@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polynomial Division Stepper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex:1; overflow-y:auto; padding:8px 0; display:flex; flex-direction:column; gap:12px; }
+
+    .mode-toggle { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+
+    .problem-card { padding:16px 20px; position:relative; }
+    .problem-card .prob-label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
+    .problem-expr { font-family:'JetBrains Mono',monospace; font-size:24px; line-height:1.2; }
+    .problem-sub { font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft); margin-top:6px; }
+
+    .prob-picker { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+    .step-block { padding:12px 16px; border-radius:4px; }
+    .step-block.locked { opacity:0.35; pointer-events:none; }
+    .step-block.active { border-color:var(--accent); }
+    .step-block.done { opacity:0.72; }
+
+    .step-q { font-family:'Patrick Hand',cursive; font-size:15px; margin-bottom:8px; color:var(--ink-2); }
+    .step-q strong { color:var(--ink); }
+    .step-warn { font-family:'Patrick Hand',cursive; font-size:13px; color:var(--redline); margin-bottom:6px; }
+    .step-answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .step-input {
+      border:2px solid var(--ink); border-radius:4px; padding:5px 10px;
+      font-family:'JetBrains Mono',monospace; font-size:17px; background:var(--paper);
+      color:var(--ink); width:160px; text-align:center;
+    }
+    .step-input.ok  { border-color:var(--green); background:#d4edda; }
+    .step-input.err { border-color:var(--redline); background:#f8d7da; }
+    .step-fb { font-family:'Permanent Marker',cursive; font-size:14px; }
+    .step-fb.good { color:var(--green); }
+    .step-fb.bad  { color:var(--redline); }
+    .step-reveal { font-family:'JetBrains Mono',monospace; font-size:14px; padding:5px 10px; background:var(--paper-2); border-radius:3px; margin-top:6px; display:none; }
+
+    .solved-banner { padding:14px; background:var(--highlight); transform:rotate(-0.4deg); display:none; }
+    .solved-banner .f-display { font-size:26px; color:var(--accent); }
+    .verdict-factor    { font-family:'Permanent Marker',cursive; font-size:16px; color:var(--green); margin-top:6px; }
+    .verdict-notfactor { font-family:'Permanent Marker',cursive; font-size:16px; color:var(--redline); margin-top:6px; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u6.html">← U6</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rationals &amp; Polynomials</a> &nbsp;·&nbsp; D4 &amp; D8</div>
+      <div class="tool-title f-display">Polynomial Division Stepper</div>
+      <div class="tool-tagline f-hand">Long division or synthetic — step through the algorithm, one move at a time.</div>
+
+      <div class="trainer-stage">
+
+        <div class="mode-toggle">
+          <span class="f-marker" style="font-size:12px;">MODE:</span>
+          <button class="btn accent" id="mode-long" onclick="setMode('long')">Long Division</button>
+          <button class="btn" id="mode-synth" onclick="setMode('synth')">Synthetic Division</button>
+        </div>
+
+        <div class="prob-picker">
+          <span class="f-marker" style="font-size:12px; align-self:center;">PROBLEM:</span>
+          <button class="sk-pill active" id="pb0" onclick="loadProb(0)">P1</button>
+          <button class="sk-pill" id="pb1" onclick="loadProb(1)">P2</button>
+          <button class="sk-pill" id="pb2" onclick="loadProb(2)">P3</button>
+          <button class="sk-pill" id="pb3" onclick="loadProb(3)">P4</button>
+          <button class="btn small" onclick="reload()">↺ restart</button>
+        </div>
+
+        <div class="problem-card sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="prob-label" id="prob-label">LONG DIVIDE:</div>
+          <div class="problem-expr" id="prob-expr"></div>
+          <div class="problem-sub" id="prob-sub"></div>
+        </div>
+
+        <div id="steps-area"></div>
+
+        <div class="solved-banner sk-box" id="solved-banner">
+          <div class="prob-label">RESULT</div>
+          <div class="f-display" id="solved-expr"></div>
+          <div id="solved-verdict"></div>
+          <div style="margin-top:8px; font-family:'Patrick Hand',cursive; font-size:14px;" id="solved-note"></div>
+          <button class="btn accent" style="margin-top:10px;" onclick="nextProb()">next problem →</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Pick Long or Synthetic mode.</li>
+          <li>Answer each step in order.</li>
+          <li>Hit Enter or "check".</li>
+          <li>Use "hint" if stuck.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">LONG DIVISION</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <span style="color:var(--accent);">①</span> Divide front terms<br>
+          <span style="color:var(--accent);">②</span> Multiply by divisor<br>
+          <span style="color:var(--accent);">③</span> Subtract — ⚠️ flip signs!<br>
+          <span style="color:var(--accent);">④</span> Bring down, repeat<br>
+          <span style="color:var(--ink-soft); font-size:12px;">Remainder ≠ 0 → not a factor.</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SYNTHETIC DIVISION</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <span style="color:var(--accent);">①</span> Divisor must be linear<br>
+          <span style="color:var(--accent);">②</span> Set divisor = 0 → box #<br>
+          <span style="color:var(--accent);">③</span> Write coefficients (0 for gaps)<br>
+          <span style="color:var(--accent);">④</span> Bring down · multiply · add<br>
+          <span style="color:var(--ink-soft); font-size:12px;">Last number = remainder. Quotient is one degree lower.</span>
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">LONG VS SYNTHETIC?</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          Use <strong>synthetic</strong> only when the divisor is linear (degree 1). For quadratic or higher divisors, use <strong>long division</strong>. Both give the same answer.
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Which step tripped you up? Screenshot it and explain why the signs flip.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="polynomial-sketch.html">→ Polynomial Sketch Pad</a>
+        <a class="related-link f-hand" href="rational-simplifier.html">→ Rational Simplifier</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ── Long Division problems ─────────────────────────────────── */
+    const LONG_PROBS = [
+      {
+        expr: '(x² + 5x + 6) ÷ (x + 2)',
+        sub: 'No missing terms. Clean starter problem.',
+        steps: [
+          {
+            q: 'Divide the leading terms: x² ÷ x = ?',
+            ans: ['x'],
+            reveal: 'x² ÷ x = x. Write x in the quotient.',
+            warn: false,
+          },
+          {
+            q: 'Multiply x · (x + 2) = x² + 2x. Subtract from x² + 5x. What remains?',
+            ans: ['3x'],
+            reveal: 'x² + 5x − (x² + 2x) = 3x',
+            warn: true,
+          },
+          {
+            q: 'Bring down +6. New expression: 3x + 6. Divide: 3x ÷ x = ?',
+            ans: ['3'],
+            reveal: '3x ÷ x = 3. Write 3 in the quotient.',
+            warn: false,
+          },
+          {
+            q: 'Multiply 3 · (x + 2) = 3x + 6. Subtract from 3x + 6. Remainder?',
+            ans: ['0'],
+            reveal: '3x + 6 − (3x + 6) = 0',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x + 3   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x + 2) IS a factor',
+        note: 'Check: (x + 2)(x + 3) = x² + 5x + 6 ✓',
+      },
+      {
+        expr: '(x³ − 7x + 6) ÷ (x − 2)',
+        sub: '⚠️ Missing x² term — placeholder required before dividing!',
+        steps: [
+          {
+            q: 'Write x³ + __x² − 7x + 6 before starting. Missing x² coefficient?',
+            ans: ['0'],
+            reveal: 'Insert 0x² as a placeholder. Full dividend: x³ + 0x² − 7x + 6.',
+            warn: false,
+          },
+          {
+            q: 'Divide: x³ ÷ x = ?',
+            ans: ['x^2', 'x²'],
+            reveal: 'x³ ÷ x = x²',
+            warn: false,
+          },
+          {
+            q: 'Multiply x² · (x − 2) = x³ − 2x². Subtract from x³ + 0x². What remains?',
+            ans: ['2x^2', '2x²'],
+            reveal: 'x³ + 0x² − (x³ − 2x²) = 2x²',
+            warn: true,
+          },
+          {
+            q: 'Bring down −7x. Current expression: 2x² − 7x. Divide: 2x² ÷ x = ?',
+            ans: ['2x'],
+            reveal: '2x² ÷ x = 2x',
+            warn: false,
+          },
+          {
+            q: 'Multiply 2x · (x − 2) = 2x² − 4x. Subtract from 2x² − 7x. What remains?',
+            ans: ['-3x', '−3x'],
+            reveal: '2x² − 7x − (2x² − 4x) = −3x',
+            warn: true,
+          },
+          {
+            q: 'Bring down +6. Current: −3x + 6. Divide: −3x ÷ x = ?',
+            ans: ['-3', '−3'],
+            reveal: '−3x ÷ x = −3',
+            warn: false,
+          },
+          {
+            q: 'Multiply −3 · (x − 2) = −3x + 6. Subtract from −3x + 6. Remainder?',
+            ans: ['0'],
+            reveal: '−3x + 6 − (−3x + 6) = 0. Subtracting (−3x + 6) flips both signs.',
+            warn: true,
+          },
+        ],
+        final: 'Quotient: x² + 2x − 3   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x − 2) IS a factor',
+        note: 'Bonus: x² + 2x − 3 = (x + 3)(x − 1). All three factors confirmed.',
+      },
+      {
+        expr: '(x³ + 2x² − 5x − 6) ÷ (x − 2)',
+        sub: 'No missing terms.',
+        steps: [
+          {
+            q: 'Divide: x³ ÷ x = ?',
+            ans: ['x^2', 'x²'],
+            reveal: 'x³ ÷ x = x²',
+            warn: false,
+          },
+          {
+            q: 'Multiply x² · (x − 2) = x³ − 2x². Subtract from x³ + 2x². What remains?',
+            ans: ['4x^2', '4x²'],
+            reveal: 'x³ + 2x² − (x³ − 2x²) = 4x²',
+            warn: true,
+          },
+          {
+            q: 'Bring down −5x. Current: 4x² − 5x. Divide: 4x² ÷ x = ?',
+            ans: ['4x'],
+            reveal: '4x² ÷ x = 4x',
+            warn: false,
+          },
+          {
+            q: 'Multiply 4x · (x − 2) = 4x² − 8x. Subtract from 4x² − 5x. What remains?',
+            ans: ['3x'],
+            reveal: '4x² − 5x − (4x² − 8x) = 3x. Subtracting −8x adds 8x.',
+            warn: true,
+          },
+          {
+            q: 'Bring down −6. Current: 3x − 6. Divide: 3x ÷ x = ?',
+            ans: ['3'],
+            reveal: '3x ÷ x = 3',
+            warn: false,
+          },
+          {
+            q: 'Multiply 3 · (x − 2) = 3x − 6. Subtract from 3x − 6. Remainder?',
+            ans: ['0'],
+            reveal: '3x − 6 − (3x − 6) = 0',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x² + 4x + 3   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x − 2) IS a factor',
+        note: 'Bonus: x² + 4x + 3 = (x + 1)(x + 3). Three linear factors total.',
+      },
+      {
+        expr: '(2x³ + x² − 7x + 2) ÷ (x + 2)',
+        sub: 'This one leaves a remainder — is (x + 2) a factor?',
+        steps: [
+          {
+            q: 'Divide: 2x³ ÷ x = ?',
+            ans: ['2x^2', '2x²'],
+            reveal: '2x³ ÷ x = 2x²',
+            warn: false,
+          },
+          {
+            q: 'Multiply 2x² · (x + 2) = 2x³ + 4x². Subtract from 2x³ + x². What remains?',
+            ans: ['-3x^2', '−3x²'],
+            reveal: '2x³ + x² − (2x³ + 4x²) = −3x²',
+            warn: true,
+          },
+          {
+            q: 'Bring down −7x. Current: −3x² − 7x. Divide: −3x² ÷ x = ?',
+            ans: ['-3x', '−3x'],
+            reveal: '−3x² ÷ x = −3x',
+            warn: false,
+          },
+          {
+            q: 'Multiply −3x · (x + 2) = −3x² − 6x. Subtract from −3x² − 7x. What remains?',
+            ans: ['-x', '−x'],
+            reveal: '−3x² − 7x − (−3x² − 6x) = −x. Subtracting −6x adds 6x.',
+            warn: true,
+          },
+          {
+            q: 'Bring down +2. Current: −x + 2. Divide: −x ÷ x = ?',
+            ans: ['-1', '−1'],
+            reveal: '−x ÷ x = −1',
+            warn: false,
+          },
+          {
+            q: 'Multiply −1 · (x + 2) = −x − 2. Subtract from −x + 2. Remainder?',
+            ans: ['4'],
+            reveal: '−x + 2 − (−x − 2) = 4. Subtracting −2 gives +2.',
+            warn: true,
+          },
+        ],
+        final: 'Quotient: 2x² − 3x − 1   ·   Remainder: 4',
+        verdict: 'notfactor',
+        verdictMsg: '✗ (x + 2) is NOT a factor',
+        note: 'Remainder 4 ≠ 0, so (x + 2) does not divide evenly into this polynomial.',
+      },
+    ];
+
+    /* ── Synthetic Division problems ────────────────────────────── */
+    const SYNTH_PROBS = [
+      {
+        expr: '(x³ + 3x² − 4) ÷ (x − 1)',
+        sub: '⚠️ Missing x term — you will need a placeholder 0.',
+        steps: [
+          {
+            q: 'Set x − 1 = 0. Solve for x. Box number?',
+            ans: ['1'],
+            reveal: 'x − 1 = 0  →  x = 1. Write 1 in the box.',
+            warn: false,
+          },
+          {
+            q: '⚠️ x³ + 3x² − 4 is missing the x term. Coefficient list: 1, 3, __, −4. Placeholder value?',
+            ans: ['0'],
+            reveal: 'The x coefficient is 0. Full row: 1  3  0  −4',
+            warn: false,
+          },
+          {
+            q: 'Bring down 1. Multiply 1 × 1 = 1. Add to 3. First running sum?',
+            ans: ['4'],
+            reveal: '3 + 1 = 4',
+            warn: false,
+          },
+          {
+            q: 'Multiply 4 × 1 = 4. Add to 0 (the placeholder). Second running sum?',
+            ans: ['4'],
+            reveal: '0 + 4 = 4',
+            warn: false,
+          },
+          {
+            q: 'Multiply 4 × 1 = 4. Add to −4. This is the remainder.',
+            ans: ['0'],
+            reveal: '−4 + 4 = 0. Remainder = 0!',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x² + 4x + 4   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x − 1) IS a factor',
+        note: 'x² + 4x + 4 = (x + 2)². The quotient itself factors into a perfect square.',
+      },
+      {
+        expr: '(x³ − 2x² − 5x + 6) ÷ (x − 3)',
+        sub: 'No missing terms. Linear divisor → synthetic is allowed.',
+        steps: [
+          {
+            q: 'Set x − 3 = 0. Box number?',
+            ans: ['3'],
+            reveal: 'x = 3. Write 3 in the box.',
+            warn: false,
+          },
+          {
+            q: 'Bring down 1. Multiply 1 × 3 = 3. Add to −2. First running sum?',
+            ans: ['1'],
+            reveal: '−2 + 3 = 1',
+            warn: false,
+          },
+          {
+            q: 'Multiply 1 × 3 = 3. Add to −5. Second running sum?',
+            ans: ['-2', '−2'],
+            reveal: '−5 + 3 = −2',
+            warn: false,
+          },
+          {
+            q: 'Multiply −2 × 3 = −6. Add to 6. This is the remainder.',
+            ans: ['0'],
+            reveal: '6 + (−6) = 0. Remainder = 0!',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x² + x − 2   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x − 3) IS a factor',
+        note: 'x² + x − 2 = (x + 2)(x − 1). Three linear factors total.',
+      },
+      {
+        expr: '(x³ − 6x² + 11x − 6) ÷ (x − 2)',
+        sub: 'No missing terms.',
+        steps: [
+          {
+            q: 'Set x − 2 = 0. Box number?',
+            ans: ['2'],
+            reveal: 'x = 2.',
+            warn: false,
+          },
+          {
+            q: 'Bring down 1. Multiply 1 × 2 = 2. Add to −6. First running sum?',
+            ans: ['-4', '−4'],
+            reveal: '−6 + 2 = −4',
+            warn: false,
+          },
+          {
+            q: 'Multiply −4 × 2 = −8. Add to 11. Second running sum?',
+            ans: ['3'],
+            reveal: '11 + (−8) = 3',
+            warn: false,
+          },
+          {
+            q: 'Multiply 3 × 2 = 6. Add to −6. Remainder?',
+            ans: ['0'],
+            reveal: '−6 + 6 = 0. Remainder = 0!',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x² − 4x + 3   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (x − 2) IS a factor',
+        note: 'x² − 4x + 3 = (x − 1)(x − 3). This polynomial has three distinct real roots.',
+      },
+      {
+        expr: '(2x³ − 3x² − 11x + 6) ÷ (2x − 1)',
+        sub: '⚠️ Non-monic divisor! Leading coefficient is 2, not 1.',
+        steps: [
+          {
+            q: '⚠️ Non-monic divisor. Set 2x − 1 = 0 and solve for x. Box number?',
+            ans: ['1/2', '0.5'],
+            reveal: '2x = 1  →  x = 1/2. The box number is 1/2.',
+            warn: false,
+          },
+          {
+            q: 'Bring down 2. Multiply 2 × (1/2) = 1. Add to −3. First running sum?',
+            ans: ['-2', '−2'],
+            reveal: '−3 + 1 = −2',
+            warn: false,
+          },
+          {
+            q: 'Multiply −2 × (1/2) = −1. Add to −11. Second running sum?',
+            ans: ['-12', '−12'],
+            reveal: '−11 + (−1) = −12',
+            warn: false,
+          },
+          {
+            q: 'Multiply −12 × (1/2) = −6. Add to 6. Remainder?',
+            ans: ['0'],
+            reveal: '6 + (−6) = 0. Remainder = 0!',
+            warn: false,
+          },
+          {
+            q: 'Quotient row so far: [2, −2, −12]. Divide each by the leading coefficient (2). Final quotient?',
+            ans: ['x^2-x-6', 'x²-x-6', 'x^2 - x - 6', 'x^2-x-6'],
+            reveal: '2 ÷ 2 = 1 (→ x²),  −2 ÷ 2 = −1 (→ −x),  −12 ÷ 2 = −6. Quotient: x² − x − 6',
+            warn: false,
+          },
+        ],
+        final: 'Quotient: x² − x − 6   ·   Remainder: 0',
+        verdict: 'factor',
+        verdictMsg: '✓ (2x − 1) IS a factor',
+        note: 'x² − x − 6 = (x − 3)(x + 2). Check: (2x − 1)(x − 3)(x + 2) = 2x³ − 3x² − 11x + 6 ✓',
+      },
+    ];
+
+    /* ── State ───────────────────────────────────────────────────── */
+    let mode = 'long';
+    let PROBS = LONG_PROBS;
+    let curProb = 0, curStep = 0;
+
+    /* ── Normaliser ─────────────────────────────────────────────── */
+    function norm(s) {
+      return s
+        .replace(/\s+/g, '')
+        .replace(/−/g, '-')     // unicode minus → hyphen
+        .replace(/²/g, '^2')   // superscript
+        .replace(/³/g, '^3')
+        .toLowerCase();
+    }
+
+    /* ── Mode switch ─────────────────────────────────────────────── */
+    function setMode(m) {
+      mode = m;
+      PROBS = (m === 'long') ? LONG_PROBS : SYNTH_PROBS;
+      document.getElementById('mode-long').className  = (m === 'long')  ? 'btn accent' : 'btn';
+      document.getElementById('mode-synth').className = (m === 'synth') ? 'btn accent' : 'btn';
+      loadProb(0);
+    }
+
+    /* ── Load problem ────────────────────────────────────────────── */
+    function loadProb(idx) {
+      curProb = idx; curStep = 0;
+      document.querySelectorAll('[id^=pb]').forEach((b, i) => b.classList.toggle('active', i === idx));
+      const p = PROBS[idx];
+      document.getElementById('prob-label').textContent  = mode === 'long' ? 'LONG DIVIDE:' : 'SYNTHETIC DIVIDE:';
+      document.getElementById('prob-expr').textContent   = p.expr;
+      document.getElementById('prob-sub').textContent    = p.sub;
+      document.getElementById('solved-banner').style.display = 'none';
+      renderSteps();
+    }
+
+    /* ── Render step list ────────────────────────────────────────── */
+    function renderSteps() {
+      const p = PROBS[curProb];
+      const area = document.getElementById('steps-area');
+      area.innerHTML = '';
+
+      p.steps.forEach((step, i) => {
+        const isDone   = i < curStep;
+        const isActive = i === curStep;
+        const div = document.createElement('div');
+        div.className = `step-block sk-box ${isActive ? 'active' : isDone ? 'done' : 'locked'}`;
+        div.innerHTML = `
+          <div class="step-q"><strong>Step ${i + 1}:</strong> ${step.q}</div>
+          ${isDone ? `<div class="step-reveal" style="display:block;">${step.reveal} ✓</div>` : ''}
+          ${isActive ? `
+            ${step.warn ? `<div class="step-warn">⚠️ Remember: subtracting a negative flips it to positive!</div>` : ''}
+            <div class="step-answer-row">
+              <input class="step-input" id="si${i}" type="text" placeholder="answer"
+                     onkeydown="if(event.key==='Enter')checkStep(${i})" />
+              <button class="btn small accent" onclick="checkStep(${i})">check →</button>
+              <button class="btn small" onclick="showHint(${i})">hint</button>
+              <span class="step-fb" id="sf${i}"></span>
+            </div>
+            <div class="step-reveal" id="sr${i}">${step.reveal}</div>` : ''}
+        `;
+        area.appendChild(div);
+      });
+
+      setTimeout(() => document.querySelector('.step-block.active .step-input')?.focus(), 50);
+    }
+
+    /* ── Check answer ────────────────────────────────────────────── */
+    function checkStep(i) {
+      const inp = document.getElementById(`si${i}`);
+      const fb  = document.getElementById(`sf${i}`);
+      const val = norm(inp.value);
+      const ok  = PROBS[curProb].steps[i].ans.some(a => norm(a) === val);
+      if (ok) {
+        inp.classList.add('ok');
+        fb.textContent = '✓'; fb.className = 'step-fb good';
+        setTimeout(() => {
+          curStep = i + 1;
+          if (curStep >= PROBS[curProb].steps.length) showSolved();
+          else renderSteps();
+        }, 600);
+      } else {
+        inp.classList.add('err');
+        fb.textContent = '✗ try again'; fb.className = 'step-fb bad';
+        setTimeout(() => { inp.classList.remove('err'); fb.textContent = ''; }, 1100);
+      }
+    }
+
+    /* ── Hint ────────────────────────────────────────────────────── */
+    function showHint(i) {
+      const r = document.getElementById(`sr${i}`);
+      if (r) r.style.display = 'block';
+    }
+
+    /* ── Solved banner ───────────────────────────────────────────── */
+    function showSolved() {
+      const p = PROBS[curProb];
+      document.getElementById('solved-banner').style.display = 'block';
+      document.getElementById('solved-expr').textContent = p.final;
+      const vDiv = document.getElementById('solved-verdict');
+      vDiv.className   = p.verdict === 'factor' ? 'verdict-factor' : 'verdict-notfactor';
+      vDiv.textContent = p.verdictMsg;
+      document.getElementById('solved-note').textContent = p.note;
+      document.getElementById('solved-banner').scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+
+    function reload()   { loadProb(curProb); }
+    function nextProb() { loadProb((curProb + 1) % PROBS.length); }
+
+    /* ── Init ────────────────────────────────────────────────────── */
+    loadProb(0);
+  </script>
+</body>
+</html>

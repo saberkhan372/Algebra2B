@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sine/Cosine Graph Builder — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position:absolute; inset:0; width:100%; height:100%; }
+
+    .mode-row, .toggle-row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .slider-grid {
+      display:grid;
+      grid-template-columns: 96px 1fr 54px;
+      gap:6px 10px;
+      align-items:center;
+      margin-top:10px;
+    }
+    .param-lbl {
+      font-family:'JetBrains Mono', monospace;
+      font-size:13px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .param-lbl .letter { font-size:17px; font-style:italic; font-weight:700; }
+    .param-val {
+      font-family:'JetBrains Mono', monospace;
+      font-size:13px;
+      font-weight:700;
+      color:var(--accent);
+      text-align:right;
+    }
+    .eq-strip {
+      margin-top:10px;
+      padding:8px 14px;
+      background:var(--ink);
+      color:var(--paper);
+      border:2px solid var(--ink);
+      border-radius:4px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:17px;
+    }
+    .info-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .info-chip {
+      border:1.5px solid var(--ink-2);
+      background:var(--paper-2);
+      border-radius:4px;
+      padding:3px 9px;
+      font-family:'JetBrains Mono', monospace;
+      font-size:12px;
+    }
+    .annot {
+      margin-top:8px;
+      padding:7px 12px;
+      background:var(--highlight);
+      border-left:4px solid var(--accent);
+      border-radius:3px;
+      font-family:'Patrick Hand', cursive;
+      font-size:14px;
+      min-height:36px;
+    }
+    .mini-table {
+      width:100%;
+      border-collapse:collapse;
+      font-family:'JetBrains Mono', monospace;
+      font-size:11px;
+    }
+    .mini-table th, .mini-table td { padding:4px; border-bottom:1px solid rgba(29,26,20,0.14); }
+    .mini-table th { text-align:left; color:var(--ink-soft); }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u7.html">← U7</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u7.html">← U7 · Trigonometry</a> &nbsp;·&nbsp; D3</div>
+      <div class="tool-title f-display">Sine/Cosine Graph Builder</div>
+      <div class="tool-tagline f-hand">Build the wave: amplitude, period, phase shift, and midline all in one place.</div>
+
+      <div class="widget-container" style="flex:1; min-height:230px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <div class="eq-strip" id="eq-display">y = sin(x)</div>
+
+      <div class="info-row">
+        <span class="info-chip" id="chip-amp">amplitude = 1</span>
+        <span class="info-chip" id="chip-period">period = 2π</span>
+        <span class="info-chip" id="chip-phase">phase shift = 0</span>
+        <span class="info-chip" id="chip-midline">midline y = 0</span>
+      </div>
+
+      <div class="annot" id="annot">Move one slider at a time. The graph labels update as the wave changes.</div>
+
+      <div class="mode-row">
+        <span class="f-marker" style="font-size:11px;">FUNCTION:</span>
+        <button class="sk-pill active" id="btn-sin" onclick="setMode('sin')">sin</button>
+        <button class="sk-pill" id="btn-cos" onclick="setMode('cos')">cos</button>
+        <button class="btn small" style="margin-left:auto;" onclick="resetAll()">↺ reset</button>
+      </div>
+
+      <div class="slider-grid">
+        <label class="param-lbl" for="sl-a">
+          <span class="letter" style="color:var(--accent);">a</span>
+          <span style="color:var(--ink-2); font-size:11px;">amplitude</span>
+        </label>
+        <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" oninput="slide('a')">
+        <span class="param-val" id="val-a">1</span>
+
+        <label class="param-lbl" for="sl-b">
+          <span class="letter" style="color:#2a6fb4;">b</span>
+          <span style="color:var(--ink-2); font-size:11px;">period</span>
+        </label>
+        <input type="range" id="sl-b" min="0.25" max="4" step="0.25" value="1" oninput="slide('b')">
+        <span class="param-val" style="color:#2a6fb4;" id="val-b">1</span>
+
+        <label class="param-lbl" for="sl-h">
+          <span class="letter" style="color:#2a8a4a;">h</span>
+          <span style="color:var(--ink-2); font-size:11px;">phase</span>
+        </label>
+        <input type="range" id="sl-h" min="-6.28" max="6.28" step="0.26" value="0" oninput="slide('h')">
+        <span class="param-val" style="color:#2a8a4a;" id="val-h">0</span>
+
+        <label class="param-lbl" for="sl-k">
+          <span class="letter" style="color:#8b4513;">k</span>
+          <span style="color:var(--ink-2); font-size:11px;">midline</span>
+        </label>
+        <input type="range" id="sl-k" min="-4" max="4" step="0.5" value="0" oninput="slide('k')">
+        <span class="param-val" style="color:#8b4513;" id="val-k">0</span>
+      </div>
+
+      <div class="toggle-row">
+        <label class="f-hand" style="font-size:13px;"><input type="checkbox" id="show-parent" checked onchange="draw()"> show parent wave</label>
+        <label class="f-hand" style="font-size:13px;"><input type="checkbox" id="show-period" checked onchange="draw()"> highlight one period</label>
+        <label class="f-hand" style="font-size:13px;"><input type="checkbox" id="show-points" checked onchange="draw()"> key points</label>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">THE FORM</div>
+        <div style="font-family:'JetBrains Mono', monospace; font-size:14px; line-height:2;">
+          y = <span style="color:var(--accent); font-weight:700;">a</span>
+          · trig(<span style="color:#2a6fb4; font-weight:700;">b</span>(x − <span style="color:#2a8a4a; font-weight:700;">h</span>))
+          + <span style="color:#8b4513; font-weight:700;">k</span>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; line-height:1.7;">
+          <span style="color:var(--accent);">a</span> sets amplitude and flips the wave if negative.<br>
+          <span style="color:#2a6fb4;">b</span> changes period: period = 2π / |b|.<br>
+          <span style="color:#2a8a4a;">h</span> shifts the wave left or right.<br>
+          <span style="color:#8b4513;">k</span> moves the midline.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">KEY POINTS</div>
+        <table class="mini-table">
+          <thead><tr><th>point</th><th>x</th><th>y</th></tr></thead>
+          <tbody id="point-table"></tbody>
+        </table>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">TRY THIS</div>
+        <div class="try-this-item sk-box">
+          <span class="q-num f-display">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Set a = 2. Which labels move: amplitude, midline, period, or phase shift?</span>
+        </div>
+        <div class="try-this-item sk-box" style="transform:rotate(0.3deg);">
+          <span class="q-num f-display">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set b = 2. The period should shrink to π. Count one full wave to check it.</span>
+        </div>
+        <div class="try-this-item sk-box">
+          <span class="q-num f-display">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Switch sine to cosine without moving sliders. What stays the same? What changes?</span>
+        </div>
+      </div>
+
+      <div class="share-box sk-box">
+        <div class="f-marker" style="font-size:11px;">SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Give me one equation whose period is π and midline is y = 1. Show me where you see both on the graph.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="unit-circle.html">→ Unit Circle Walker</a>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+        <a class="related-link f-hand" href="soh-cah-toa.html">→ SOH CAH TOA Solver</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+    const TAU = Math.PI * 2;
+    const COLORS = { wave:'#2a6fb4', parent:'#6b6357', amp:'#d94f2a', period:'#2a6fb4', phase:'#2a8a4a', mid:'#8b4513' };
+    let mode = 'sin';
+    let P = { a:1, b:1, h:0, k:0 };
+    let lastParam = null;
+
+    function fmt(n) {
+      const rounded = Math.round(n * 100) / 100;
+      return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace(/\.?0+$/, '');
+    }
+
+    function fmtPi(n) {
+      if (Math.abs(n) < 0.005) return '0';
+      const ratio = n / Math.PI;
+      const candidates = [
+        [0.25, 'π/4'], [0.5, 'π/2'], [0.75, '3π/4'], [1, 'π'],
+        [1.25, '5π/4'], [1.5, '3π/2'], [1.75, '7π/4'], [2, '2π'],
+      ];
+      const sign = n < 0 ? '−' : '';
+      const absRatio = Math.abs(ratio);
+      for (const [val, label] of candidates) {
+        if (Math.abs(absRatio - val) < 0.04) return sign + label;
+      }
+      return fmt(n);
+    }
+
+    function trig(x) {
+      const input = P.b * (x - P.h);
+      const base = mode === 'sin' ? Math.sin(input) : Math.cos(input);
+      return P.a * base + P.k;
+    }
+
+    function parentTrig(x) {
+      return mode === 'sin' ? Math.sin(x) : Math.cos(x);
+    }
+
+    function resizeCanvas() {
+      const r = canvas.parentElement.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(r.width * dpr);
+      canvas.height = Math.round(r.height * dpr);
+      canvas.style.width = r.width + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { W:r.width, H:r.height };
+    }
+
+    function bounds(W, H) {
+      const amp = Math.max(Math.abs(P.a), 1);
+      const yPad = Math.max(1.2, amp + Math.abs(P.k) + 0.8);
+      return { xMin:-Math.PI * 2.25, xMax:Math.PI * 2.25, yMin:-yPad, yMax:yPad, W, H };
+    }
+
+    function sx(x, b) { return (x - b.xMin) / (b.xMax - b.xMin) * b.W; }
+    function sy(y, b) { return b.H - (y - b.yMin) / (b.yMax - b.yMin) * b.H; }
+
+    function drawGrid(b) {
+      ctx.clearRect(0, 0, b.W, b.H);
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, b.W, b.H);
+
+      ctx.strokeStyle = 'rgba(29,26,20,0.08)';
+      ctx.lineWidth = 1;
+      for (let x = -2 * Math.PI; x <= 2.01 * Math.PI; x += Math.PI / 2) {
+        const px = sx(x, b);
+        ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, b.H); ctx.stroke();
+      }
+      for (let y = Math.ceil(b.yMin); y <= Math.floor(b.yMax); y++) {
+        const py = sy(y, b);
+        ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(b.W, py); ctx.stroke();
+      }
+
+      ctx.strokeStyle = 'rgba(29,26,20,0.45)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, sy(0, b)); ctx.lineTo(b.W, sy(0, b)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(sx(0, b), 0); ctx.lineTo(sx(0, b), b.H); ctx.stroke();
+
+      ctx.fillStyle = 'rgba(29,26,20,0.62)';
+      ctx.font = "11px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (const x of [-2*Math.PI, -Math.PI, 0, Math.PI, 2*Math.PI]) {
+        ctx.fillText(fmtPi(x), sx(x, b), sy(0, b) + 6);
+      }
+    }
+
+    function drawFunction(fn, b, color, width, dash) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.setLineDash(dash || []);
+      ctx.beginPath();
+      let started = false;
+      for (let px = 0; px <= b.W; px += 2) {
+        const x = b.xMin + (px / b.W) * (b.xMax - b.xMin);
+        const y = fn(x);
+        const py = sy(y, b);
+        if (!Number.isFinite(y) || py < -80 || py > b.H + 80) {
+          started = false;
+          continue;
+        }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawBracket(x1, x2, y, label, color, b) {
+      const py = sy(y, b);
+      const p1 = sx(x1, b), p2 = sx(x2, b);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(p1, py); ctx.lineTo(p2, py);
+      ctx.moveTo(p1, py - 6); ctx.lineTo(p1, py + 6);
+      ctx.moveTo(p2, py - 6); ctx.lineTo(p2, py + 6);
+      ctx.stroke();
+      ctx.font = "12px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText(label, (p1 + p2) / 2, py - 8);
+    }
+
+    function keyXs() {
+      const q = Math.abs(TAU / P.b) / 4;
+      return [P.h, P.h + q, P.h + 2*q, P.h + 3*q, P.h + 4*q];
+    }
+
+    function drawLabels(b) {
+      const period = Math.abs(TAU / P.b);
+      const start = P.h;
+      const end = P.h + period;
+      const periodY = Math.min(b.yMax - 0.25, P.k + Math.abs(P.a) + 0.35);
+
+      if (document.getElementById('show-period').checked) {
+        ctx.fillStyle = 'rgba(42,111,180,0.08)';
+        ctx.fillRect(sx(start, b), 0, sx(end, b) - sx(start, b), b.H);
+        drawBracket(start, end, periodY, 'one period', COLORS.period, b);
+      }
+
+      ctx.strokeStyle = COLORS.mid;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([7, 5]);
+      ctx.beginPath();
+      ctx.moveTo(0, sy(P.k, b)); ctx.lineTo(b.W, sy(P.k, b)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = COLORS.mid;
+      ctx.font = "12px 'JetBrains Mono', monospace";
+      ctx.textAlign = 'left';
+      ctx.fillText('midline y = ' + fmt(P.k), 10, sy(P.k, b) - 14);
+
+      const ampX = P.h - period * 0.12;
+      const top = P.k + Math.abs(P.a);
+      ctx.strokeStyle = COLORS.amp;
+      ctx.fillStyle = COLORS.amp;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(sx(ampX, b), sy(P.k, b)); ctx.lineTo(sx(ampX, b), sy(top, b));
+      ctx.moveTo(sx(ampX, b) - 5, sy(P.k, b)); ctx.lineTo(sx(ampX, b) + 5, sy(P.k, b));
+      ctx.moveTo(sx(ampX, b) - 5, sy(top, b)); ctx.lineTo(sx(ampX, b) + 5, sy(top, b));
+      ctx.stroke();
+      ctx.textAlign = 'right';
+      ctx.fillText('amp ' + fmt(Math.abs(P.a)), sx(ampX, b) - 8, (sy(P.k, b) + sy(top, b)) / 2);
+
+      if (document.getElementById('show-points').checked) {
+        ctx.fillStyle = COLORS.wave;
+        for (const x of keyXs()) {
+          const y = trig(x);
+          ctx.beginPath();
+          ctx.arc(sx(x, b), sy(y, b), 4, 0, TAU);
+          ctx.fill();
+        }
+      }
+    }
+
+    function draw() {
+      const size = resizeCanvas();
+      const b = bounds(size.W, size.H);
+      drawGrid(b);
+      if (document.getElementById('show-parent').checked) drawFunction(parentTrig, b, COLORS.parent, 2, [8, 6]);
+      drawLabels(b);
+      drawFunction(trig, b, COLORS.wave, 3, []);
+    }
+
+    function updateText() {
+      const fn = mode;
+      const hPart = P.h === 0 ? 'x' : `x ${P.h > 0 ? '−' : '+'} ${fmtPi(Math.abs(P.h))}`;
+      const bPart = P.b === 1 ? hPart : `${fmt(P.b)}(${hPart})`;
+      const aPart = P.a === 1 ? '' : P.a === -1 ? '−' : `${fmt(P.a)}·`;
+      const kPart = P.k === 0 ? '' : P.k > 0 ? ` + ${fmt(P.k)}` : ` − ${fmt(Math.abs(P.k))}`;
+      document.getElementById('eq-display').textContent = `y = ${aPart}${fn}(${bPart})${kPart}`;
+      document.getElementById('chip-amp').textContent = `amplitude = ${fmt(Math.abs(P.a))}`;
+      document.getElementById('chip-period').textContent = `period = ${fmtPi(Math.abs(TAU / P.b))}`;
+      document.getElementById('chip-phase').textContent = `phase shift = ${fmtPi(P.h)}`;
+      document.getElementById('chip-midline').textContent = `midline y = ${fmt(P.k)}`;
+
+      const rows = keyXs().map((x, i) => `<tr><td>${i + 1}</td><td>${fmtPi(x)}</td><td>${fmt(trig(x))}</td></tr>`).join('');
+      document.getElementById('point-table').innerHTML = rows;
+
+      const notes = {
+        a: P.a < 0 ? 'a is negative, so the wave flips over its midline.' : 'a controls amplitude: distance from the midline to a peak.',
+        b: 'b changes the period. Bigger |b| means the wave finishes faster.',
+        h: 'h is phase shift. The whole wave slides left or right before it starts its cycle.',
+        k: 'k moves the midline. Peaks and valleys ride above and below that line.',
+        mode: mode === 'sin' ? 'Sine starts on the midline and heads upward when a is positive.' : 'Cosine starts at a peak when a is positive.',
+      };
+      document.getElementById('annot').textContent = notes[lastParam || 'mode'];
+    }
+
+    function refresh() {
+      ['a','b','h','k'].forEach(p => {
+        document.getElementById('sl-' + p).value = P[p];
+        document.getElementById('val-' + p).textContent = p === 'h' ? fmtPi(P[p]) : fmt(P[p]);
+      });
+      document.getElementById('btn-sin').classList.toggle('active', mode === 'sin');
+      document.getElementById('btn-cos').classList.toggle('active', mode === 'cos');
+      updateText();
+      draw();
+    }
+
+    function slide(p) {
+      P[p] = Number(document.getElementById('sl-' + p).value);
+      if (p === 'a' && P.a === 0) P.a = 0.5;
+      lastParam = p;
+      refresh();
+    }
+
+    function setMode(next) {
+      mode = next;
+      lastParam = 'mode';
+      refresh();
+    }
+
+    function resetAll() {
+      mode = 'sin';
+      P = { a:1, b:1, h:0, k:0 };
+      lastParam = null;
+      refresh();
+    }
+
+    window.addEventListener('resize', draw);
+    refresh();
+  </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exponential Equation Solver — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex:1; overflow-y:auto; padding:8px 0; display:flex; flex-direction:column; gap:12px; }
+    .problem-card { padding:16px 20px; position:relative; }
+    .problem-card .prob-label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
+    .problem-expr { font-family:'JetBrains Mono',monospace; font-size:26px; line-height:1.15; }
+    .prob-picker { display:flex; gap:8px; flex-wrap:wrap; }
+    .strategy-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+    @media (max-width: 720px) { .strategy-row { grid-template-columns:1fr; } }
+    .strategy-chip { padding:8px 10px; font-family:'Patrick Hand',cursive; font-size:14px; color:var(--ink-2); }
+    .strategy-chip strong { display:block; color:var(--ink); font-family:'JetBrains Mono',monospace; font-size:13px; margin-bottom:2px; }
+    .step-block { padding:12px 16px; border-radius:4px; }
+    .step-block.locked { opacity:0.35; pointer-events:none; }
+    .step-block.active { border-color:var(--accent); }
+    .step-block.done { opacity:0.72; }
+    .step-q { font-family:'Patrick Hand',cursive; font-size:15px; margin-bottom:8px; color:var(--ink-2); }
+    .step-q strong { color:var(--ink); }
+    .step-answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .step-input {
+      border:2px solid var(--ink); border-radius:4px; padding:5px 10px;
+      font-family:'JetBrains Mono',monospace; font-size:17px; background:var(--paper);
+      color:var(--ink); width:180px; text-align:center;
+    }
+    .step-input.ok { border-color:var(--green); background:#d4edda; }
+    .step-input.err { border-color:var(--redline); background:#f8d7da; }
+    .step-fb { font-family:'Permanent Marker',cursive; font-size:14px; }
+    .step-fb.good { color:var(--green); }
+    .step-fb.bad { color:var(--redline); }
+    .step-reveal { font-family:'JetBrains Mono',monospace; font-size:14px; padding:5px 10px; background:var(--paper-2); border-radius:3px; display:none; }
+    .solved-banner { padding:14px; background:var(--highlight); transform:rotate(-0.4deg); display:none; }
+    .solved-banner .f-display { font-size:31px; color:var(--accent); }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u5.html">← U5</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u5.html">← U5 · Exponential &amp; Log</a> &nbsp;·&nbsp; D6</div>
+      <div class="tool-title f-display">Exponential Equation Solver</div>
+      <div class="tool-tagline f-hand">Decide first: same base, log both sides, or use ln for e.</div>
+
+      <div class="trainer-stage">
+        <div class="prob-picker">
+          <span class="f-marker" style="font-size:12px; align-self:center;">PROBLEM:</span>
+          <button class="sk-pill active" id="pb0" onclick="loadProb(0)">P1</button>
+          <button class="sk-pill" id="pb1" onclick="loadProb(1)">P2</button>
+          <button class="sk-pill" id="pb2" onclick="loadProb(2)">P3</button>
+          <button class="sk-pill" id="pb3" onclick="loadProb(3)">P4</button>
+          <button class="sk-pill" id="pb4" onclick="loadProb(4)">P5</button>
+          <button class="btn small" onclick="reload()">↺ restart</button>
+        </div>
+
+        <div class="problem-card sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="prob-label">SOLVE FOR x:</div>
+          <div class="problem-expr" id="prob-expr"></div>
+          <div style="margin-top:6px; font-family:'Patrick Hand',cursive; font-size:14px; color:var(--ink-soft);" id="prob-note"></div>
+        </div>
+
+        <div class="strategy-row">
+          <div class="strategy-chip sk-box"><strong>same base?</strong>Rewrite both sides, then set exponents equal.</div>
+          <div class="strategy-chip sk-box"><strong>no match?</strong>Log both sides and bring the exponent down.</div>
+          <div class="strategy-chip sk-box"><strong>base e?</strong>Use ln so e and ln undo each other.</div>
+        </div>
+
+        <div id="steps-area"></div>
+
+        <div class="solved-banner sk-box" id="solved-banner">
+          <div class="prob-label">FINAL ANSWER</div>
+          <div class="f-display" id="solved-expr"></div>
+          <div style="margin-top:10px; font-family:'Patrick Hand',cursive; font-size:14px;" id="solved-note"></div>
+          <button class="btn accent" style="margin-top:10px;" onclick="nextProb()">next problem →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Pick a problem.</li>
+          <li>Answer one move at a time.</li>
+          <li>Use exact log form before decimals.</li>
+          <li>Round only at the end.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE MOVES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <strong>2^x = 16</strong> becomes 2^x = 2^4, so x = 4.<br><br>
+          <strong>3^x = 20</strong> becomes x log(3) = log(20), so x = log(20)/log(3).<br><br>
+          <strong>e^(2x) = 10</strong> becomes 2x = ln(10).
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">WATCH FOR</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          If there is a coefficient in front, divide it away before logging. If the problem is a word model, isolate the exponential part first.
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
+        <div class="f-marker" style="font-size:11px;">SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Which problem needed logs? Explain why matching bases were not enough.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="exponential-explorer.html">→ Exponential Function Explorer</a>
+        <a class="related-link f-hand" href="log-converter.html">→ Log ↔ Exponential Converter</a>
+        <a class="related-link f-hand" href="log-properties.html">→ Log Properties Sandbox</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROBS = [
+      {
+        expr:'2^x = 16',
+        note:'Exact answer: rewrite 16 as a power of 2.',
+        steps:[
+          { q:'Can both sides use the same base? Type yes or no.', ans:['yes','y'], reveal:'Yes. 16 = 2^4.' },
+          { q:'Rewrite the right side as a power of 2.', ans:['2^4','2⁴'], reveal:'2^x = 2^4' },
+          { q:'Set the exponents equal. What is x?', ans:['4'], reveal:'x = 4' },
+        ],
+        final:'x = 4',
+        note2:'No calculator needed. Same base is the clean path.',
+      },
+      {
+        expr:'3^x = 20',
+        note:'Approximate answer: bases do not match, so log both sides.',
+        steps:[
+          { q:'Can 20 be rewritten as a nice power of 3? Type yes or no.', ans:['no','n'], reveal:'No. Use logs.' },
+          { q:'After logging both sides, what comes down in front of log(3)?', ans:['x'], reveal:'log(3^x) = x log(3)' },
+          { q:'Solve for x in exact form.', ans:['log(20)/log(3)','ln(20)/ln(3)'], reveal:'x = log(20) / log(3)' },
+          { q:'Decimal approximation to the nearest hundredth?', ans:['2.73'], reveal:'log(20) / log(3) ≈ 2.73' },
+        ],
+        final:'x = log(20) / log(3) ≈ 2.73',
+        note2:'Exact log form first, decimal second.',
+      },
+      {
+        expr:'5 · 2^x = 40',
+        note:'Coefficient first: isolate the exponential part before logging or matching bases.',
+        steps:[
+          { q:'Divide both sides by 5. What equation remains?', ans:['2^x=8','2^x = 8'], reveal:'2^x = 8' },
+          { q:'Rewrite 8 as a power of 2.', ans:['2^3','2³'], reveal:'8 = 2^3' },
+          { q:'Set exponents equal. What is x?', ans:['3'], reveal:'x = 3' },
+        ],
+        final:'x = 3',
+        note2:'The coefficient was the only thing hiding the same-base move.',
+      },
+      {
+        expr:'e^(2x) = 10',
+        note:'Use natural log because the base is e.',
+        steps:[
+          { q:'Which log should undo base e? Type log or ln.', ans:['ln'], reveal:'ln is log base e.' },
+          { q:'After applying ln, what equation do you get?', ans:['2x=ln(10)','2x = ln(10)'], reveal:'ln(e^(2x)) = ln(10), so 2x = ln(10).' },
+          { q:'Solve for x in exact form.', ans:['ln(10)/2','(ln(10))/2'], reveal:'x = ln(10) / 2' },
+          { q:'Decimal approximation to the nearest hundredth?', ans:['1.15'], reveal:'ln(10) / 2 ≈ 1.15' },
+        ],
+        final:'x = ln(10) / 2 ≈ 1.15',
+        note2:'ln and e are inverse operations.',
+      },
+      {
+        expr:'500(1.04)^x = 900',
+        note:'Word-model style: $500 grows at 4% until it reaches $900.',
+        steps:[
+          { q:'Divide by 500 first. What is the right side?', ans:['1.8'], reveal:'900 / 500 = 1.8, so (1.04)^x = 1.8.' },
+          { q:'Write x in exact log form.', ans:['log(1.8)/log(1.04)','ln(1.8)/ln(1.04)'], reveal:'x = log(1.8) / log(1.04)' },
+          { q:'Decimal approximation to the nearest tenth?', ans:['15.0','15'], reveal:'log(1.8) / log(1.04) ≈ 15.0' },
+        ],
+        final:'x = log(1.8) / log(1.04) ≈ 15.0 years',
+        note2:'Keep the log quotient until the final rounding step.',
+      },
+    ];
+
+    let curProb = 0, curStep = 0;
+
+    function norm(s) {
+      return s.replace(/\s+/g,'').replace(/−/g,'-').replace(/⁴/g,'^4').replace(/³/g,'^3').toLowerCase();
+    }
+
+    function loadProb(idx) {
+      curProb = idx; curStep = 0;
+      document.querySelectorAll('[id^=pb]').forEach((b,i) => b.classList.toggle('active', i===idx));
+      document.getElementById('prob-expr').textContent = PROBS[idx].expr;
+      document.getElementById('prob-note').textContent = PROBS[idx].note;
+      document.getElementById('solved-banner').style.display = 'none';
+      renderSteps();
+    }
+
+    function renderSteps() {
+      const p = PROBS[curProb];
+      const area = document.getElementById('steps-area');
+      area.innerHTML = '';
+      p.steps.forEach((step, i) => {
+        const isDone = i < curStep, isActive = i === curStep;
+        const div = document.createElement('div');
+        div.className = `step-block sk-box ${isActive ? 'active' : isDone ? 'done' : 'locked'}`;
+        div.innerHTML = `
+          <div class="step-q"><strong>Step ${i + 1}:</strong> ${step.q}</div>
+          ${isDone ? `<div class="step-reveal" style="display:block;">${step.reveal} ✓</div>` : ''}
+          ${isActive ? `
+            <div class="step-answer-row">
+              <input class="step-input" id="si${i}" type="text" placeholder="answer" onkeydown="if(event.key==='Enter')checkStep(${i})" />
+              <button class="btn small accent" onclick="checkStep(${i})">check →</button>
+              <button class="btn small" onclick="showHint(${i})">hint</button>
+              <span class="step-fb" id="sf${i}"></span>
+            </div>
+            <div class="step-reveal" id="sr${i}">${step.reveal}</div>` : ''}
+        `;
+        area.appendChild(div);
+      });
+    }
+
+    function checkStep(i) {
+      const inp = document.getElementById(`si${i}`);
+      const fb = document.getElementById(`sf${i}`);
+      const val = norm(inp.value);
+      const ok = PROBS[curProb].steps[i].ans.some(a => norm(a) === val);
+      if (ok) {
+        inp.classList.add('ok'); fb.textContent = '✓'; fb.className = 'step-fb good';
+        setTimeout(() => {
+          curStep = i + 1;
+          if (curStep >= PROBS[curProb].steps.length) showSolved();
+          else { renderSteps(); document.querySelector('.step-block.active .step-input')?.focus(); }
+        }, 500);
+      } else {
+        inp.classList.add('err'); fb.textContent = 'try again'; fb.className = 'step-fb bad';
+        setTimeout(() => { inp.classList.remove('err'); fb.textContent = ''; }, 1000);
+      }
+    }
+
+    function showHint(i) {
+      const r = document.getElementById(`sr${i}`);
+      if (r) r.style.display = 'block';
+    }
+
+    function showSolved() {
+      const p = PROBS[curProb];
+      document.getElementById('solved-banner').style.display = 'block';
+      document.getElementById('solved-expr').textContent = p.final;
+      document.getElementById('solved-note').textContent = p.note2;
+    }
+
+    function reload() { loadProb(curProb); }
+    function nextProb() { loadProb((curProb + 1) % PROBS.length); }
+
+    loadProb(0);
+  </script>
+</body>
+</html>

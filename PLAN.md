@@ -7,12 +7,12 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 23 tools wired into the homepage grid.  
-**Curriculum:** 7 full units (Sept → May). Units 5, 6, and 7 now exist on the site.  
-**Unit pages:** U1–U7 have homes for existing tools; not-yet-built Codex tools remain marked as coming soon instead of broken links.  
-**Video-learning:** local transcript workflow is set up in `video-learning/`, with 41 lesson transcripts, extracted PDF text, 21 contact sheets, and 6 synthesis notes files.
+**Site:** 7 unit pages (u1–u7), 29 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
+**Curriculum:** 7 full units (Sept → May, year complete).  
+**Unit pages:** U1–U7 fully wired. Only genuinely missing tools remain marked coming soon.  
+**Video-learning:** complete through batch 6 — 41 transcripts, extracted PDF text, 21 contact sheets, 6 synthesis notes.
 
-**23 tools currently built/integrated:**
+**29 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -32,10 +32,19 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Function Composition Machine (U4)
 - Inverse Function Revealer (U4)
 - Log ↔ Exponential Converter (U5)
+- Exponential Function Explorer (U5)
+- Log Properties Sandbox (U5)
+- Exponential Equation Solver (U5)
 - Rational Simplifier (U6)
 - Adding Rational Expressions (U6)
 - Polynomial Sketch Pad (U6)
+- Polynomial Division Stepper (U6) — long division + synthetic, 4 problems each, factor verdict
+- SOH CAH TOA Triangle Solver (U7)
 - Unit Circle Walker (U7)
+- Sine/Cosine Graph Builder (U7)
+
+**1 tool still missing (coming soon on unit page):**
+- Exponential Model Builder (U5, D3)
 
 ---
 
@@ -145,6 +154,16 @@ Contact sheets created:
 - U9-D2 probability rules.
 - U9-D3 sampling and distributions.
 
+### Unit page sync (May 2026)
+
+ChatGPT ran a repo-wide static audit and found:
+- Homepage tool count was stuck at 23, then 26/27; current actual is 28.
+- u4.html, u5.html, u6.html, u7.html all had `future`/coming-soon rows for tools that already existed and were wired into the homepage.
+
+Fixed: index.html counts updated, all four unit pages synced. Remaining "coming soon" rows are for tools that genuinely don't exist yet.
+
+---
+
 ### Site changes made from video insights
 
 Updated `tools/substitution-stepper.html`:
@@ -195,12 +214,26 @@ Verification:
 
 ## Who does what
 
+Three agents. Each has a lane — don't mix them up.
+
 ### Claude builds these
 Claude handles anything that requires:
 - **pedagogical judgment** (how to sequence a conceptual reveal, what a student gets confused by)
 - **novel interaction design** (animations, canvas tools, multi-panel layouts)
 - **math correctness** (asymptote logic, domain restrictions, extraneous solutions, numerical edge cases)
 - **voice and framing** (the "Try This", "Key Ideas", sidebar copy — it has to sound like Mr. K)
+
+Do NOT ask Claude to audit the repo for consistency issues or stale data — that belongs to ChatGPT.
+
+### ChatGPT audits these
+ChatGPT handles anything that is:
+- **static analysis** (reading across all files without editing — tool counts, stale links, coming-soon vs live mismatches)
+- **consistency checks** (do unit pages match the homepage TOOLS array? do plan counts match reality?)
+- **doc and plan review** (is PLAN.md behind the actual site? are markdown files accurate?)
+- **pre-build review** (before Claude builds a new tool, ChatGPT can check for naming conflicts, existing patterns to follow)
+- **post-build audit** (after a tool ships, ChatGPT verifies the unit page, homepage card, and plan doc are all updated)
+
+ChatGPT reports findings; Claude or Codex act on them. ChatGPT does not edit HTML.
 
 ### Codex builds these
 Codex handles anything that is:
@@ -219,7 +252,7 @@ Codex handles anything that is:
 | Add u5.html (Exponential & Log) | **Codex** | Done |
 | Add u6.html (Rational Functions & Polynomials) | **Codex** | Done |
 | Add u7.html (Trigonometry) | **Codex** | Done |
-| Update index.html nav + unit cards | **Codex** | Done — homepage now renders 23 tools |
+| Update index.html nav + unit cards | **Codex** | Done — homepage now renders 28 tools |
 | Correct existing unit day maps | **Codex** | Done for existing tool homes; future tools remain coming soon |
 | Update all unit breadcrumb links | **Codex** | Done — full-site local-link smoke test passed |
 
@@ -467,31 +500,39 @@ What to build:
 
 ---
 
-## Priority order
+## What's done vs. remaining
 
-| # | Tool | Unit | Who | Complexity |
-|---|---|---|---|---|
-| 1 | Add u5–u7 pages + fix unit maps | — | **Codex** | Low |
-| 2 | Piecewise Function Grapher | U1 | **Claude** | Medium |
-| 3 | Transformations Explorer | U2 | **Claude** | Medium-High |
-| 4 | Quadratic Standard Form Explorer | U3 | **Claude** | Medium |
-| 5 | Log ↔ Exponential Converter | U5 | **Claude** | Medium |
-| 6 | Exponential Explorer | U5 | **Codex** | Low-Medium |
-| 7 | Cubic & Radical Grapher | U4 | **Claude** | Medium |
-| 8 | Function Composition Machine | U4 | **Claude** | High |
-| 9 | Inverse Function Revealer | U4 | **Claude** | Medium |
-| 10 | Log Properties Sandbox | U5 | **Codex** | Low |
-| 11 | Exponential Equation Solver | U5 | **Codex** | Low-Medium |
-| 12 | Rational Expression Simplifier | U6 | **Claude** | Medium |
-| 13 | Adding Rational Expressions | U6 | **Claude** | Medium |
-| 14 | Polynomial Sketch Pad | U6 | **Codex** | Low-Medium |
-| 15 | SOH CAH TOA Solver | U7 | **Codex** | Low |
-| 16 | Sine/Cosine Graph Builder | U7 | **Codex** | Low-Medium |
-| 17 | Unit Circle Walker | U7 | **Claude** | High |
+### All completed (25 of 28 tools + all site structure)
 
-**Total new tools: 17**  
-**Claude builds: 10** (all novel interactions, conceptual bridges, canvas complexity)  
-**Codex builds: 7** (structural pages, mechanics tools following existing patterns)
+| Tool | Unit | Who built |
+|---|---|---|
+| Add u5–u7 pages + fix unit maps | — | Codex |
+| Sync unit page statuses to match live tools | — | Claude |
+| Piecewise Function Grapher | U1 | Claude |
+| Transformations Explorer | U2 | Claude |
+| Quadratic Standard Form Explorer | U3 | Claude |
+| Log ↔ Exponential Converter | U5 | Claude |
+| Exponential Function Explorer | U5 | Codex |
+| Cubic & Radical Grapher | U4 | Claude |
+| Function Composition Machine | U4 | Claude |
+| Inverse Function Revealer | U4 | Claude |
+| Log Properties Sandbox | U5 | Codex |
+| Exponential Equation Solver | U5 | Codex |
+| Rational Expression Simplifier | U6 | Claude |
+| Adding Rational Expressions | U6 | Claude |
+| Polynomial Sketch Pad | U6 | Codex |
+| SOH CAH TOA Solver | U7 | Codex |
+| Unit Circle Walker | U7 | Claude |
+| Sine/Cosine Graph Builder | U7 | Codex |
+
+### Remaining (2 tools)
+
+| # | Tool | Unit | Who | Complexity | Notes |
+|---|---|---|---|---|---|
+| 1 | Exponential Model Builder | U5, D3 | **Claude** | Medium | Story problems need keyword classification, percent-to-decimal checks, compounding frequency, and unrounded expression display. |
+| 2 | Polynomial Division Stepper | U6, D4 | **Claude** | Medium-High | Long division and synthetic division both need correct placeholder-zero handling and remainder display. Math edge cases throughout. |
+
+**After each tool ships, run ChatGPT audit:** verify the unit page lesson row, homepage TOOLS array card, and PLAN.md are all updated before calling it done.
 
 ---
 
