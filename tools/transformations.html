@@ -50,6 +50,19 @@
     /* sidebar formula card */
     .formula-card { text-align: center; padding: 10px 14px; border: 1.5px dashed var(--ink-2); border-radius: 4px; }
     .formula-card .f-big { font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 2; }
+
+    /* transformation chips */
+    .t-chip {
+      padding: 3px 10px; border-radius: 4px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    /* practice panel */
+    .practice-panel {
+      margin-top: 8px; border: 2px solid var(--accent); border-radius: 4px;
+      background: #fff8f0; padding: 10px 12px;
+    }
+    .p-result { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
   </style>
 </head>
 <body class="paper-lined">
@@ -73,6 +86,9 @@
 
       <!-- annotation -->
       <div class="annot" id="annot">Move a slider — this box explains what it does.</div>
+
+      <!-- transformation chips — updates live as sliders move -->
+      <div id="transform-chips" style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; min-height:22px;"></div>
 
       <!-- parent function picker -->
       <div class="parent-row">
@@ -120,6 +136,22 @@
           <input type="checkbox" id="show-grid" checked onchange="draw()"> grid
         </label>
         <button class="btn small" style="margin-left:auto;" onclick="resetAll()">↺ reset</button>
+        <button class="btn small" id="practice-toggle" onclick="togglePractice()">📝 write g(x)</button>
+      </div>
+
+      <!-- practice: write g(x) mode -->
+      <div id="practice-panel" class="practice-panel" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span class="f-marker" style="font-size:11px;">PRACTICE — WRITE g(x)</span>
+          <span class="f-type" style="font-size:12px; color:var(--ink-soft);" id="pnum-label">1 / 5</span>
+        </div>
+        <div class="f-hand" style="font-size:14px; line-height:1.6;" id="practice-prompt"></div>
+        <div style="display:flex; gap:8px; align-items:center; margin-top:8px; flex-wrap:wrap;">
+          <button class="btn small accent" onclick="checkPractice()">✓ check</button>
+          <button class="btn small" onclick="nextPrompt(-1)">← prev</button>
+          <button class="btn small" onclick="nextPrompt(1)">next →</button>
+          <span class="p-result" id="practice-result"></span>
+        </div>
       </div>
     </div>
 
@@ -147,6 +179,18 @@
           <li>Read the yellow box — it tells you what changed and why.</li>
           <li>Toggle the gray dashed parent to compare.</li>
         </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#f0f4ff;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">TRANSFORMATION ORDER (like PEMDAS)</div>
+        <div class="f-hand" style="font-size:13px; line-height:2; color:var(--ink-2);">
+          <strong style="color:#2a8a4a;">① h</strong> — inside the function → left/right<br>
+          <strong style="color:var(--accent);">② a</strong> — out front → stretch / reflect<br>
+          <strong style="color:#8b4513;">③ k</strong> — added at the end → up/down
+        </div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:4px; border-top:1px dashed var(--ink-2); padding-top:6px;">
+          Why does h shift the "wrong" way? Ask: <em>what x makes the inside zero?</em> That x is where the vertex lands.
+        </div>
       </div>
 
       <div class="try-this-box">
@@ -270,9 +314,9 @@
           return `b = ${fmt(b)} → reflected over y-axis AND stretched horizontally.`;
 
         case 'h':
-          if (h === 0)   return 'h = 0 — no horizontal shift. Graph is centered.';
-          if (h > 0)     return `h = ${fmt(h)} → shift RIGHT ${fmt(h)} units. The minus sign inside (x − ${fmt(h)}) is why: the vertex/anchor lands at x = ${fmt(h)}.`;
-          return `h = ${fmt(h)} → shift LEFT ${fmt(Math.abs(h))} units. We write (x − (${fmt(h)})) = (x + ${fmt(Math.abs(h))}), so it looks like plus — but h is still negative.`;
+          if (h === 0)   return 'h = 0 — no horizontal shift. Graph is centered at the origin.';
+          if (h > 0)     return `h = ${fmt(h)} → shift RIGHT ${fmt(h)} units. Ask: what x makes (x − ${fmt(h)}) equal zero? x = ${fmt(h)}. That's where the vertex lands — and why (x − ${fmt(h)}) feels "backwards."`;
+          return `h = ${fmt(h)} → shift LEFT ${fmt(Math.abs(h))} units. The inside is (x + ${fmt(Math.abs(h))}). Ask: what x makes that zero? x = ${fmt(h)}. Vertex lands at x = ${fmt(h)}.`;
 
         case 'k':
           if (k === 0)   return 'k = 0 — no vertical shift.';
@@ -392,6 +436,103 @@
       document.getElementById('eq-display').textContent = buildEq();
     }
 
+    // ---- transformation chips ----
+    function updateChips() {
+      const { a, b, h, k } = P;
+      const el = document.getElementById('transform-chips');
+      el.innerHTML = '';
+
+      const chip = (text, clr) => {
+        const s = document.createElement('span');
+        s.className = 't-chip';
+        s.style.cssText = `border:1.5px solid ${clr}; color:${clr}; background:${clr}18;`;
+        s.textContent = text;
+        el.appendChild(s);
+      };
+
+      // Order: H first (inside), then A (split reflect + stretch), then K (outside)
+      if (h > 0)  chip(`→ right ${fmt(h)}`, '#2a8a4a');
+      else if (h < 0) chip(`← left ${fmt(Math.abs(h))}`, '#2a8a4a');
+
+      if (a < 0)  chip('↕ reflect over x-axis', '#d94f2a');
+      const absA = Math.abs(a);
+      if (absA > 1)            chip(`↑ stretch × ${fmt(absA)}`, '#d94f2a');
+      else if (absA < 1 && absA > 0) chip(`↓ compress × ${fmt(absA)}`, '#d94f2a');
+
+      if (k > 0)  chip(`↑ up ${fmt(k)}`, '#8b4513');
+      else if (k < 0) chip(`↓ down ${fmt(Math.abs(k))}`, '#8b4513');
+
+      if (b < 0)  chip('↔ reflect over y-axis', '#2a6fb4');
+      const absB = Math.abs(b);
+      if (absB !== 1) {
+        if (absB > 1) chip(`◀ horiz compress × ${fmt(absB)}`, '#2a6fb4');
+        else          chip(`▶ horiz stretch × ${fmt(Math.round(1/absB*10)/10)}`, '#2a6fb4');
+      }
+
+      if (el.children.length === 0) {
+        const s = document.createElement('span');
+        s.style.cssText = "font-family:'Patrick Hand',cursive; font-size:13px; color:rgba(29,26,20,0.4);";
+        s.textContent = 'at parent function — no transformations yet';
+        el.appendChild(s);
+      }
+    }
+
+    // ---- practice: write g(x) ----
+    const PROMPTS = [
+      { parent:'abs',   label:'|x|', sol:{a:1,  b:1, h:2,  k:3},
+        desc:'Start with <strong>f(x) = |x|</strong>.<br>Shift right 2, then up 3.' },
+      { parent:'quad',  label:'x²',  sol:{a:-1, b:1, h:-4, k:0},
+        desc:'Start with <strong>f(x) = x²</strong>.<br>Reflect over the x-axis, then shift left 4.' },
+      { parent:'sqrt',  label:'√x',  sol:{a:2,  b:1, h:1,  k:-3},
+        desc:'Start with <strong>f(x) = √x</strong>.<br>Vertical stretch by 2, shift right 1, shift down 3.' },
+      { parent:'quad',  label:'x²',  sol:{a:-3, b:1, h:2,  k:1},
+        desc:'Start with <strong>f(x) = x²</strong>.<br>Reflect over x-axis, vertical stretch by 3, shift right 2, shift up 1.' },
+      { parent:'cubic', label:'x³',  sol:{a:0.5,b:1, h:-3, k:2},
+        desc:'Start with <strong>f(x) = x³</strong>.<br>Vertical compression by ½, shift left 3, shift up 2.' },
+    ];
+
+    let practiceIdx = 0;
+    let practiceOpen = false;
+
+    function togglePractice() {
+      practiceOpen = !practiceOpen;
+      document.getElementById('practice-panel').style.display = practiceOpen ? '' : 'none';
+      document.getElementById('practice-toggle').textContent = practiceOpen ? '× close practice' : '📝 write g(x)';
+      if (practiceOpen) loadPrompt();
+    }
+
+    function loadPrompt() {
+      const p = PROMPTS[practiceIdx];
+      document.getElementById('pnum-label').textContent = `${practiceIdx + 1} / ${PROMPTS.length}`;
+      document.getElementById('practice-prompt').innerHTML =
+        p.desc + `<br><span style="color:var(--ink-soft); font-size:12px;">Pick the parent above, then set sliders to match — then ✓ check.</span>`;
+      document.getElementById('practice-result').textContent = '';
+    }
+
+    function checkPractice() {
+      const p = PROMPTS[practiceIdx];
+      const s = p.sol;
+      const wrongs = [];
+      if (fn !== p.parent)  wrongs.push(`parent should be ${p.label}`);
+      if (P.a !== s.a)      wrongs.push(`a should be ${s.a}`);
+      if (P.h !== s.h)      wrongs.push(`h should be ${s.h}`);
+      if (P.k !== s.k)      wrongs.push(`k should be ${s.k}`);
+
+      const el = document.getElementById('practice-result');
+      if (wrongs.length === 0) {
+        el.textContent = '✓ Perfect!';
+        el.style.color = '#2a8a4a';
+      } else {
+        el.textContent = '✗ ' + wrongs.join(' · ');
+        el.style.color = '#d94f2a';
+      }
+    }
+
+    function nextPrompt(dir) {
+      practiceIdx = (practiceIdx + dir + PROMPTS.length) % PROMPTS.length;
+      loadPrompt();
+    }
+
     // ---- interaction ----
     function slide(param) {
       let v = +document.getElementById(`sl-${param}`).value;
@@ -403,6 +544,7 @@
       P[param] = v;
       document.getElementById(`val-${param}`).textContent = fmt(v);
       document.getElementById('annot').textContent = annotText(param);
+      updateChips();
       draw();
     }
 
@@ -410,6 +552,7 @@
       fn = name;
       document.querySelectorAll('[data-fn]').forEach(b => b.classList.toggle('active', b.dataset.fn === name));
       document.getElementById('annot').textContent = `Switched to parent: f(x) = ${FNDEFS[name].name}. Move sliders to transform it.`;
+      updateChips();
       draw();
     }
 
@@ -420,10 +563,12 @@
         document.getElementById(`val-${p}`).textContent = fmt(P[p]);
       });
       document.getElementById('annot').textContent = 'Reset — all parameters back to 1 (or 0). Parent function restored.';
+      updateChips();
       draw();
     }
 
     window.addEventListener('resize', draw);
+    updateChips();
     draw();
   </script>
 </body>

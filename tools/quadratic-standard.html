@@ -127,7 +127,8 @@
           <strong>Discriminant:</strong> Δ = b² − 4ac<br>
           &nbsp;&nbsp;Δ &gt; 0 → 2 real roots<br>
           &nbsp;&nbsp;Δ = 0 → 1 real root (tangent)<br>
-          &nbsp;&nbsp;Δ &lt; 0 → no real roots (imaginary)
+          &nbsp;&nbsp;Δ &lt; 0 → no real roots → <em>imaginary solutions</em><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ parabola doesn't cross x-axis
         </div>
       </div>
 
@@ -157,6 +158,7 @@
         <a class="related-link f-hand" href="complete-square.html">→ Complete the Square Trainer</a>
         <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
         <a class="related-link f-hand" href="factoring-lab.html">→ Factoring Quadratics Lab</a>
+        <a class="related-link f-hand" href="imaginary-sandbox.html">→ Imaginary Number Sandbox</a>
       </div>
     </div>
   </div>
@@ -321,8 +323,9 @@
       } else {
         const realPart = fmt(-b / (2*a));
         const imagPart = fmt(Math.sqrt(-disc) / (2*Math.abs(a)));
-        add(`Δ = ${fmt(disc)} › no real roots`, 'disc-neg');
-        add(`x = ${realPart} ± ${imagPart}i`, 'disc-neg');
+        add(`Δ = ${fmt(disc)} — no real zeros`, 'disc-neg');
+        add(`parabola doesn't touch x-axis`, 'disc-neg');
+        add(`x = ${realPart} ± ${imagPart}i  (imaginary)`, 'disc-neg');
       }
 
       // vertex & y-intercept
