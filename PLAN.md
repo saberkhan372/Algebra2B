@@ -10,7 +10,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Site:** 7 unit pages (u1–u7), 30 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
-**Video-learning:** complete through batch 8 — 50 transcripts (including U3-D1 25-26), extracted PDF text, 29 contact sheets, 8 synthesis notes.
+**Video-learning:** complete through batch 9 — 50 transcripts, extracted PDF text, 29 contact sheets, 9 synthesis notes.
 
 **30 tools built/integrated:**
 - Absolute Value Grapher (U2)
@@ -83,6 +83,7 @@ Artifacts now include:
 - `video-learning/batch-6-trig-statistics-insights.md` - insights from angle/radian lessons, periodic functions, sine/cosine graphs, probability rules, data displays, and sampling/distribution lessons.
 - `video-learning/batch-7-rational-operations-insights.md` - insights from U8-D2 through U8-D4 and the Unit 8 Study Guide: multiply/divide rationals, add/subtract rationals, solving rational equations, asymptote rules, domain/range interval notation, rational function identification, and graphing technique.
 - `video-learning/batch-8-functions-transformations-unit2-insights.md` - insights from U2-D1, U2-D2, U2-D5, and U2-D8: functions, domain/range/end behavior, calculator workflow, transformations, and cumulative Unit 2 review.
+- `video-learning/batch-9-25-26-revisit-insights.md` - insights from 25-26 versions of U1-D2/D3, U2-D3/D4/D6/D7, U3-D1, and U3-D3: confirms patterns from earlier batches; new insights include the definitive "why h is opposite" explanation, "plus/minus ruin the party" exponent rule, imaginary-solutions/no-x-intercepts bridge, GCF-always-first principle, and three-form quadratic map (vertex ↔ standard ↔ intercept).
 
 Transcribed lessons so far:
 
@@ -96,8 +97,15 @@ Transcribed lessons so far:
 - U2-D6 - difference of squares and cubes.
 - U2-D7 - quadratic graphing and vertex form patterns.
 - U2-D8 - Unit 2 test review: functions, transformations, exponents, factoring, quadratics, piecewise evaluation, and cumulative skills.
+- U1-D2 - substitution and elimination. (25-26)
+- U1-D3 - factoring and solving. (25-26)
+- U2-D3 - absolute value transformations and the "why h is opposite" vertex explanation. (25-26)
+- U2-D4 - negative exponents, plus/minus-ruin-the-party rule, and quiz review. (25-26)
+- U2-D6 - difference of squares and cubes, odd-exponent caveat, calculator cube-root check. (25-26)
+- U2-D7 (Part 1 & 2) - quadratic graphing, even function intro, right-1-up-a / right-2-up-4a pattern confirmation. (25-26)
 - U3-D1 - imaginary numbers and quadratic formula bridge. (24-25)
 - U3-D1 - imaginary numbers, quadratic formula, and "no x-intercepts when solutions contain i" connection. (25-26)
+- U3-D3 (Part 1 & 2) - completing the square: three-form quadratic map, pattern-discovery approach, imaginary results from negative right side. (25-26)
 - U3-D3 - completing the square.
 - U3-D5 - intro to rational expressions.
 - U4-D1 - radical functions and square-root graph patterns.
@@ -557,8 +565,12 @@ All 30 planned tools are now live. Future additions will be driven by video-lear
 **Upgrade candidates from video insights (not new tools — improvements to existing ones):**
 - `adding-rationals.html`: add Subtract tab with negative-distribution as Step 1; add "does numerator factor?" final-simplification check.
 - `rational-expressions.html`: add interval-notation domain/range readout; add three-case horizontal asymptote rule chip; add slant asymptote indicator.
-- `imaginary-sandbox.html`: add explicit callout — "if discriminant < 0, the parabola has no x-intercepts" — connecting imaginary solutions to the graph.
-- Transformations Explorer: separate chips for "stretch by 2" vs "reflect over x-axis" when a = −2; add "write g(x) from verbal list" practice mode.
+- `imaginary-sandbox.html`: add "parabola connection" panel — "when discriminant < 0, solutions contain i and the parabola has no x-intercepts." Show a mini floating-parabola graphic.
+- `quadratic-slider.html` (Quadratic Standard Form Explorer): when discriminant chip is negative, label it "no real zeros — parabola doesn't touch x-axis."
+- Transformations Explorer: separate chips for "stretch by 2" vs "reflect over x-axis" when a = −2; add "write g(x) from verbal list" practice mode; add "why h is opposite" tooltip explaining the "make the inside zero" rule.
+- `factoring-lab.html`: add factor-search heuristic hint — "try pairs near √(product); if sum is too small, spread further apart."
+- `negexp.html` (Negative Exponent Flipper): add "plus/minus ruin the party" error state when student tries to flip a term in a sum/difference.
+- `complete-square.html` (Complete the Square Trainer): add three-form map chip (vertex ↔ standard ↔ intercept); add pattern-discovery hint from foiling (x+b/2)²; flag imaginary results with "no x-intercepts" note.
 
 **New tool candidates from video insights (gaps identified — no existing tool covers these):**
 - Rational Multiplication/Division Stepper (U8-D2): keep-change-flip before factoring, factor/cancel with original-domain restrictions.
