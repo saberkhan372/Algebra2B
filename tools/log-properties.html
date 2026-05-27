@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Properties Sandbox — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; }
+    .tool-page { height: calc(100vh - 52px); overflow-y: auto; }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ---- tabs ---- */
+    .mode-tabs {
+      display: flex; gap: 0; border-bottom: 2px solid var(--ink);
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .mode-tab {
+      padding: 6px 18px; border: none; background: transparent;
+      font-family: 'Permanent Marker', cursive; font-size: 14px;
+      cursor: pointer; color: var(--ink-soft); border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.15s;
+    }
+    .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+    .mode-tab:hover:not(.active) { background: var(--paper-2); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+
+    /* ---- color language ---- */
+    .cbase { color: #2a6fb4; }            /* base — blue */
+    .cexp  { color: #d94f2a; font-weight: 700; }   /* exponent / coefficient — red */
+    .carg  { color: #2a8a4a; }            /* argument — green */
+
+    /* ---- rule cards ---- */
+    .rule-cards {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px;
+    }
+    .rule-card {
+      flex: 1; min-width: 155px; max-width: 280px;
+      border: 2px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 10px 13px; background: var(--paper-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 13.5px; line-height: 1.7;
+    }
+    .rule-card.blog-card { background: var(--highlight); }
+    .rule-name {
+      font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink);
+      border-bottom: 1px dashed var(--ink-soft); padding-bottom: 3px; margin-bottom: 5px;
+    }
+    .rule-sub {
+      font-family: 'Patrick Hand', cursive; font-size: 11.5px; color: var(--ink-soft);
+      margin-top: 3px;
+    }
+
+    /* ---- base match banner ---- */
+    .base-match-banner {
+      background: #e8f5e9; border-left: 4px solid #2a8a4a;
+      padding: 7px 12px; border-radius: 0 6px 6px 0;
+      font-family: 'Patrick Hand', cursive; font-size: 14px; margin-bottom: 12px;
+    }
+
+    /* ---- problem picker ---- */
+    .problem-picker { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+    .prob-btn {
+      padding: 5px 13px; border: 2px solid var(--ink); border-radius: 20px;
+      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 14px;
+      cursor: pointer; transition: background .12s, color .12s;
+    }
+    .prob-btn.active { background: var(--ink); color: var(--paper); }
+    .prob-btn:hover:not(.active) { background: var(--paper-2); }
+
+    /* ---- step rows ---- */
+    .step-area { min-height: 120px; }
+    .step-row {
+      display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+      padding: 5px 0; opacity: 0; transform: translateY(10px);
+      transition: opacity .32s ease, transform .32s ease;
+    }
+    .step-row.visible { opacity: 1; transform: none; }
+    .step-lbl {
+      font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--accent);
+      min-width: 56px; padding-top: 12px; flex-shrink: 0;
+    }
+    .expr-box {
+      border: 3px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 9px 16px; background: var(--paper);
+      font-family: 'JetBrains Mono', monospace; font-size: 22px; line-height: 1.45;
+      box-shadow: 3px 3px 0 rgba(29,26,20,0.15); display: inline-block;
+    }
+    .expr-box.hl { background: var(--highlight); }
+    .expr-box.ok { background: #d4edda; border-color: #2a8a4a; }
+    .step-note {
+      font-family: 'Patrick Hand', cursive; font-size: 14px; color: var(--ink-soft);
+      max-width: 300px; padding: 8px 10px 8px 12px;
+      border-left: 3px solid var(--accent); align-self: center;
+    }
+    .step-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      background: #2a8a4a; color: #fff;
+      font-family: 'Patrick Hand', cursive; font-size: 13px; align-self: center;
+    }
+    .down-arrow {
+      padding-left: 16px; font-size: 20px; color: var(--ink-soft);
+      font-family: 'Permanent Marker', cursive; opacity: 0; transform: translateY(8px);
+      transition: opacity .32s ease, transform .32s ease;
+    }
+    .down-arrow.visible { opacity: 1; transform: none; }
+
+    /* ---- inline fraction ---- */
+    .mfr {
+      display: inline-flex; flex-direction: column; align-items: center;
+      font-size: 0.82em; vertical-align: middle; margin: 0 2px; line-height: 1.1;
+    }
+    .mfr .mn { border-bottom: 1.5px solid var(--ink); padding: 0 5px 2px; }
+    .mfr .md { padding: 2px 5px 0; }
+
+    /* ---- blog rule animation ---- */
+    @keyframes blogDrop {
+      0%   { transform: translate(32px, -18px) scale(0.55); opacity: 0; }
+      60%  { transform: translate(-2px, 2px) scale(1.05); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+    @keyframes blogRise {
+      0%   { transform: translate(-28px, 18px) scale(0.55); opacity: 0; }
+      60%  { transform: translate(2px, -2px) scale(1.05); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+    .bd { animation: blogDrop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+    .br { animation: blogRise 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+    /* ---- controls ---- */
+    .controls-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .btn-step {
+      padding: 8px 22px; border: 2.5px solid var(--ink); border-radius: 6px;
+      background: var(--accent); color: #fff; font-family: 'Permanent Marker', cursive;
+      font-size: 13px; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-step:hover { opacity: 0.85; }
+    .btn-step:disabled { background: var(--paper-2); color: var(--ink-soft); border-color: var(--ink-soft); cursor: default; }
+    .btn-ghost {
+      padding: 6px 15px; border: 2px solid var(--ink-soft); border-radius: 6px;
+      background: transparent; color: var(--ink-soft); font-family: 'Permanent Marker', cursive;
+      font-size: 12px; cursor: pointer;
+    }
+    .btn-ghost:hover { background: var(--paper-2); }
+
+    /* ---- quick check ---- */
+    .qc-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+    .score-box {
+      font-family: 'Permanent Marker', cursive; font-size: 20px; color: var(--accent);
+    }
+    .qc-note {
+      font-family: 'Patrick Hand', cursive; font-size: 14px; color: var(--ink-soft);
+    }
+    .qc-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px;
+    }
+    .qc-card {
+      border: 2.5px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 13px 12px 10px; background: var(--paper);
+    }
+    .qc-expr {
+      font-family: 'JetBrains Mono', monospace; font-size: 22px;
+      text-align: center; margin-bottom: 10px; line-height: 1.4;
+    }
+    .qc-choices { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 6px; }
+    .qc-btn {
+      padding: 5px 14px; border: 2px solid var(--ink); border-radius: 16px;
+      background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 15px;
+      cursor: pointer; transition: background .1s;
+    }
+    .qc-btn:hover:not(:disabled) { background: var(--paper-2); }
+    .qc-btn.correct { background: #d4edda; border-color: #2a8a4a; color: #1a5c30; }
+    .qc-btn.wrong   { background: #ffe0e0; border-color: #d94f2a; color: #8b1a1a; }
+    .qc-btn:disabled { cursor: default; }
+    .qc-explain {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft);
+      display: none; padding-top: 6px; border-top: 1px dashed var(--ink-soft); line-height: 1.4;
+    }
+    .qc-explain.visible { display: block; }
+    .qc-reset-row { margin-top: 14px; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u5.html">← U5</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none;">
+      <div class="tool-breadcrumb">
+        <a href="../u5.html">← U5 · Logs &amp; Exponentials</a> &nbsp;·&nbsp; D5
+      </div>
+      <div class="tool-title f-display">Log Properties Sandbox</div>
+      <div class="tool-tagline f-hand">Expand, condense, and simplify — one step at a time. Same base first, always.</div>
+
+      <!-- Mode tabs -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="expand-panel">Expand</button>
+        <button class="mode-tab" data-mode="condense-panel">Condense</button>
+        <button class="mode-tab" data-mode="qc-panel">Quick Check</button>
+      </div>
+
+      <!-- ===== EXPAND ===== -->
+      <div class="mode-panel active" id="expand-panel">
+        <div class="rule-cards">
+          <div class="rule-card">
+            <div class="rule-name">Product Rule</div>
+            log<sub class="cbase">b</sub>(M·N)<br>
+            = log<sub class="cbase">b</sub>(M) + log<sub class="cbase">b</sub>(N)
+            <div class="rule-sub">product inside → two logs added</div>
+          </div>
+          <div class="rule-card">
+            <div class="rule-name">Quotient Rule</div>
+            log<sub class="cbase">b</sub>(<span class="mfr"><span class="mn">M</span><span class="md">N</span></span>)<br>
+            = log<sub class="cbase">b</sub>(M) − log<sub class="cbase">b</sub>(N)
+            <div class="rule-sub">top → +log, bottom → −log</div>
+          </div>
+          <div class="rule-card blog-card">
+            <div class="rule-name">🎯 Blog Rule (Power)</div>
+            log<sub class="cbase">b</sub>(M<sup class="cexp">p</sup>)<br>
+            = <span class="cexp">p</span> · log<sub class="cbase">b</sub>(M)
+            <div class="rule-sub">exponent drops to coefficient</div>
+          </div>
+        </div>
+
+        <div class="base-match-banner">⚠️ <strong>Same base first!</strong> — All logs in an expression must share the same base before using any rule.</div>
+
+        <div class="problem-picker" id="expand-picker"></div>
+
+        <div class="step-area" id="expand-stage"></div>
+
+        <div class="controls-row">
+          <button class="btn-step" id="expand-next">Next Step →</button>
+          <button class="btn-ghost" id="expand-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- ===== CONDENSE ===== -->
+      <div class="mode-panel" id="condense-panel">
+        <div class="rule-cards">
+          <div class="rule-card">
+            <div class="rule-name">Sum → Product</div>
+            log<sub class="cbase">b</sub>(M) + log<sub class="cbase">b</sub>(N)<br>
+            = log<sub class="cbase">b</sub>(M·N)
+            <div class="rule-sub">two logs added → product inside one</div>
+          </div>
+          <div class="rule-card">
+            <div class="rule-name">Difference → Quotient</div>
+            log<sub class="cbase">b</sub>(M) − log<sub class="cbase">b</sub>(N)<br>
+            = log<sub class="cbase">b</sub>(<span class="mfr"><span class="mn">M</span><span class="md">N</span></span>)
+            <div class="rule-sub">+log → numerator, −log → denominator</div>
+          </div>
+          <div class="rule-card blog-card">
+            <div class="rule-name">🎯 Blog Rule (Power)</div>
+            <span class="cexp">p</span> · log<sub class="cbase">b</sub>(M)<br>
+            = log<sub class="cbase">b</sub>(M<sup class="cexp">p</sup>)
+            <div class="rule-sub">coefficient pops up to exponent</div>
+          </div>
+        </div>
+
+        <div class="base-match-banner">⚠️ <strong>Same base first!</strong> — Only condense logs that share the same base.</div>
+
+        <div class="problem-picker" id="condense-picker"></div>
+
+        <div class="step-area" id="condense-stage"></div>
+
+        <div class="controls-row">
+          <button class="btn-step" id="condense-next">Next Step →</button>
+          <button class="btn-ghost" id="condense-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- ===== QUICK CHECK ===== -->
+      <div class="mode-panel" id="qc-panel">
+        <div class="qc-header">
+          <span class="score-box" id="qc-score">Score: 0 / 8</span>
+          <span class="qc-note">These special values appear constantly — memorize them!</span>
+        </div>
+        <div class="qc-grid" id="qc-grid"></div>
+        <div class="qc-reset-row">
+          <button class="btn-ghost" onclick="buildQC()">Reset All</button>
+        </div>
+      </div>
+
+    </div><!-- /tool-main -->
+  </div><!-- /tool-page -->
+
+  <script>
+    /* ======= TAB SWITCHING ======= */
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab, .mode-panel').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.mode).classList.add('active');
+      });
+    });
+
+    /* ======= EXPAND DATA ======= */
+    const EXPAND = [
+      {
+        label: '1. Product',
+        steps: [
+          { lbl: 'Start',    html: `log(<span class="carg">x · y</span>)`,                                note: '' },
+          { lbl: 'Step 1',   html: `log(<span class="carg">x · y</span>)`,                                badge: 'base 10 ✓', note: 'Both resulting logs share base 10 (plain "log" means base 10). Bases match — ready to expand.' },
+          { lbl: 'Step 2',   html: `log(<span class="carg">x</span>) + log(<span class="carg">y</span>)`, note: 'The product inside one log becomes the sum of two logs. Always the same base on both!', ok: true }
+        ]
+      },
+      {
+        label: '2. Quotient',
+        steps: [
+          { lbl: 'Start',    html: `log<sub class="cbase">3</sub>(<span class="mfr"><span class="mn carg">m</span><span class="md carg">n</span></span>)`,                                              note: '' },
+          { lbl: 'Step 1',   html: `log<sub class="cbase">3</sub>(<span class="mfr"><span class="mn carg">m</span><span class="md carg">n</span></span>)`,                                              badge: 'base 3 ✓', note: 'Both resulting logs use base 3. Bases match.' },
+          { lbl: 'Step 2',   html: `log<sub class="cbase">3</sub>(<span class="carg">m</span>) − log<sub class="cbase">3</sub>(<span class="carg">n</span>)`, note: 'Numerator log is <strong style="color:#2a8a4a">positive (+)</strong>. Denominator log is <strong style="color:#d94f2a">negative (−)</strong>.', ok: true }
+        ]
+      },
+      {
+        label: '3. Blog Rule',
+        steps: [
+          { lbl: 'Start',    html: `log(<span class="carg">x</span><sup class="cexp">3</sup>)`,                                 note: '' },
+          { lbl: 'Step 1',   html: `log(<span class="carg">x</span><sup class="cexp">3</sup>)`,                                 badge: 'exponent spotted: 3', note: 'The exponent <strong>3</strong> is trapped inside the log. The blog rule says it can drop down to become a coefficient.' },
+          { lbl: 'Step 2',   html: `<span class="cexp bd">3</span> · log(<span class="carg">x</span>)`,                        note: '"Blog rule": the exponent drops from superscript position to coefficient. Remember — only works on a single-argument log!', ok: true, blog: 'drop' }
+        ]
+      },
+      {
+        label: '4. Combination',
+        steps: [
+          { lbl: 'Start',    html: `log<sub class="cbase">2</sub>(<span class="mfr"><span class="mn">8x<sup class="cexp">4</sup></span><span class="md">y</span></span>)`,                                                                                   note: '' },
+          { lbl: 'Step 1',   html: `log<sub class="cbase">2</sub>(<span class="mfr"><span class="mn">8x<sup class="cexp">4</sup></span><span class="md">y</span></span>)`,                                                                                   badge: 'base 2 ✓', note: 'All logs will use base 2.' },
+          { lbl: 'Step 2',   html: `log<sub class="cbase">2</sub>(8x<sup class="cexp">4</sup>) − log<sub class="cbase">2</sub>(y)`,                                                                                                                        note: 'Quotient rule first: numerator → +log, denominator → −log.' },
+          { lbl: 'Step 3',   html: `log<sub class="cbase">2</sub>(8) + log<sub class="cbase">2</sub>(x<sup class="cexp">4</sup>) − log<sub class="cbase">2</sub>(y)`,                                                                                      note: 'Product rule: 8·x⁴ inside one log splits into two logs added.' },
+          { lbl: 'Step 4',   html: `log<sub class="cbase">2</sub>(8) + <span class="cexp">4</span>·log<sub class="cbase">2</sub>(x) − log<sub class="cbase">2</sub>(y)`,                                                                                  note: 'Blog rule: the exponent 4 on x drops to a coefficient.' },
+          { lbl: 'Step 5',   html: `<span class="cexp">3</span> + <span class="cexp">4</span>·log<sub class="cbase">2</sub>(x) − log<sub class="cbase">2</sub>(y)`,                                                                                        note: 'Simplify: 2³ = 8, so log₂(8) = 3. Done!', ok: true }
+        ]
+      }
+    ];
+
+    /* ======= CONDENSE DATA ======= */
+    const CONDENSE = [
+      {
+        label: '1. Product',
+        steps: [
+          { lbl: 'Start',    html: `log(<span class="carg">x</span>) + log(<span class="carg">y</span>)`,    note: '' },
+          { lbl: 'Step 1',   html: `log(<span class="carg">x</span>) + log(<span class="carg">y</span>)`,    badge: 'base 10 ✓', note: 'Both logs use base 10. Bases match — ready to condense.' },
+          { lbl: 'Step 2',   html: `log(<span class="carg">xy</span>)`,                                        note: 'Two logs added → one log of the product.', ok: true }
+        ]
+      },
+      {
+        label: '2. Quotient',
+        steps: [
+          { lbl: 'Start',    html: `log<sub class="cbase">b</sub>(<span class="carg">m</span>) − log<sub class="cbase">b</sub>(<span class="carg">n</span>)`,    note: '' },
+          { lbl: 'Step 1',   html: `<span style="color:#2a8a4a">+log<sub class="cbase">b</sub>(<span class="carg">m</span>)</span>&nbsp;&nbsp;<span style="color:#d94f2a">−log<sub class="cbase">b</sub>(<span class="carg">n</span>)</span>`,     note: 'Label each log: <strong style="color:#2a8a4a">positive</strong> goes to numerator, <strong style="color:#d94f2a">negative</strong> goes to denominator.' },
+          { lbl: 'Step 2',   html: `log<sub class="cbase">b</sub>(<span class="mfr"><span class="mn carg">m</span><span class="md carg">n</span></span>)`,       note: 'The positive argument lands on top; the negative argument lands on the bottom.', ok: true }
+        ]
+      },
+      {
+        label: '3. Blog Rule',
+        steps: [
+          { lbl: 'Start',    html: `<span class="cexp">5</span> · log(<span class="carg">x</span>)`,                          note: '' },
+          { lbl: 'Step 1',   html: `<span class="cexp">5</span> · log(<span class="carg">x</span>)`,                          badge: 'coefficient spotted: 5', note: 'The coefficient is <strong>5</strong>. The blog rule says it can pop up to become an exponent.' },
+          { lbl: 'Step 2',   html: `log(<span class="carg">x</span><sup class="cexp br">5</sup>)`,                            note: '"Blog rule" reversed: the coefficient pops up from in front of the log to an exponent on the argument.', ok: true, blog: 'rise' }
+        ]
+      },
+      {
+        label: '4. Combination',
+        steps: [
+          { lbl: 'Start',    html: `<span class="cexp">2</span>·log<sub class="cbase">3</sub>(<span class="carg">x</span>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                     note: '' },
+          { lbl: 'Step 1',   html: `<span class="cexp">2</span>·log<sub class="cbase">3</sub>(<span class="carg">x</span>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                     badge: 'base 3 ✓', note: 'Both logs use base 3.' },
+          { lbl: 'Step 2',   html: `log<sub class="cbase">3</sub>(<span class="carg">x</span><sup class="cexp">2</sup>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                      note: 'Blog rule: coefficient 2 pops up to become the exponent on x.' },
+          { lbl: 'Step 3',   html: `log<sub class="cbase">3</sub>(<span class="mfr"><span class="mn"><span class="carg">x</span><sup class="cexp">2</sup></span><span class="md carg">y</span></span>)`,                    note: 'Quotient rule: +log₃(x²) → numerator, −log₃(y) → denominator. Done!', ok: true }
+        ]
+      }
+    ];
+
+    /* ======= STEP RENDERER ======= */
+    function buildPicker(containerId, data, setFn) {
+      const c = document.getElementById(containerId);
+      c.innerHTML = '';
+      data.forEach((p, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'prob-btn' + (i === 0 ? ' active' : '');
+        btn.textContent = p.label;
+        btn.addEventListener('click', () => {
+          c.querySelectorAll('.prob-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          setFn(i);
+        });
+        c.appendChild(btn);
+      });
+    }
+
+    function renderSteps(stageId, nextBtnId, data, probIdx, shownCount) {
+      const stage = document.getElementById(stageId);
+      const nextBtn = document.getElementById(nextBtnId);
+      stage.innerHTML = '';
+      const prob = data[probIdx];
+
+      for (let i = 0; i < shownCount; i++) {
+        const step = prob.steps[i];
+
+        // Down arrow between steps
+        if (i > 0) {
+          const arr = document.createElement('div');
+          arr.className = 'down-arrow';
+          arr.textContent = '↓';
+          stage.appendChild(arr);
+          requestAnimationFrame(() => requestAnimationFrame(() => arr.classList.add('visible')));
+        }
+
+        // Step row
+        const row = document.createElement('div');
+        row.className = 'step-row';
+        stage.appendChild(row);
+
+        // Step label
+        const lbl = document.createElement('div');
+        lbl.className = 'step-lbl';
+        lbl.textContent = step.lbl;
+        row.appendChild(lbl);
+
+        // Expression box
+        const box = document.createElement('div');
+        box.className = 'expr-box' + (step.ok ? ' ok' : (i > 0 ? ' hl' : ''));
+        box.innerHTML = step.html;
+        row.appendChild(box);
+
+        // Badge
+        if (step.badge) {
+          const b = document.createElement('span');
+          b.className = 'step-badge';
+          b.textContent = step.badge;
+          row.appendChild(b);
+        }
+
+        // Note
+        if (step.note) {
+          const n = document.createElement('div');
+          n.className = 'step-note';
+          n.innerHTML = step.note;
+          row.appendChild(n);
+        }
+
+        // Animate in (defer so transition fires)
+        requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('visible')));
+      }
+
+      // Update next button
+      nextBtn.disabled = (shownCount >= prob.steps.length);
+    }
+
+    /* ======= EXPAND STATE ======= */
+    let expProb = 0, expStep = 1;
+
+    function setExpand(i) {
+      expProb = i; expStep = 1;
+      renderSteps('expand-stage', 'expand-next', EXPAND, expProb, expStep);
+    }
+
+    document.getElementById('expand-next').addEventListener('click', () => {
+      expStep++;
+      renderSteps('expand-stage', 'expand-next', EXPAND, expProb, expStep);
+    });
+    document.getElementById('expand-reset').addEventListener('click', () => setExpand(expProb));
+
+    /* ======= CONDENSE STATE ======= */
+    let conProb = 0, conStep = 1;
+
+    function setCondense(i) {
+      conProb = i; conStep = 1;
+      renderSteps('condense-stage', 'condense-next', CONDENSE, conProb, conStep);
+    }
+
+    document.getElementById('condense-next').addEventListener('click', () => {
+      conStep++;
+      renderSteps('condense-stage', 'condense-next', CONDENSE, conProb, conStep);
+    });
+    document.getElementById('condense-reset').addEventListener('click', () => setCondense(conProb));
+
+    /* ======= QUICK CHECK DATA ======= */
+    const QC = [
+      {
+        html:    `log<sub class="cbase">b</sub>(1)`,
+        answer:  '0',
+        choices: ['0', '1', 'b', '−1'],
+        explain: `b⁰ = 1 for any base b. So log_b(1) = 0 always.`
+      },
+      {
+        html:    `log<sub class="cbase">b</sub>(b)`,
+        answer:  '1',
+        choices: ['0', '1', 'b', 'b²'],
+        explain: `b¹ = b. So log_b(b) = 1 always — any base to the power 1 is itself.`
+      },
+      {
+        html:    `log(100)`,
+        answer:  '2',
+        choices: ['1', '2', '10', '100'],
+        explain: `"log" means base 10. 10² = 100, so log(100) = 2.`
+      },
+      {
+        html:    `log(1000)`,
+        answer:  '3',
+        choices: ['2', '3', '4', '30'],
+        explain: `10³ = 1000, so log(1000) = 3.`
+      },
+      {
+        html:    `ln(e)`,
+        answer:  '1',
+        choices: ['0', '1', 'e', 'ln'],
+        explain: `ln = log base e. e¹ = e, so ln(e) = 1.`
+      },
+      {
+        html:    `ln(e<sup class="cexp">4</sup>)`,
+        answer:  '4',
+        choices: ['1', '4', 'e', 'e⁴'],
+        explain: `Blog rule: 4·ln(e) = 4·1 = 4.`
+      },
+      {
+        html:    `log<sub class="cbase">2</sub>(1)`,
+        answer:  '0',
+        choices: ['0', '1', '2', '−1'],
+        explain: `2⁰ = 1, so log₂(1) = 0. (Same rule: any base, log of 1 = 0.)`
+      },
+      {
+        html:    `log<sub class="cbase">5</sub>(5<sup class="cexp">3</sup>)`,
+        answer:  '3',
+        choices: ['1', '3', '5', '15'],
+        explain: `Blog rule: 3·log₅(5) = 3·1 = 3.`
+      }
+    ];
+
+    let qcCorrect = 0;
+
+    function buildQC() {
+      qcCorrect = 0;
+      document.getElementById('qc-score').textContent = 'Score: 0 / 8';
+      const grid = document.getElementById('qc-grid');
+      grid.innerHTML = '';
+
+      QC.forEach((q, qi) => {
+        const card = document.createElement('div');
+        card.className = 'qc-card';
+
+        const expr = document.createElement('div');
+        expr.className = 'qc-expr';
+        expr.innerHTML = q.html;
+        card.appendChild(expr);
+
+        const choices = document.createElement('div');
+        choices.className = 'qc-choices';
+
+        // Shuffle choices for display
+        const shuffled = [...q.choices].sort(() => Math.random() - 0.5);
+        shuffled.forEach(c => {
+          const btn = document.createElement('button');
+          btn.className = 'qc-btn';
+          btn.textContent = c;
+          btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            // Disable all buttons in this card
+            choices.querySelectorAll('.qc-btn').forEach(b => b.disabled = true);
+            if (c === q.answer) {
+              btn.classList.add('correct');
+              qcCorrect++;
+            } else {
+              btn.classList.add('wrong');
+              // highlight correct
+              choices.querySelectorAll('.qc-btn').forEach(b => {
+                if (b.textContent === q.answer) b.classList.add('correct');
+              });
+            }
+            explain.classList.add('visible');
+            document.getElementById('qc-score').textContent = `Score: ${qcCorrect} / 8`;
+          });
+          choices.appendChild(btn);
+        });
+        card.appendChild(choices);
+
+        const explain = document.createElement('div');
+        explain.className = 'qc-explain';
+        explain.textContent = q.explain;
+        card.appendChild(explain);
+
+        grid.appendChild(card);
+      });
+    }
+
+    /* ======= INIT ======= */
+    buildPicker('expand-picker', EXPAND, setExpand);
+    buildPicker('condense-picker', CONDENSE, setCondense);
+    setExpand(0);
+    setCondense(0);
+    buildQC();
+  </script>
+</body>
+</html>
