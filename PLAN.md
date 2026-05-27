@@ -10,7 +10,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Site:** 7 unit pages (u1–u7), 29 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. Only genuinely missing tools remain marked coming soon.  
-**Video-learning:** complete through batch 7 — 45 transcripts, extracted PDF text, 25 contact sheets, 7 synthesis notes.
+**Video-learning:** complete through batch 8 — 49 transcripts, extracted PDF text, 29 contact sheets, 8 synthesis notes.
 
 **29 tools built/integrated:**
 - Absolute Value Grapher (U2)
@@ -82,15 +82,20 @@ Artifacts now include:
 - `video-learning/batch-5-exponential-log-polynomial-division-insights.md` - insights from exponential models, log graphing/solving, polynomial roots, long division, and synthetic division.
 - `video-learning/batch-6-trig-statistics-insights.md` - insights from angle/radian lessons, periodic functions, sine/cosine graphs, probability rules, data displays, and sampling/distribution lessons.
 - `video-learning/batch-7-rational-operations-insights.md` - insights from U8-D2 through U8-D4 and the Unit 8 Study Guide: multiply/divide rationals, add/subtract rationals, solving rational equations, asymptote rules, domain/range interval notation, rational function identification, and graphing technique.
+- `video-learning/batch-8-functions-transformations-unit2-insights.md` - insights from U2-D1, U2-D2, U2-D5, and U2-D8: functions, domain/range/end behavior, calculator workflow, transformations, and cumulative Unit 2 review.
 
 Transcribed lessons so far:
 
 - U1-D2 - substitution and elimination.
 - U1-D3 - factoring and solving.
+- U2-D1 - functions, relations, vertical line test, domain/range, interval notation, and end behavior.
+- U2-D2 - calculator workflow, graphing/intersections, fraction syntax, and rounding discipline.
 - U2-D3 - absolute value transformations.
 - U2-D4 - negative exponents, calculator review, and transformation review.
+- U2-D5 - parent functions, transformation vocabulary, transformation order, and writing transformed functions.
 - U2-D6 - difference of squares and cubes.
 - U2-D7 - quadratic graphing and vertex form patterns.
+- U2-D8 - Unit 2 test review: functions, transformations, exponents, factoring, quadratics, piecewise evaluation, and cumulative skills.
 - U3-D1 - imaginary numbers and quadratic formula bridge.
 - U3-D3 - completing the square.
 - U3-D5 - intro to rational expressions.
@@ -142,8 +147,12 @@ PDF text extracted so far:
 Contact sheets created:
 
 - U1-D2 substitution/elimination.
+- U2-D1 functions/domain/range.
+- U2-D2 calculator workflow.
 - U2-D4 negative exponents.
+- U2-D5 parent transformations.
 - U2-D6 squares/cubes.
+- U2-D8 test review.
 - U3-D3 completing the square.
 - U4-D1 radical functions.
 - U4-D2 square-root functions.

@@ -1,0 +1,213 @@
+Alright, here's the video for the Unit 2 test review.
+I'm not going to go through all of this because it's eight pages.
+We will be doing something in class, which is a little bit shorter, but I do want to look
+at this because I don't say what's on the test, right?
+Math is cumulative, meaning everything we've learned before could be fair game for the
+test.
+If something's really challenging, it's probably going to be on this review packet, but
+just remember factoring exponent rules, substitutionally, elimination can show up.
+And then not everything in the packet will be on the actual test, but what did we learn
+in this unit?
+You learned about functions, right?
+If it's a graph, you can test it with the vertical line test, does it hit in two spots
+or not?
+Mapping is a question down below, we'll get into a map.
+What's the domain in range?
+What's the N behavior?
+How do you use the calculator, absolute value functions?
+Remember they are a V shape, and then how do negative exponents work?
+How do graphs shift left and right?
+How do they stretch?
+How do they reflect?
+And the factoring difference of squares, which is the difference of squares A squared
+minus B squared A plus B A minus B. That one, you need to know this one by heart.
+But I will, for this test, give you this one, that's called the sum or difference of
+cubes formula.
+And then quadratics, which means parabolas, which are in this form.
+They always have a squared and x squared, all right?
+So let's just choose a couple of these.
+How do I know this is a parabola?
+Well, it's got an x squared term, whereas the vertex minus h, so it's left 3 up 1.
+And the A value is 1, so it means for a regular parabola, if the A value is 1, you
+go right 1 up 1, because it's like 1 squared, it's just 1.
+Then we go right 2, what's 2 squared?
+So up 4, and then you just mirror it up both sides.
+If we went right 3, we'd go up 9.
+So main, it goes left forever and right forever, so negative infinity to infinity.
+The range, what's the lowest it gets to?
+The lowest it gets to is 1, so bracket on 1 up to infinity.
+This is an absolute value function, there's no squared, right?
+So it's a B shape.
+The vertex is at right 2 up 7, I know that we can only call it a slope with the absolute
+value graph with straight lines.
+We can't call this a slope, we can get it to curved, this is just the A value.
+And technically this is an A value, but when we're doing absolute value, this is theoretically
+a slope, so down 3 over 1, down 3 over 1, all the time.
+It is going to go left and right forever, so there are a lot of times the domain is negative
+infinity to infinity.
+But the range is again low to high, so the lowest this gets to is negative infinity.
+The highest it gets to is 7 with a bracket.
+You might see a parabola written like this, where it's x squared, but how do we know
+the vertex?
+What's 2 is your A value?
+It doesn't have an H value, so it's like the vertex is 0, negative 5.
+And the A value is 2 means you go right by 1 up by the A value, so right 1 up by 2, then
+you go right 2 and 2 squared is 4, so we should be going up 4, but it's going 4 times
+the A value.
+So 4 times 2 is 8, so right 1 up by A, right 2 up by 4 times A. Evaluate, if it says
+find F of 12, well I can only plug in 12, what is 12, 12 is 12 less than 2 or greater
+than or equal to 2, 12 is greater than or equal to 2, so I plug it into this one.
+Negative 3, negative 3 is not greater than negative 3, it's less than or equal to negative
+3, so I plug it into here, negative 3 plus 19 is square root of 16, the rule is if you
+can simplify it, then you should, you have to, right, don't just leave your answer as
+square root of 16.
+Determine whether each relation is a function, is it a function? No, because elbow pasta
+gives you jack cheese, and elbow pasta also goes with cheddar cheese, you can't have an input,
+give you two different outputs, but I can say that when I plug in pen A, I get good.
+Is it okay that I have negative 12 and negative 1 and 0, all of these mapping to the same
+number? Yes, all of these map to the same number, so that's okay, this is yes as a function,
+you just can't have negative 12 also mapped to negative 200, if this would be bad, if
+it maps to two things, well not bad, but it would not be a function.
+And a F of negative 3, when I plug in negative 3 from the domain, oh, it's not in the domain,
+so we call that undefined.
+Determine whether each graph represents a function, vertical line to, I can go over a
+line everywhere, that's good, so yes it's a function, the domain, how far left and how far
+right does it go? The most left it gets to is negative 3 with a closed dot, the far
+this right, the x value gets to is 2 with an open dot, so parenthesis, the lowest it gets
+to is negative 4 with a closed dot, so bracket, the highest it gets to is a y value of 5 open
+dot, there's no n behavior because there's no arrows, when the x, so what's the function had
+negative 1, negative 1's are here, where's the dot, it's down there, negative 4, when x is 1,
+we're at 0, when x is negative 3, we're also at 0, when the x value is 2, we're up here,
+but it's an open circle, so it's actually undefined. This is a good one to go over, let's talk
+about domain and range. First, I can draw a vertical line everywhere, except when I draw a vertical
+line here, it hits that dot and that dot, and that fails the vertical line test, so it's not a
+function, we can say the domain, it's going to go left forever, so from negative infinity,
+all the way up, it keeps going here to 1 with an open circle union, so skipping from 1 to 2,
+open circle, but there's a closed circle below it, so it gets a bracket to infinity,
+the lowest this gets to, oh, there's an extra one here, there's also negative 4 in the domain,
+because it's right here, negative 3, and then from negative 1 up to infinity,
+as we go left, the n behavior is that it's a, as we go left, it's always at negative 3,
+as we go right, we're going up, and then when x is negative 4, 1, 2, 3, 4, we're down there at
+negative 3, when x is negative 1, we're at 1, when x is 2, it's not undefined, there's a dot down
+here, so it's negative 4, and when x is 4, we're at 4, and then this is calculator work,
+make sure you plug it in correctly, this is graph each side, and you graph and calculator,
+remember you go here, press y equals, if you have something there, you can press clear,
+clear, and I'll just show you so you can remember 2.6 x plus 13,
+so I'll go up to this top of 2.6 x plus 13, and then the next one is negative
+square root x plus 7 plus 3, negative square root x plus 7 plus 3 loops to lead plus 3,
+any graph? The first second, and then trace, because that's like you're tracing the graph,
+see where they intersect, yours is going to say first curve, second curve, guess, but
+this app does a little differently, so the left boundary,
+the right boundary, and then it's x is negative 4.45 now.
+Simplifying, let's just look at this one, it's interesting,
+3x to the third, there's nothing that we can do to that, but this is an exponent outside
+an exponent, so let's distribute it, 3 to the negative 4, 6 times negative 4 is negative 24,
+3 to the 1 minus 4 is 3 to the negative 3, and x to the third, x to the negative 24, it's
+x to the negative 21, both of those go to the bottom because they're negative exponents,
+but if you can simplify, then you must, so 3 to the third is 27, that's good. Here,
+another one, 4 to the fourth, 7 squared, I plugged in 256 over 49, and a calculator,
+256 over 49, and if you press this button, it says math, and then press enter, and then
+enter again, I wanted to see if this simplified, but it does not. Remember, it will simplify your
+fractions for you. We did a bunch of these recently, let's just look at this,
+gotta go on order. First thing is inside, this is like a square root function inside the
+square root is technically inside parenthesis, so minus 8, so horizontal translation right 95,
+vertical stretch by 29 and 30, vertical reflection, and then vertical translation up 41.
+So, with this graph be slightly taller or shorter, so it would be, if we had a graph like y equals
+1 squared of x, that would be the original, but if I make it 1 half squared of x, that's shorter,
+I guess stretch, but it's really a compression, and then I could make it 2 squared of x,
+that would be taller. Well, what's 29 over 30? It's like a little bit less than 1,
+because 30 over 30 would be 1, so this means it's a little bit shorter. These ones,
+you might see it in words, so I want to shift left and reflection over the x-axis,
+what does that mean? What if my graph was like this, this is the x-axis, and if flip it,
+it would be like this, right? That's a vertical reflection, so that's just this negative in front.
+So, we take f of x, we go 16 to the left, so plus 16, we reflect it, and we go 27 units up,
+so f of x, but with all this stuff, is now what y equals. There's a good one, start with this,
+and then look at these and see what happens. This one goes, starts at 0, 0, it goes down,
+make 1 squared, comes up back towards starting down. This starts here, it can start at negative
+4, 2, so I know it went left for up to, how do I know the stretch? Well, look at the original,
+it's like a 1 squared mountain or value. This is a 1, 2, 3 squared, so it's stretched by 3,
+but it's like the same shape just stretched, so 3, left forward up to. What about this one?
+Well, and this goes down, up, down. This goes up, down, up. It means it's flipped, so there's a negative.
+It's smushed. I don't know how much, but this goes down by 1 squared. This goes up by like a quarter
+of a square. Do I just make a guess that it's about 1, 4th of I can't, I can't grade you on a guess,
+but we can study this 1, 4th, and then it's reflected because it's upside down and shifted,
+left, 3, down, 1, so left, 3, down, 1. Don't want to go too much into these. This is just regular
+factoring, just look at the filled in notes, but if it's solved by factoring, remember,
+take out a GCF if you can and leave that GCF all the way to the end, because every factor
+you're going to set equal to zero and anything with x in it being multiplied is a factor,
+so x equals zero, x equals negative seven, and x equals negative nine. Then we'll foreshadowing
+just so you know, like this is called the polynomial many terms. The highest exponent is how many
+answers you get, so this is x to the third, there's got to be three answers. This one has x to the second,
+so it only has two answers, and this one's kind of cool because when you move everything to the left
+side, the minus x squared, the minus 12, you get 4x squared minus 25, which is 2x plus 5, 2x minus 5,
+it's that difference of squares formula, and then you set each factor equal to zero.
+The cubes formula we've provided, I'll just take a look at a couple of these.
+How do I know this is difference of cubes or some of cubes? Well, first off it's a plus,
+also now that 64 is 4 to the third power, so I know it's a perfect cube, there's also,
+there's no GCF I can take it. So x to the ninth, what is that? Well that's x to the third,
+2 to the third, 4 to the third, I don't know why the 18, y to the sixth, 2 to the third, and then
+the formula is up here, right? You take this, you get down to a, get down to b, so you add those
+or subtract them, then you square a and then you flip it, so if this was a plus, it's now a minus,
+if it was a minus, it's now a plus, and you do a plus b, sorry, a times b, just a b,
+and then plus b squared, this is always a plus. Something that is interesting, let's see,
+if you have an a, let's say 2x to the seventh, and a b of y to the tenth, you can write it as 2x
+to the seventh y to the tenth, you could have written it as, I'm going to do here x to the third,
+4 y to the sixth, I did 4 in front, then x to the third, then y to the sixth, as long as all the
+terms are in there, you're good. Here, these are hard, right? This is like the quiz, it's not,
+this is not an even number, it's not a visible by a three, it's not perfect square, something
+in GCF, and I looked at a calculator and I said, oh, well, 17 goes into this, so I pull the 17 out,
+and then pull as many x's as I could, which is five x's, or when you pull out 17 and x to the fifth,
+you just left it one, when you pull out 17, you left with four, you pull out x to the fifth,
+you left with six x's, which is two x to the third, plus one, two x to the third, minus one,
+leave the GCF the whole time. What else? Vertex, sometimes you're graphing an absolute value,
+which is a vertex of zero, negative three, and just a slope of up to over one, up to over one,
+and this has a slope of down three over one, sometimes you're graphing a, this has a vertex at negative
+two, negative three, but it's not shown because this pink function only exists between negative one
+and three, so here's negative one, here's three, technically it should be a V shape or cut off,
+so I plugged in negative one, and I plugged in three, and I got these two points, negative one,
+negative two, and three two, one of them is a closed circle, one is an open circle,
+this is just a line up at six with a closed circle, this has a slope of this tricky right,
+because this is a negative slope, you might be tempted to go down left, well,
+remember it's got a, this is a, if someone was skiing or skateboarding down this, it would be a
+downhill, this is one to study these two, I'm just going to look at this one, slope intercept form,
+parallel to this, and passes through this point, what parallel to this, so we got to find the
+slope of this, so I put it in the slope intercept form, and found the slope to be negative four over three,
+now I'm going to put that into my n, and I'm going to use this point for x and y, so here's my
+y, here's my n, here's my x, 25, how did I do this, well four times 36, I don't know what
+you can calculate it, then four times 36, then divided by three, get 48, because above negative,
+this becomes positive, minus 48 from both sides, b is dengage 23, so in slope intercept form,
+we have our slope, and we have our intercept, graphing on a number line, this is pretty simple,
+just remember, this is divided by negative four, so I'm multiplying both sides by negative four,
+and when you divide or multiply by negative, you put the sign, so one minus three x equals 40,
+and I minus one from both sides, that's fine, then I divide both sides by negative three,
+I flip the sign again, isolate for an absolute value, so add 17, once this is
+isolated, you make two branches, so four x minus 13 could have been 45, four x minus 13 could
+have been negative 45, so all by substitution, I'm looking at both of these, and I see this is a
+three and an eight, three and eight don't really divide very well, but six and two do, so I took two
+x plus six y equals negative 16, and minus six y over the other side, two x equals all this,
+divide everything by two, so x is negative three y minus eight, and I flip that in for that x,
+isolate, get y equals negative three, well if I know that x is negative three y minus eight,
+I take this y and plug it in for that y, and I get x and y, this is a good one, this is y
+equals mx plus b, y and receptive one, slope of one, up one over one, up one over one, that's
+this green line, this purple, well this purple one is a parabola, how do I know that, because it's x
+squared, it has a vertex of zero, three, and the a value of negative one, so down one over one,
+down two over four, down one over one, down two over four, right one, down one, left one,
+down one, left two, down four, that what happens, it hits here and here, the solutions are where
+they cross, so it crosses at one comma two, and negative two, negative one, and then the last
+couple things are just simplifying without using a calculator, let's look at this one,
+seven over three, five halves, adding them all over seven eighths minus one over six,
+this is tricky, right, because we have adding fractions, we need a common denominator,
+so I'm going to take the top, seven over three plus five halves, I could make the denominator
+multiply this by two, multiply this by three, we're giving you the bottom, you got to do to the top,
+so they're both over six, you add the tops, I get 29 over six, the bottom, seven over eight
+minus one over six, the lowest common multiple, these could go into is 24, so do this one times three,
+this one times four, 21 over 24 minus four over 24, so 21 minus four is
+17, now I do top, over bottom, which is 29 over six, over 17 over 24, keep change flips, right,
+29 over six times 24 over 17, multiply the tops, multiply the bottoms, I got this, and then I plug
+that into a calculator and simplify the fraction, remember, 696 over 102, if I do this, 696,
+over 102, I press math, first option is fraction, fraction, press enter,
+press enter again, simplifies to one, whoops, 116 over 17, and there you have it,
+the only thing that didn't cover is this, if the A value on a parabola, in this case,
+is two, well, I find my vertex to be negative one, negative three, and then instead of going right
+one up one, right two up four, I go right one up one, I go right one up by A, so right one up two,
+right two up by eight, if it's four times eight, all right, best of luck, study.

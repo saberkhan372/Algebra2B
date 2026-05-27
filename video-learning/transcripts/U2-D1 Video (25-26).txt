@@ -1,0 +1,139 @@
+All right, here's a video for you to do one function. This is a really big lesson
+because we're going to talk about domain and range which is going to basically be
+in every single chapter from now on. So a function. Sometimes I like to think
+a vending machine. Here's my... Here's a drawing of vending machine, right?
+Here's a person. Maybe this is you. You walk up to the vending machine. You put in a
+dollar, one dollar, and you get one soda, all right? This is a functioning machine,
+vending machine. Okay, here's a vending machine. If you put in a dollar, you get one soda.
+Would you say it's still functioning if you put in a dollar and it doesn't give you a soda?
+Or is it functioning correctly if you put in a dollar and for some reason it gives you two
+sodas? No, it wouldn't be functioning properly, right? Otherwise if it's just a
+relation, a relationship between an input and an output, we call that a relation. So
+relation is literally anything that pairs an input with an output. It doesn't have to be
+mapped. So here, if I put in a student, I get what instrument they play. So if I put in
+Jerry, I get the Jerry plays banjo. If I put in Denise, I get the Denise to play his flute.
+The students are the input and the instrument they play are the output. I know it's not in
+math, but it's a relation between an input and an output. So as coordinates, here's our input,
+here's our output. It's kind of like x and y, right? x is the input. Why is the output? Jerry goes
+in, banjo comes out, Denise goes in, flute comes out. So now let's do some math relations. So
+here's a function, y equals two times x plus one. So we plug in whatever we want for x. What
+if we plug in six for x? Two times six plus one is 13. What if we plug in negative 13 for x? We
+get negative 25. So as coordinates, we put in six and we, the output with 13, or if we put in
+negative 13, the output is negative 25. So you plug in something for x, you get a y. Now let's talk
+about domain. So the domain is what can we plug in for x? So where was... Okay, here we go. So let's
+think about this one first. The website where you type in your birthday and you receive an AI
+generated horoscope. What are all the inputs? What the domain is? What are we allowed to plug in? We
+can plug in birthdays. For this one, we plug in something for x. We multiply it by negative three. We
+get a y. We can plug in one. We can plug in negative one. We can plug in a decimal or a fraction. You
+plug in literally anything. So all real numbers, anything. We plug in all real numbers. All real
+numbers is the mathematical way of saying like anything that is on the number one. So here you take
+you plug in something for x and you square root. You can plug in one. The square root of one is one. You
+could plug in four. The square root of four is two. You could actually plug in a fraction. The
+square root of one fourth is the square root of one over the square root of four, which is one
+hat. But if you plug in negative one or any negative number, you can't take the square root of
+a negative number because what does that mean? A perfect square, like four, two times two gives
+you four. Negative one times negative one is positive one. So there's nothing that you could
+square that's negative that will stay negative. So you can't plug in a negative. So the domain is
+all numbers bigger than zero actually equal to zero because the square root of zero is zero. So you
+can plug in zero, but you just can't plug in a negative. So before we get about getting to more of a
+function, let's talk about the vertical line test. The vertical line test says basically a vertical line
+that you draw anywhere on the graph can only hit the graph one time. So I just drew a vertical line and it
+hits there and there. That vertical line I drew hits twice. So this is not a function because it fails the
+vertical line test. Here, a drew a vertical line and hit once. I drew another vertical line and hits once. You
+basically trying to draw a vertical line that hits twice. This one was easy to see. These are just going to go
+up but never become vertical. So you could draw a vertical line anywhere and just say you're aware if you have
+arrows at the end of a graph, that means that it goes on forever. I drew a vertical line here. This is a function
+because there's no area where a vertical line hits twice. And then this is a tricky one. So this had a, let's see. There's a
+closed circle that hits once, that hits once. Here, if I draw a vertical line, it'll go through that empty circle
+and hit here. That's only one. One point that it hits. So it helps us like C. This is a piecewise function. Remember
+last unit. What is, so f of something is the output. So three is the input. Three is the x value. Where does the
+graph exist at three? It exists at three. So this should say three. f of three. So when I plug in at the x value of
+three, the y value is three. The closed circle is where the graph actually exists. So what are really, really
+testing for? If a vertical line touches the graph more than ones, it shows that an input and x value has two y
+values. And you can't, that's, that's, that's like putting in one dollar and getting two sodas when that's not a
+functioning machine. It can't be a coin toss. You can't plug in three and get six or 12. It has to be six. If
+you plug in three, you get six or you plug in three, you get 12. It can't be both. So a unique input always has the
+same output. So here's the textbook definition, the relationship in which, in which each element
+of the domain, the input is paired with at most one element of the range, meaning the output. So
+I'm going to write that over here, maybe domain. It's all the input values. And the range is all the
+the output values. All right. So let's see, this is, this is called a mapping relation. So four maps to one, but
+it doesn't map anywhere else. Negative seven maps to one, but it doesn't map anywhere else. Now you get 21 maps to two,
+negative 53 maps to two. That's fine, right? Because all of these inputs only have one line coming out of
+them. I know that they're both mapping to one and they're both mapping to two, but we're not worried about
+like outputs being used more than once. We're worried about an input like this Z maps to B and to C. So this
+can't be a function. This is a function. Or here, negative four gives me 20, negative two gives me 10, three gives
+me negative 15, seven. This is fine because each input, each x value, has a union you want unique
+for the y value. But here, I put in Bobby and I got all of those and look down here, I put in Bobby
+and I got mushrooms. It's okay that Chet and Sausage Chet maps to Sausage twice because that's just
+the same point, but Bobby can't map to two things that is not a function. And here, determine whether
+each set of ordered pairs shows a function, express the domain and range of each relation as a set.
+I didn't do that. So here we go. Let's make this smaller.
+Here's the inputs, chocolate. Chocolate maps to nuts. It's okay, but chocolate can't map to nuts
+and sprinkles. Express the domain and range as a set. So the domain, what is all of the inputs
+So you can do this if you want to try, take a curved line and a pointy line and a curved line. So
+chocolate is the input. There's one input in this whole thing. And the range, all the outputs,
+well, we've got nuts and sprinkles.
+And then here, what is my domain and range? We're plugging 14. I got one, plugging negative six to get
+negative one, zero gives me one, 12. There's no repeats of an input. I think. Now, right. So what is my
+domain of this? Negative 14 is an input, negative six is an input, zero, 12 is an input, 25 and 37.
+Those are my inputs.
+My range, all of my outputs, well, one negative one, it's okay that they're all giving me like
+similar outputs, but each input only has one unique output. Okay, so we've been talking about like
+finite sets of numbers, right? Sometimes in the technical term for that is discrete mathematics.
+But what if we're talking about a number line, like from negative three to five, how many numbers
+are between negative three and five? Negative two, negative one, zero, one, two, three, four, five,
+but what about like negative 2.99? What about negative 2.99? What about negative 2.99?
+What about negative 2.99? There's actually an unlimited amount of number, it's between negative
+three and five. So we're going to have to use something called interval notation. This is an
+example and then I'll go through the stuff I highlighted. If I go from negative three to five,
+negative three is an open circle, five is a closed circle. If I am not including the number,
+like an open circle, I'm going to use a parentheses. If I go up to five and include the number five,
+I put a bracket. So the closed circle is a bracket, open circle is parentheses and this is really,
+really important because we're going to use, it's important because we're going to use a
+interval. I can just remember this. And then infinity, this symbol, I like to write my infinity
+is just like two circles next to each other. Some people like a sideways eight. It doesn't really
+matter however you want to do it. Infinity represents an interval that goes right and up forever.
+Negative infinity is the interval that goes left or down forever. Well infinity, because it's
+like, you can't ever include infinity because what's the biggest number you can think of? I'll just
+add one to it as the bigger number. So infinity can never be reached. So you can always use parentheses
+with infinity. Now, let's talk about domain range in interval notation. So using brackets and stuff
+like that. What is what x values does this function? Well, this is actually not a function, right? It
+fails a vertical line test. But this is going to go left forever and right forever. And there are,
+if I go to the x value of one to negative three, right, the graph exists at negative three or
+one, two, three, four, five. The graph exists at five. But here in the middle, there's no graph.
+So the domain is from negative infinity land to infinity land. But we have this little like patch
+from negative one, the x value to one. And the graph goes through there. So those are closed circles.
+So the domain is what x values does this cover? Well, negative infinity up to negative one.
+And this u means skip over, I mean union. And then from one to infinity.
+So domain is always from left to right. And that's like similar in range because we're going
+low to high in range. Here's a y value of negative five. The graph exists there. It's going to keep
+going forever. So the graph is actually a negative infinity all the way up to infinity. And those
+get parentheses. But about the domain here, it's going to go, well, the starting over here,
+it's going to exist at negative infinity and go off to infinity. If we're talking about left or
+right, the low to high, well, it doesn't exist. It doesn't exist. It exists at negative four.
+So from negative four with the bracket, because it's a closed circle up to infinity,
+parentheses. Here's it's going to go left forever and right forever. Negative infinity to infinity.
+It's also low. So it's starting down at negative infinity goes up to infinity.
+The last idea we'll cover is n behavior. This is the graph point up as it goes to the left,
+as it goes to the right, does it point down? Right. So n behavior is where does it go as we go to
+the left? And as we go to the right, left meaning this way, it's pointing up this way to the right,
+it's pointing down. So all I really want you to say is as it goes to the right, it goes down.
+As it goes to the left, it goes up. And I kind of mess this up because most of the time,
+it'll be like this. Well, I'll put left first. Let's see here we go.
+And then let's just do these first.
+See if we can actually make this happen.
+Okay. As we go left, we went up. As we go right, we went down. Here as we go left, we went down.
+As we go right, we're actually going to three. Here as we go left, we're going down.
+As we go right up, we hit a wall. So this is important.
+n behavior is talking about if we as we go on forever. But if it doesn't go on forever,
+it stops. There is no n behavior. So say the n behavior does not exist.
+And then lastly, this is kind of like a test question where I'm going to ask you domain,
+range, and behavior, and is it a function? Well, is it a function? Well, remember the vertical
+line test, if your vertical line only hits once. Yeah, that's a function. It passes the
+vertical line test. What's the domain? What's going to go? It's starting on the left,
+going off to the left forever, going off to the right forever. So domain is actually negative
+infinity to infinity. The range, it's starting down like it exists way down there at negative
+infinity. It goes up, up, up, up, up to the top, close circle at three. What about the n behavior
+as we go left or pointing down as we go right, we point down. So it's time. The graphing calculators
+are going to be very useful in the next class. So you basically need it. And if you don't have it,
+please let me know and we'll try and figure that out. All right, that is unit two, day one.

@@ -1,0 +1,127 @@
+Okay, here's the video for a unit two, day five, parent functions and graphs and how
+they flip and how they change.
+All right, this lesson is kind of long, just to be warned, I want you to really read
+the notes on your own on top of watching this video because what we're talking about is
+parent functions and then how they get transformed by transformations, the vertex and
+slope method only really works for absolute value because here, you know, we have
+a vertex and we have a slope of out one over one, here we shifted the vertex, what would
+we do?
+We went like left three up four and then we, this slope is now down two over one and
+we're going to kind of see how things change.
+So I'm going to just take a quick look at Desmos and show you an absolute value graph,
+right?
+Remember, inside the absolute value if I add like plus three, what do you think that's
+going to do?
+If I do plus three, then shifted it left three.
+What happens if I do minus three, it's right to three, right?
+Well that's inside of the absolute value, so that's a left and right shift.
+It's directly acting on the x, but what if, like, impendos, I do the inside of parentheses
+first, well, what if I do addition of three at the end?
+Well, we shifted right three first and then we shifted up three second and then what I'm
+going to do is stretch it.
+So what if I put a two in front?
+What happens?
+The slope was up one over one, but if I put a two, it stretches it up two over one.
+There's another kind of stretch, which is called the compression, like what if I instead
+up, like increasing it by two like that, what if I make it like a fraction and instead
+of me putting in a fraction, it's going to put like a half, but up a 0.5, so I'm going
+up a half over one, so it's actually called the compression, but we'll talk about that
+here in the notes.
+So this is the unshifted one and then here's one where the vertex is left three up
+forward and the slope is down two over one and this is that general form, right?
+X minus h plus k, a is the slope.
+While what we're going to do, we're going to do translations, translating left and right,
+and we can also go up and down, so I'm going to say here up slash down left and right.
+We can also stretch and compress, so this is a stretch compared to this, it's stretched,
+it's longer, and then a reflection, excuse me, to a reflection happens, so this is opening
+up, why is this a reflection while there's a negative in front of the entire thing?
+So that's a vertical reflection and they happen in a specific order, so think about
+PEMDOS.
+First thing you have to do is inside the parentheses, so in this case, inside the absolute
+value, we've shifted left three, then exponent is no exponents, but there's multiply,
+so multiply by negative two, so that changes the slope, and then add to track, so this
+happens to last.
+The first thing that happens to the x is the h, the left and right, so we have, no, this
+is really important, we have different kinds of transformations, we have horizontal and vertical
+translations, translations are left and right, up and down, stretches, well, we can be stretched
+or compressed, but they're kind of the same thing, because if you stretch by two, you're
+stretching by two, but if you stretch by a half, you're actually shrinking or compressing,
+that we're just going to call it all vertical stretch, be stretched by number, so everything
+here that's highlighted is the words I'm going to use, and there's other words I expect
+you to use, and then a reflection, imagine this is reflecting, right, so it's going from
+like something like this, and there's a picture here, imagine a reflection, so it's flipping
+upside down, it's a reflection over the x-axis, vertical reflection, okay.
+Describe the transformations in example one b, so example one b is here, so it is copy
+and pasted it, and then the order matters, right, so inside the parentheses and PEMDOS, the
+first thing we do is a horizontal translation left, a vertical stretch by two, a vertical
+reflection, so the two and the negative are actually doing two different things, this is
+a stretch, this is a reflection, and a negative in front of a function is always a vertical
+reflection, and then lastly a vertical translation up for units, so the words left and up are
+very important, you can't just say like vertical translations three units, because to
+we go up and go down and go left we go right, okay, now the transformations can be described
+in the same regardless of the parent function, so you don't know this yet, but there's
+actually cube root functions, and a cube root function inside of the cube root, the third
+root is x minus h, and then plus k the m, so what do you think happens, what do you think
+this does, is a vertical translation left six units inside there, then this is a vertical
+stretch by five, and this is a vertical translation up by nine, here parent function a logarithm
+inside of the x is the x minus h, so that's left and right, this is your stretch or
+compression, and this is your upper down, notice the pattern, so a log graph, they all have
+different shapes, but the x and the h and the k, they all kind of do the same thing regardless
+of the parent function, so notice this doesn't say x minus seven in parentheses, so what it is
+is it's just x, and then minus seven, so it's not shifted left or right, it's a vertical
+stretch by one fourth, it's a vertical reflection and a vertical translation down by seven,
+so in general, no matter what the parent function is, inside the parentheses is the left and
+right, the horizontal translation, this is your stretch, your vertical stretch, and this
+is your vertical translation, so what happens here is it's like this is just a random picture
+of a graph, and it's got, it doesn't have a vertex, but I'm going to choose the point
+one one, but what happens here, this means left two and down three, so one one was this
+shape, we went left two and down three, but we didn't, we didn't do like a, there's
+no A, so we didn't stretch, so the shape is literally identical, here we're going to always
+start with this one one, we're going to go right one and shrink it by a half, or technically
+straight, we're compressing, but we're just going to call everything a stretch, stretch
+by a half, so we started at one one, we went right one and we compressed it by a half,
+and here we do a bunch of things, so we started at one one, we went left three, one two three,
+one two three, we flipped it over the x axis, so if we're one away from the axis, we're going
+to go one away from the bottom, so meaning like if we're up here, we're one away, when we flip,
+we flip to here, and then so we're here, and then we're multiplying by two, so it just goes to
+here, so one times two is two, and then we shifted up four, one two three four, like that,
+but I just did this kind of expert level, but what I want you to be able to do is acknowledge,
+this is a vertical translation, left three, this is a vertical stretch by two, this is a vertical
+reflection, and this is a vertical translation up four, you also might be asked to work backwards,
+so I want you to give me a g of x that you started with f of x and you did these things,
+so translated nine to the right, so f of x minus nine means nine to the right, you stretched by two
+and had a reflection, so the reflection is the negative, the two is the stretch, so negative two
+times this, and then shifted 12 down, it's just minus 12 at the end, okay, so there's one of
+these on the homework, and then this is kind of separate, this isn't, this is just like general math
+stuff, it's just good to know that if I do two squared times two to the third, we'll technically
+two squared is four, two to the third is eight, and then you get four times eight is 32, two to the
+fifth is 32, what am I talking about? Well, I just want you to know that the rule that we've been
+using is x to the a, x to the b is we add exponents, but you can't really do anything with x to the a
+plus b, it's not like a number we can simplify, but if we had something like two to the fifth,
+we can actually make it a number, we can plug that into a calculator, it is a reminder two to the
+fifth is like this, second quit, two, we test this button to the fifth power, right, it'll do two,
+what do you think two to the 20th is probably a huge number, it's in the millions, okay,
+so let's look at these, we have a base of two and a base of two, two to the ninth, two to the negative
+six is nine and minus six, we technically adding them, but negative six, right, we're adding a negative,
+and then three and minus eight, so we got this is two to the third, this is five to the negative
+fifth, put it on the bottom, and then two to the third is two, two times two, five to the fifth
+they use it calculator, and I'm much like basically I'm saying if you can simplify numbers, then do
+it, meaning don't leave three to the fourth in the answer, plug that into a calculator to get
+three to the fourth, here negative two minus two, negative three minus minus nine, so negative three
+to the negative fourth goes to the bottom, that's three to the fourth, X to the sixth, stays on
+top, and there you go, and then the last couple things here, piecewise plus, we'll regularly add
+and repair and functions or piecewise graphs, but we just have absolute values, so sometimes
+you'll have this one which is just a line with a, it says a like Y intercept of three and a slope
+of up one over one, but remember it only exists over here because it's left of negative two,
+this dotted line, so I plug negative two into this function, and I got one, I got the point negative two
+one, and the slope is still up one over one, but I got to go this way which means down one over one,
+and here absolute value, this means right one, so absolute value shifted right one with a slope of
+up one over one, and it happens that you see the V shape in this, but in this example,
+this purple one, this technically has a vertex of right two up one, this would be the vertex,
+and the slope is up one over one, but it doesn't exist over here, because zero is that like border,
+so what you can do if you want is make the vertex, make the dotted lines until you get to
+your border, and then you can keep going from there, and then this pink one,
+this second graph has a vertex of three negative two, and then that vertex is up, you can put it
+here and you can start graphing, all right, so just be aware that like this is a vertex,
+this is an absolute value function, but you really you only see, you don't see this part,
+so it doesn't look like it, but it's because it's restricted, okay, so there you go, that's unit two,

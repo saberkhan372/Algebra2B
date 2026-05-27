@@ -14,6 +14,7 @@ Generated from local files under `teacher and student work`.
 - `batch-5-exponential-log-polynomial-division-insights.md` - exponential models, log graphing/solving, polynomial roots, long division, and synthetic division insights.
 - `batch-6-trig-statistics-insights.md` - angle/radian, periodic-function, sine/cosine, probability, and statistics insights.
 - `batch-7-rational-operations-insights.md` - Unit 8 rational-expression multiplication/division, addition/subtraction, equations, and study-guide insights.
+- `batch-8-functions-transformations-unit2-insights.md` - Unit 2 functions, domain/range, calculator workflow, transformations, and test-review insights.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
@@ -61,6 +62,10 @@ Generated from local files under `teacher and student work`.
 - U8-D3 - adding/subtracting rational expressions, LCD building, numerator combining, and sign distribution.
 - U8-D4 - solving rational equations, common denominators, excluded values, extraneous candidates, and no-solution cases.
 - Unit 8 Study Guide - rational-function identification, excluded values, interval notation, asymptote rules, solving, and graphing.
+- U2-D1 - functions, relations, vertical line test, domain/range, interval notation, and end behavior.
+- U2-D2 - TI-style calculator workflow, graphing, intersection, fraction syntax, and rounding discipline.
+- U2-D5 - parent functions, transformation vocabulary, transformation order, and writing transformed functions.
+- U2-D8 - Unit 2 test review: functions, transformations, exponents, factoring, quadratics, piecewise evaluation, and cumulative skills.
 
 ## Summary
 

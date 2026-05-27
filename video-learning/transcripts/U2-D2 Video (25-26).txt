@@ -1,0 +1,119 @@
+All right, here's a video for unit two day one and as you can see I have a calculator open.
+This is an emulator of the TI 84, I'll use a different one in class, that's more like
+that's really from the company but this is an app as you can see right here on the right
+side of my screen called calculate 84, I'll leave that open and let me see if I can.
+Okay, so if you're the thing about like that more basic calculators is you can only do one
+equation at a time, get an answer, then you kind of have to write that answer down if you want
+to put that into the next equation. Basically you can do multiple equations at a time,
+3 plus 4, 5 divided by 6, 7 plus 5, right? But what if I got 7 plus 5 and 12 and then I want
+to multiply that answer by 3, if you just press times, it takes the previous answer and
+divides it or multiplies it by, let's see, what if I accidentally press 9, I can press delete,
+multiply it by 3, you can also use the arrows and it looks a little different on the real calculator
+but what's highlighted here, let's see if I wanted to take that answer divided by 3, what is it
+going to take, what's going to take 36 and divide it by 3 or times 3, sorry, okay. Another big thing
+is that there is, if you're looking at the calculator right now, there is a minus sign,
+so I'm pressing clear, minus like 3 minus 6, right, is different than saying negative
+6 plus 3, right? The negative button and the minus button are different and I know that's not
+ideal but that's just how they did it. So subtraction versus negative is a significant shortcoming
+but let's see, how can we do this on a calculator? 4, minus, that's clear, so you could press
+delete, it'll delete that line, let's just, you don't need to clear everything. 4, minus 8,
+minus 5, negative 9, but what do I want to do, I'm not going to press minus, well, see what happens
+when I press minus, so I want to do clear everything, negative 2 plus 6, minus 11, negative 7,
+and then here, negative 2, where's the parentheses, right above the 8, times 11 minus 4 and just
+know that what is this doing, this is using PEMDOS, right, it's doing 11 minus 4 first, which is 7,
+and in time negative 2. So as long as we put the expression in the right order, you're using the
+order of commands, the word syntax means order of commands in this case, it'll get me the right
+answer. So there's fractions too, okay, 42 divided by 6, so it could press 42 divided by 6,
+but there's also this button, this green button called alpha, and right next to it is a button
+with x, if you press alpha, then x, you can do 42, press down over 6, same thing, right,
+what if I want to write 112 over 4 different way, what about this, parentheses 112 divided by 4,
+and if you're using the TI, I think it's TI 89, the ones that's like a little bit older than the
+most people have, like more rounded on the edges, that's how you have to put do a fraction, right,
+it doesn't have alpha x, it doesn't do 112 over 4, so instead you do parentheses 112 over 4,
+all right, okay, what about this one, 21 plus 7 over 4, well 21 plus 7 is on the top, so I'm going
+to do this, I'm going to do alpha fraction 21 plus 7 over 4, let's see what that gives me,
+gives me 7, what I would like to do is I go up and up, I want to go up here,
+let's see if I even can, nope, it won't let me, so I'm going to do alpha x,
+parentheses 21 plus 7, which is 28 over 4, and I really emphasize, I like parentheses, you can
+almost never use too many parentheses, so go for that, and then here, negative 18 over 1 plus 2,
+so I'm going to put negative 18 parentheses, oops, I did something wrong, I'll press it to lead,
+negative 18 over 1 plus 2, I think I get negative 6,
+we can enter previous results, select in the arrow keys, handing in it, right, so if I want to
+press up and I want to do 6, right, we can do that, what if I want to do this, so clear 1, 2,
+8, 6 times 2, 4, 5, 7, 1, 2, 8, 6 times 2, 4, 5, 7, I get that, and then I want to do a
+a separate calculation, right, 6.324 divided by 1.347, and I want to find the product of the previous
+two answers, so I want to do, so go up, up, press enter, 3, 1, 5, 9, 7, 0, 2, times, up,
+that long decimal, 4.69 dot, dot, dot, that's, I know it's only in the end, is it like a 6 there,
+it's actually going on forever, so it's stored in the calculator, it's really, really long decimal,
+and so when I multiply this two, I get 1, 4, 8, 3, 4, 4, 1, 3, 0.84, 4, 0, right, well,
+and I just rounded it off. What about graphing? Well, calculators can even grab.
+Give me a moment here, okay, so this is really, really cool. This button up here on the upper left,
+so I'm going to press Y equals on the upper left, and then there is a button X, that's like
+literally like X for graphing, it doesn't do algebra for you, but it will graph, and then there's
+this button in the top right, graph. If there's nothing in the Y equals, it won't graph anything,
+so let's try a couple. Y equals X, and then right here, squared, let's graph, nope, okay,
+so it looks like that, what about negative X squared, so I'm going to go up here, I'm going to clear
+this graph, don't press minus, because in the front, right, so negative X squared, press graph,
+oh, okay, you flipped it upside down. Now here, go back to Y equals, I'll clear this,
+whoops, Y equals X squared minus three, what happens? I mean, you can't do this on a real calculator,
+I'll show you in class, but it shifted it down three, the same shape, right, this is called the
+parabola, what about here, based on example, four, what happens if it's a minus, right, it looks like
+it opens down, there's a plus four, well the minus three, this minus three moved it down three,
+and this negative, I mean it flips upside down, so flip upside down, shift up four,
+up four, point down, there we go, the TI 84 is not capable of solving equations by typing them,
+in the main calculator screen, but you can graph things, okay, so if I wanted to do
+like a system of equations, see where the two lines intersect, we can actually do that, so
+what you do is you enter each side of the equation is enter like one equation, Y1, one equation, Y2,
+all this do in a simple one, so let's do like X plus three, right, oops, okay, X plus three,
+and let's do a negative X minus two, I don't know, let's see, okay, there's an intersection,
+right, it says if the intersection of visible press second, so then blue button, and then trace,
+which is right there, and go down to number five, which is intersect, then it says,
+put back on the graph screen, hit enter three times, three times, so here we go, one, two, three,
+now that didn't work very well, right, so calculate intersection,
+says left bound, so I move it to the left of the intersection, right bound, I move it to the
+right of the intersection, press enter, it intersects at negative two point, like X and Y,
+those are the things I can answer for the intersect, negative two point five, and zero point five,
+if you don't see the graph, let's say I made this X plus delete plus 12,
+right, and then this negative X, that's two plus 14, okay, intersections like above what I can see,
+there is this button in the top middle, zoom, if you go down to zoom out, it doesn't do anything,
+well, in this case it didn't normally you have to press zoom, zoom out, and press enter twice,
+okay, let me zoom in a little bit more now, now second trace intersection, left bound,
+so left of the intersection, press enter, I want to go to the right of the intersection,
+press enter, they cross at one comma 13, all right, round of the nearest thousand, so if I want to
+get out of this screen, I can press second, and that does all the blue stuff above the button,
+it's a quick, okay, it's all round of the nearest thousand, so here we go, this is just algebra,
+what I did first is a minus four from those sides, so what if I want to do negative five over seven,
+minus four, remember that to parentheses negative five over seven, close it, minus four, negative
+five seventh is a fraction to put in parentheses, you could also do negative five over seven,
+minus four, you'll get the same thing, so that's, you know what it's going to be kind of confusing
+because I did not get different calculators, so this will be minus four point seven one four,
+and then so what do we do? We minus four from this side, we minus four from this side, so it's here,
+but this and this are still here, so let's add three fifths, so two thirds plus three fifths,
+a two, two thirds plus three fifths,
+graph, whoops, enter, 1.267, so let's do this,
+we've got 1.267, x is equal to negative four point seven one four, and then let's divide by
+1.267, divide by 1.267, you get, what do we get, so what do I want to do? Negative four point seven
+one four divided by 1.267, you get negative three point seven two one, because it says round to three
+decimal places. Notice I got a little bit of 72, so if you want, it's really important in science,
+the more that you round and chop off the number, the less precise you get, so it's actually really
+good to round as little as possible. Okay, last little section here, let's solve where these,
+this line, and this line intersect, so this line is in y, because I'm supposed to be forms,
+remember I'll press y equals, I'll clear this one, I'll go up here, clear this one,
+that one says four x minus two, and the next one I had to jumble it around until I got in this form,
+so negative one half x plus seven, I'm going to graph both of them. All right, this looks a little
+bit different obviously than ours, did I get one comma third? Yeah, so let's do minus two plus seven,
+let's make sure that's true. So I'm going to use zoom number six, zoom standard,
+and where do they intersect? So second trace, go down to intersect, left boundary,
+let's see, normally on the real calculator doesn't start way off to the right, I guess. So left
+of the intersection, press enter, go right of the intersection, press enter, and it looks like
+they intersect at two comma six, nice. Okay, so just to finish it up here, be mindful that you still
+need to know how to do mental math, and help you with factoring, there's a lot of stuff that
+the calculator can't do, right? So like knowing how to even start this, equip this, this is just
+straight algebra one, like moving stuff to one side, the calculator can't do that, it won't do algebra
+three, but what it will do is you can put in a fraction, add a fraction, it gives you a decimal,
+and then same here, I added negative five, seven, put minus four, I got a negative decimal,
+and then I divided these decimals and I, all right, it's going to be helpful, but it won't be a
+substitute for knowing how to graph or solve a problem, but it's a good way to explore graphs, and
+then just be mindful, you still have to show work, so don't think that the calculator will do
+everything, but it is, as we'll see, a really helpful tool, and like as you get into calculus and
+harder stuff, it'll be even more useful. So there you go, unit two, day one.
