@@ -13,6 +13,7 @@ Generated from local files under `teacher and student work`.
 - `batch-4-exponents-polynomials-trig-insights.md` - exponential/log tools, rational-function graphing, function composition, polynomial sketching, and right-triangle trig insights.
 - `batch-5-exponential-log-polynomial-division-insights.md` - exponential models, log graphing/solving, polynomial roots, long division, and synthetic division insights.
 - `batch-6-trig-statistics-insights.md` - angle/radian, periodic-function, sine/cosine, probability, and statistics insights.
+- `batch-7-rational-operations-insights.md` - Unit 8 rational-expression multiplication/division, addition/subtraction, equations, and study-guide insights.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
@@ -56,6 +57,10 @@ Generated from local files under `teacher and student work`.
 - U9-D1 - statistics intro, categorical/quantitative variables, frequency tables, bar/pie charts, and misleading graphs.
 - U9-D2 - probability rules, experimental/theoretical probability, law of large numbers, complements, and `or`/`and` probability language.
 - U9-D3 - sampling bias, dot/stem/histogram displays, mean/median/mode, skew, quartiles/IQR, and box plots.
+- U8-D2 - multiplying/dividing rational expressions, keep-change-flip, factor cancellation, and original-domain restrictions.
+- U8-D3 - adding/subtracting rational expressions, LCD building, numerator combining, and sign distribution.
+- U8-D4 - solving rational equations, common denominators, excluded values, extraneous candidates, and no-solution cases.
+- Unit 8 Study Guide - rational-function identification, excluded values, interval notation, asymptote rules, solving, and graphing.
 
 ## Summary
 

@@ -1,0 +1,296 @@
+All right, you can go unit gate and study guide with the video.
+So, here you go, here are the learning targets that will be on the test.
+You can identify what's a rational equation or not.
+I know what excluded values are, I know the domain.
+I can express it in interval notation.
+I can simplify rational expressions, multiply, divide, add and subtract.
+I can solve them and then state their excluded values or extraneous solutions.
+I can graph, rational expressions of one or more asymptote, and I can graph with rational expressions and understand how their transforms.
+Okay, remember, rational function can be written as a quotient.
+So, division of two polynomials.
+You can't have square roots and you can't have fractional epsilon, which in a sense is a square root.
+The excluded values occur when the denominator equals zero, because if the denominator is zero, it's undefined.
+The factor cancels on the numerator and the denominator.
+It's still considered an excluded value.
+When dividing, remember, you keep changing flip when adding subtracting.
+That's when you need a denominator.
+And when solving, you still need to check for extraneous solutions.
+All right, so circle the functions that are rational.
+I'm going to first highlight why this can't be a rational function, because even though it's division, you can't have a square root.
+Can't have a fractional exponent.
+And even though the inside is a rational expression, because it's under a square root, it limits the domain, and square roots are not allowed, are not considered rational functions.
+All of these are, this is a binomial of a binomial, trinomial over binomial, and remember trinomial over a polynomial.
+So these three are rational expressions where these three are not.
+Morning.
+Here, evaluate for a given x value, meaning plug and x value in here.
+That's pretty sub-explanatory.
+And then here, plug and x value in, just be careful, because that's negative 3 times negative 3 is negative 27.
+These both come out to fractions, but that's bound to happen, because your expression itself is a fraction.
+Here, let's talk about what the horizontal asymptotes.
+Remember, it's not just 2.
+Yeah, it goes through 2, but it's the line y equals 2.
+And the vertical asymptote is the line that goes through the x-axis at negative 3, so it's x equals negative 3.
+The domain of this goes from negative infinity up to negative 3 starts again at negative 3, so you get a union up to infinity.
+Remember, the domain is always up to the vertical asymptote, and the range is negative infinity up to the horizontal asymptote, and then onto infinity.
+Make sure you're putting the union in there.
+And behavior as x goes left, it's getting closer and closer to the horizontal asymptote, so it's getting closer to 2.
+And as it goes to the right, it's also getting closer to 2.
+Remember, in this unit, we're only going to have one vertical and one horizontal asymptote.
+Obviously, it could get more and more confusing, but we won't be adding more than one asymptote.
+This function works the exact same way.
+It's just that the asymptote is at one half.
+It's not a whole number, but that's still doable.
+So, real zeros are x intercept.
+Where is the x intercept for this graph?
+Well, it hits at a point negative 6, 0, and the y intercept is at 0, 4.
+Okay.
+Let's talk about vertical asymptotes are when they're called excluded.
+They're basically excluded values because the denominator would be 0.
+It's possible to have no vertical asymptotes.
+Let me give you an example.
+What if there was like 2x over x squared plus 9?
+If you set that equal to 0, you get x squared equals negative 9, and then you square root
+this x squared equal plus or minus 3i.
+Those don't show up on a number line, so those aren't actually vertical asymptotes.
+Okay.
+Definitely know this.
+Horizontal asymptotes can occur three different ways.
+If the degree of the numerator is more than a degree of the denominator, I think what's going
+to happen?
+This is going to get bigger, faster than this.
+If you plug in infinity, this is infinity to the third is actually bigger than infinity squared,
+so this is actually going to have no horizontal asymptotes.
+As we get bigger, it's going to go up.
+It's not going to flatten out like these graphs do.
+If the numerator and denominator have the same degree, you take the leading coefficient.
+So the leading coefficients are three over two, so that horizontal asymptotes actually
+add three asymptotes.
+And then here, if the denominator is bigger than the numerator, we, the denominator, if
+we plug in infinity for x, it would be a larger number in the denominator.
+So this would become zero, then it's the k value.
+So remember, if you have something like y equals five over x minus three, that's going
+to have a vertical asymptote of three, but then the horizontal asymptote is going to be
+this number, the k value.
+Slant asymptotes, you just need to know what they are.
+You're not going to have to do them on the test, but it's when the numerator is bigger
+bigger than the denominator by its factor of one, but you're going to have to do division,
+and we're not going to do that on the test, but slant asymptotes.
+You don't need to graph them.
+It just happens when the degree of the numerator is bigger than the degree of the denominator
+by one degree.
+Okay, so let's talk about asymptotes given.
+This is the degree on top and degree on bottom are both of one.
+So the leading coefficients are one.
+So your horizontal asymptotes is one.
+This, if we set it equal to zero, we're going to have a vertical asymptote at negative five.
+Here, the degree is bigger on the bottom, so the horizontal asymptote is zero.
+This factors into plus two minus two, so your vertical asymptotes are at x equals two,
+x equals negative two.
+The degree on top is bigger, so there's going to be no horizontal asymptote.
+There's going to be a slant asymptote because the degree on top is bigger than the degree on bottom,
+but this has a vertical asymptote as well at x equals five.
+Here, the degree on top is bigger than the degree on bottom by one,
+so it will have a slant asymptote.
+It won't have a horizontal asymptote, and it will have a vertical asymptote at one
+because the denominator would be zero if you plugged in one for x.
+Here, the degree on top and bottom are the same,
+so we're going to have a horizontal asymptote at seven halves.
+This, if we set it equal to zero and move at 18 over and divide,
+we'd get plus or minus 30i, so that's no horizontal, no real vertical asymptote.
+Here, we'd have a vertical asymptote at two.
+Here, we'd have a vertical asymptote at three halves and negative five.
+And then here, if you set x squared equal to zero,
+the only thing that we can plug into make it zero is zero, so vertical asymptote is zero.
+The degree on top is bigger than the degree on bottom, so no horizontal asymptote.
+However, the degree on top is bigger than the degree on bottom by one degree,
+so we will have a slant asymptote.
+The slant asymptote question is basically just a yes or no.
+All right, excluded values.
+Take the denominator, set it equal to zero.
+You can factor out 10x, so zero and seven are the excluded values.
+All of these kind of work the same way.
+They just factor.
+I want you to write excluded values as what x cannot equal.
+So I guess I said set it equal to zero, but really we're setting it not equal to zero,
+because what values of x can we not plug in because it would make the denominator zero,
+which is under five.
+Simplify, factor the numerator, factor the denominator, see what cancels,
+and what you're left with is x plus four over x plus eight.
+Don't cancel the x's or simplify for over eight because really it's x plus four x plus eight
+plus is and minus is inextricably combine two terms, but two letters,
+the two numbers, so you can't get rid of these x's.
+Here, factor, factor, the x minus four is cancel, but we're still up at five over x plus nine.
+Same here, these factors cancel.
+Here you can pull it two out.
+This factors, so the x plus fives are gone.
+Here, factor, factor, x minus two is or gone.
+So we're left with x two, x minus five, two x plus three.
+Here, this, we already did that one, but here, this factor is nominator two and minus seven and plus one.
+Let's take it three out here, three and plus one and plus two.
+Now look, n plus one is cancel, so you're left at three and plus two over two and seven.
+Simplify, completely factor, but the numerator, the nominator, cancel,
+factors, so this is actually the same kind of deal.
+But, factor, this doesn't factor.
+Everything you can, it's multiplying.
+And because there's an x minus two here and here, those cancel, the x minus eight's cancel,
+you can just keep everything else at the end.
+But it's left, you don't need to foil this out.
+So if x plus minus nine is on top and then this is on the bottom, don't foil that.
+Let's leave it.
+It's two separate parts.
+Here, 15b plus 35.
+Yeah, you can take out of five, but that's the exact same term.
+So you can think of this as something that can just cancel this factors,
+this factors, seven b plus three are both gone.
+And this is the vision to this stays keep.
+Change this to multiplying and then flip this.
+When you flip this, you can take an eight out, you can factor this,
+eight's are gone, the plus three's are gone, and the plus ones are gone.
+This is also division.
+So it's this numerator times this denominator flipped.
+Take a seven out of this, you can factor this, you can factor this,
+four n and four n are gone, three n plus two is gone.
+So you're just left with this, don't n plus six and then minus six cannot cancel with each other.
+This is some traction, but if we make it addition,
+we can make this a negative one.
+This factor is the three x plus four, three x minus four.
+This only has three x plus four.
+So it needs three x minus four on top of bottom.
+Distribute this negative one.
+Now that we have a common denominator, see what cancels, cancel like terms.
+And then leave it like this.
+This factors, this has an x minus three and x plus one.
+So this needs the x minus three, whatever you do at the bottom,
+got it due to the top.
+This is subtraction to make this an addition problem pop the negative up.
+This factors, this factors.
+This is one of those fun ones that has x plus three x plus one.
+This has x plus one, but has x minus five.
+So the left needs x minus five on top and bottom.
+The right needs x plus three on top and bottom.
+Distribute that x, distribute that negative three, combine like terms.
+And at the very end, if this factors do that and notice the x plus one's cancel.
+So this is a good one to study because we actually had a factor at the end.
+Here's three parts.
+This is a subtract, subtractions of make it addition pop the negative up.
+X plus three, x minus three, x minus three, x minus three, so it needs x plus three.
+This also needs x minus three.
+Actually, this has x minus three twice.
+So this needs another x minus three.
+This needs an x minus three twice.
+For oil that, distribute the negative x, distribute the three.
+We get all these like terms.
+A lot of stuff cancels though.
+So you left this.
+So C and D, the number 11, not very good study.
+Solve, well, this is something we haven't done a lot of, but this is a proportion.
+So what you could do is get a common denominator.
+This is x plus five, so this needs x plus five.
+This needs an x plus three on top and bottom.
+So now we have a common denominator on the left and right.
+So the top is anything left.
+Move everything to one side, solve for x.
+Check for excluded values.
+X can't be negative five or negative three, but our answer was negative 13 thirds.
+So that purpose.
+Here, common denominator.
+So now we only look at the numerator.
+We've everything to one side, factor x equals five and two.
+That's good because the excluded values are seven halves and negative one.
+And those are not what the answer was.
+Scooted values of this one.
+X can't be seven halves or negative one, but our answers are neither of those.
+So we're all good.
+Here, factor this.
+R minus five, R minus two, so this needs R minus five.
+This needs an R minus five as well.
+And we just look at the numerator.
+So all of this, we've got all the one side solve for R.
+R can't be two or five.
+Those are excluded values, but your answer is neither of those.
+So you're good.
+Here, one, we actually got, and we got our answers for n.
+We've got zero and negative a fourth.
+But n can't be zero.
+If we plug zero into here, the original equation, we don't undefined.
+So you can cross out one of your answers.
+These rest of these work the same way, so the answers are not part of what?
+Actually, that's the type of x can't be two.
+X can be three.
+And then here, three and negative two.
+Oh, goodness.
+X can't be three.
+So you only get two answers here.
+Graph, sketch, asymptotes, as dash lines, and make sure the graph is curved.
+Here, vertical asymptote at zero, or asymptote at negative two.
+So zero and negative two.
+Plug in a number, like one, because it's one x value to the right of the vertical asymptote.
+Plug in one, you get negative five.
+How do I get to that point?
+I went right from this intersection of the asymptotes.
+I went right one down three.
+Let's go left one up three.
+Those are my two points.
+And then sketch your curve.
+Here, negative one is, well, actually positive one is your vertical asymptote.
+And positive two is your horizontal asymptote to one and two.
+What x value should be plug in?
+Well, one is our vertical asymptotes.
+So let's plug in an x value of two.
+You get negative one.
+So two common negative one is right here.
+How did we get there?
+We went right one down three.
+Let's go left one up three.
+Sketch your curves.
+Let's do one where there's an x and top of the bottom.
+Remember, this is a degree of one, degree of one.
+So the leading coefficients are negative for over one.
+That means our horizontal asymptote is at negative four.
+And our vertical asymptote, where does that happen?
+That happens when the denominator is zero.
+That happens when x is one.
+So there's a vertical asymptote at one.
+Then let's plug in a point.
+We plug in two.
+You get negative eight.
+So at two, negative eight.
+You can do the right one down four.
+So let's go left one up four.
+The rest of these are very similar.
+Except let our g to agree on top and bottom is the same.
+So four over two are the leading coefficients.
+So our horizontal asymptote is four over two, which equals two.
+And our vertical asymptote happens set this equal at three or to zero.
+x equals negative three.
+And then we picked x equals one fourth.
+Let's see.
+Why?
+It gives us a y value of zero.
+But you could have chosen negative two as your x value.
+And that would have given you a point down here.
+And you could mirror it.
+Here, degree on top and bottom, but one.
+So one third is your horizontal asymptote.
+Vertical asymptote happens at negative three.
+Pick a point.
+F equals three.
+Oh, we picked a point that makes the numerator zero.
+If we pick three,
+that's going to make the numerator zero.
+So how do you get to that point?
+We went down to one, two, three, four, five, six.
+So we go one, two, three, four, five, six.
+And this is at one third.
+And so it's on the x axis.
+So we went down by a third, we went up by a third.
+And then all of the rest work in the same way.
+Just remember this is like plus zero.
+So you have a horizontal asymptotes zero.
+This has a vertical asymptote at negative two.
+Where is this point?
+Well, we plugged in negative one for x.
+And we went right one down three.
+That's the last one up three.
+And there you go.
+That is the unit eight study guide video.

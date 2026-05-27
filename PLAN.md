@@ -10,7 +10,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Site:** 7 unit pages (u1–u7), 29 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. Only genuinely missing tools remain marked coming soon.  
-**Video-learning:** complete through batch 6 — 41 transcripts, extracted PDF text, 21 contact sheets, 6 synthesis notes.
+**Video-learning:** complete through batch 7 — 45 transcripts, extracted PDF text, 25 contact sheets, 7 synthesis notes.
 
 **29 tools built/integrated:**
 - Absolute Value Grapher (U2)
@@ -81,6 +81,7 @@ Artifacts now include:
 - `video-learning/batch-4-exponents-polynomials-trig-insights.md` - insights from exponential/log lessons, rational-function graphing, function composition, polynomial sketching, and right-triangle trig.
 - `video-learning/batch-5-exponential-log-polynomial-division-insights.md` - insights from exponential models, log graphing/solving, polynomial roots, long division, and synthetic division.
 - `video-learning/batch-6-trig-statistics-insights.md` - insights from angle/radian lessons, periodic functions, sine/cosine graphs, probability rules, data displays, and sampling/distribution lessons.
+- `video-learning/batch-7-rational-operations-insights.md` - insights from U8-D2 through U8-D4 and the Unit 8 Study Guide: multiply/divide rationals, add/subtract rationals, solving rational equations, asymptote rules, domain/range interval notation, rational function identification, and graphing technique.
 
 Transcribed lessons so far:
 
@@ -122,6 +123,10 @@ Transcribed lessons so far:
 - U9-D1 - statistics intro, categorical/quantitative variables, frequency and relative-frequency tables, bar/pie charts, and misleading graphs.
 - U9-D2 - probability rules, experimental/theoretical probability, law of large numbers, complements, and `or`/`and` probability language.
 - U9-D3 - sampling bias, data displays, mean/median/mode, skew, quartiles/IQR, outlier fences, and box plots.
+- U8-D2 - multiplying/dividing rational expressions, keep-change-flip, factor cancellation, and original-domain restrictions.
+- U8-D3 - adding/subtracting rational expressions, LCD building, numerator combining, sign distribution, and final simplification.
+- U8-D4 - solving rational equations, common denominators, excluded values, extraneous candidates, and no-solution cases.
+- Unit 8 Study Guide - rational-function identification (no square roots/fractional exponents), interval notation, three-case horizontal asymptote rule, slant asymptote identification, and graphing-from-asymptotes technique.
 
 U9 note: the newly transcribed U9-D1 through U9-D3 classroom videos are statistics/probability lessons. The local video inventory also contains a separate `Unit 9 Review Video (Conics)`, so future U9 planning should keep those strands distinct until the source materials are reconciled.
 
@@ -154,9 +159,13 @@ Contact sheets created:
 - U7-D3 periodic functions and Ferris wheel modeling.
 - U7-D4 sine/cosine graphs and unit-circle exact values.
 - U8-D1 rational expressions.
+- U8-D2 multiplying and dividing rational expressions.
+- U8-D3 adding and subtracting rational expressions.
+- U8-D4 rational equations.
 - U9-D1 statistics displays.
 - U9-D2 probability rules.
 - U9-D3 sampling and distributions.
+- Unit 8 study guide.
 
 ### Unit page sync (May 2026)
 
