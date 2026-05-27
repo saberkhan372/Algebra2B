@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exponential Equation Solver — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; }
+    .tool-page { height: calc(100vh - 52px); overflow-y: auto; }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ---- tabs ---- */
+    .mode-tabs {
+      display: flex; gap: 0; border-bottom: 2px solid var(--ink);
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .mode-tab {
+      padding: 6px 18px; border: none; background: transparent;
+      font-family: 'Permanent Marker', cursive; font-size: 14px;
+      cursor: pointer; color: var(--ink-soft); border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.15s;
+    }
+    .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+    .mode-tab:hover:not(.active) { background: var(--paper-2); }
+    .mode-panel { display: none; }
+    .mode-panel.active { display: block; }
+
+    /* ---- color language ---- */
+    .cbase { color: #2a6fb4; }
+    .cexp  { color: #d94f2a; font-weight: 700; }
+    .clog  { color: #2a8a4a; }
+    .cexact { color: #8b4513; font-weight: 700; }
+
+    /* ---- decision banner ---- */
+    .decision-card {
+      border: 2.5px solid var(--ink); border-radius: 8px;
+      padding: 12px 16px; margin-bottom: 14px;
+      display: flex; gap: 16px; flex-wrap: wrap; align-items: stretch;
+    }
+    .dec-option {
+      flex: 1; min-width: 160px;
+      border: 2px solid var(--ink-soft); border-radius: 6px;
+      padding: 10px 12px; background: var(--paper-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6;
+    }
+    .dec-option.active-dec { background: var(--highlight); border-color: var(--ink); }
+    .dec-label {
+      font-family: 'Permanent Marker', cursive; font-size: 12px; margin-bottom: 4px;
+    }
+    .dec-then {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 4px;
+    }
+
+    /* ---- problem picker ---- */
+    .problem-picker { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+    .prob-btn {
+      padding: 5px 13px; border: 2px solid var(--ink); border-radius: 20px;
+      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 14px;
+      cursor: pointer; transition: background .12s, color .12s;
+    }
+    .prob-btn.active { background: var(--ink); color: var(--paper); }
+    .prob-btn:hover:not(.active) { background: var(--paper-2); }
+
+    /* ---- step rows ---- */
+    .step-area { min-height: 120px; }
+    .step-row {
+      display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap;
+      padding: 5px 0; opacity: 0; transform: translateY(10px);
+      transition: opacity .32s ease, transform .32s ease;
+    }
+    .step-row.visible { opacity: 1; transform: none; }
+    .step-lbl {
+      font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--accent);
+      min-width: 56px; padding-top: 11px; flex-shrink: 0;
+    }
+    .expr-box {
+      border: 3px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 8px 16px; background: var(--paper);
+      font-family: 'JetBrains Mono', monospace; font-size: 21px; line-height: 1.5;
+      box-shadow: 3px 3px 0 rgba(29,26,20,0.15); display: inline-block;
+    }
+    .expr-box.hl   { background: var(--highlight); }
+    .expr-box.ok   { background: #d4edda; border-color: #2a8a4a; }
+    .expr-box.warn { background: #fff3cd; border-color: #856404; }
+    .expr-box.exact-box {
+      background: #fdf0e0; border-color: #8b4513; border-style: dashed;
+    }
+    .step-note {
+      font-family: 'Patrick Hand', cursive; font-size: 14px; color: var(--ink-soft);
+      max-width: 300px; padding: 8px 10px 8px 12px;
+      border-left: 3px solid var(--accent); align-self: center;
+    }
+    .step-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px; align-self: center;
+    }
+    .step-badge.yes { background: #2a8a4a; color: #fff; }
+    .step-badge.no  { background: #d94f2a; color: #fff; }
+    .step-badge.info { background: #2a6fb4; color: #fff; }
+    .step-badge.exact { background: #8b4513; color: #fff; }
+
+    .down-arrow {
+      padding-left: 16px; font-size: 20px; color: var(--ink-soft);
+      font-family: 'Permanent Marker', cursive; opacity: 0; transform: translateY(8px);
+      transition: opacity .32s ease, transform .32s ease;
+    }
+    .down-arrow.visible { opacity: 1; transform: none; }
+
+    /* ---- blog drop/rise animations ---- */
+    @keyframes blogDrop {
+      0%   { transform: translate(32px, -18px) scale(0.55); opacity: 0; }
+      60%  { transform: translate(-2px, 2px) scale(1.05); opacity: 1; }
+      100% { transform: none; opacity: 1; }
+    }
+    .bd { animation: blogDrop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+    /* ---- exact form callout ---- */
+    .exact-note {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 4px 0;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity .32s ease, transform .32s ease;
+    }
+    .exact-note.visible { opacity: 1; transform: none; }
+    .exact-tag {
+      font-family: 'Permanent Marker', cursive; font-size: 11px;
+      background: #8b4513; color: #fff; padding: 2px 8px; border-radius: 4px;
+    }
+    .exact-text {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: #8b4513;
+    }
+
+    /* ---- controls ---- */
+    .controls-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+    .btn-step {
+      padding: 8px 22px; border: 2.5px solid var(--ink); border-radius: 6px;
+      background: var(--accent); color: #fff; font-family: 'Permanent Marker', cursive;
+      font-size: 13px; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-step:hover { opacity: 0.85; }
+    .btn-step:disabled { background: var(--paper-2); color: var(--ink-soft); border-color: var(--ink-soft); cursor: default; }
+    .btn-ghost {
+      padding: 6px 15px; border: 2px solid var(--ink-soft); border-radius: 6px;
+      background: transparent; color: var(--ink-soft); font-family: 'Permanent Marker', cursive;
+      font-size: 12px; cursor: pointer;
+    }
+    .btn-ghost:hover { background: var(--paper-2); }
+
+    /* ---- inline fraction ---- */
+    .mfr {
+      display: inline-flex; flex-direction: column; align-items: center;
+      font-size: 0.82em; vertical-align: middle; margin: 0 3px; line-height: 1.1;
+    }
+    .mfr .mn { border-bottom: 1.5px solid var(--ink); padding: 0 5px 2px; }
+    .mfr .md { padding: 2px 5px 0; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u5.html">← U5</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none;">
+      <div class="tool-breadcrumb">
+        <a href="../u5.html">← U5 · Logs &amp; Exponentials</a> &nbsp;·&nbsp; D6
+      </div>
+      <div class="tool-title f-display">Exponential Equation Solver</div>
+      <div class="tool-tagline f-hand">Same base? Set exponents equal. Can't match? Log both sides.</div>
+
+      <!-- Mode tabs -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="sameb-panel">Same Base</button>
+        <button class="mode-tab" data-mode="logside-panel">Log Both Sides</button>
+        <button class="mode-tab" data-mode="xboth-panel">x on Both Sides</button>
+      </div>
+
+      <!-- ===== SAME BASE ===== -->
+      <div class="mode-panel active" id="sameb-panel">
+        <div class="decision-card">
+          <div class="dec-option active-dec">
+            <div class="dec-label" style="color:#2a8a4a;">✓ Same Base Possible</div>
+            Rewrite both sides with matching bases.<br>
+            Set the exponents equal.<br>
+            Solve the resulting equation.
+            <div class="dec-then">Works when both sides can be written as powers of the same base.</div>
+          </div>
+          <div class="dec-option">
+            <div class="dec-label" style="color:var(--ink-soft);">✗ Not Possible Here</div>
+            If bases can't match → log both sides.<br>
+            See the next tab.
+            <div class="dec-then">3^x = 15 — no way to write 15 as a power of 3 cleanly.</div>
+          </div>
+        </div>
+
+        <div class="problem-picker" id="sameb-picker"></div>
+        <div class="step-area" id="sameb-stage"></div>
+        <div class="controls-row">
+          <button class="btn-step" id="sameb-next">Next Step →</button>
+          <button class="btn-ghost" id="sameb-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- ===== LOG BOTH SIDES ===== -->
+      <div class="mode-panel" id="logside-panel">
+        <div class="decision-card">
+          <div class="dec-option">
+            <div class="dec-label" style="color:var(--ink-soft);">✗ Same Base Fails</div>
+            Can't rewrite both sides with the same base.
+            <div class="dec-then">e.g. 3^x = 15 — 15 is not a power of 3.</div>
+          </div>
+          <div class="dec-option active-dec">
+            <div class="dec-label" style="color:#2a6fb4;">→ Log Both Sides</div>
+            Apply log (or ln if base is e) to both sides.<br>
+            Blog rule: exponent drops to coefficient.<br>
+            Divide — and keep the exact form first!
+            <div class="dec-then">Use ln when the base is e. Use log for everything else.</div>
+          </div>
+        </div>
+
+        <div class="problem-picker" id="logside-picker"></div>
+        <div class="step-area" id="logside-stage"></div>
+        <div class="controls-row">
+          <button class="btn-step" id="logside-next">Next Step →</button>
+          <button class="btn-ghost" id="logside-reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- ===== X ON BOTH SIDES ===== -->
+      <div class="mode-panel" id="xboth-panel">
+        <div class="decision-card">
+          <div class="dec-option active-dec">
+            <div class="dec-label" style="color:#d94f2a;">x appears in both exponents</div>
+            Log both sides.<br>
+            Blog rule on each side (exponents drop).<br>
+            Distribute, then collect all x terms.<br>
+            Factor out x and divide.
+            <div class="dec-then">This creates a linear equation — no quadratic needed.</div>
+          </div>
+        </div>
+
+        <div class="problem-picker" id="xboth-picker"></div>
+        <div class="step-area" id="xboth-stage"></div>
+        <div class="controls-row">
+          <button class="btn-step" id="xboth-next">Next Step →</button>
+          <button class="btn-ghost" id="xboth-reset">Reset</button>
+        </div>
+      </div>
+
+    </div><!-- /tool-main -->
+  </div><!-- /tool-page -->
+
+  <script>
+    /* ======= TAB SWITCHING ======= */
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab, .mode-panel').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.mode).classList.add('active');
+      });
+    });
+
+    /* ======= PROBLEM DATA ======= */
+
+    // ---- SAME BASE ----
+    const SAMEB = [
+      {
+        label: '4ˣ = 64',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">4</span><sup class="cexp">x</sup> = 64`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">4</span><sup class="cexp">x</sup> = 64`, badge:{cls:'yes', text:'64 = 4³ ✓'}, note:'64 is a perfect power of 4. Same base is possible!' },
+          { lbl:'Step 1', html:`<span class="cbase">4</span><sup class="cexp">x</sup> = <span class="cbase">4</span><sup class="cexp">3</sup>`, note:'Rewrite 64 as 4³. Now both sides share base 4.' },
+          { lbl:'Step 2', html:`<span class="cexp">x</span> = <span class="cexp">3</span>`, note:'Same base → set exponents equal. Drop the bases.', ok:true }
+        ]
+      },
+      {
+        label: '2ˣ⁺¹ = 32',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">2</span><sup class="cexp">x+1</sup> = 32`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">2</span><sup class="cexp">x+1</sup> = 32`, badge:{cls:'yes', text:'32 = 2⁵ ✓'}, note:'32 = 2⁵. Same base possible.' },
+          { lbl:'Step 1', html:`<span class="cbase">2</span><sup class="cexp">x+1</sup> = <span class="cbase">2</span><sup class="cexp">5</sup>`, note:'Rewrite 32 as 2⁵.' },
+          { lbl:'Step 2', html:`<span class="cexp">x + 1</span> = <span class="cexp">5</span>`, note:'Same base → set exponents equal.' },
+          { lbl:'Step 3', html:`<span class="cexp">x</span> = <span class="cexp">4</span>`, note:'Subtract 1 from both sides.', ok:true }
+        ]
+      },
+      {
+        label: '9ˣ = 27',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">9</span><sup class="cexp">x</sup> = 27`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">9</span><sup class="cexp">x</sup> = 27`, badge:{cls:'yes', text:'base 3 works ✓'}, note:'9 = 3², 27 = 3³. Neither side uses base 9, but both can share base 3.' },
+          { lbl:'Step 1', html:`(<span class="cbase">3</span><sup>2</sup>)<sup class="cexp">x</sup> = <span class="cbase">3</span><sup>3</sup>`, note:'Rewrite 9 as 3² and 27 as 3³.' },
+          { lbl:'Step 2', html:`<span class="cbase">3</span><sup class="cexp">2x</sup> = <span class="cbase">3</span><sup>3</sup>`, note:'Power rule: (3²)ˣ = 3^(2x).' },
+          { lbl:'Step 3', html:`<span class="cexp">2x</span> = 3`, note:'Same base → set exponents equal.' },
+          { lbl:'Step 4', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn">3</span><span class="md">2</span></span>`, note:'Divide both sides by 2.', ok:true }
+        ]
+      }
+    ];
+
+    // ---- LOG BOTH SIDES ----
+    const LOGSIDE = [
+      {
+        label: '3ˣ = 15',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">3</span><sup class="cexp">x</sup> = 15`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">3</span><sup class="cexp">x</sup> = 15`, badge:{cls:'no', text:'15 ≠ 3ⁿ'}, note:'15 is not a perfect power of 3. Same base fails — log both sides.' },
+          { lbl:'Step 1', html:`<span class="clog">log</span>(<span class="cbase">3</span><sup class="cexp">x</sup>) = <span class="clog">log</span>(15)`, note:'Apply log to both sides. Balance is preserved.' },
+          { lbl:'Step 2', html:`<span class="cexp bd">x</span> · <span class="clog">log</span>(<span class="cbase">3</span>) = <span class="clog">log</span>(15)`, note:'"Blog rule": the exponent x drops to a coefficient.', blog:'drop' },
+          { lbl:'Step 3', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn clog">log(15)</span><span class="md clog">log(3)</span></span>`, note:'Divide both sides by log(3).', exact:true },
+          { lbl:'Calc',   html:`<span class="cexp">x</span> ≈ 2.465`, note:'Round to 3 decimal places (or as directed).', ok:true }
+        ]
+      },
+      {
+        label: '5ˣ⁻² = 30',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">5</span><sup class="cexp">x−2</sup> = 30`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">5</span><sup class="cexp">x−2</sup> = 30`, badge:{cls:'no', text:'30 ≠ 5ⁿ'}, note:'30 is not a power of 5. Log both sides.' },
+          { lbl:'Step 1', html:`<span class="clog">log</span>(<span class="cbase">5</span><sup class="cexp">x−2</sup>) = <span class="clog">log</span>(30)`, note:'Log both sides.' },
+          { lbl:'Step 2', html:`<span class="cexp bd">(x−2)</span> · <span class="clog">log</span>(<span class="cbase">5</span>) = <span class="clog">log</span>(30)`, note:'Blog rule: exponent (x−2) drops to coefficient.', blog:'drop' },
+          { lbl:'Step 3', html:`x − 2 = <span class="mfr"><span class="mn clog">log(30)</span><span class="md clog">log(5)</span></span>`, note:'Divide both sides by log(5).' },
+          { lbl:'Step 4', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn clog">log(30)</span><span class="md clog">log(5)</span></span> + 2`, note:'Add 2 to both sides.', exact:true },
+          { lbl:'Calc',   html:`<span class="cexp">x</span> ≈ 4.113`, note:'Keep the exact form above; this is the decimal.', ok:true }
+        ]
+      },
+      {
+        label: 'e²ˣ = 50',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">e</span><sup class="cexp">2x</sup> = 50`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">e</span><sup class="cexp">2x</sup> = 50`, badge:{cls:'info', text:'base is e → use ln'}, note:'When the base is e, use ln (natural log) instead of log for clean simplification.' },
+          { lbl:'Step 1', html:`<span class="clog">ln</span>(<span class="cbase">e</span><sup class="cexp">2x</sup>) = <span class="clog">ln</span>(50)`, note:'Apply ln to both sides.' },
+          { lbl:'Step 2', html:`<span class="cexp bd">2x</span> · <span class="clog">ln</span>(<span class="cbase">e</span>) = <span class="clog">ln</span>(50)`, note:'Blog rule: exponent 2x drops to coefficient.', blog:'drop' },
+          { lbl:'Step 3', html:`<span class="cexp">2x</span> · 1 = <span class="clog">ln</span>(50)`, note:'ln(e) = 1 — simplifies cleanly!' },
+          { lbl:'Step 4', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn clog">ln(50)</span><span class="md">2</span></span>`, note:'Divide both sides by 2.', exact:true },
+          { lbl:'Calc',   html:`<span class="cexp">x</span> ≈ 1.956`, note:'Use the e^x or ln button on the calculator.', ok:true }
+        ]
+      }
+    ];
+
+    // ---- X ON BOTH SIDES ----
+    const XBOTH = [
+      {
+        label: '3ˣ = 5ˣ⁻¹',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">3</span><sup class="cexp">x</sup> = <span class="cbase">5</span><sup class="cexp">x−1</sup>`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">3</span><sup class="cexp">x</sup> = <span class="cbase">5</span><sup class="cexp">x−1</sup>`, badge:{cls:'no', text:'different bases + x both sides'}, note:'Can\'t match bases. x appears on both sides. Log both sides.' },
+          { lbl:'Step 1', html:`<span class="clog">log</span>(<span class="cbase">3</span><sup class="cexp">x</sup>) = <span class="clog">log</span>(<span class="cbase">5</span><sup class="cexp">x−1</sup>)`, note:'Log both sides.' },
+          { lbl:'Step 2', html:`<span class="cexp bd">x</span>·<span class="clog">log3</span> = <span class="cexp bd">(x−1)</span>·<span class="clog">log5</span>`, note:'Blog rule on both sides — exponents drop to coefficients.', blog:'drop' },
+          { lbl:'Step 3', html:`<span class="cexp">x</span>·<span class="clog">log3</span> = <span class="cexp">x</span>·<span class="clog">log5</span> − <span class="clog">log5</span>`, note:'Distribute log5 on the right.' },
+          { lbl:'Step 4', html:`<span class="cexp">x</span>·<span class="clog">log3</span> − <span class="cexp">x</span>·<span class="clog">log5</span> = −<span class="clog">log5</span>`, note:'Move x·log5 to the left — collect all x terms.' },
+          { lbl:'Step 5', html:`<span class="cexp">x</span>(<span class="clog">log3</span> − <span class="clog">log5</span>) = −<span class="clog">log5</span>`, note:'Factor out x.' },
+          { lbl:'Step 6', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn">−<span class="clog">log(5)</span></span><span class="md"><span class="clog">log(3)</span>−<span class="clog">log(5)</span></span></span>`, note:'Divide both sides by (log3 − log5).', exact:true },
+          { lbl:'Calc',   html:`<span class="cexp">x</span> ≈ 3.151`, note:'Compute with the calculator using log button.', ok:true }
+        ]
+      },
+      {
+        label: '2ˣ⁺¹ = 3ˣ',
+        steps: [
+          { lbl:'Start',  html:`<span class="cbase">2</span><sup class="cexp">x+1</sup> = <span class="cbase">3</span><sup class="cexp">x</sup>`, note:'' },
+          { lbl:'Check',  html:`<span class="cbase">2</span><sup class="cexp">x+1</sup> = <span class="cbase">3</span><sup class="cexp">x</sup>`, badge:{cls:'no', text:'different bases + x both sides'}, note:'Bases 2 and 3 can\'t be matched. Log both sides.' },
+          { lbl:'Step 1', html:`<span class="clog">log</span>(<span class="cbase">2</span><sup class="cexp">x+1</sup>) = <span class="clog">log</span>(<span class="cbase">3</span><sup class="cexp">x</sup>)`, note:'Log both sides.' },
+          { lbl:'Step 2', html:`<span class="cexp bd">(x+1)</span>·<span class="clog">log2</span> = <span class="cexp bd">x</span>·<span class="clog">log3</span>`, note:'Blog rule on both sides.', blog:'drop' },
+          { lbl:'Step 3', html:`<span class="cexp">x</span>·<span class="clog">log2</span> + <span class="clog">log2</span> = <span class="cexp">x</span>·<span class="clog">log3</span>`, note:'Distribute log2 on the left.' },
+          { lbl:'Step 4', html:`<span class="clog">log2</span> = <span class="cexp">x</span>·<span class="clog">log3</span> − <span class="cexp">x</span>·<span class="clog">log2</span>`, note:'Move x·log2 to the right — all x terms together.' },
+          { lbl:'Step 5', html:`<span class="clog">log2</span> = <span class="cexp">x</span>(<span class="clog">log3</span> − <span class="clog">log2</span>)`, note:'Factor out x.' },
+          { lbl:'Step 6', html:`<span class="cexp">x</span> = <span class="mfr"><span class="mn clog">log(2)</span><span class="md"><span class="clog">log(3)</span>−<span class="clog">log(2)</span></span></span>`, note:'Divide both sides by (log3 − log2).', exact:true },
+          { lbl:'Calc',   html:`<span class="cexp">x</span> ≈ 1.710`, note:'Keep the exact fraction — only round at the end.', ok:true }
+        ]
+      }
+    ];
+
+    /* ======= STEP RENDERER ======= */
+    function buildPicker(containerId, data, setFn) {
+      const c = document.getElementById(containerId);
+      c.innerHTML = '';
+      data.forEach((p, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'prob-btn' + (i === 0 ? ' active' : '');
+        btn.textContent = p.label;
+        btn.addEventListener('click', () => {
+          c.querySelectorAll('.prob-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          setFn(i);
+        });
+        c.appendChild(btn);
+      });
+    }
+
+    function renderSteps(stageId, nextBtnId, data, probIdx, shownCount) {
+      const stage = document.getElementById(stageId);
+      const nextBtn = document.getElementById(nextBtnId);
+      stage.innerHTML = '';
+      const prob = data[probIdx];
+
+      for (let i = 0; i < shownCount; i++) {
+        const step = prob.steps[i];
+
+        if (i > 0) {
+          const arr = document.createElement('div');
+          arr.className = 'down-arrow';
+          arr.textContent = '↓';
+          stage.appendChild(arr);
+          requestAnimationFrame(() => requestAnimationFrame(() => arr.classList.add('visible')));
+        }
+
+        // Exact form note (shown before the step row if this is an exact step)
+        if (step.exact) {
+          const enote = document.createElement('div');
+          enote.className = 'exact-note';
+          enote.innerHTML = `<span class="exact-tag">KEEP EXACT</span><span class="exact-text">Write this form on paper before reaching for the calculator.</span>`;
+          stage.appendChild(enote);
+          requestAnimationFrame(() => requestAnimationFrame(() => enote.classList.add('visible')));
+        }
+
+        const row = document.createElement('div');
+        row.className = 'step-row';
+        stage.appendChild(row);
+
+        // Label
+        const lbl = document.createElement('div');
+        lbl.className = 'step-lbl';
+        lbl.textContent = step.lbl;
+        row.appendChild(lbl);
+
+        // Expression box
+        const box = document.createElement('div');
+        const boxClass = step.ok ? 'ok' : step.exact ? 'exact-box' : (i > 0 ? 'hl' : '');
+        box.className = 'expr-box' + (boxClass ? ' ' + boxClass : '');
+        box.innerHTML = step.html;
+        row.appendChild(box);
+
+        // Badge
+        if (step.badge) {
+          const b = document.createElement('span');
+          b.className = 'step-badge ' + step.badge.cls;
+          b.textContent = step.badge.text;
+          row.appendChild(b);
+        }
+
+        // Note
+        if (step.note) {
+          const n = document.createElement('div');
+          n.className = 'step-note';
+          n.innerHTML = step.note;
+          row.appendChild(n);
+        }
+
+        requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('visible')));
+      }
+
+      nextBtn.disabled = (shownCount >= prob.steps.length);
+    }
+
+    /* ======= STATE MACHINES ======= */
+    // Same Base
+    let sbProb = 0, sbStep = 1;
+    function setSameb(i) { sbProb = i; sbStep = 1; renderSteps('sameb-stage','sameb-next',SAMEB,sbProb,sbStep); }
+    document.getElementById('sameb-next').addEventListener('click', () => { sbStep++; renderSteps('sameb-stage','sameb-next',SAMEB,sbProb,sbStep); });
+    document.getElementById('sameb-reset').addEventListener('click', () => setSameb(sbProb));
+
+    // Log Both Sides
+    let lsProb = 0, lsStep = 1;
+    function setLogside(i) { lsProb = i; lsStep = 1; renderSteps('logside-stage','logside-next',LOGSIDE,lsProb,lsStep); }
+    document.getElementById('logside-next').addEventListener('click', () => { lsStep++; renderSteps('logside-stage','logside-next',LOGSIDE,lsProb,lsStep); });
+    document.getElementById('logside-reset').addEventListener('click', () => setLogside(lsProb));
+
+    // X on Both Sides
+    let xbProb = 0, xbStep = 1;
+    function setXboth(i) { xbProb = i; xbStep = 1; renderSteps('xboth-stage','xboth-next',XBOTH,xbProb,xbStep); }
+    document.getElementById('xboth-next').addEventListener('click', () => { xbStep++; renderSteps('xboth-stage','xboth-next',XBOTH,xbProb,xbStep); });
+    document.getElementById('xboth-reset').addEventListener('click', () => setXboth(xbProb));
+
+    /* ======= INIT ======= */
+    buildPicker('sameb-picker',  SAMEB,   setSameb);
+    buildPicker('logside-picker',LOGSIDE, setLogside);
+    buildPicker('xboth-picker',  XBOTH,   setXboth);
+    setSameb(0);
+    setLogside(0);
+    setXboth(0);
+  </script>
+</body>
+</html>

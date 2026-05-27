@@ -221,7 +221,7 @@
         <!-- Filter + search -->
         <div class="filter-row">
           <span class="label f-marker">SHOW:</span>
-          <button class="sk-pill active" data-filter="all" onclick="filterTools(this)">all 29</button>
+          <button class="sk-pill active" data-filter="all" id="filter-all-btn" onclick="filterTools(this)">all 29</button>
           <button class="sk-pill" data-filter="visualizer" onclick="filterTools(this)">visualizers</button>
           <button class="sk-pill" data-filter="practice" onclick="filterTools(this)">practice</button>
           <button class="sk-pill" data-filter="game" onclick="filterTools(this)">games</button>
@@ -269,6 +269,7 @@
       { id: 'poly',  name: 'Polynomial Sketch Pad',         unit: 'U6', topic: 'Polynomials',      kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Set roots and multiplicities, then sketch cross, bounce, and end behavior.', href: 'tools/polynomial-sketch.html' },
       { id: 'pdiv',  name: 'Polynomial Division Stepper',  unit: 'U6', topic: 'Polynomials',      kind: 'practice',   diff: 3, code: 'Pd', desc: 'Long division and synthetic — step through divide, multiply, subtract, bring down. Factor verdict at the end.', href: 'tools/polynomial-division-stepper.html' },
       { id: 'soht',  name: 'SOH CAH TOA Triangle Solver',   unit: 'U7', topic: 'Trigonometry',     kind: 'practice',   diff: 2, code: 'St', desc: 'Click a reference angle, watch opp/adj labels update, and solve the triangle.', href: 'tools/soh-cah-toa.html' },
+      { id: 'scgb',  name: 'Sine/Cosine Graph Builder',     unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 2, code: 'Sg', desc: 'Trace sin and cos from the unit circle, then shape it with a, b, h, k sliders.', href: 'tools/sincos-grapher.html' },
       { id: 'unitc', name: 'Unit Circle Walker',            unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 3, code: 'Uc', desc: 'Drag around the unit circle and watch sine or cosine trace a wave.',          href: 'tools/unit-circle.html' },
       { id: 'trigb', name: 'Sine/Cosine Graph Builder',     unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 2, code: 'Sc', desc: 'Build amplitude, period, phase shift, and midline from one trig equation.', href: 'tools/sine-cosine-builder.html' },
     ];
@@ -300,6 +301,8 @@
     }
 
     buildGrid(TOOLS);
+    // Keep "all N" button label and count in sync with TOOLS array
+    document.getElementById('filter-all-btn').textContent = 'all ' + TOOLS.length;
 
     let activeFilter = 'all';
 
@@ -328,6 +331,7 @@
     }
 
     document.getElementById('search-input').addEventListener('input', applyFilter);
+    applyFilter(); // initialise count on first load
 
     // TOTW mini graph preview
     (function() {
