@@ -197,6 +197,16 @@
         </div>
       </div>
 
+      <div class="sk-box" style="padding:10px; background:#e8f4ec; border-color:#2a8a4a;">
+        <div class="f-marker" style="font-size:11px; color:#2a8a4a; margin-bottom:6px;">🔍 SEARCH STRATEGY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          Start near <strong>√(|ac|)</strong> — that's where factor pairs are closest together.<br><br>
+          · Sum too <em>small</em>? Spread the pair further apart.<br>
+          · Sum too <em>big</em>? Pull the pair closer together.<br>
+          · Need a <em>negative</em> sum? Make the larger number negative.
+        </div>
+      </div>
+
       <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
         <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
         <div class="f-hand" style="font-size:12px; margin-top:4px;">Show me a quadratic you thought would factor but didn't.</div>
@@ -306,8 +316,10 @@
 
         // Steps
         const prod = a * c;
+        const sqrtHint = Math.round(Math.sqrt(Math.abs(prod)));
         stepsEl.innerHTML = `
-          <div class="step"><div class="num">①</div><div class="content">Find two numbers that <strong>multiply to ${prod}</strong> and <strong>add to ${b}</strong>:<br>
+          <div class="step"><div class="num">①</div><div class="content">Find two numbers that <strong>multiply to ${prod}</strong> and <strong>add to ${b}</strong>.<br>
+            <span style="font-family:'Patrick Hand',cursive; color:#2a8a4a; font-size:13px;">Start near √(|ac|) ≈ ${sqrtHint} and spread from there.</span><br>
             <span class="math">${result.p} × ${result.q} = ${prod} &nbsp; and &nbsp; ${result.p} + ${result.q} = ${b} ✓</span>
           </div></div>
           <div class="step"><div class="num">②</div><div class="content">Factored form:<br>
@@ -319,8 +331,11 @@
         factorEl.textContent = 'not factorable over ℤ';
         factorEl.style.color = 'var(--ink-soft)';
         areaEl.innerHTML = `<div class="no-factor-msg" style="grid-column:1/-1;">No integer factor pairs exist for ac = ${a*c}, b = ${b}</div>`;
+        const sqrtHintNo = Math.round(Math.sqrt(Math.abs(a*c)));
         stepsEl.innerHTML = `
-          <div class="step"><div class="num">①</div><div class="content">Look for two integers that multiply to <span class="math">${a*c}</span> and add to <span class="math">${b}</span>. None exist.</div></div>
+          <div class="step"><div class="num">①</div><div class="content">Look for two integers that multiply to <span class="math">${a*c}</span> and add to <span class="math">${b}</span>.<br>
+            <span style="font-family:'Patrick Hand',cursive; color:#2a8a4a; font-size:13px;">Started near √(|ac|) ≈ ${sqrtHintNo} — no pair sums to ${b}. None exist.</span>
+          </div></div>
           <div class="step"><div class="num">②</div><div class="content">Discriminant: <span class="math">b²−4ac = ${disc}</span>. ${disc < 0 ? 'Negative → no real roots → not factorable over ℝ.' : 'Not a perfect square → irrational roots → not factorable over ℤ.'}</div></div>`;
       }
     }
