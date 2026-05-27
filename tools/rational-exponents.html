@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rational Exponents Tower — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .tower-stage { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; gap:16px; padding:12px 0; overflow-y:auto; }
+
+    .score-row { display:flex; gap:24px; align-items:center; }
+    .score-cell { text-align:center; }
+    .score-num  { font-family:'Caveat',cursive; font-weight:700; font-size:40px; color:var(--accent); line-height:1; }
+    .score-lbl  { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); }
+
+    .question-card { width:100%; max-width:500px; padding:20px 24px; text-align:center; position:relative; }
+    .q-label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
+    .q-expr   { font-family:'JetBrains Mono',monospace; font-size:38px; line-height:1; }
+    .q-expr sup { font-size:0.65em; }
+
+    .choices-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; width:100%; max-width:500px; }
+    .choice { padding:12px 10px; border:2.5px solid var(--ink); border-radius:6px; background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:15px; cursor:pointer; transition:background .12s,transform .08s; text-align:center; box-shadow:2px 3px 0 rgba(29,26,20,0.1); }
+    .choice:hover  { background:var(--paper-2); transform:translateY(-1px); }
+    .choice.correct { background:#d4edda; border-color:var(--green); color:var(--green); pointer-events:none; }
+    .choice.wrong   { background:#f8d7da; border-color:var(--redline); color:var(--redline); pointer-events:none; }
+    .choice.reveal  { background:#d4edda; border-color:var(--green); pointer-events:none; }
+
+    .tower-visual { display:flex; gap:4px; align-items:flex-end; width:100%; max-width:500px; min-height:40px; }
+    .tower-block  { flex:1; background:var(--ink); border-radius:3px 3px 0 0; transition:height .3s ease; }
+
+    .fb-msg { font-family:'Permanent Marker',cursive; font-size:20px; min-height:26px; text-align:center; }
+    .fb-msg.good { color:var(--green); }
+    .fb-msg.bad  { color:var(--redline); }
+
+    .end-screen { display:none; flex-direction:column; align-items:center; gap:14px; text-align:center; }
+    .end-screen.show { display:flex; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u4.html">← U4</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none; align-items:center;">
+      <div class="tool-breadcrumb" style="width:100%;"><a href="../u4.html">← U4 · Rational Exponents</a> &nbsp;·&nbsp; D2</div>
+      <div class="tool-title f-display" style="text-align:center;">Rational Exponents Tower</div>
+      <div class="tool-tagline f-hand" style="text-align:center;">Match x^(m/n) to its radical form. Stack correct answers to build your tower.</div>
+
+      <!-- Active game -->
+      <div class="tower-stage" id="game-stage">
+        <div class="score-row">
+          <div class="score-cell"><div class="score-num" id="score-num">0</div><div class="score-lbl">SCORE</div></div>
+          <div class="score-cell"><div class="score-num" id="round-num">1</div><div class="score-lbl">ROUND</div></div>
+          <div class="score-cell"><div class="score-num" id="streak-num">0</div><div class="score-lbl">STREAK 🔥</div></div>
+        </div>
+
+        <!-- Tower visual -->
+        <div class="tower-visual" id="tower-visual"></div>
+
+        <div class="question-card sk-box-thick">
+          <div class="q-label">MATCH THIS EXPRESSION:</div>
+          <div class="q-expr" id="q-expr">x<sup>1/2</sup></div>
+        </div>
+
+        <div class="choices-grid" id="choices-grid"></div>
+        <div class="fb-msg" id="fb-msg"></div>
+
+        <button class="btn accent big" id="start-btn" onclick="startGame()">▶ Build the Tower!</button>
+      </div>
+
+      <!-- End screen -->
+      <div class="end-screen" id="end-screen">
+        <div style="font-family:'Caveat',cursive; font-weight:700; font-size:56px; color:var(--accent);" id="end-score">0</div>
+        <div class="f-marker" style="font-size:16px;">points</div>
+        <div class="tower-visual" id="final-tower" style="max-width:400px; width:100%;"></div>
+        <div class="f-hand" style="font-size:17px;" id="end-msg"></div>
+        <div class="sk-box" style="padding:12px 20px; max-width:440px; width:100%;" id="end-review"></div>
+        <button class="btn accent big" onclick="startGame()">▶ play again</button>
+        <a href="rational-expressions.html" class="btn">← Rational Expressions</a>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO PLAY</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>See an expression with a fractional exponent.</li>
+          <li>Pick the matching radical form.</li>
+          <li>Each correct answer adds a block to your tower!</li>
+          <li>10 rounds — build as high as you can.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE RULE</div>
+        <div style="text-align:center; padding:10px; border:1.5px dashed var(--ink-2); border-radius:4px;">
+          <div class="f-mono" style="font-size:16px;">x<sup>m/n</sup> = ⁿ√(x<sup>m</sup>) = (ⁿ√x)<sup>m</sup></div>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; color:var(--ink-2);">
+          The <strong>denominator</strong> is the index of the radical. The <strong>numerator</strong> is the power.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">EXAMPLES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          x<sup>1/2</sup> = √x<br>
+          x<sup>1/3</sup> = ³√x<br>
+          x<sup>2/3</sup> = ³√(x²)<br>
+          8<sup>2/3</sup> = (³√8)² = 4<br>
+          16<sup>3/4</sup> = (⁴√16)³ = 8
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="neg-exponent-flipper.html">→ Negative Exponent Flipper</a>
+        <a class="related-link f-hand" href="diff-of-squares.html">→ Difference of Squares</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QS = [
+      { expr:'x<sup>1/2</sup>', latex:'x^(1/2)', correct:'√x',         wrong:['x²', '1/(2x)', 'x/2'] },
+      { expr:'x<sup>1/3</sup>', latex:'x^(1/3)', correct:'³√x',         wrong:['x³', '√x', 'x/3'] },
+      { expr:'x<sup>2/3</sup>', latex:'x^(2/3)', correct:'³√(x²)',       wrong:['²√(x³)', 'x²/3', '³√x·2'] },
+      { expr:'x<sup>3/2</sup>', latex:'x^(3/2)', correct:'(√x)³',        wrong:['√(x³)', '3/(2x)', 'x³/x²'] },
+      { expr:'x<sup>1/4</sup>', latex:'x^(1/4)', correct:'⁴√x',          wrong:['√x', 'x/4', '⁴√(x²)'] },
+      { expr:'x<sup>3/4</sup>', latex:'x^(3/4)', correct:'⁴√(x³)',        wrong:['³√(x⁴)', '(⁴√x)⁴', 'x³/4'] },
+      { expr:'8<sup>2/3</sup>', latex:'8^(2/3)', correct:'4',             wrong:['16', '2', '³√64'] },
+      { expr:'16<sup>3/4</sup>',latex:'16^(3/4)',correct:'8',             wrong:['12', '4', '64'] },
+      { expr:'27<sup>1/3</sup>',latex:'27^(1/3)',correct:'3',             wrong:['9', '√27', '7'] },
+      { expr:'4<sup>3/2</sup>', latex:'4^(3/2)', correct:'8',             wrong:['6', '12', '³√4'] },
+      { expr:'x<sup>5/2</sup>', latex:'x^(5/2)', correct:'(√x)⁵',        wrong:['x⁵/x²', '√(5x)', '⁵√(x²)'] },
+      { expr:'x<sup>4/3</sup>', latex:'x^(4/3)', correct:'³√(x⁴)',        wrong:['⁴√(x³)', 'x⁴/3', '³√x·4'] },
+    ];
+
+    function shuffle(a) { const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];} return b; }
+
+    let score=0, round=0, streak=0, answered=false, blocks=[], wrongList=[];
+    const TOTAL_ROUNDS = 10;
+
+    function updateUI() {
+      document.getElementById('score-num').textContent = score;
+      document.getElementById('round-num').textContent = Math.min(round+1, TOTAL_ROUNDS);
+      document.getElementById('streak-num').textContent = streak;
+    }
+
+    function renderTower(containerId, blocks) {
+      const el = document.getElementById(containerId);
+      el.innerHTML = '';
+      for (let i=0; i<TOTAL_ROUNDS; i++) {
+        const b = document.createElement('div');
+        b.className = 'tower-block';
+        const h = blocks[i] ? (20 + blocks[i] * 4) : 4;
+        b.style.height = h + 'px';
+        b.style.background = blocks[i] ? (blocks[i] > 1 ? '#d94f2a' : '#1d1a14') : 'rgba(29,26,20,0.1)';
+        el.appendChild(b);
+      }
+    }
+
+    function startGame() {
+      score=0; round=0; streak=0; blocks=[]; wrongList=[];
+      document.getElementById('end-screen').classList.remove('show');
+      document.getElementById('game-stage').style.display='flex';
+      document.getElementById('start-btn').style.display='none';
+      updateUI();
+      renderTower('tower-visual', blocks);
+      nextQ();
+    }
+
+    function nextQ() {
+      if (round >= TOTAL_ROUNDS) { endGame(); return; }
+      answered = false;
+      const pool = shuffle(QS);
+      const q = pool[round % QS.length];
+      window._q = q;
+      document.getElementById('q-expr').innerHTML = q.expr;
+      document.getElementById('fb-msg').textContent = '';
+      document.getElementById('fb-msg').className = 'fb-msg';
+
+      const opts = shuffle([q.correct, ...q.wrong.slice(0,3)]);
+      const grid = document.getElementById('choices-grid');
+      grid.innerHTML = '';
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'choice';
+        btn.textContent = opt;
+        btn.onclick = () => pick(opt, btn);
+        grid.appendChild(btn);
+      });
+      updateUI();
+    }
+
+    function pick(choice, btn) {
+      if (answered) return;
+      answered = true;
+      const q = window._q;
+      const ok = choice === q.correct;
+
+      document.querySelectorAll('.choice').forEach(b => {
+        if (b.textContent === q.correct) b.classList.add(ok ? 'correct' : 'reveal');
+        else if (b === btn && !ok) b.classList.add('wrong');
+        b.style.pointerEvents = 'none';
+      });
+
+      const fb = document.getElementById('fb-msg');
+      if (ok) {
+        streak++;
+        const pts = 10 + streak * 2;
+        score += pts;
+        blocks.push(Math.min(streak, 5));
+        fb.textContent = streak >= 3 ? `🔥 ${streak} streak! +${pts}` : `✓ +${pts} pts`;
+        fb.className = 'fb-msg good';
+      } else {
+        streak = 0;
+        blocks.push(0);
+        wrongList.push({ expr: q.expr, correct: q.correct, chose: choice });
+        fb.textContent = `✗ It's ${q.correct}`;
+        fb.className = 'fb-msg bad';
+      }
+
+      renderTower('tower-visual', blocks);
+      round++;
+      setTimeout(nextQ, 1400);
+    }
+
+    function endGame() {
+      document.getElementById('game-stage').style.display = 'none';
+      const es = document.getElementById('end-screen');
+      es.classList.add('show');
+      document.getElementById('end-score').textContent = score;
+      const maxH = blocks.reduce((a,b)=>a+b,0);
+      document.getElementById('end-msg').textContent = score>=130 ? '🏆 Perfect tower!' : score>=90 ? '🔥 Strong build!' : score>=60 ? '👍 Keep stacking.' : 'Play again — the tower gets taller!';
+      renderTower('final-tower', blocks);
+
+      const rev = document.getElementById('end-review');
+      if (wrongList.length === 0) {
+        rev.innerHTML = '<div class="f-hand" style="color:var(--green); text-align:center; font-size:15px;">No mistakes! Perfect score! 🎉</div>';
+      } else {
+        rev.innerHTML = '<div class="f-marker" style="font-size:11px; margin-bottom:6px;">REVIEW:</div>' +
+          wrongList.map(w=>`<div class="f-hand" style="font-size:13px; margin-bottom:3px;">${w.expr} → <span style="color:var(--green);">${w.correct}</span></div>`).join('');
+      }
+    }
+  </script>
+</body>
+</html>

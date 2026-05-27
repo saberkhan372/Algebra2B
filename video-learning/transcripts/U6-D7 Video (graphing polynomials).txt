@@ -1,0 +1,70 @@
+Alright, here's a video for unit 6, day 7.
+It's about graphing.
+So remember, I think one of the last classes that polynomial graphs can look like this,
+it can go up to the right and down to the left, we can both point up, we can both point
+down and go down to the right, up to the left, they're like a roller coaster, right?
+And each of these x-intercepts are solutions to each factor.
+So here, find all the factors, find all the zeros, x-intercepts are all synonyms, right?
+They all mean the same thing.
+Here, factor by grouping, we can take out x to the third, we can take out a negative
+3, 9, x, see you're left with x plus 5, x to the third minus 9, x, you can take
+an x out, and then you have this, which factors in x plus 3, x minus 3, so we have four factors,
+zero, negative 3, 3, and negative 5, four zeros are solutions.
+The highest degree is four, and that's super important, the highest degree is the number
+of factors, the number of solutions.
+What also matters is the leading coefficient, so the front number, if it's in the form
+or the highest degree is first, that'll be your leading coefficient, this is like a positive
+1 here, but here is a negative 1, right?
+If we factor this, we can take out a negative 1, I mean this factor is into x minus
+6, x minus 1, so 6 and 1, but the leading coefficient's negative, so I know it's both,
+like if it has to go through both of these, and it points, the leading coefficient means
+where does it point to the right, points down to the right, it has to go through this and
+through this, so both ends point down.
+We'll check this one out, we can pull a 2 out, and this is x plus 3, x plus 3, so x plus
+3 is a factor that shows up twice.
+The leading coefficient's positive, which means it goes through negative 3, but how do
+you go through negative 3, and not go through another number, well it has to just bounce
+off that number.
+This is a factor, x plus 3, that shows up an even number of times, so if the factors
+with a degree of 1, like this, it says a degree of 1, this has a degree of 1, they go
+through that x intercept.
+Factors of the degree of 2 or an even number like this, bounce like this.
+Higher odd degrees, like x to the thick odd, they swerve, right, so x cube swerves, but we
+don't see that this year we're only going to see a degree of 1, or degree of 2, alright,
+so for each polynomial, I'll identify the degree in the zeros, which zeros are bounces.
+This has a degree of 1, the actual solution is x equals negative 12, and I know it goes
+through, because that's an odd number.
+This is going to bounce, and x equals negative 4, that's a degree of 2, this is a degree
+of 2, sort of bounce, x equals 6.
+The total degree is 1, 2, 3, 4, 5, but 1, 2, 3, 4, 5, 3, 5.
+Same thing here, total degree of 6, 7, 8, 9, 10.
+This is a degree of 6, x equals 0, so it's going to bounce, because it's even.
+This is going to go through, because it's odd, this is going to go through, because it's odd,
+and then what is some possibility, so I think this chart here is really important,
+if the leading coefficient is positive, so something like the 16 is positive number,
+it's going to go up to the right, if the leading coefficient's negative, it's going to go down
+to the right, if it's an odd degree, one end points one way, for one end points the other way,
+if it's an even degree, both ends point the same way, so this has a total degree of 5.
+That means, and the leading coefficient's positive, right?
+That means it's going to go up to the right, down to the left, because it's odd.
+This has an even coefficient, positive, but it's even, so both ends will point the same way.
+Yes, there will be more squiggles in between right here, but think about the end, total, and behavior.
+The sketch of graph, they mean to give them conditions, the y-axis is irrelevant,
+meaning like, I don't know how it is, they go through here and go really far down,
+and then go out here and go really far down, well, that's not as important as just going
+through the dot, or bouncing off the dot.
+Okay, even degree, it's a both ends point the same way, leading coefficient's positive,
+it goes through negative four, one, and bounces at one and goes through five, so up to the right,
+I would start, I draw my, so draw your dots, because up to the right, I start with an arrow
+through at five, bounce at one, so bounce, and then negative four, it's going to go through,
+because it doesn't say bounce. This one, odds, so both ends point different ways,
+it goes down to the right, negative six, negative two, zero, it bounces, and goes through at four,
+so draw this through, bounce, through, through.
+Finally, we put all the, given the polynomial in factored form, we identify the zeros,
+cross and bounce, end behavior, draw slow and deliberately, so what's the degree?
+One, two, three, four, even degrees, so both ends are going to point the same way,
+the leading coefficient's negative, so I know it goes down to the right, and if it's even,
+it'll also go down to the left, negative three, one, and negative five is going to bounce,
+so here's negative five, so that's where it bounces, here's negative three, here's one,
+it goes down to the right, it's going to go through, through, it's at it bounces, and negative five,
+so there you go. The homework looks just like this, so keep practicing.

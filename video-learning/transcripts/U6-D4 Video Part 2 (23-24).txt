@@ -1,0 +1,153 @@
+Sorry about that, it's part two.
+All right, what do we have to get?
+How do we have to get them m squared?
+What do we have to multiply m by to get m squared?
+We have to multiply it by m.
+So m times m is m squared, m times four is four m.
+Two years of traction, nine minus four is to five,
+bring down the 20.
+How do I get five and I'll have to multiply m by five?
+And then five times four is 20, so you have no remainder,
+and you can check our answer by four.
+What if there's a remainder?
+Well, this is important.
+X to the fourth, m is x squared plus five, x minus six.
+We're missing an x to the third term.
+So in order to do divisions with polynomials,
+you need a space for every power of x to the fourth.
+There aren't any x to the third,
+and you have to have a placeholder for it.
+So it makes zero x to the third.
+Minus x squared plus five x minus six.
+So we've got it all here.
+x times x to the third is m x to the fourth.
+Two times x to the third is two x to the third,
+and when I do this subtraction, this becomes zero.
+And then zero minus two x to the third is negative two x to the third.
+Bringing this down.
+Now, what do I have to multiply x by to get the negative two x to the third?
+That's multiplied by negative two x squared.
+Negative two x squared times x is negative two x to the third.
+So we get that here.
+How do you brought this down?
+Negative two x squared times two is negative four x squared.
+We've got to be careful because it's traction.
+Negative minus a negative negative zero.
+Negative x squared plus four x squared is three x squared.
+Bring this down.
+How do I get three x squared from x after multiply it by three x?
+So three x times x, three x squared.
+Three x times two is six x.
+Do this subtraction, this subtraction.
+They get minus one x.
+How do I get minus one x by x after multiply it by minus one?
+Rock this down.
+Minus one times x is minus one x minus one times two is negative two.
+This is negative six plus two.
+I get negative four.
+So here's my remainder.
+So this is really divided polynomial.
+This, I had binomial two terms.
+And we're trying to see if it's a factor.
+If you get a remainder, it's not a factor.
+If we don't, if we get no remainder or a remainder of zero,
+that actually is a factor.
+And then we're left with a polynomial from lower degree when we do it.
+So we took out an x, we basically just divided out an x plus two from an x to the fourth polynomial.
+We got an x to the third.
+We could divide it again.
+We knew another thing to divide it by a three x squared.
+And once we're at x squared, that's something we can use the quadratic formula.
+We're probably similar to the fully factor.
+We get all of the factors.
+We get something like this and get all of the factors.
+So I'm going to speak down this in fact,
+because this is really, really useful.
+So I'll do this one line.
+We're trying to do x plus two.
+The actual factor is negative two.
+That's what goes in this box.
+I'm just repeating that I've shown here.
+We take all of the coefficients of two, three, one, and eight, two, three, one, and into the line.
+You always bring down the first number.
+Just add it.
+And you say two times negative two.
+You get negative four.
+And you add, then you get negative one.
+Negative one, then negative two is positive two.
+And you add these.
+You get three.
+Three times negative two is negative six.
+We get two.
+Because we have a remainder, that means that x plus two is not a factor of this.
+It isn't going to even be.
+It's going to be a factor of this out.
+x plus two is not the exact, the weak daughter remains.
+Something like this, x to the fourth.
+We don't have any x to the third.
+16x squared, 3x and 12.
+We need to put a zero for the x to the third.
+Remember, x plus four means negative four.
+The actual x and x with vectors in the box.
+One times negative four is negative four.
+Add these.
+Negative four times negative four is positive six.
+And we get zero.
+Zero times negative four is zero.
+These you get three.
+Three times negative four is zero.
+We got zero remaining.
+It turns.
+That's x plus four.
+And you start with this x and x.
+Also, right here, we're going to get a scalar and one for the x and the fourth.
+There's no x to the third.
+There's no x to the third.
+There's no x to the third.
+There's no x to the third.
+So, bring number one.
+Fulsation, right here.
+That's what it's going to be.
+Three times three is nine.
+Add these.
+You get four times three is 12.
+12 times three is 36.
+Add these.
+And look what happened.
+We divided an x to the fourth.
+By one of the roots.
+And we got an x to the third.
+So, basically, when you took out x minus three,
+we're left with x to the third plus three x squared plus four x plus 12.
+And it says that x minus three is also a five.
+So, the next factor, going has the new growth.
+So, drop down one, one times negative three is negative three.
+Add these.
+You get zero times negative three is zero times negative three is zero.
+Add these.
+You get four times negative three is negative twelve.
+Five is you get no remainder.
+So, we've got down to x to the fourth plus four.
+That's all right.
+x squared plus four.
+Which means we had x to the x squared plus four is after we divided out x minus three.
+That means that we basically down for this x minus e x plus three x squared plus four.
+For this one, we set it equal to zero.
+That's square root of.
+You get plus and minus two i.
+This is find all the roots.
+Here we go, if I'm green, negative three, two i and negative two i all the roots.
+I'm just following on the left.
+So, this is a possible testing scenario, at least.
+Something like that for the fourth.
+You take out a factor.
+You get to the third.
+You take out the other factor.
+You get x squared.
+You get x squared.
+You get x squared.
+You get x squared.
+There you go.
+That's part two.
+That's six.
+Okay.

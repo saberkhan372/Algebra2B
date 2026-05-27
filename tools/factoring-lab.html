@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Factoring Quadratics Lab — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    .lab-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 8px 0;
+      overflow-y: auto;
+    }
+
+    .big-eq {
+      text-align: center;
+      padding: 16px;
+      position: relative;
+    }
+    .big-eq .standard-form {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 32px;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .big-eq .factor-form {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+    .big-eq .equals-sign {
+      font-family: 'Caveat', cursive;
+      font-size: 18px;
+      color: var(--ink-soft);
+    }
+
+    .coeff-sliders {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .coeff-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .coeff-group label {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 12px;
+    }
+    .coeff-group .coeff-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 500;
+      color: var(--ink);
+      min-width: 40px;
+      text-align: center;
+    }
+
+    .area-model {
+      display: grid;
+      gap: 2px;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+    .area-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      border: 1.5px solid var(--ink);
+      border-radius: 3px;
+      min-height: 44px;
+      transition: background 0.2s;
+    }
+    .area-cell.header { background: var(--paper-2); font-size: 13px; }
+    .area-cell.fill-ax2 { background: #cfe3f1; }
+    .area-cell.fill-bx  { background: #f1e1cf; }
+    .area-cell.fill-c   { background: #dde8cf; }
+
+    .factoring-steps {
+      border: 1.5px dashed var(--ink-2);
+      border-radius: 4px;
+      padding: 10px 12px;
+    }
+    .step { display: flex; gap: 8px; align-items: baseline; margin-bottom: 4px; font-size: 14px; }
+    .step .num { font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--accent); width: 20px; }
+    .step .content { font-family: 'Patrick Hand', cursive; flex: 1; }
+    .step .math { font-family: 'JetBrains Mono', monospace; color: var(--ink-2); }
+
+    .no-factor-msg {
+      text-align: center;
+      padding: 10px;
+      background: var(--paper-2);
+      border-radius: 4px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Quadratics</a> &nbsp;·&nbsp; D3</div>
+      <div class="tool-title f-display">Factoring Quadratics Lab</div>
+      <div class="tool-tagline f-hand">Change a, b, c. See the factors appear (or not). Area model included.</div>
+
+      <div class="lab-stage">
+        <!-- Big equation display -->
+        <div class="big-eq sk-box" style="padding:14px;">
+          <div class="standard-form" id="std-form">x² + 5x + 6</div>
+          <div class="equals-sign">↕ factors to</div>
+          <div class="factor-form" id="factor-form">(x + 2)(x + 3)</div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="coeff-sliders">
+          <div class="coeff-group">
+            <label>a (x² term)</label>
+            <input type="range" id="sl-a" min="1" max="4" step="1" value="1" style="width:100%;" />
+            <div class="coeff-val" id="cv-a">1</div>
+          </div>
+          <div class="coeff-group">
+            <label>b (x term)</label>
+            <input type="range" id="sl-b" min="-12" max="12" step="1" value="5" style="width:100%;" />
+            <div class="coeff-val" id="cv-b">5</div>
+          </div>
+          <div class="coeff-group">
+            <label>c (constant)</label>
+            <input type="range" id="sl-c" min="-16" max="16" step="1" value="6" style="width:100%;" />
+            <div class="coeff-val" id="cv-c">6</div>
+          </div>
+        </div>
+
+        <!-- Area model -->
+        <div>
+          <div class="f-marker" style="font-size:12px; margin-bottom:6px;">AREA MODEL</div>
+          <div class="area-model" id="area-model" style="grid-template-columns: 80px 1fr 1fr;">
+            <!-- built by JS -->
+          </div>
+        </div>
+
+        <!-- Factoring steps -->
+        <div class="factoring-steps" id="steps-box">
+          <!-- built by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Drag the sliders to change a, b, c.</li>
+          <li>Watch the factored form update.</li>
+          <li>See which pairs multiply to ac and add to b.</li>
+          <li>Try to make it <strong>not factorable</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Set b = 0, c = −4. What does the factored form look like? (Hint: difference of squares.)</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.4deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Find a quadratic that <em>can't</em> be factored over integers. What makes it "prime"?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">What's the discriminant (b²−4ac) when it doesn't factor? Compare to when it does.</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">THE METHOD</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5;">
+          Find two numbers that <strong>multiply to ac</strong> and <strong>add to b</strong>.<br>
+          Use them to split the middle term, then factor by grouping.
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Show me a quadratic you thought would factor but didn't.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="diff-of-squares.html">→ Difference of Squares</a>
+        <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let a = 1, b = 5, c = 6;
+
+    function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while (y) { [x, y] = [y, x % y]; } return x; }
+
+    function factor(a, b, c) {
+      if (c === 0) return { p: 0, q: b, f1: [1, 0], f2: [a, b] };
+      // Find p, q such that p*q = a*c and p+q = b
+      const ac = a * c;
+      for (let p = -Math.abs(ac); p <= Math.abs(ac); p++) {
+        if (ac !== 0 && ac % p !== 0) continue;
+        const q = ac / p;
+        if (p + q === b) {
+          // factor: ax² + px + qx + c → group
+          // (a=1): (x + p)(x + q) if a=1
+          if (a === 1) {
+            return { p, q, f1: [1, p], f2: [1, q] };
+          }
+          // general: ax² + px + qx + c
+          // group: x(ax + p) + (c/q)(ax + p) ... need integer factors
+          const g1 = gcd(a, p);
+          const g2 = gcd(q, c);
+          if ((a / g1) === (q / g2) && (p / g1) === (c / g2)) {
+            return { p, q, f1: [g1, p / g1], f2: [g2, q / g2] };
+          }
+          // simpler check: factor as (f1x + r1)(f2x + r2)
+          for (let f1 = 1; f1 <= a; f1++) {
+            if (a % f1 !== 0) continue;
+            const f2 = a / f1;
+            for (let r1 = -Math.abs(c); r1 <= Math.abs(c); r1++) {
+              if (c % r1 !== 0 && r1 !== 0) continue;
+              if (r1 === 0) continue;
+              const r2 = c / r1;
+              if (f1 * r2 + f2 * r1 === b) {
+                return { p, q, f1: [f1, r1], f2: [f2, r2] };
+              }
+            }
+          }
+        }
+      }
+      return null;
+    }
+
+    function fmtPoly(coeff, exp, constant) {
+      // format (coeff)x + constant as string
+      let s = '';
+      if (coeff === 1) s = 'x';
+      else if (coeff === -1) s = '−x';
+      else if (coeff < 0) s = `−${Math.abs(coeff)}x`;
+      else s = `${coeff}x`;
+      if (constant > 0) s += ` + ${constant}`;
+      else if (constant < 0) s += ` − ${Math.abs(constant)}`;
+      return s;
+    }
+
+    function fmtStd(a, b, c) {
+      let s = '';
+      if (a === 1) s += 'x²';
+      else if (a === -1) s += '−x²';
+      else s += `${a}x²`;
+      if (b > 0) s += ` + ${b}x`;
+      else if (b < 0) s += ` − ${Math.abs(b)}x`;
+      if (c > 0) s += ` + ${c}`;
+      else if (c < 0) s += ` − ${Math.abs(c)}`;
+      return s;
+    }
+
+    function update() {
+      document.getElementById('std-form').textContent = fmtStd(a, b, c);
+
+      const result = factor(a, b, c);
+      const factorEl = document.getElementById('factor-form');
+      const stepsEl = document.getElementById('steps-box');
+      const areaEl = document.getElementById('area-model');
+
+      if (result) {
+        const { f1, f2 } = result;
+        factorEl.textContent = `(${fmtPoly(f1[0], 1, f1[1])})(${fmtPoly(f2[0], 1, f2[1])})`;
+        factorEl.style.color = 'var(--accent)';
+
+        // Area model cells
+        const r1 = f1[1], r2 = f2[1];
+        const c1 = f1[0], c2 = f2[0];
+        areaEl.innerHTML = `
+          <div class="area-cell header"></div>
+          <div class="area-cell header">${c1}x</div>
+          <div class="area-cell header">${r1 >= 0 ? '+' + r1 : r1}</div>
+          <div class="area-cell header">${c2}x</div>
+          <div class="area-cell fill-ax2">${c1*c2}x²</div>
+          <div class="area-cell fill-bx">${c2*r1}x</div>
+          <div class="area-cell header">${r2 >= 0 ? '+' + r2 : r2}</div>
+          <div class="area-cell fill-bx">${c1*r2}x</div>
+          <div class="area-cell fill-c">${r1*r2}</div>`;
+
+        // Steps
+        const prod = a * c;
+        stepsEl.innerHTML = `
+          <div class="step"><div class="num">①</div><div class="content">Find two numbers that <strong>multiply to ${prod}</strong> and <strong>add to ${b}</strong>:<br>
+            <span class="math">${result.p} × ${result.q} = ${prod} &nbsp; and &nbsp; ${result.p} + ${result.q} = ${b} ✓</span>
+          </div></div>
+          <div class="step"><div class="num">②</div><div class="content">Factored form:<br>
+            <span class="math">${fmtStd(a, b, c)} = (${fmtPoly(f1[0], 1, f1[1])})(${fmtPoly(f2[0], 1, f2[1])})</span>
+          </div></div>
+          <div class="step"><div class="num">③</div><div class="content">Check: expand to verify ✓</div></div>`;
+      } else {
+        const disc = b * b - 4 * a * c;
+        factorEl.textContent = 'not factorable over ℤ';
+        factorEl.style.color = 'var(--ink-soft)';
+        areaEl.innerHTML = `<div class="no-factor-msg" style="grid-column:1/-1;">No integer factor pairs exist for ac = ${a*c}, b = ${b}</div>`;
+        stepsEl.innerHTML = `
+          <div class="step"><div class="num">①</div><div class="content">Look for two integers that multiply to <span class="math">${a*c}</span> and add to <span class="math">${b}</span>. None exist.</div></div>
+          <div class="step"><div class="num">②</div><div class="content">Discriminant: <span class="math">b²−4ac = ${disc}</span>. ${disc < 0 ? 'Negative → no real roots → not factorable over ℝ.' : 'Not a perfect square → irrational roots → not factorable over ℤ.'}</div></div>`;
+      }
+    }
+
+    ['a','b','c'].forEach(p => {
+      document.getElementById(`sl-${p}`).addEventListener('input', function() {
+        const v = parseInt(this.value);
+        if (p==='a') a = v; if (p==='b') b = v; if (p==='c') c = v;
+        if (a === 0) { a = 1; this.value = 1; }
+        document.getElementById(`cv-${p}`).textContent = v;
+        update();
+      });
+    });
+
+    update();
+  </script>
+</body>
+</html>

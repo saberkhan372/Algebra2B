@@ -1,0 +1,69 @@
+Alright, here's the video for unit 2 day 7. This is the last bit of material before we
+do a quiz and a quiz review. So, it's about quadratic. Quadratic means squared, so that
+X term is squared and we're actually now to a point where there's no longer straight lines.
+We're actually forming curves and a lot of times you'll hear me say like we'll try to
+make a smooth curve. It's not easy, right? Like I just draw this. It's going to be sort
+of okay. I mean sometimes with a pencil if you want you can like sketch it out. Clearly I'm
+not an artist. But where are parabolas? So, the name of this shape is a parabola. It's actually
+seen in a lot of things like on satellites. There's going to be a satellite dish, right?
+as receives information. So, let's say there's a signal of data going through the air like
+internet signal, right? It's going in to the dish and it bounces off to this little receptor here. If
+it goes here, it'll bounce there. It'll go here to put bounce there. Less skis, like when you go skiing,
+have a parabolic shape, right? So, when you are, here's where your foot goes,
+parabolic shape. Because when you're, I guess, you don't do much skiing. But when you're on the edge
+of your ski, you want it to full, like full contact with the rails of the ski. What does this look like
+on Desmos? Well, remember H and K do the same thing. So, if I slide H around and change,
+that's my left and right. What do you think K does? Exactly. K moves it up and down.
+And now something's interesting. What does A do? It doesn't change the slope. It changes the,
+what I would call the stretch. Imagine I'm stretching this A gets bigger. And once A becomes
+like a fraction, let's say I want A to be 0.5. It's a stretch by a half. And then I can make it
+stretch like super negative. It get really, really, really stretched, right? There's no such thing
+as it being A being zero. I mean, because I would just be a number K. But if you begin with left,
+right, up, down and stretch or compress. But we're just going to call it all a stretch.
+Okay. Back to the notes. So, we're not talking about the slope anymore. We're talking about
+basically applauding points and seeing what it looks like. So, if I plug into this parent function,
+if I plug in negative 3, negative 3 squared is actually 9, because it's negative 3 times negative 3.
+So, here are my points, negative 2. I get 4, negative 1, I get 1, 0, 0, 1, 1, 2, 4, 3, 9. They're actually
+symmetrical. So, 0, 0, 1, 1, 2, 4, 0, 0, negative 1, 1, negative 2, 4, and then up there at 9. Notice
+it's like, it's not like a up one over one, up one over one. It's now up one, right one,
+up. So, let's think of this way. Right one, up one, right two, up four, right three, up nine.
+Where do you think it would go? Right four, up 16, right, up five. We went right five, it would go up 25.
+And it has a vertex. The vertex is where it's symmetrical. So, there's actually something called,
+we didn't talk about this in the notes, but there's something called the line of symmetry. So,
+right down the middle, it's symmetric on either side. It's actually an even function. So,
+they treat values the same regardless of their sign. So, meaning five plug in a five or a negative five,
+I still get 25. It's actually the same as when we did absolute value functions.
+Okay, symbolically, say if we plug in an x, like three, or plug in a negative version of that
+x, like negative three, we're actually going to get the same, they're equal to each other. They're
+the same with absolute value functions. So, here is the hk form. Does it look familiar? Yeah,
+this moves it left and right. This moves it up and down. So, identify the vertex in direction of
+opening. Is it taller or wider? So, the vertex is your hk. And is it taller or wider? Well,
+if a is a really big number, it's going to be taller. And if a is a fraction, it's going to be
+wider. Let's take a look at that again. If my a is a really big number, it's tall. This is,
+if a is just one, this is regular. But what if a is a fraction, or like a really small number,
+it gets wider. So, tall, wide. Here's what it's hard to admit to, but that's wide. Okay,
+this one is kind of sneaky, but this is your a, and it's not shifted left or right, but it is
+shifted up 16. So, just careful if it says x squared, that's actually like x plus 0 squared. So,
+the vertex is 0 comma 16. I know it opens down because it's negative. And it's tall because my a
+values two. Here, I don't have a 0 over here, so it's not shifted up or down. My vertex is negative
+6 0. I know it opens up because this is a positive a value, but it's actually y because my a values
+of fraction, it's 1 third. And lastly, my vertex is 19, negative 21. So, right by 19 down by 21,
+it's opened down, but it's almost one. So, it's almost normal. But I guess what is that? It's a
+little bit less than one. So, it's actually going to be wide, but it's opening down.
+So, when we graph these, I want you to graph five points. I want you to graph the vertex,
+and there's two different things you can do. Like this, you can plug in an x, get a y, plug in an
+x, get a y, and then you get five points. But let's look at a pattern. All parabolas,
+if the a value is one, you go right one up one, right two up four, right three up nine. And that's
+like every single time it's like that. But what if we switch it up? So, there's a pattern. So,
+right one up one, right two up four, left one up one, left two up four. That's five points.
+But what if we have, these are these are normal, right? So, here's my vertex is at zero, negative three.
+And from that point, I can get five points because from my vertex, I can go right one up one,
+right two up four, right one up one, there's our left one up one, left two up four, that's it.
+Here, my vertex is at negative two zero, right one up one, right two up four, left one up one,
+left two up four. It does say it domain and range. So, this is actually going to go left forever
+and right forever. So, domain is negative infinity to infinity for both of these. And then range
+is low to high. So, the lowest is negative three with a bracket because it includes that number
+up to infinity. The lowest this gets to zero up to infinity. Well, look at this.
+My vertex here is negative few, negative five. But, this is actually wrong. So, I want to go
+right one. Let's see, let's check this. So, negative one, let's plug in negative one.
+I'm going to come back and finish this.

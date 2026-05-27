@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOH CAH TOA Triangle Solver — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* Mode tabs */
+    .mode-tabs { display:flex; gap:0; border-bottom:2px solid var(--ink); margin-bottom:12px; }
+    .mode-tab {
+      padding:5px 16px; border:none; background:transparent;
+      font-family:'Permanent Marker',cursive; font-size:13px; cursor:pointer;
+      color:var(--ink-soft); border-bottom:3px solid transparent; margin-bottom:-2px;
+    }
+    .mode-tab.active { color:var(--ink); border-bottom-color:var(--accent); }
+    .mode-tab:hover:not(.active) { background:var(--paper-2); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:flex; flex-direction:column; gap:10px; flex:1; }
+
+    /* Canvas */
+    #tri-canvas { display:block; width:100%; cursor:pointer; }
+
+    /* Reference angle selector */
+    .angle-sel-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .angle-sel-btn {
+      padding:5px 14px; border:2px solid var(--ink-2); border-radius:6px;
+      font-family:'Patrick Hand',cursive; font-size:14px; cursor:pointer;
+      background:var(--paper-2); transition:all 0.15s;
+    }
+    .angle-sel-btn.active { background:var(--highlight); border-color:var(--accent); color:var(--ink); }
+
+    /* Ratio chips */
+    .ratio-chips { display:flex; gap:8px; flex-wrap:wrap; }
+    .ratio-chip {
+      padding:5px 14px; border:2px solid var(--ink-2); border-radius:6px;
+      font-family:'JetBrains Mono',monospace; font-size:14px; cursor:pointer;
+      background:var(--paper-2); transition:all 0.15s;
+    }
+    .ratio-chip.active { background:#dde9f6; border-color:#2a6fb4; }
+    .ratio-chip.recip { background:#fdf0e0; border-color:#c8a000; }
+    .ratio-chip.recip.active { background:#f5d34c; border-color:#c8a000; }
+    .ratio-chip:hover:not(.active) { background:var(--highlight); }
+
+    /* Solve inputs */
+    .solve-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; max-width:400px; }
+    .solve-field {
+      display:flex; flex-direction:column; gap:3px;
+    }
+    .solve-label { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); }
+    .solve-input {
+      border:2px solid var(--ink-2); border-radius:4px; padding:5px 8px;
+      font-family:'JetBrains Mono',monospace; font-size:15px;
+      background:var(--paper); color:var(--ink); width:100%;
+    }
+    .solve-input:focus { outline:none; border-color:var(--accent); }
+    .solve-input.known { background:#e8f4ec; border-color:#2a8a4a; }
+    .solve-input.unknown { background:#fdf0e0; border-color:var(--accent); }
+
+    .calc-output {
+      background:var(--ink); color:#f6f1e4; border-radius:6px; padding:10px 14px;
+      font-family:'Patrick Hand',cursive; font-size:14px; line-height:1.7;
+      max-width:460px;
+    }
+    .calc-step { margin:0; }
+    .calc-step .lbl { color:#f5d34c; font-family:'Permanent Marker',cursive; font-size:11px; }
+    .calc-step .expr { color:#fff; font-family:'JetBrains Mono',monospace; }
+    .calc-result { color:#6bde8c; font-family:'JetBrains Mono',monospace; font-size:16px; font-weight:bold; }
+
+    .warn-box {
+      background:#fdecea; border:2px solid var(--redline); border-radius:6px;
+      padding:8px 12px; font-family:'Patrick Hand',cursive; font-size:13px;
+      max-width:400px;
+    }
+
+    /* Special triangles */
+    .special-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media (max-width:600px) { .special-grid { grid-template-columns:1fr; } }
+    .special-card {
+      border:2px solid var(--ink); border-radius:8px; padding:12px 14px;
+      background:var(--paper); text-align:center;
+    }
+    .special-card canvas { display:block; margin:0 auto; }
+    .special-title { font-family:'Permanent Marker',cursive; font-size:13px; margin-bottom:6px; }
+    .special-table {
+      width:100%; border-collapse:collapse; margin-top:8px;
+      font-family:'Patrick Hand',cursive; font-size:13px;
+    }
+    .special-table th { border-bottom:2px solid var(--ink-2); padding:4px 6px; color:var(--ink-soft); font-size:11px; }
+    .special-table td { padding:4px 6px; text-align:center; border-bottom:1px solid var(--ink-2); }
+    .special-table .mono { font-family:'JetBrains Mono',monospace; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u7.html">← U7</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../index.html">← all tools</a> &nbsp;·&nbsp; U7 · Trig</div>
+      <div class="tool-title f-display">SOH CAH TOA Solver</div>
+      <div class="tool-tagline f-hand">Click the reference angle. Watch opposite and adjacent update.</div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="explore">Explore</button>
+        <button class="mode-tab" data-mode="solve">Solve</button>
+        <button class="mode-tab" data-mode="special">Special Triangles</button>
+      </div>
+
+      <!-- ===== EXPLORE ===== -->
+      <div id="mode-explore" class="mode-panel active">
+        <canvas id="tri-canvas" height="220"></canvas>
+
+        <div class="angle-sel-row">
+          <span class="f-marker" style="font-size:12px;">REFERENCE ANGLE:</span>
+          <button class="angle-sel-btn active" id="btn-refA" onclick="setRefAngle('A')">angle A (bottom-left)</button>
+          <button class="angle-sel-btn" id="btn-refC" onclick="setRefAngle('C')">angle C (top-right)</button>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span class="f-marker" style="font-size:12px;">ANGLE θ:</span>
+          <input type="range" id="theta-slider" min="10" max="80" step="1" value="37"
+            oninput="setTheta(+this.value)" style="width:160px;" />
+          <span class="f-mono" style="font-size:16px;" id="theta-display">37°</span>
+          <button class="btn small" onclick="setTheta(37); document.getElementById('theta-slider').value=37;">↺</button>
+        </div>
+
+        <div class="ratio-chips" id="ratio-chips"></div>
+      </div>
+
+      <!-- ===== SOLVE ===== -->
+      <div id="mode-solve" class="mode-panel">
+        <canvas id="tri-canvas-solve" height="180"></canvas>
+
+        <div class="angle-sel-row" style="margin-top:4px;">
+          <span class="f-marker" style="font-size:12px;">REFERENCE ANGLE:</span>
+          <button class="angle-sel-btn active" id="btn-refA-s" onclick="setSolveRef('A')">angle A</button>
+          <button class="angle-sel-btn" id="btn-refC-s" onclick="setSolveRef('C')">angle C</button>
+        </div>
+
+        <div style="font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft); margin-top:4px;">
+          Enter any 2 values. Leave the unknown blank.
+        </div>
+        <div class="solve-grid">
+          <div class="solve-field">
+            <label class="solve-label">ANGLE θ (degrees)</label>
+            <input class="solve-input" id="sv-angle" type="number" min="1" max="89" step="1" placeholder="?" oninput="solveTri()" />
+          </div>
+          <div class="solve-field">
+            <label class="solve-label">HYPOTENUSE</label>
+            <input class="solve-input" id="sv-hyp" type="number" min="0.01" step="any" placeholder="?" oninput="solveTri()" />
+          </div>
+          <div class="solve-field">
+            <label class="solve-label" id="sv-opp-lbl">OPPOSITE</label>
+            <input class="solve-input" id="sv-opp" type="number" min="0.01" step="any" placeholder="?" oninput="solveTri()" />
+          </div>
+          <div class="solve-field">
+            <label class="solve-label" id="sv-adj-lbl">ADJACENT</label>
+            <input class="solve-input" id="sv-adj" type="number" min="0.01" step="any" placeholder="?" oninput="solveTri()" />
+          </div>
+        </div>
+
+        <div id="calc-output" class="calc-output" style="margin-top:8px; display:none;"></div>
+        <div id="warn-output" class="warn-box" style="margin-top:6px; display:none;"></div>
+        <button class="btn small" style="margin-top:6px;" onclick="clearSolve()">↺ clear</button>
+      </div>
+
+      <!-- ===== SPECIAL ===== -->
+      <div id="mode-special" class="mode-panel">
+        <div class="f-hand" style="font-size:14px; color:var(--ink-2);">
+          Two special triangles have exact side ratios — no calculator needed.
+        </div>
+        <div class="special-grid">
+          <div class="special-card">
+            <div class="special-title">45 – 45 – 90</div>
+            <canvas id="sp-canvas-45" width="180" height="150"></canvas>
+            <table class="special-table">
+              <tr><th>angle</th><th>sin</th><th>cos</th><th>tan</th></tr>
+              <tr><td class="mono">45°</td><td class="mono">√2/2</td><td class="mono">√2/2</td><td class="mono">1</td></tr>
+            </table>
+            <div class="f-hand" style="font-size:12px; margin-top:6px; color:var(--ink-2);">
+              Sides: x, x, x√2 &nbsp;(legs equal, hyp = leg × √2)
+            </div>
+          </div>
+          <div class="special-card">
+            <div class="special-title">30 – 60 – 90</div>
+            <canvas id="sp-canvas-30" width="180" height="150"></canvas>
+            <table class="special-table">
+              <tr><th>angle</th><th>sin</th><th>cos</th><th>tan</th></tr>
+              <tr><td class="mono">30°</td><td class="mono">1/2</td><td class="mono">√3/2</td><td class="mono">√3/3</td></tr>
+              <tr><td class="mono">60°</td><td class="mono">√3/2</td><td class="mono">1/2</td><td class="mono">√3</td></tr>
+            </table>
+            <div class="f-hand" style="font-size:12px; margin-top:6px; color:var(--ink-2);">
+              Sides: x, x√3, 2x &nbsp;(short leg, long leg, hyp)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">SOH CAH TOA</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:15px; line-height:2; padding:6px 0;">
+          <div><strong style="color:#2a6fb4;">S</strong>in = <strong style="color:#2a6fb4;">O</strong>pp / <strong style="color:#2a6fb4;">H</strong>yp</div>
+          <div><strong style="color:#d94f2a;">C</strong>os = <strong style="color:#d94f2a;">A</strong>dj / <strong style="color:#d94f2a;">H</strong>yp</div>
+          <div><strong style="color:#2a8a4a;">T</strong>an = <strong style="color:#2a8a4a;">O</strong>pp / <strong style="color:#2a8a4a;">A</strong>dj</div>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea;">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">⚠ INVERSE ≠ RECIPROCAL</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5;">
+          <strong>tan⁻¹(x)</strong> finds a missing <em>angle</em>.<br>
+          <strong>cot(x)</strong> = 1/tan(x) flips the ratio.<br>
+          These are NOT the same thing!
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">RECIPROCAL TRIG</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2;">
+          <div>csc θ = 1/sin θ = Hyp/Opp</div>
+          <div>sec θ = 1/cos θ = Hyp/Adj</div>
+          <div>cot θ = 1/tan θ = Adj/Opp</div>
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Switch the reference angle A ↔ C. Do opp and adj swap?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In Solve: hyp=10, angle=30°. Find opposite. Which ratio?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">In Solve: opp=5, adj=12. Find the angle. Keep 4 decimals!</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">PRECISION RULE</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5;">
+          Keep <strong>4 decimal places</strong> during work.<br>
+          Round final answer to the requested place.
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="unit-circle.html">→ Unit Circle Walker</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== MODE TABS =====
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = document.getElementById('mode-' + tab.dataset.mode);
+        panel.classList.add('active');
+        if (tab.dataset.mode === 'special') drawSpecialTriangles();
+        else if (tab.dataset.mode === 'solve') drawSolveCanvas();
+        else drawExplore();
+      });
+    });
+
+    // ===== EXPLORE =====
+    let theta = 37, refAngle = 'A';
+
+    function setTheta(v) {
+      theta = v;
+      document.getElementById('theta-display').textContent = v + '°';
+      drawExplore();
+    }
+    function setRefAngle(v) {
+      refAngle = v;
+      document.getElementById('btn-refA').classList.toggle('active', v==='A');
+      document.getElementById('btn-refC').classList.toggle('active', v==='C');
+      drawExplore();
+    }
+
+    function drawExplore() {
+      const canvas = document.getElementById('tri-canvas');
+      drawTriangle(canvas, theta, refAngle, null);
+      renderRatioChips();
+    }
+
+    function drawTriangle(canvas, angleDeg, ref, knownSides) {
+      const ctx = canvas.getContext('2d');
+      const W = canvas.clientWidth || canvas.width;
+      const H = canvas.height;
+      canvas.width = W * devicePixelRatio;
+      canvas.height = H * devicePixelRatio;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      const rad = angleDeg * Math.PI / 180;
+      const HYP = Math.min(W*0.5, H*0.85);
+      const ADJ = HYP * Math.cos(rad);
+      const OPP = HYP * Math.sin(rad);
+
+      // Vertices: A bottom-left (ref angle), B bottom-right (right angle), C top-right
+      const margin = 20;
+      const bx = W*0.72, by = H - margin - 10;
+      const ax = bx - ADJ, ay = by;
+      const cx = bx, cy = by - OPP;
+
+      // Triangle fill
+      ctx.fillStyle = 'rgba(42,111,180,0.07)';
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.closePath(); ctx.fill();
+
+      // Triangle stroke
+      ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.closePath(); ctx.stroke();
+
+      // Right angle square at B
+      const sq = 10;
+      ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(bx-sq, by); ctx.lineTo(bx-sq, by-sq); ctx.lineTo(bx, by-sq);
+      ctx.stroke();
+
+      // Reference angle arc
+      const refX = ref === 'A' ? ax : cx;
+      const refY = ref === 'A' ? ay : cy;
+      const arcAngle = ref === 'A' ? rad : Math.PI/2 - rad;
+      ctx.strokeStyle = var_accent(); ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (ref === 'A') {
+        ctx.arc(ax, ay, 22, -0.04, -rad - 0.04, true);
+      } else {
+        ctx.arc(cx, cy, 22, Math.PI/2 + 0.04, Math.PI + 0.04, false);
+      }
+      ctx.stroke();
+      ctx.fillStyle = var_accent();
+      ctx.font = "bold 13px 'Patrick Hand',cursive"; ctx.textAlign='center';
+      ctx.fillText('θ', refX + (ref==='A' ? 28 : -22), refY + (ref==='A' ? -8 : 18));
+
+      // Side labels: opp/adj/hyp
+      const oppStr  = ref === 'A' ? 'opposite'  : 'adjacent';
+      const adjStr  = ref === 'A' ? 'adjacent'  : 'opposite';
+      const oppClr  = '#2a6fb4', adjClr = '#2a8a4a', hypClr = '#8b4513';
+      const oppBold = ref === 'A';
+
+      // Hypotenuse (A to C)
+      ctx.save(); ctx.strokeStyle=hypClr; ctx.lineWidth=3;
+      // (already drawn above as part of triangle — just relabel)
+      ctx.restore();
+
+      // Label: hypotenuse (midpoint of AC)
+      const hypMx=(ax+cx)/2, hypMy=(ay+cy)/2;
+      ctx.save();
+      ctx.translate(hypMx, hypMy);
+      ctx.rotate(Math.atan2(cy-ay, cx-ax));
+      ctx.font = "bold 13px 'Patrick Hand',cursive";
+      ctx.fillStyle = hypClr; ctx.textAlign='center';
+      ctx.fillText('hypotenuse', 0, -8);
+      if (knownSides && knownSides.hyp) ctx.fillText(fmt4(knownSides.hyp), 0, 6);
+      ctx.restore();
+
+      // Label: opposite (midpoint of BC vertical)
+      ctx.font = "bold 13px 'Patrick Hand',cursive";
+      ctx.fillStyle = '#2a6fb4'; ctx.textAlign='left';
+      ctx.fillText(oppStr === 'opposite' ? 'opposite' : 'adjacent', bx+5, (by+cy)/2+4);
+      if (knownSides && knownSides.opp) { ctx.fillStyle='#1d1a14'; ctx.fillText(fmt4(knownSides.opp), bx+5, (by+cy)/2+18); }
+
+      // Label: adjacent (midpoint of AB horizontal)
+      ctx.fillStyle = '#2a8a4a'; ctx.textAlign='center';
+      ctx.fillText(adjStr === 'adjacent' ? 'adjacent' : 'opposite', (ax+bx)/2, by+16);
+      if (knownSides && knownSides.adj) { ctx.fillStyle='#1d1a14'; ctx.fillText(fmt4(knownSides.adj), (ax+bx)/2, by+30); }
+
+      // Vertex labels
+      ctx.font = "bold 14px 'Caveat',cursive"; ctx.fillStyle='#1d1a14'; ctx.textAlign='center';
+      ctx.fillText(ref==='A'?'A (θ)':'A', ax-8, ay+18);
+      ctx.fillText('B (90°)', bx+24, by+16);
+      ctx.fillText(ref==='C'?'C (θ)':'C', cx+16, cy-8);
+    }
+
+    function var_accent() { return '#d94f2a'; }
+
+    function renderRatioChips() {
+      const opp = ref_opp_label(), adj = ref_adj_label();
+      const chips = document.getElementById('ratio-chips');
+      chips.innerHTML = `
+        <span class="f-marker" style="font-size:12px; align-self:center;">RATIOS:</span>
+        <button class="ratio-chip" title="SOH" onclick="showRatioDetail('sin')">
+          sin θ = ${opp}/${hyp_label()}
+        </button>
+        <button class="ratio-chip" onclick="showRatioDetail('cos')">
+          cos θ = ${adj}/${hyp_label()}
+        </button>
+        <button class="ratio-chip" onclick="showRatioDetail('tan')">
+          tan θ = ${opp}/${adj}
+        </button>
+        <button class="ratio-chip recip" onclick="showRatioDetail('csc')">
+          csc θ = ${hyp_label()}/${opp}
+        </button>
+        <button class="ratio-chip recip" onclick="showRatioDetail('sec')">
+          sec θ = ${hyp_label()}/${adj}
+        </button>
+        <button class="ratio-chip recip" onclick="showRatioDetail('cot')">
+          cot θ = ${adj}/${opp}
+        </button>
+        <span id="ratio-val-display" class="f-hand" style="font-size:13px; color:var(--ink-2); align-self:center;"></span>
+      `;
+    }
+
+    function ref_opp_label() { return refAngle==='A' ? 'opp' : 'adj'; }
+    function ref_adj_label() { return refAngle==='A' ? 'adj' : 'opp'; }
+    function hyp_label() { return 'hyp'; }
+
+    function showRatioDetail(fn) {
+      const rad = theta * Math.PI / 180;
+      const vals = { sin: Math.sin(rad), cos: Math.cos(rad), tan: Math.tan(rad),
+                     csc: 1/Math.sin(rad), sec: 1/Math.cos(rad), cot: 1/Math.tan(rad) };
+      const v = vals[fn];
+      document.getElementById('ratio-val-display').textContent =
+        `${fn}(${theta}°) = ${fmt4(v)}`;
+    }
+
+    // ===== SOLVE =====
+    let solveRef = 'A';
+    function setSolveRef(v) {
+      solveRef = v;
+      document.getElementById('btn-refA-s').classList.toggle('active', v==='A');
+      document.getElementById('btn-refC-s').classList.toggle('active', v==='C');
+      solveTri();
+    }
+
+    function fmt4(v) {
+      if (!isFinite(v)) return 'undef';
+      return (Math.round(v*10000)/10000).toString();
+    }
+    function fmtFinal(v) { return (Math.round(v*100)/100).toFixed(2); }
+
+    function getInputs() {
+      const angle = parseFloat(document.getElementById('sv-angle').value);
+      const hyp   = parseFloat(document.getElementById('sv-hyp').value);
+      const opp   = parseFloat(document.getElementById('sv-opp').value);
+      const adj   = parseFloat(document.getElementById('sv-adj').value);
+      return { angle: isNaN(angle)?null:angle, hyp: isNaN(hyp)?null:hyp,
+               opp: isNaN(opp)?null:opp, adj: isNaN(adj)?null:adj };
+    }
+
+    function solveTri() {
+      const o = getInputs();
+      const known = Object.entries(o).filter(([k,v])=>v!==null).map(([k])=>k);
+      const out = document.getElementById('calc-output');
+      const warn = document.getElementById('warn-output');
+      out.style.display = 'none'; warn.style.display = 'none';
+
+      if (known.length < 2) return;
+      if (known.length > 2) {
+        warn.style.display = 'block';
+        warn.textContent = 'You entered more than 2 values — leave the unknown blank.'; return;
+      }
+
+      const steps = [];
+      let result = {};
+
+      const deg2rad = d => d * Math.PI / 180;
+      const rad2deg = r => r * 180 / Math.PI;
+
+      // Angle + hyp → find opp and adj
+      if (known.includes('angle') && known.includes('hyp')) {
+        const r = deg2rad(o.angle);
+        result.opp = o.hyp * Math.sin(r);
+        result.adj = o.hyp * Math.cos(r);
+        steps.push({ lbl:'Ratio', expr:`sin(${o.angle}°) = opp / hyp  →  SOH` });
+        steps.push({ lbl:'Solve opp', expr:`opp = ${o.hyp} × sin(${o.angle}°) = ${fmt4(Math.sin(r))} × ${o.hyp}` });
+        steps.push({ lbl:'opp =', result: fmtFinal(result.opp) });
+        steps.push({ lbl:'Solve adj', expr:`adj = ${o.hyp} × cos(${o.angle}°) = ${fmt4(Math.cos(r))} × ${o.hyp}` });
+        steps.push({ lbl:'adj =', result: fmtFinal(result.adj) });
+      }
+      // Angle + opp → find hyp and adj
+      else if (known.includes('angle') && known.includes('opp')) {
+        const r = deg2rad(o.angle);
+        result.hyp = o.opp / Math.sin(r);
+        result.adj = o.opp / Math.tan(r);
+        steps.push({ lbl:'Ratio', expr:`sin(${o.angle}°) = opp / hyp  →  SOH` });
+        steps.push({ lbl:'Rearrange', expr:`hyp = opp / sin(${o.angle}°) = ${o.opp} / ${fmt4(Math.sin(r))}` });
+        steps.push({ lbl:'hyp =', result: fmtFinal(result.hyp) });
+        steps.push({ lbl:'Also', expr:`adj = opp / tan(${o.angle}°) = ${o.opp} / ${fmt4(Math.tan(r))}` });
+        steps.push({ lbl:'adj =', result: fmtFinal(result.adj) });
+      }
+      // Angle + adj → find hyp and opp
+      else if (known.includes('angle') && known.includes('adj')) {
+        const r = deg2rad(o.angle);
+        result.hyp = o.adj / Math.cos(r);
+        result.opp = o.adj * Math.tan(r);
+        steps.push({ lbl:'Ratio', expr:`cos(${o.angle}°) = adj / hyp  →  CAH` });
+        steps.push({ lbl:'Rearrange', expr:`hyp = adj / cos(${o.angle}°) = ${o.adj} / ${fmt4(Math.cos(r))}` });
+        steps.push({ lbl:'hyp =', result: fmtFinal(result.hyp) });
+        steps.push({ lbl:'Also', expr:`opp = adj × tan(${o.angle}°) = ${o.adj} × ${fmt4(Math.tan(r))}` });
+        steps.push({ lbl:'opp =', result: fmtFinal(result.opp) });
+      }
+      // Two sides → find angle
+      else if (known.includes('opp') && known.includes('hyp')) {
+        const r = Math.asin(o.opp / o.hyp);
+        result.angle = rad2deg(r);
+        result.adj = Math.sqrt(o.hyp*o.hyp - o.opp*o.opp);
+        steps.push({ lbl:'Ratio', expr:`sin θ = opp / hyp = ${o.opp} / ${o.hyp}  →  SOH` });
+        steps.push({ lbl:'Inverse trig', expr:`θ = sin⁻¹(${fmt4(o.opp/o.hyp)})` });
+        steps.push({ lbl:'⚠ sin⁻¹ finds the angle,', expr:`not the reciprocal!` });
+        steps.push({ lbl:'θ =', result: fmtFinal(result.angle) + '°' });
+        steps.push({ lbl:'adj (Pythagorean)', result: fmtFinal(result.adj) });
+      }
+      else if (known.includes('adj') && known.includes('hyp')) {
+        const r = Math.acos(o.adj / o.hyp);
+        result.angle = rad2deg(r);
+        result.opp = Math.sqrt(o.hyp*o.hyp - o.adj*o.adj);
+        steps.push({ lbl:'Ratio', expr:`cos θ = adj / hyp = ${o.adj} / ${o.hyp}  →  CAH` });
+        steps.push({ lbl:'Inverse trig', expr:`θ = cos⁻¹(${fmt4(o.adj/o.hyp)})` });
+        steps.push({ lbl:'⚠ cos⁻¹ finds the angle,', expr:`not the reciprocal!` });
+        steps.push({ lbl:'θ =', result: fmtFinal(result.angle) + '°' });
+        steps.push({ lbl:'opp (Pythagorean)', result: fmtFinal(result.opp) });
+      }
+      else if (known.includes('opp') && known.includes('adj')) {
+        const r = Math.atan(o.opp / o.adj);
+        result.angle = rad2deg(r);
+        result.hyp = Math.sqrt(o.opp*o.opp + o.adj*o.adj);
+        steps.push({ lbl:'Ratio', expr:`tan θ = opp / adj = ${o.opp} / ${o.adj}  →  TOA` });
+        steps.push({ lbl:'Inverse trig', expr:`θ = tan⁻¹(${fmt4(o.opp/o.adj)})` });
+        steps.push({ lbl:'⚠ tan⁻¹ finds the angle,', expr:`cot(θ) = adj/opp is different!` });
+        steps.push({ lbl:'θ =', result: fmtFinal(result.angle) + '°' });
+        steps.push({ lbl:'hyp (Pythagorean)', result: fmtFinal(result.hyp) });
+      }
+      else { return; }
+
+      // Render steps
+      out.innerHTML = steps.map(s =>
+        s.result
+          ? `<div class="calc-step"><span class="lbl">${s.lbl}</span> <span class="calc-result">${s.result}</span></div>`
+          : `<div class="calc-step"><span class="lbl">${s.lbl}</span> <span class="expr">${s.expr}</span></div>`
+      ).join('');
+      out.style.display = 'block';
+
+      // Draw solve canvas with known sides
+      const solveAngle = o.angle || result.angle;
+      const solveSides = {
+        hyp: o.hyp || result.hyp,
+        opp: o.opp || result.opp,
+        adj: o.adj || result.adj
+      };
+      drawTriangle(document.getElementById('tri-canvas-solve'), solveAngle||37, solveRef, solveSides);
+    }
+
+    function drawSolveCanvas() {
+      drawTriangle(document.getElementById('tri-canvas-solve'), 37, solveRef, null);
+    }
+
+    function clearSolve() {
+      ['sv-angle','sv-hyp','sv-opp','sv-adj'].forEach(id => document.getElementById(id).value='');
+      document.getElementById('calc-output').style.display='none';
+      document.getElementById('warn-output').style.display='none';
+      drawSolveCanvas();
+    }
+
+    // ===== SPECIAL TRIANGLES =====
+    function drawSpecialTriangles() {
+      drawSpecial('sp-canvas-45', 45, 'x', 'x', 'x√2');
+      drawSpecial('sp-canvas-30', 30, 'x', 'x√3', '2x');
+    }
+
+    function drawSpecial(id, angleDeg, oppLbl, adjLbl, hypLbl) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      const rad = angleDeg * Math.PI / 180;
+      const HYP = 100;
+      const ADJ = HYP * Math.cos(rad);
+      const OPP = HYP * Math.sin(rad);
+      const margin = 20;
+      const bx = W*0.75, by = H - margin;
+      const ax = bx - ADJ, ay = by;
+      const cx = bx, cy = by - OPP;
+
+      ctx.fillStyle='rgba(42,111,180,0.08)';
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#1d1a14'; ctx.lineWidth=2; ctx.lineJoin='round';
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.closePath(); ctx.stroke();
+      const sq=8;
+      ctx.strokeStyle='#1d1a14'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(bx-sq,by); ctx.lineTo(bx-sq,by-sq); ctx.lineTo(bx,by-sq); ctx.stroke();
+
+      // Angle arc
+      ctx.strokeStyle=var_accent(); ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(ax,ay,18,0,-rad,true); ctx.stroke();
+
+      // Labels
+      ctx.font = "bold 12px 'Patrick Hand',cursive";
+      ctx.fillStyle='#8b4513'; ctx.textAlign='center';
+      const hmx=(ax+cx)/2, hmy=(ay+cy)/2;
+      ctx.save(); ctx.translate(hmx,hmy); ctx.rotate(Math.atan2(cy-ay,cx-ax));
+      ctx.fillText(hypLbl,0,-7); ctx.restore();
+      ctx.fillStyle='#2a6fb4'; ctx.textAlign='left';
+      ctx.fillText(oppLbl, bx+5, (by+cy)/2+4);
+      ctx.fillStyle='#2a8a4a'; ctx.textAlign='center';
+      ctx.fillText(adjLbl, (ax+bx)/2, by+14);
+      ctx.fillStyle=var_accent(); ctx.textAlign='center';
+      ctx.fillText(angleDeg+'°', ax+24, ay-5);
+      ctx.fillStyle='#1d1a14';
+      ctx.fillText('90°', bx+16, by+14);
+      ctx.fillText((90-angleDeg)+'°', cx+14, cy+4);
+    }
+
+    // ===== INIT =====
+    drawExplore();
+  </script>
+</body>
+</html>

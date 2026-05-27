@@ -1,0 +1,127 @@
+Okay, here's unit five, day two function composition.
+This is similar to what we did in unit four
+where we found the inverse where we found like F of its inverse.
+We put the inverse into the original function, it comes out to X.
+This is a composition where you put one function into another.
+So this first slide is just review.
+It's using substitution to solve this,
+and this one is at Y is equal to all this stuff.
+Well, then we can say all this stuff can be Y in the second equation.
+So negative eight X minus seven times three X plus fourteen
+is equal to negative eleven, and then this whole equation just has X in it.
+If you distribute the negative seven,
+solve for X to get negative three.
+You take that negative three, plug it into the first equation
+for X right here, and you get Y equals five.
+So some teachers like to see it X comma Y is a point.
+I'm fine with just boxing X, boxing Y.
+So whenever you see functions like F of G of X,
+or F of G of H of X, you actually go inner to outer.
+So you take H of X, plug it into G.
+Get that answer, plug that answer into F,
+and then just to know functions can be plugged into themselves.
+So it can be written in more than a way.
+F of G of X means you put G of X into F.
+This is saying the same thing, F of G of X.
+Notice this is an open circle.
+It's not a typo.
+This means composition.
+You might see G of H of X, right?
+It means you do H of X into G of X.
+You go right to left, inner to outer.
+So a couple examples.
+This is saying put G of X into F of X.
+Put G into F. What does that look like?
+Well, here's G, which is three X plus two.
+We're going to put three X plus two in to F of X wherever there's X.
+So three X plus two minus one, two minus one,
+just makes three X plus one.
+It's backwards now in this example.
+So G of F of X means put F into G.
+So put X minus one in for that X.
+So three times X minus one plus two,
+distribute the three.
+It all solves out to three X minus one
+and just notice it's different because the order is different.
+The answers are different.
+What if we have something a little bit bigger?
+We want to put F into G.
+Remember right to left.
+I want to put this stuff into G.
+So negative two X plus five in parentheses in for X
+and then minus three.
+Because we're not, there's no exponent here.
+We can just drop the parentheses five minus three makes two.
+But what happens when I want to put negative two X squared plus five,
+which is F into itself?
+Well, I want to put negative two X plus five into this X.
+So it's negative two times negative two X plus five squared plus five.
+Whatever you have is a super important.
+Whenever you have two terms in parentheses with a squared,
+it means write those parentheses twice and foil.
+Foil this, save the negative two until the end,
+distribute that negative two in.
+And then the like terms here end up being negative 50 plus five,
+so you get negative eight to the fourth plus 40 X squared minus 45.
+Now, for example, in this case, we have F, G and H.
+What if I want to put H into G?
+Well, let's put X minus nine in for this X and this X.
+So I actually need to change this.
+Okay, so we have negative two times X minus nine squared minus five times X minus nine.
+So we'll change this.
+That negative five will make negative five X minus actually plus 45.
+So negative two X squared minus 36 X.
+And then we have what's two times 81.
+So negative one 62 minus five X plus 45.
+And so we'll have negative two X squared plus 31 X.
+And then I'm going to calculate it real quick.
+Negative one one seven.
+All right.
+Even I got tripped up, right?
+You got to put whatever you have an X.
+That's where you plug in the other function.
+If G of X goes into F, I mean,
+I want to put all this in for that X.
+And now this is an important point for this chapter and for this class.
+If I put negative two X squared minus five X and it's all to the third,
+that means I put this parentheses three times,
+but we're not going to be triple foriling in this class.
+So you can need this one as is.
+Okay.
+Last part of this is evaluating operations.
+It's just like F of X plus G of X,
+but now there's going to be actual numbers in there.
+So if I want to do H of negative two times F of negative two is multiplying the two.
+I have to find H of negative two and then six,
+then I find F of negative two is two.
+Well, I just do what is H of negative two times F of negative two.
+That's six times two, which is 12.
+If it's written like this,
+this is from unit five day one.
+Remember you can break this up into F of three plus H of three.
+Well, let's find out F of three is three.
+H of three is one.
+Let's add those and you get four.
+You can do the same thing with composition.
+I can find G of eight.
+Take that answer,
+which is a number and plug that number into F.
+This is the same thing written in two different ways.
+Remember F of G of X, F of G of eight.
+So this is our last slide.
+I want to find H of two.
+H of two is one.
+Take that answer and put it into G.
+So G of one, which is four times one to the third.
+Well, one times one times one minus six times one squared.
+One times one is still one.
+So you get negative two.
+And lastly, if I want to do left to right,
+I find G of one.
+We already found G of one is negative two.
+Take negative two and then plug it in to G again.
+So negative two to the third is negative eight.
+Negative two squared is four.
+This all simplifies up to negative 56.
+So that's composition of functions and then composition of functions
+when there is a number in there.

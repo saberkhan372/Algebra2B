@@ -1,0 +1,327 @@
+All right, here is the video for unit one, day three.
+We're talking about quadratic.
+So quadratic is an expression.
+So something with many terms where the greatest exponent
+is to the highest exponent here is two.
+And just say you're aware that a x squared, that's the x
+bx.
+If there's no exponent, we just know it's a one.
+And then c doesn't have an x term with it.
+So there's all called quadratic.
+The highest exponent is two.
+And many of them we're going to see today are trinomial.
+So this has three terms.
+x squared is one term.
+6x is the second term.
+And 2 is the third term.
+They're separated by addition or subtraction.
+You've seen them before, but you're going to master them
+so they don't bring you down for the rest of high school.
+We're going to factor and foil a million times this day.
+So just the warning that we're going to do this a lot.
+And it's really important.
+So here we go.
+First, let's look at some exponent rules.
+If you have some variable raised to a number,
+some variable raised to a number.
+And it's the same variable.
+So x to the a times x to the b.
+You add the exponents.
+And if it's x to the a, and it's raised to another exponent,
+that's when you multiply.
+OK, so here we go.
+This is x to the eighth times x to the third.
+How do you simplify that?
+Or remember you add a to the three.
+So that's x to the eleventh.
+Here, we're going to distribute.
+And I like to say numbers multiply numbers.
+So there's a one here.
+And letters multiply with it.
+So 6 times 1 is 6 x to the sixth times 4 is 24.
+x to the third.
+6 times negative 9 is negative 54.
+x squared, well there's nothing here so it stays as x squared.
+And here, when you have two sets of parentheses with two items,
+we have to do the famous forling technique,
+which means first times first, outer, inner, and last.
+And so multiplying.
+So x times x, x times 5, negative 3 times x,
+and negative 3 times 5.
+And we get x squared plus 5x minus 3x minus 15.
+And we can combine these, clean it up a little bit.
+Whenever you can combine, like, terms, you must do it.
+So 5 minus 3 is 2x.
+Right now, we just multiply.
+It's just simplified.
+And if it's a multiplication, sign up the way I have to do.
+But if it's just factor out a greatest common factor,
+we're going to go basically backwards.
+So what is the biggest number, the greatest
+common factor between 15 and 6?
+3.
+And how many x's are here?
+Those three x's, just as a quick note, x to the third,
+is the same thing as same x times x times x.
+And so that's three x's, one x.
+So we can only take out one.
+We took out one from x to the third, sort of left
+with x squared.
+When we took out an x here, when you take a three out
+of this, or left with five, and when you take a three out
+of this, they are left with two.
+And you can check.
+We'll do this every time.
+But if you wanted to distribute it back in, 3 times 5 is 15,
+x times x squared is x to the third, 3 times negative 2 is negative 6.
+Here, I look at all three numbers, and I say, OK,
+biggest factor is 4.
+And this is 7x is 5x isn't 4x.
+Because I can take, the most I can take out is 4x's.
+So similar, you could distribute it back in to check your answer,
+but I know that one works.
+Example 1c, which is right here, contained the number
+is negative 3 and 5.
+But its answer had 2 and negative 15.
+How are those numbers related?
+Well, negative 3 times 5 is negative 15.
+Negative 3 plus 5 is 2.
+What's that called?
+Well, product is when you multiply, and sum is when you add.
+You might have heard this before the product sum factoring.
+That's what we're going to do a million times.
+So when you have a simple trinomial, where the first number is
+a 1, it makes it a little bit easier.
+But I'm going to do this the same way every single time.
+So remember, first number times the last number.
+The a value times the c value is 15, and then b value is 8.
+So what multiplies the 15, but adds to 8, 5 times 3.
+Then you take your 8 and make it your 8x.
+I want to still make it 8x, but I'm going to break it down
+into these numbers.
+So 5x plus 3x.
+Now, there's a greatest common factor here.
+I can pull it in x, and here I can pull out a 3.
+And when I do that, what's left matches.
+So now the two values that came out are one factor,
+and the two factors that are repeated are the other one.
+You can check by foiling, and we know that it works.
+Let's do another.
+What molds to 1 times 35 is 35.
+The b value is negative 12.
+What multiplies to 35, but adds to negative 12?
+That's a little tricky.
+You know, it's a bigger number.
+I immediately thought 5 and 7 makes 35,
+and it has to add to negative 12 or combine to negative 12.
+So if they're both negative, that'll work.
+So make negative 12x into negative 5x minus 7x.
+And it doesn't matter if you put this negative 7.
+First, your answer to the law is work.
+That's the beauty of this technique.
+So you can pull an x out of this,
+you can pull a negative 7 out of this.
+These are repeated, so that's one factor.
+These came out, so that's the other.
+Important.
+First, first, this is very important.
+See if you can take out a GCF first.
+Here, I have an x to the third, x squared,
+and x, there's no numbers I can pull out,
+but I can pull out an x, and I'm just
+going to leave that on the outside of the whole thing.
+Now I'm left with x squared minus 4x minus 12.
+What multiplies to negative 12, but adds to negative 4?
+How about negative 6 and 2?
+Here, x squared minus 6x.
+So what I do, a negative 6 and 2,
+is what I rewrote negative 4.
+And then, I let this x outside.
+So because I have parentheses here,
+but now I want to make more parentheses inside,
+what I did is I made brackets.
+And I can pull an x out of this, and I'm
+left with x minus 6.
+I can pull a 2 out of this, and I'm left with x minus 6.
+So the x stayed outside, but x plus 2, x minus 6 is repeated.
+This last one, very similar process,
+took the 3 out the whole time.
+What multiplies to negative 6 and adds to 1 is 3 and negative 2.
+When the coefficient on the x squared is 1, for example,
+this is a 1.
+It makes it really easy, because it's basically
+the thing, and what multiplies to c and adds to b.
+But when the number in front is not 1,
+you have to do that multiplication first.
+You can't just jump straight to parentheses.
+Some math teachers, we've done this so long
+that we can just guess and check,
+and we go straight to these parentheses
+and try it by foiling.
+But that's not a really practical way to do it.
+You may prefer it, but the way I will show you every time
+is the product sum at it.
+So 3 times 4 is 12.
+What multiplies to 12 and adds to 8?
+Well, we'll multiply it 6 times 2, right?
+So 8x became 6x plus 2x.
+And again, you could swap the order of these.
+It wouldn't matter.
+You could pull at 3x out of this,
+and you could pull at 2 out of this.
+These are repeated, so that's one factor.
+Always check, is there any GCF's in this?
+Sometimes that happens if you forgot to pull at GCF
+out of the beginning.
+But no, you can't think good.
+Here, 2 times negative 36, negative 72.
+What multiplies to negative 72 that adds to negative 1?
+Well, I know that 8 times 9 is 72.
+And that's the negative 1.
+So how about negative 9 and positive 8?
+You'll get better at this.
+I know this seems daunting right now.
+But so I'm making negative x as negative 9x plus 8x.
+There you go.
+Pull an x out of this.
+Pull a 4 out of this.
+And then you're done.
+Few more.
+4 times 3 is 12.
+That's negative 8.
+Same similar process.
+Here, is there a GCF?
+Kind of seems like it, but no.
+6 times negative 20 is 100.
+I'm going to have done this wrong.
+So here we go.
+Let's do this.
+Let's just see 6.
+Time to negative 20 is negative 120.
+Let's just erase this real quick.
+So you can see a live action.
+Here we go.
+6 times negative 20 is negative 120.
+But what adds to negative 7?
+And this is where we can use a calculator
+to kind of figure this out.
+So 120, I like to just test numbers.
+120 divided by, I don't know, 6.
+6 and 20?
+No.
+Something that some teachers like to do is do 120
+and take the square root of it.
+So I know about 10 times 11 times 11.
+So let's see.
+Let's do something similar to that.
+120 divided by 12.
+What do we have to get to?
+7.
+125.
+We need to make the gap bigger.
+So 120 divided by 5 maybe.
+Now 120 divided by 6.
+We already tried that.
+120 divided by 7.
+120 divided by 8.
+8 and 15.
+Oh, yeah.
+That'll work, right?
+So 8 and 15.
+But we need it to be negative 7.
+So let's make this negative 15.
+So again, maybe we write it.
+6x squared plus 8x minus 15x minus 20.
+And we can take the GCF out of these.
+And we can take a 2x out and we're left with 3x plus 4.
+We can take a 5.
+Let's take a negative 5 out, negative 5.
+And we're left with 3x plus 4.
+Awesome.
+Because what we're left with are our two factors here and here.
+So 2x minus 5, 3x plus 4.
+Always box your answers.
+You may be wondering, isn't there another step
+at the end of these problems?
+Yes and no.
+Many try no meal problems.
+I want you to solve for x.
+I want you to find, you know, for example,
+if I have put an equal sign here, there
+are values for x that make this true or that make it equal to 0.
+I didn't ask for it yet, but here, this
+is something where we don't have an x squared.
+So we can do this like L for 1 style, right?
+Minus 4 from both sides, so 3x equals negative 4
+divide both sides by 3x is negative 4th is.
+But this is not a foil down.
+So it's already factored for us.
+If this equals 0, 0 times anything is 0.
+And if this equals 0, 0 times anything is 0.
+So imagine a bunch of things factored out.
+6 times 7x plus 3 times 12x minus 9 times 0 times 7 times 12
+away.
+Once you throw a 0 into multiplication
+followed, it equals 0.
+So what you can do is say set each factor equal to 0.
+And that's what I did here.
+And I solved each factor.
+So negative 2 and 7 halves of both are solutions
+to this problem.
+And let's see.
+Before we do anything in these problems,
+we need to ensure that all terms of the tri new meal
+are on one side of the equation, leaving it equal 0.
+So here is a factored problem.
+I factored it to this, right?
+What more fuzzening it 30 adds to 70?
+Factored it.
+And then I set each factor equal to 0.
+Because this says solve, right?
+If it says solve, that means you actually
+have to find your solutions.
+Here, well, it's really, this looks bad.
+How do I solve this?
+Do I take an x out of this side?
+No, you move the 12 over.
+You do product some factoring.
+So what multiplies to 60 and adds to negative 19,
+4 and 15, negative 4, negative 15.
+You factored it, set each factor equal to 0.
+Those are your two solutions.
+You can check your answer at these.
+It's quite hard to have at 4.5s, but you definitely
+can make sure that this is a true statement using your solutions.
+You shouldn't have to wonder if you factored it correctly.
+You can also always foil to check your answer.
+You don't always need to, but it's a smart idea
+to do with an assessment.
+This is a little bit kind of deeper thinking.
+And this is all words, right?
+So I had to kind of fill in a little bit.
+I want you to think about this.
+When you have numbers like 60 and negative 19,
+and you don't see this part, all right?
+I've done this a million times, so I can say, OK,
+I know, 4 and 15 and negative 19.
+But what you can do is either take 60 and square root it.
+So I'll show you right here.
+60, square root it.
+I know around, it's like around 7, right?
+So I'll do 60 divided by 8, 60 divided by 6, 6 and 10.
+I can work 60 divided by, well, we need, here.
+So check this out.
+If I do the square root of 60, it's 7 and 7.
+And I want the gap to be really big.
+I want it to be 19 apart.
+But I know I have to make it wider than those two numbers.
+So if the sum is too small, do you move further apart?
+And if the sum is too big, we've closer together.
+And if it's a negative number, right?
+And you get multiplied in negative 60 to add to 11.
+This is a funny example, because it's still 15 and 4,
+but one's positive and one's negative.
+All right, this is a big lesson.
+So make sure if you don't understand factoring,
+you meet with in the math lab, or with me,
+and we will help you figure it out.

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inverse Function Revealer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    .canvas-wrap { position:relative; width:100%; aspect-ratio:1/1; max-height:420px; }
+    canvas { width:100%; height:100%; display:block; border-radius:6px; cursor:crosshair; }
+
+    .mode-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+    .mode-btn {
+      padding:5px 16px; border-radius:20px; border:2px solid var(--ink);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:13px;
+      cursor:pointer;
+    }
+    .mode-btn.active { background:var(--ink); color:var(--paper); }
+
+    .pt-display { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; align-items:center; }
+    .pt-chip {
+      padding:4px 10px; border-radius:4px; border:2px solid;
+      font-family:'JetBrains Mono',monospace; font-size:13px;
+    }
+    .pt-chip.f-chip  { border-color:#d94f2a; color:#d94f2a; background:rgba(217,79,42,0.07); }
+    .pt-chip.fi-chip { border-color:#2a8a4a; color:#2a8a4a; background:rgba(42,138,74,0.07); }
+    .pt-chip.pass    { border-color:#2a8a4a; color:#2a8a4a; background:rgba(42,138,74,0.07); }
+    .pt-chip.fail    { border-color:#d94f2a; color:#d94f2a; background:rgba(217,79,42,0.07); }
+    .pt-chip.neutral { border-color:var(--ink-2); color:var(--ink-2); }
+
+    .fn-pick-grid { display:grid; gap:6px; margin-top:6px; }
+    .fn-radio-row { display:flex; gap:8px; align-items:center; cursor:pointer; }
+    .fn-radio-row input { accent-color:var(--accent); cursor:pointer; }
+    .fn-radio-label { font-family:'JetBrains Mono',monospace; font-size:13px; }
+
+    .deriv-box { margin-top:8px; padding:8px 10px; background:var(--paper-2); border-radius:4px; border:1.5px solid var(--ink-2); }
+    .deriv-step { font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.9; display:flex; align-items:center; gap:8px; }
+    .deriv-step.swap   { color:#d94f2a; }
+    .deriv-step.result { color:#2a8a4a; font-weight:700; }
+    .deriv-step .annot { color:var(--ink-soft); font-size:10px; }
+    .deriv-note { margin-top:6px; font-family:'Patrick Hand',cursive; font-size:12px; color:var(--ink-2); padding:4px 6px; border-left:3px solid var(--highlight); }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u4.html">← U4</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u4.html">← U4 · Inverse Functions</a> &nbsp;·&nbsp; D8</div>
+      <div class="tool-title f-display">Inverse Function Revealer</div>
+      <div class="tool-tagline f-hand">Swap (x, y) to (y, x) — the graph flips over y = x.</div>
+
+      <div class="canvas-wrap">
+        <canvas id="cv"></canvas>
+      </div>
+
+      <div class="mode-row">
+        <button class="mode-btn active" id="btn-reveal" onclick="setMode('reveal')">◉ reveal inverse</button>
+        <button class="mode-btn" id="btn-hlt" onclick="setMode('hlt')">— horizontal line test</button>
+      </div>
+
+      <div class="pt-display" id="pt-display">
+        <span class="pt-chip f-chip"  id="chip-f">f: —</span>
+        <span class="pt-chip fi-chip" id="chip-fi">f⁻¹: —</span>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">CHOOSE A FUNCTION</div>
+        <div class="fn-pick-grid">
+          <label class="fn-radio-row">
+            <input type="radio" name="fn" value="linear" checked onchange="setFn('linear')">
+            <span class="fn-radio-label">f(x) = 2x + 3</span>
+          </label>
+          <label class="fn-radio-row">
+            <input type="radio" name="fn" value="quad" onchange="setFn('quad')">
+            <span class="fn-radio-label">f(x) = x²  (x ≥ 0)</span>
+          </label>
+          <label class="fn-radio-row">
+            <input type="radio" name="fn" value="cubic" onchange="setFn('cubic')">
+            <span class="fn-radio-label">f(x) = x³</span>
+          </label>
+          <label class="fn-radio-row">
+            <input type="radio" name="fn" value="sqrt" onchange="setFn('sqrt')">
+            <span class="fn-radio-label">f(x) = √x</span>
+          </label>
+        </div>
+
+        <div class="f-marker" style="font-size:10px; margin-top:14px; margin-bottom:2px;">HOW TO FIND f⁻¹: swap x ↔ y, solve for y</div>
+        <div class="deriv-box" id="deriv-box"></div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">KEY IDEA</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7;">
+          If <strong>(a, b)</strong> is on f,<br>
+          then <strong>(b, a)</strong> is on f⁻¹.<br><br>
+          The graphs are <em>mirror images</em> over <strong>y = x</strong>.<br><br>
+          f has an inverse only if it is <strong>one-to-one</strong> — the <em>Horizontal Line Test</em> passes.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Drag the red point. Notice the green mirror — what is the pattern between their coordinates?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Switch to HLT mode. Drag the line on x² (x ≥ 0) — does it ever hit twice? Why is the restriction x ≥ 0 necessary?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="composition.html">→ Composition Machine</a>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('cv');
+    const ctx    = canvas.getContext('2d');
+
+    const FNDEFS = {
+      linear: {
+        name:    '2x + 3',
+        invName: '(x − 3) / 2',
+        eval:    x => 2*x + 3,
+        invEval: x => (x - 3) / 2,
+        domain:    () => true,
+        invDomain: () => true,
+        ptRange:  [-4, 4],
+        hltRange: [-8, 8],
+        initHltY: 3,
+        steps: [
+          { text: 'y = 2x + 3',       cls: '',       annot: '' },
+          { text: 'x = 2y + 3',       cls: 'swap',   annot: '← swap x ↔ y' },
+          { text: 'x − 3 = 2y',       cls: '',       annot: '' },
+          { text: 'y = (x − 3) / 2',  cls: 'result', annot: '← this is f⁻¹(x)' },
+        ],
+        note: '',
+      },
+      quad: {
+        name:    'x²  (x ≥ 0)',
+        invName: '√x',
+        eval:    x => x >= 0 ? x*x : null,
+        invEval: x => x >= 0 ? Math.sqrt(x) : null,
+        domain:    x => x >= 0,
+        invDomain: x => x >= 0,
+        ptRange:  [0, 4],
+        hltRange: [-8, 8],
+        initHltY: 4,
+        steps: [
+          { text: 'y = x²  (x ≥ 0)',  cls: '',       annot: '' },
+          { text: 'x = y²  (y ≥ 0)',  cls: 'swap',   annot: '← swap x ↔ y' },
+          { text: 'y = √x',           cls: 'result', annot: '← this is f⁻¹(x)' },
+        ],
+        note: 'Without x ≥ 0, the HLT fails: y = 4 hits both x = 2 and x = −2. The restriction makes f one-to-one.',
+      },
+      cubic: {
+        name:    'x³',
+        invName: '∛x',
+        eval:    x => x*x*x,
+        invEval: x => Math.cbrt(x),
+        domain:    () => true,
+        invDomain: () => true,
+        ptRange:  [-3, 3],
+        hltRange: [-8, 8],
+        initHltY: 2,
+        steps: [
+          { text: 'y = x³',  cls: '',       annot: '' },
+          { text: 'x = y³',  cls: 'swap',   annot: '← swap x ↔ y' },
+          { text: 'y = ∛x',  cls: 'result', annot: '← this is f⁻¹(x)' },
+        ],
+        note: '',
+      },
+      sqrt: {
+        name:    '√x',
+        invName: 'x²  (x ≥ 0)',
+        eval:    x => x >= 0 ? Math.sqrt(x) : null,
+        invEval: x => x >= 0 ? x*x : null,
+        domain:    x => x >= 0,
+        invDomain: x => x >= 0,
+        ptRange:  [0, 6],
+        hltRange: [-8, 8],
+        initHltY: 1,
+        steps: [
+          { text: 'y = √x  (x ≥ 0)',  cls: '',       annot: '' },
+          { text: 'x = √y  (y ≥ 0)',  cls: 'swap',   annot: '← swap x ↔ y' },
+          { text: 'x² = y',           cls: '',       annot: '' },
+          { text: 'y = x²  (x ≥ 0)', cls: 'result', annot: '← this is f⁻¹(x)' },
+        ],
+        note: '',
+      },
+    };
+
+    let fnKey  = 'linear';
+    let mode   = 'reveal';
+    let ptX    = 1;
+    let hltY   = 3;
+    let dragging = false;
+
+    function def() { return FNDEFS[fnKey]; }
+
+    // ── canvas setup ──
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+        canvas.width  = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.scale(dpr, dpr);
+      }
+    }
+
+    function dims() {
+      const W = canvas.clientWidth, H = canvas.clientHeight;
+      const sc = Math.min(W, H) / 16;
+      const ox = W / 2, oy = H / 2;
+      return { W, H, ox, oy, sc };
+    }
+
+    function toCanvas(x, y, d) { return [d.ox + x * d.sc, d.oy - y * d.sc]; }
+    function toGraph(px, py, d) { return [(px - d.ox) / d.sc, (d.oy - py) / d.sc]; }
+
+    function fmt(v) {
+      if (!isFinite(v) || isNaN(v)) return '?';
+      const r = Math.round(v * 100) / 100;
+      return r === Math.round(r) ? String(Math.round(r)) : r.toFixed(2);
+    }
+
+    // ── drawing helpers ──
+    function drawCurve(evalFn, domFn, col, lw, dashed) {
+      const d = dims();
+      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.setLineDash(dashed ? [6, 4] : []);
+      let started = false;
+      ctx.beginPath();
+      for (let px = 0; px <= d.W; px += 0.7) {
+        const x = (px - d.ox) / d.sc;
+        if (!domFn(x)) { started = false; continue; }
+        const y = evalFn(x);
+        if (y === null || !isFinite(y)) { started = false; continue; }
+        const py = d.oy - y * d.sc;
+        if (py < -d.H || py > 2 * d.H) { started = false; continue; }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawDot(x, y, col, r, d) {
+      const [px, py] = toCanvas(x, y, d);
+      ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.fillStyle = col; ctx.fill();
+      ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2; ctx.stroke();
+    }
+
+    function drawLabel(text, col, px, py) {
+      ctx.fillStyle = col;
+      ctx.font = "11px 'Patrick Hand', cursive";
+      ctx.fillText(text, px, py);
+    }
+
+    // ── find HLT intersections numerically ──
+    function findIntersections(evalFn, domFn, y) {
+      const pts = [];
+      const step = 0.04;
+      let prev = null, prevX = null;
+      for (let x = -8.5; x <= 8.5; x += step) {
+        if (!domFn(x)) { prev = null; continue; }
+        const fy = evalFn(x);
+        if (fy === null || !isFinite(fy)) { prev = null; continue; }
+        const diff = fy - y;
+        if (prev !== null && prev !== 0 && diff !== 0 && Math.sign(diff) !== Math.sign(prev)) {
+          let lo = prevX, hi = x;
+          for (let i = 0; i < 28; i++) {
+            const mid = (lo + hi) / 2;
+            if (!domFn(mid)) break;
+            const fm = evalFn(mid);
+            if ((fm - y) * (evalFn(lo) - y) <= 0) hi = mid; else lo = mid;
+          }
+          const root = (lo + hi) / 2;
+          if (pts.every(p => Math.abs(p - root) > 0.2)) pts.push(root);
+        }
+        prev = diff; prevX = x;
+      }
+      return pts;
+    }
+
+    // ── find a good label position on a curve ──
+    function curveLabel(evalFn, domFn, d, preferRight) {
+      const xVals = preferRight
+        ? Array.from({ length: 80 }, (_, i) => 7 - i * 0.15)
+        : Array.from({ length: 80 }, (_, i) => -7 + i * 0.15);
+      for (const x of xVals) {
+        if (!domFn(x)) continue;
+        const y = evalFn(x);
+        if (y === null || !isFinite(y)) continue;
+        const [px, py] = toCanvas(x, y, d);
+        if (px > 10 && px < d.W - 10 && py > 14 && py < d.H - 4) return [px, py];
+      }
+      return null;
+    }
+
+    // ── main draw ──
+    function draw() {
+      resize();
+      const d   = dims();
+      const def_ = def();
+
+      // background
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, d.W, d.H);
+
+      // grid lines
+      ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+      for (let i = -8; i <= 8; i++) {
+        ctx.beginPath(); ctx.moveTo(d.ox + i * d.sc, 0); ctx.lineTo(d.ox + i * d.sc, d.H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, d.oy + i * d.sc); ctx.lineTo(d.W, d.oy + i * d.sc); ctx.stroke();
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, d.oy); ctx.lineTo(d.W, d.oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(d.ox, 0); ctx.lineTo(d.ox, d.H); ctx.stroke();
+
+      // axis tick labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)';
+      ctx.font = "10px 'Special Elite', monospace";
+      for (let i = -7; i <= 7; i++) {
+        if (i === 0 || i % 2 !== 0) continue;
+        ctx.textAlign = 'center'; ctx.fillText(i, d.ox + i * d.sc, d.oy + 13);
+        ctx.textAlign = 'right';  ctx.fillText(-i, d.ox - 4, d.oy + i * d.sc + 4);
+      }
+
+      // y = x mirror line
+      ctx.strokeStyle = 'rgba(29,26,20,0.18)'; ctx.lineWidth = 1.2;
+      ctx.setLineDash([7, 5]);
+      ctx.beginPath();
+      const ext = Math.max(d.W, d.H);
+      ctx.moveTo(d.ox - ext, d.oy + ext);
+      ctx.lineTo(d.ox + ext, d.oy - ext);
+      ctx.stroke(); ctx.setLineDash([]);
+      // y=x label
+      ctx.fillStyle = 'rgba(29,26,20,0.28)';
+      ctx.font = "11px 'Patrick Hand', cursive"; ctx.textAlign = 'right';
+      const lxr = d.ox + 6 * d.sc - 2, lyr = d.oy - 6 * d.sc - 4;
+      if (lxr > 0 && lyr > 0 && lxr < d.W && lyr < d.H) ctx.fillText('y = x', lxr, lyr);
+
+      if (mode === 'reveal') {
+        // f⁻¹ (green, drawn first so f sits on top)
+        drawCurve(def_.invEval, def_.invDomain, '#2a8a4a', 2.5, false);
+        // f (red)
+        drawCurve(def_.eval, def_.domain, '#d94f2a', 2.5, false);
+
+        // curve labels
+        ctx.textAlign = 'left';
+        const fLbl = curveLabel(def_.eval, def_.domain, d, true);
+        if (fLbl) drawLabel(`f(x) = ${def_.name}`, '#d94f2a', fLbl[0] + 5, fLbl[1] - 4);
+        const fiLbl = curveLabel(def_.invEval, def_.invDomain, d, false);
+        if (fiLbl) drawLabel(`f⁻¹(x) = ${def_.invName}`, '#2a8a4a', fiLbl[0] + 5, fiLbl[1] - 4);
+
+        // draggable point
+        const [mn, mx] = def_.ptRange;
+        const ax = Math.max(mn, Math.min(mx, ptX));
+        const ay = def_.eval(ax);
+        if (ay !== null && isFinite(ay)) {
+          // connector: dashed line from (ax,ay) to (ay,ax)
+          ctx.strokeStyle = 'rgba(29,26,20,0.25)'; ctx.lineWidth = 1.2;
+          ctx.setLineDash([4, 4]);
+          ctx.beginPath();
+          const [c1x, c1y] = toCanvas(ax, ay, d);
+          const [c2x, c2y] = toCanvas(ay, ax, d);
+          ctx.moveTo(c1x, c1y); ctx.lineTo(c2x, c2y);
+          ctx.stroke(); ctx.setLineDash([]);
+
+          // dot on f (red)
+          drawDot(ax, ay, '#d94f2a', 7, d);
+
+          // dot on f⁻¹: coordinates are (ay, ax) — only if invDomain holds
+          if (def_.invDomain(ay)) {
+            drawDot(ay, ax, '#2a8a4a', 7, d);
+          }
+
+          // update chips
+          document.getElementById('chip-f').textContent  = `f:   (${fmt(ax)}, ${fmt(ay)})`;
+          document.getElementById('chip-fi').textContent = `f⁻¹: (${fmt(ay)}, ${fmt(ax)})`;
+        }
+
+      } else {
+        // HLT mode
+        drawCurve(def_.eval, def_.domain, '#d94f2a', 2.5, false);
+
+        const clampedY = Math.max(def_.hltRange[0], Math.min(def_.hltRange[1], hltY));
+        const ints = findIntersections(def_.eval, def_.domain, clampedY);
+        const passes = ints.length <= 1;
+        const lineCol = passes ? '#2a8a4a' : '#d94f2a';
+
+        // horizontal test line
+        const [lp1x, lp1y] = toCanvas(-9, clampedY, d);
+        const [lp2x, lp2y] = toCanvas(9,  clampedY, d);
+        ctx.strokeStyle = lineCol; ctx.lineWidth = 2;
+        ctx.setLineDash([8, 5]);
+        ctx.beginPath(); ctx.moveTo(lp1x, lp1y); ctx.lineTo(lp2x, lp2y);
+        ctx.stroke(); ctx.setLineDash([]);
+
+        // intersection dots
+        for (const ix of ints) drawDot(ix, clampedY, lineCol, 6, d);
+
+        // y= label on line
+        ctx.fillStyle = lineCol;
+        ctx.font = "11px 'JetBrains Mono', monospace"; ctx.textAlign = 'left';
+        ctx.fillText(`y = ${fmt(clampedY)}`, d.ox + 4, lp1y - 6);
+
+        // update display chips
+        const pd = document.getElementById('pt-display');
+        pd.innerHTML = '';
+        const rc = document.createElement('span');
+        rc.className = `pt-chip ${passes ? 'pass' : 'fail'}`;
+        if (ints.length === 0) {
+          rc.className = 'pt-chip neutral';
+          rc.textContent = 'line misses f(x)';
+        } else {
+          rc.textContent = passes
+            ? `HLT passes  (${ints.length} intersection)`
+            : `HLT fails!  (${ints.length} intersections — not one-to-one)`;
+        }
+        pd.appendChild(rc);
+        for (const ix of ints) {
+          const xc = document.createElement('span');
+          xc.className = 'pt-chip f-chip'; xc.style.fontSize = '11px';
+          xc.textContent = `x = ${fmt(ix)}`;
+          pd.appendChild(xc);
+        }
+      }
+    }
+
+    // ── interaction ──
+    function evtPt(e) {
+      const r   = canvas.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      return [src.clientX - r.left, src.clientY - r.top];
+    }
+
+    function onDown(e) { dragging = true; onMove(e); }
+    function onUp()    { dragging = false; }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const [px, py] = evtPt(e);
+      const d = dims();
+      const [gx, gy] = toGraph(px, py, d);
+      const def_ = def();
+      if (mode === 'reveal') {
+        const [mn, mx] = def_.ptRange;
+        ptX = Math.max(mn, Math.min(mx, Math.round(gx * 4) / 4));
+      } else {
+        const [mn, mx] = def_.hltRange;
+        hltY = Math.max(mn, Math.min(mx, Math.round(gy * 4) / 4));
+      }
+      draw();
+    }
+
+    canvas.addEventListener('mousedown',  onDown);
+    canvas.addEventListener('mousemove',  onMove);
+    canvas.addEventListener('mouseup',    onUp);
+    canvas.addEventListener('mouseleave', onUp);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); onDown(e); }, { passive: false });
+    canvas.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e); }, { passive: false });
+    canvas.addEventListener('touchend',   onUp);
+
+    // ── controls ──
+    function setMode(m) {
+      mode = m;
+      document.getElementById('btn-reveal').classList.toggle('active', m === 'reveal');
+      document.getElementById('btn-hlt').classList.toggle('active', m === 'hlt');
+      if (m === 'reveal') {
+        document.getElementById('pt-display').innerHTML =
+          '<span class="pt-chip f-chip" id="chip-f">f: —</span>' +
+          '<span class="pt-chip fi-chip" id="chip-fi">f⁻¹: —</span>';
+      }
+      draw();
+    }
+
+    function setFn(key) {
+      fnKey = key;
+      const d = FNDEFS[key];
+      ptX  = (d.ptRange[0] + d.ptRange[1]) / 2;
+      hltY = d.initHltY !== undefined ? d.initHltY : (d.hltRange[0] + d.hltRange[1]) / 2;
+      renderDerivation();
+      // restore reveal chips when switching function
+      if (mode === 'reveal') {
+        document.getElementById('pt-display').innerHTML =
+          '<span class="pt-chip f-chip" id="chip-f">f: —</span>' +
+          '<span class="pt-chip fi-chip" id="chip-fi">f⁻¹: —</span>';
+      }
+      draw();
+    }
+
+    function renderDerivation() {
+      const def_ = def();
+      const box  = document.getElementById('deriv-box');
+      box.innerHTML = def_.steps.map(s =>
+        `<div class="deriv-step ${s.cls}">${s.text}` +
+        (s.annot ? `<span class="annot">${s.annot}</span>` : '') +
+        `</div>`
+      ).join('') + (def_.note
+        ? `<div class="deriv-note">${def_.note}</div>`
+        : '');
+    }
+
+    window.addEventListener('resize', draw);
+    renderDerivation();
+    draw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transformations Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .parent-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+
+    /* sliders */
+    .slider-grid {
+      display: grid;
+      grid-template-columns: 90px 1fr 38px;
+      gap: 5px 10px; align-items: center; margin-top: 8px;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .param-lbl .letter { font-size: 17px; font-style: italic; font-weight: 700; }
+    .param-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      font-weight: 700; color: var(--accent); text-align: right;
+    }
+
+    /* equation display */
+    .eq-strip {
+      margin-top: 8px; padding: 7px 14px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 0.03em;
+    }
+
+    /* annotation */
+    .annot {
+      margin-top: 5px; padding: 7px 12px;
+      background: var(--highlight); border-left: 4px solid var(--accent); border-radius: 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 14px; min-height: 36px;
+    }
+
+    .bottom-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+    .parent-chk { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+
+    /* sidebar formula card */
+    .formula-card { text-align: center; padding: 10px 14px; border: 1.5px dashed var(--ink-2); border-radius: 4px; }
+    .formula-card .f-big { font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 2; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u2.html">← U2</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u2.html">← U2 · Functions &amp; Transformations</a> &nbsp;·&nbsp; D4</div>
+      <div class="tool-title f-display">Transformations Explorer</div>
+      <div class="tool-tagline f-hand">One formula, every function family. See exactly what a, b, h, and k do.</div>
+
+      <div class="widget-container" style="flex:1; min-height:180px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <!-- equation display -->
+      <div class="eq-strip" id="eq-display">y = f(x)</div>
+
+      <!-- annotation -->
+      <div class="annot" id="annot">Move a slider — this box explains what it does.</div>
+
+      <!-- parent function picker -->
+      <div class="parent-row">
+        <span class="f-marker" style="font-size:11px;">PARENT:</span>
+        <button class="sk-pill active" data-fn="quad"  onclick="setFn('quad')">x²</button>
+        <button class="sk-pill"        data-fn="abs"   onclick="setFn('abs')">|x|</button>
+        <button class="sk-pill"        data-fn="sqrt"  onclick="setFn('sqrt')">√x</button>
+        <button class="sk-pill"        data-fn="cubic" onclick="setFn('cubic')">x³</button>
+        <button class="sk-pill"        data-fn="line"  onclick="setFn('line')">x</button>
+      </div>
+
+      <!-- parameter sliders -->
+      <div class="slider-grid">
+        <label class="param-lbl" for="sl-a">
+          <span class="letter" style="color:var(--accent);">a</span> <span style="color:var(--ink-2); font-size:11px;">vertical</span>
+        </label>
+        <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" oninput="slide('a')">
+        <span class="param-val" id="val-a">1</span>
+
+        <label class="param-lbl" for="sl-b">
+          <span class="letter" style="color:#2a6fb4;">b</span> <span style="color:var(--ink-2); font-size:11px;">horiz.</span>
+        </label>
+        <input type="range" id="sl-b" min="-3" max="3" step="0.5" value="1" oninput="slide('b')">
+        <span class="param-val" style="color:#2a6fb4;" id="val-b">1</span>
+
+        <label class="param-lbl" for="sl-h">
+          <span class="letter" style="color:#2a8a4a;">h</span> <span style="color:var(--ink-2); font-size:11px;">← →</span>
+        </label>
+        <input type="range" id="sl-h" min="-6" max="6" step="0.5" value="0" oninput="slide('h')">
+        <span class="param-val" style="color:#2a8a4a;" id="val-h">0</span>
+
+        <label class="param-lbl" for="sl-k">
+          <span class="letter" style="color:#8b4513;">k</span> <span style="color:var(--ink-2); font-size:11px;">↑ ↓</span>
+        </label>
+        <input type="range" id="sl-k" min="-6" max="6" step="0.5" value="0" oninput="slide('k')">
+        <span class="param-val" style="color:#8b4513;" id="val-k">0</span>
+      </div>
+
+      <!-- bottom toggles -->
+      <div class="bottom-row">
+        <label class="parent-chk">
+          <input type="checkbox" id="show-parent" checked onchange="draw()"> show parent (gray)
+        </label>
+        <label class="parent-chk">
+          <input type="checkbox" id="show-grid" checked onchange="draw()"> grid
+        </label>
+        <button class="btn small" style="margin-left:auto;" onclick="resetAll()">↺ reset</button>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">THE GENERAL FORMULA</div>
+        <div class="formula-card">
+          <div class="f-big">
+            y = <span style="color:var(--accent); font-weight:700;">a</span> · f(<span style="color:#2a6fb4; font-weight:700;">b</span>(x − <span style="color:#2a8a4a; font-weight:700;">h</span>)) + <span style="color:#8b4513; font-weight:700;">k</span>
+          </div>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; line-height:1.8; color:var(--ink-2);">
+          <span style="color:var(--accent);">a</span> — vertical stretch/compress, flip over x-axis<br>
+          <span style="color:#2a6fb4;">b</span> — horizontal stretch/compress, flip over y-axis <em>(inside!)</em><br>
+          <span style="color:#2a8a4a;">h</span> — shift left/right <em>(− means right!)</em><br>
+          <span style="color:#8b4513;">k</span> — shift up/down
+        </div>
+      </div>
+
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Pick a parent function up top.</li>
+          <li>Move <strong>one slider at a time.</strong></li>
+          <li>Read the yellow box — it tells you what changed and why.</li>
+          <li>Toggle the gray dashed parent to compare.</li>
+        </ol>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">On x², set b = 2. Does the parabola get wider or narrower? Now set a = 2 instead. Same result?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set h = 3 on any function. Does it shift left or right? Why does (x − 3) move right?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Set a = −1 on |x|. What happens? Now switch to x². Is it symmetric? Why/why not?</span>
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.4deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Which parameter surprised you most? b is the sneaky one — show me your evidence.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="abs-value-grapher.html">→ Absolute Value Grapher</a>
+        <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
+        <a class="related-link f-hand" href="piecewise-grapher.html">→ Piecewise Function Grapher</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    // Colors per parameter for sliders & dots
+    const P_COLORS = { a:'#d94f2a', b:'#2a6fb4', h:'#2a8a4a', k:'#8b4513' };
+
+    // Function family definitions
+    const FNDEFS = {
+      quad:  { name:'x²',  color:'#2a6fb4', f: u => u*u,         domain: () => true  },
+      abs:   { name:'|x|', color:'#d94f2a', f: u => Math.abs(u), domain: () => true  },
+      sqrt:  { name:'√x',  color:'#2a8a4a', f: u => Math.sqrt(u),domain: u => u >= 0 },
+      cubic: { name:'x³',  color:'#8b4513', f: u => u*u*u,       domain: () => true  },
+      line:  { name:'x',   color:'#7c3aed', f: u => u,           domain: () => true  },
+    };
+
+    let fn = 'quad';
+    let P  = { a:1, b:1, h:0, k:0 };
+    let lastParam = null;
+
+    // ---- number formatting ----
+    function fmt(v) { return (v === Math.round(v)) ? String(v) : String(Math.round(v*10)/10); }
+
+    // ---- equation string ----
+    function buildEq() {
+      const {a, b, h, k} = P;
+      const def = FNDEFS[fn];
+
+      // inner = b(x - h), formatted to show h explicitly
+      let inner;
+      const absH = Math.abs(h), absB = Math.abs(b);
+      const bStr = absB === 1 ? '' : fmt(absB);
+      const bSign = b < 0 ? '−' : '';
+      const hPart = h === 0 ? '' : h > 0 ? ` − ${fmt(h)}` : ` + ${fmt(absH)}`;
+
+      if (b === 1  && h === 0) inner = 'x';
+      else if (b === -1 && h === 0) inner = '(−x)';
+      else if (b === 1)  inner = `(x${hPart})`;
+      else if (b === -1) inner = `(−x${hPart})`;
+      else               inner = `(${bSign}${bStr}(x${hPart}))`;
+
+      // apply function
+      let fPart;
+      const needsParens = s => !s.startsWith('(') && s !== 'x' && s !== '(−x)';
+      if (fn === 'quad') {
+        if      (inner === 'x')    fPart = 'x²';
+        else if (inner === '(−x)') fPart = 'x²'; // (−x)² = x²
+        else fPart = inner.startsWith('(') ? `${inner}²` : `(${inner})²`;
+      } else if (fn === 'abs') {
+        fPart = `|${inner.replace(/^\(|\)$/g,'')}|`;
+      } else if (fn === 'sqrt') {
+        fPart = inner === 'x' ? '√x' : `√${inner}`;
+      } else if (fn === 'cubic') {
+        if      (inner === 'x')    fPart = 'x³';
+        else if (inner === '(−x)') fPart = '−x³';
+        else fPart = inner.startsWith('(') ? `${inner}³` : `(${inner})³`;
+      } else {
+        fPart = inner; // linear
+      }
+
+      // a prefix
+      let aStr = a === 1 ? '' : a === -1 ? '−' : `${fmt(a)}`;
+
+      // k suffix
+      let kStr = k === 0 ? '' : k > 0 ? ` + ${fmt(k)}` : ` − ${fmt(Math.abs(k))}`;
+
+      return `y = ${aStr}${fPart}${kStr}`;
+    }
+
+    // ---- annotation text ----
+    function annotText(param) {
+      const {a, b, h, k} = P;
+      switch(param) {
+        case 'a':
+          if (a === 1)   return 'a = 1 — back to the parent function. No vertical change.';
+          if (a === 0)   return 'a = 0 — function collapses to y = k (a flat line).';
+          if (a > 1)     return `a = ${fmt(a)} → vertical STRETCH by ${fmt(a)}. Every y-value is multiplied by ${fmt(a)}. Graph gets taller.`;
+          if (a > 0)     return `a = ${fmt(a)} → vertical COMPRESSION. Graph looks flatter — y-values shrunk by factor of ${fmt(1/a)}.`;
+          if (a === -1)  return 'a = −1 → REFLECTION over the x-axis. Graph flipped upside down. Every positive y is now negative.';
+          if (a < -1)    return `a = ${fmt(a)} → reflected over x-axis AND stretched vertically by ${fmt(Math.abs(a))}. Two transformations at once.`;
+          return `a = ${fmt(a)} → reflected over x-axis AND compressed vertically.`;
+
+        case 'b':
+          if (b === 1)   return 'b = 1 — no horizontal change. Parent\'s natural shape.';
+          if (b === -1)  return 'b = −1 → reflection over the y-axis. For symmetric functions like x² and |x|, nothing looks different!';
+          if (b > 1)     return `b = ${fmt(b)} → horizontal COMPRESSION by factor of ${fmt(b)}. Graph gets narrower. (Larger b = narrower — it's inside the function, so it's the opposite of what you'd guess!)`;
+          if (b > 0)     return `b = ${fmt(b)} → horizontal STRETCH by factor of ${fmt(1/b)}. Graph gets wider. (Smaller b = wider graph — counterintuitive!)`;
+          if (b < -1)    return `b = ${fmt(b)} → reflected over y-axis AND compressed horizontally by ${fmt(Math.abs(b))}.`;
+          return `b = ${fmt(b)} → reflected over y-axis AND stretched horizontally.`;
+
+        case 'h':
+          if (h === 0)   return 'h = 0 — no horizontal shift. Graph is centered.';
+          if (h > 0)     return `h = ${fmt(h)} → shift RIGHT ${fmt(h)} units. The minus sign inside (x − ${fmt(h)}) is why: the vertex/anchor lands at x = ${fmt(h)}.`;
+          return `h = ${fmt(h)} → shift LEFT ${fmt(Math.abs(h))} units. We write (x − (${fmt(h)})) = (x + ${fmt(Math.abs(h))}), so it looks like plus — but h is still negative.`;
+
+        case 'k':
+          if (k === 0)   return 'k = 0 — no vertical shift.';
+          if (k > 0)     return `k = ${fmt(k)} → shift UP ${fmt(k)} units. Every point on the graph rises by ${fmt(k)}.`;
+          return `k = ${fmt(k)} → shift DOWN ${fmt(Math.abs(k))} units. Every point on the graph drops by ${fmt(Math.abs(k))}.`;
+      }
+      return '';
+    }
+
+    // ---- canvas drawing ----
+    function resize() {
+      const r = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = r.width  * devicePixelRatio;
+      canvas.height = r.height * devicePixelRatio;
+      canvas.style.width  = r.width  + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+
+    function evalT(x) {
+      const {a, b, h, k} = P;
+      const u = b * (x - h);
+      const def = FNDEFS[fn];
+      if (!def.domain(u)) return null;
+      const v = a * def.f(u) + k;
+      return isFinite(v) ? v : null;
+    }
+
+    function evalParent(x) {
+      const def = FNDEFS[fn];
+      if (!def.domain(x)) return null;
+      const v = def.f(x);
+      return isFinite(v) ? v : null;
+    }
+
+    function plotCurve(evalFn, color, lw, dashed) {
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      const ox = W/2, oy = H/2, sc = W/18;
+
+      ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.setLineDash(dashed ? [6,5] : []);
+      let started = false; ctx.beginPath();
+
+      for (let px = 0; px <= W; px += 0.7) {
+        const x = (px - ox) / sc;
+        const y = evalFn(x);
+        if (y === null) { started = false; continue; }
+        const py = oy - y * sc;
+        if (py < -H || py > 2*H) { started = false; continue; }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    function draw() {
+      resize();
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      const ox = W/2, oy = H/2, sc = W/18;
+      const def = FNDEFS[fn];
+
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      if (document.getElementById('show-grid').checked) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+        for (let i = -9; i <= 9; i++) {
+          ctx.beginPath(); ctx.moveTo(ox+i*sc,0); ctx.lineTo(ox+i*sc,H); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0,oy+i*sc); ctx.lineTo(W,oy+i*sc); ctx.stroke();
+        }
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+      // axis labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)'; ctx.font = "10px 'Special Elite',monospace";
+      for (let i = -8; i <= 8; i++) {
+        if (i === 0 || i%2 !== 0) continue;
+        ctx.textAlign = 'center'; ctx.fillText(i, ox+i*sc, oy+13);
+        ctx.textAlign = 'right';  ctx.fillText(-i, ox-4, oy+i*sc+4);
+      }
+
+      // parent function (gray dashed)
+      if (document.getElementById('show-parent').checked) {
+        plotCurve(evalParent, 'rgba(29,26,20,0.18)', 2, true);
+      }
+
+      // transformed function
+      plotCurve(evalT, def.color, 2.5, false);
+
+      // key anchor point at (h, k)
+      const {h, k} = P;
+      const anchorY = evalT(h);
+      if (anchorY !== null) {
+        const ax = ox + h*sc, ay = oy - anchorY*sc;
+        if (ax >= 0 && ax <= W && ay >= 0 && ay <= H) {
+          const lbl = fn === 'sqrt'  ? `start (${fmt(h)}, ${fmt(k)})` :
+                      fn === 'cubic' ? `inflection (${fmt(h)}, ${fmt(k)})` :
+                      fn === 'line'  ? '' :
+                      `vertex (${fmt(h)}, ${fmt(k)})`;
+          ctx.fillStyle = def.color; ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(ax, ay, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+          if (lbl) {
+            ctx.fillStyle = def.color;
+            ctx.font = "12px 'Patrick Hand',cursive";
+            ctx.textAlign = ax > W*0.75 ? 'right' : 'left';
+            ctx.fillText(lbl, ax + (ax > W*0.75 ? -9 : 9), ay - 8);
+          }
+        }
+      }
+
+      // update text displays
+      document.getElementById('eq-display').textContent = buildEq();
+    }
+
+    // ---- interaction ----
+    function slide(param) {
+      let v = +document.getElementById(`sl-${param}`).value;
+      // keep b away from 0
+      if (param === 'b' && v === 0) {
+        v = P.b > 0 ? 0.5 : -0.5;
+        document.getElementById('sl-b').value = v;
+      }
+      P[param] = v;
+      document.getElementById(`val-${param}`).textContent = fmt(v);
+      document.getElementById('annot').textContent = annotText(param);
+      draw();
+    }
+
+    function setFn(name) {
+      fn = name;
+      document.querySelectorAll('[data-fn]').forEach(b => b.classList.toggle('active', b.dataset.fn === name));
+      document.getElementById('annot').textContent = `Switched to parent: f(x) = ${FNDEFS[name].name}. Move sliders to transform it.`;
+      draw();
+    }
+
+    function resetAll() {
+      P = {a:1, b:1, h:0, k:0};
+      ['a','b','h','k'].forEach(p => {
+        document.getElementById(`sl-${p}`).value = P[p];
+        document.getElementById(`val-${p}`).textContent = fmt(P[p]);
+      });
+      document.getElementById('annot').textContent = 'Reset — all parameters back to 1 (or 0). Parent function restored.';
+      draw();
+    }
+
+    window.addEventListener('resize', draw);
+    draw();
+  </script>
+</body>
+</html>

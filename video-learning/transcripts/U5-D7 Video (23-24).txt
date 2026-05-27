@@ -1,0 +1,94 @@
+Okay, here's the final day of algebra 2b, the final lesson, unit 9-day 7, solving logarithmic
+equation.
+So it's really similar to what we were doing, we were solving exponential equations by
+logging both sides, but now what we're going to do is, so let me just show you, if you
+have log base 10 of x equals log base 10 of 3, there's a log rule that we haven't
+really talked about, but if you do 10 raised to the log of 10, those cancel each other out.
+So really what we're doing is putting both of these as exponents to the 10 to the, this
+is the exponent, those cancel each other out, so what you left, what you're left with
+is x equals 3, but kind of the easier way to think of it is, if you have log of something
+equals log of something, you can just cancel those logs and then you just have what it says
+here, 2x plus 3 equals 9, it must have the same base, that's super important, and there
+can't be any stragglers, like if you have log of x plus 10, this plus 10 is going to throw
+off what the answer will be, well you actually can't just cancel the logs because this
+10 does not there, but if this had a log with it, you could condense this.
+So let's try for log base 10 of 2x minus 3 equals log base 10 of x plus 1, 2x minus
+3 equals x plus 1, solving it, you just get 4, try this one, ln, it's just log base
+e, there's nothing wrong with that, because it's addition, remember the product rule says
+we can make this 3 times x, so ln of 3x equals ln of 6, the ln's are gone, and actually
+just to remind you, to get rid of ln what we're really doing is eating both sides, so e to
+the ln cancel each other out, so you have 3x equals 6 to x equals 2, here's one more, this
+is log base 6 of all this stuff, log base 6 of 2 log base 6 of this, remember condensing
+means multiplying, so you actually have to distribute this to both numbers, so you get negative
+6 plus 2x squared, so 3x squared minus 5x equals negative 6 plus 2x, let's move everything
+to the left, so you get right 1x squared minus 5x plus 6 cancel, or factor, and you get
+x equals 3 and x equals 2, you can't have log of a negative, right, because 10 to the
+any power will never be negative, so what we have to do is check, and there's a whole
+slide about checking, about extraneous solutions next, but I just want to show you, if you plug in
+3 to here, you get 6, actually I plug it in here, negative 3 plus 6, negative 3 plus 2 squared
+still positive, and 2 will work too, because, actually I tried both right here, and because the
+the left side equals the right side, you only really have to try one of those, so the log of a
+negative or 0 is undefined, so log of negative 3 is undefined, so is log of 0, so extraneous answers
+happen when you find an answer for x, and you plug it into the original equation, and you get
+either 0 or a negative, that answer is extraneous, you can cross it out, if you plug in a negative,
+in a calculator, log of a negative, or 0 will say error, so here we go log 15, log base 15, cancel those,
+solving for x, because you x equals negative 3, let's plug it into either side, so I plug it into
+the left here, 3 times negative 3 is 9, or negative 9 plus 9, I don't know why I wrote this, but
+so negative 9 plus 9 is 0, you can't have log of 0, so there's no solution, because the only answer
+we got doesn't even work, what about here? 2m squared plus 6m equals m squared minus 5, move everything
+to the left, and factor, you get m equals negative 3, or m equals negative 2, so let's check negative
+3, and I checked it on, it doesn't matter, remember since these are equal, we can just try the left,
+2 times negative 3 squared, 2 times 9, it's 18, minus 18 is 0, so negative 3 doesn't work,
+what about negative 2, 2 times 4 is 8, minus 12, gives you negative 4, also m equals negative 2
+doesn't work, so no solution because neither of them work, once one side fails, you don't really have
+to try the other, all right, this one, ln of x, with a 2 out front means you could
+power rule it, so the blog rule says that 2 can go as the x, so you have ln of x squared equals
+ln of a plus 2x, that means x squared equals a plus 2x, move everything to the left, factor, you get
+4 and negative 2, checking it on the left side, 4 squared is positive, negative 2 squared is positive,
+so both work, what about some rules, when log equations have numbers of variables outside, then you
+can put it up as a power rule, you might have to do the condensing rules, just a quick reminder,
+log of x plus log of y is the product rule, so those get multiplied, log of x minus log of y,
+the quotient rule means they get divided, and then b log of x that can go there, so you get log of
+x to the b, so those are the three rules, once they're both single logs in either side, then you
+can cancel the logs, but what about these when you have only logs on one side or leaving ln, what you
+want to do is isolate this, so we'll minus the three, so we have this, to get rid of this ln,
+then I'm going to e both sides, so e to the ln cancels, and on the right I just have e to the second
+power, which is fine, that's just a number that we'll put in the calculator, so 2x minus 1, because
+these are gone, equals e squared, we'll add 1, and then divide by 2, you get x equals e to the
+second plus 1 over 2, the directions on the final, say, simplified at three decimal places,
+you plug this all in, it wants to get, let's just show you, e to the second plus 1, so press
+second, and then the ln button gives you e to the x, e to the second plus, whoops, so if you're
+still in the exponent, you have to press to the right plus 1, I'm just going to press enter,
+and then press the division button, and divide that answer by 2, you get 4.195, okay,
+you can check your answer, is it greater than it can't be zero, and it can't be negative,
+well 2 times 4, minus 1 is still positive, so that's good, what about this? This means
+quotient rule, so 2x plus 1 over x, and it's log base 10 equals 1,
+well, how do you do this? We have to change this to an exponential form, so 10 to the 1
+equals 2x plus 1 over x, if we multiply both sides by x, we get 10x equals 2x plus 1,
+move the 2x over, and you get x equals 1, it does this work, yes, because if you plug 1,
+a thing to here, that's positive, and if you plug 1 and a thing to there, it's positive.
+Last couple examples, you need to isolate, again, for this, so we'll add 1 first,
+we'll divide by 3, so you get log base 2 of x plus 7 equals 3, and then we have to say 2 to the
+third power equals x plus 7, so x equals 1, does that work? Well, when you plug it into here,
+that's a positive, so yes, what about this? Condense, because it's an addition.
+Problem, we have to do the product rule, so x plus 2 times x gives you x squared plus 2x
+equals 3, and it's log base 2, so 2 to the third power is equal to x squared plus 2x,
+move everything to one side, factor, and check. Negative 4 and 2 are our answers,
+if you plug in negative 4 right here, you'd get log base 2 of negative 2, which doesn't work,
+so this is an extremely solution, but positive 2, and either one of these is good.
+Same idea, add the 1, divide by 4, you get log base 11 of x plus 8 equals 2,
+11 squared equals x plus 8, you get x equals 1 13, and if we try that,
+in here, that's a positive number, so that works. And finally, a word problem. So
+the word problems are either going to involve the very beginning when we didn't have to do any logs,
+like three or four days ago, when we just did the interest formulas,
+then we did ones where you actually have to log both sides because we're unknown as in the
+exponent. Now, the unknown is on the inside of the element, so the moment magnitude M of an earthquake
+that releases energy is modeled by this function, and when this has changed it to Ln of capital E.
+Now, May 22, 1960, a power for earthquake to place in Chile, it had a moment of magnitude of 9.5,
+how much energy does this earthquake release? So M, we're looking, we actually know M
+equals 0.291, Ln of the unknown E plus 1.17. We know M is 9.5,
+equals 0.291, Ln of E, so minus 1.17, you get 8.33, divide by 0.291, and here, so I'll rewrite this,
+we have 28.625 equals Ln of capital E. To get rid of the Ln,
+E, that, but then you E this side. So E to the 28.625 is some huge number.
+It's 2.7 times 10 to the 12th, meaning you move the decimal 12 times, so that's a huge amount of energy.
+All right, so that's the final one, and that is the last problem before the final review.

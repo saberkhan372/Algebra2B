@@ -1,0 +1,153 @@
+Okay, so here's the video for unit five day five the sum and difference of cubes. This is a new formula
+similar if you had a squared minus b squared. That's the difference of squares and that factors out to a plus b a
+minus b in an example of that
+it's like
+4x squared minus 64
+64
+that one has to be a subtraction
+problem
+that factors out to 2x plus 8
+2x minus 8
+That's difference of squares. So now
+We're gonna do difference of cubes and just a quick
+Review of some numbers to the third power
+6 times 6 times 6 is 216, but if you take the cubed root of that you get 6
+These are some common cubes and
+Then we have some examples here
+something to the 12th
+goes in the upper part of an exponent
+But the root goes in the bottom part of an exponent. So x to the 12th to the third
+It'll be 12 divided by 3. So that's x to the fourth or nine to the ninth
+But then the third power is nine over 3 which is x to the third
+So there are two formulas and
+You can go some number to the third plus some number to the third or some number to the third minus some number to the third
+And the formulas they're very similar
+Except if it's plus you take the cubed root of each number
+Add them and then you do a squared minus a b plus b squared
+If it's a minus in the actual problem, then it's a minus a
+And b but then it's a squared plus a b. So the way I remember it is if it's a plus
+It's a plus if it's a minus. It's a minus
+This third number is always added, but this one here is switched
+Okay, so if it's minus it's plus if it's plus it's minus
+And then you always have to check
+If you can factor the end
+so
+Always check for the GCF
+Figure out what your regular a and what your regular b are by cubed rooting
+You've got a cubed root the whole term. So an example of that is if it's
+a x to the third if I cubed root that
+That becomes the cubed root of eight which is two and the cubed root of x to the third which is just x
+Right the factored form by plugging in a and b and be careful with the squared terms
+So you square all of a or all of b so
+If two x was our a and we want to find the a squared term then you square the whole thing so it's four x squared
+You always have to see if you can go further though. Here's the first example kind of an easy one
+Take what that first number is
+Make that a to the third
+cubed root it and you get just x and then square it to find what the squared term is
+take that second term
+Which is
+27
+cubed root it that becomes what our b is and then square it that becomes nine so
+This is like a to the third plus b to the third adding
+keeps adding then a minus so a plus b
+and
+Then it's a
+squared minus a times b plus b squared well a
+Square it is x squared a times b is x times three so three x and then b squared is nine
+Can we keep going well?
+This would be like x the only thing we can break this down is the three and three and that'll never make three and it'll make six
+next
+next one
+Eight is a perfect cube so the x cubed works the same way
+But eight becomes the cubed root is two but we square that becomes four
+It's a minus so it becomes a
+minus b and then a squared plus a b
+plus b squared and as you can see that's x minus two
+x squared plus two x
+Because it flips and then always plus b squared
+And you keep going no because this becomes two and two that all may not make two
+now
+Five is not a perfect square
+So we can take out a five and then we see we have the same
+x cubed minus one which is
+Not what we've done before but
+The cubed root of one
+Is one
+So x minus one because it's a minus that's a minus b
+a squared plus a b
+Plus b squared but one is really weird because it just keeps staying at one
+Check if you can keep going no make sure you have that five in the answer because that if we foil this all back and distribute
+We need that five at the end
+Okay
+216 is a perfect square
+216 the cubed root of that is six and the cubed root of x of third is x
+Square that we square the whole thing
+We'd get 36 x
+squared
+One is like we did before the cubed root of one
+It just stays as one and you square it as stays as one. So a plus b
+a squared minus a b
+Plus b squared. Can you keep going?
+No
+This one very similar
+Except if this is our a to the third
+Is x to the sixth
+cubed root it
+That's the same thing as saying
+To the sixth
+Third root becomes x squared and then we square that and becomes x to the fourth
+27 cubed root is three square that becomes nine. So a
+This is a weird one because a is not just x. It's x squared
+minus three
+And then a squared plus a b
+Plus not plus b squared. Can we keep going on either of them now?
+This one can we take out a gcf yes we could take out a seven
+x to the sixth so x to the sixth is our a to the third
+cubed root x to the sixth you get x squared. So that's our a term
+Eight cubed roots down to two squares to four
+Make sure that sevens in your answer and then a
+plus b
+a squared minus
+a b plus b squared. Can we keep going?
+There is one at the end where we can keep going and then x to the ninth
+We've seen if that's our to the a to the third then we cubed root it. That's like
+to the ninth
+cubed root means to the ninth divided by three. So our a by itself is just x to the third
+Our b value is eight
+Q square that you get 64 that's what goes here
+A plus b a squared minus a b plus b squared
+However, this can we keep going?
+Yes, this is another
+difference of cubes. You might not realize but this is to the third. This is to the third. So we can break it down to a plus b
+a squared minus a b plus b squared
+And then this never can factor so we keep it. So tricky one
+Last example is there's actually two ways you can do this
+because
+this is
+a third and this is a third. So we can do difference of cubes first
+cubed root it
+cubed root it is to the sixth divided by three is x squared. So that's our a value
+and our b value is just one. So we can do
+difference of cubes you get a minus b
+a squared plus a b plus one this will never factor down but this
+is difference of square so we can keep going.
+We can also do difference of square as first which is a plus b a minus b
+which would just be x to the third x to the third makes x to the sixth plus one minus one
+this is difference of cubes. This is difference of actually this can't go any
+well yeah it is difference of cube this is some of cubes difference of cubes
+a plus b a squared minus a b plus b squared
+this one is a minus b a squared plus a b plus b squared
+and here I checked
+to see so these are two different answers if you notice
+x plus one x minus one that's this but then we have these two things which are different and what
+I wanted to do is check if I distribute x squared to all three numbers I get all this
+if I distribute negative x to all three numbers I get these three terms and if I distribute one
+to these I get these three terms and then I combine like terms x to the fourth there's nothing
+it can combine with x cubed minus x cubed x squared minus x squared plus x minus x there's an
+x squared and a plus one left over oh hey that's what we have here x to the fourth plus x squared
+plus one that's what these two things simplify out to but if you can see these are two different
+answers but they're both acceptable and you might be asking well what should I do first
+it's kind of up to your interpretation to see what you want to do first so
+that was a quick video I know but unit five day five is on some and difference of cubes
+the reasoning might say some of cubes if it's an addition sign difference of cubes if it's
+a subtraction sign

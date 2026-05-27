@@ -1,0 +1,159 @@
+All right. So, this is the, this is a big day of unit nine, our last unit. Day four is about logarithmic functions.
+And logs are the opposite of exponents. Basically, what they're saying is, for example, if I have five squared equals 25, you can write the word log.
+of five to the second power is 25. So, that's how you read it. Base to the exponent equals the answer.
+So, looking at this, there's some exponents that we know, right? Like two to the third power is eight.
+But what's three to something is fourteen. I know three squared is nine. And there are three to the third is twenty seven.
+So, it's somewhere in between two and three and a little closer to nine. So, maybe it's like two point three. There's the guess, right? We don't know.
+So, three to the x is something. We don't know it. Sometimes you do know it. But what's the exponent here?
+That's what we're going to use logs for. So, two to the third equals eight is called exponential form,
+but log base two is called a base to the third power equals eight. This is logarithmic form.
+This is the answer, basically. So, log two of eight is three. These, I could just write this without an
+equal sign and say this is three. Okay. I honestly think this is the best diagram because it
+it has arrows, right? B to the x equals y. That's what this is saying. B to the x equals y
+with base B of y is x. Base to the exponent equals the answer.
+So, example three to the x is fourteen. And how did I get this? How did I get this? Well,
+I need to write it as three to the what equals fourteen. Log base three of fourteen. What I want
+you to do is on your calculator, we're going to say math alpha math. What do I mean by that?
+So, on this calculator, you can clear everything, just the main screen. I'm going to press the
+button that says math. Then I'm going to press the button right above it says alpha. And then I'm
+going to press math again. That gives me a log where I can change the base, right? Three. And I'm
+going to click to the right to get into the parentheses and write fourteen. Press enter.
+There is a log button. But if I just press the button that says log, look, I can't change the base.
+I can only say, okay, log of fourteen. But that's saying ten to something equals fourteen.
+What do I mean by ten? So, there's a couple rules with logs. I'm going to skip around a little bit.
+When there's no base, if it just says log of x, that's actually saying
+log base ten of x, okay? So, let's fill out this chart real quick. B to the x equals y. I mean,
+in log form B to the x equals y. What about three to the x equals nine? I want to write the word log
+base three to the x equals nine. And what is that? Three to what power is nine or two? Four to the
+x is sixty four. Written as a log is four to the x equals sixty four. Four times four times four
+is sixty four. So, it's the third power. What about this one? Five to the x is six twenty five.
+Five to the x equals six twenty five is written as five. So, this is four, x is four.
+You might be asking, why do we need this? Well, a lot of higher math computations where they
+have to use logs because it's, if you have some giant number, sometimes you don't want to know
+what the giant number is or what the base is. You want to know how many times you have to multiply
+a number by itself to get to that giant number. And before computers and before calculators,
+all they had were these books with log tables. So, if you had some giant number, you want to know
+two to the 50th power. That's going to be a huge number. 50, you look up a 50 log
+base two to some number and get that in the log table. But now that we have a calculator, we can change
+the base. Let's save this a lot of time and energy. So, again, this one is similar three to the
+third is 27. But what's six to the what is 82? Six to the what is 82? Well, this says log base six
+of 82. So, remember, I'm going to press math alpha math. Log base six, go to the right of 82
+is 2.459. And I just wrote it as 2.5. They're rounded. So, I'm some important fact. Always,
+if there's a log of one, so this is one, the only way you get one is if the exponent is zero,
+because anything to the zero powers one. So, if there's ever a one here, it just becomes zero.
+If there's ever the same number as the base, the exponent is one, because b to the one is b.
+If you ever just see log of x, that means log base 10. If you ever see log base e,
+or you ever see the two letters ln, which is actually there's an ln button in a calculator,
+it's called the natural log. And that's used for a lot of modeling of natural things. It's called
+the natural log. So, just remember, a log is just asking you what is the exponent to get to a bigger
+number. And then, you'll never get a zero in there because 10 to something. There's nothing I can
+put as an exponent, because if it was zero, it would be 10 to the zero is one. And if it was some
+negative number, it would actually turn this into a fraction, which we'll see in a second. There
+will also never be a negative in here, because I can never do a number, a positive number,
+two, an exponent, and it'll become negative, because you just keep multiplying it as
+becomes a bigger and bigger positive. Okay? So, remember those, and then let's fill out this chart.
+So, 10 to the one is 10. Two to the fifth is 32. Four squared is 16. E to the one is E.
+Here's where you can start getting a little fancy. Two to the negative three, because that
+what that means is one over two to the third, and two to the third is eight. So, that's how you get
+like a smaller number than what your base is. You have a negative here, two to the negative three.
+How do I get one? E to the zero is one. 10? Well, there's nothing that will make a negative,
+because 10 times 10 is 100, but 10 to the negative one is one tenth, and so there's no possible way.
+And then 10 to the zero is one. So, you can never have a negative here. Two to the negative one
+is one half. Remember, because it goes to the bottom, you can never have zero here either,
+because how can I get zero? Five to the one, five to the zero is one, five to the negative one is
+one fifth. So, you'll never get a zero or a negative here. Three to the negative three is one
+over 27, because three to the negative three is saying one over three to the third, which is one over
+27. Okay, let's graph into these. Notice, I have the function two to the x, which is exponential.
+The inverse of two to the x, because this is exponential, is log base two of x.
+The mirror point, so zero one becomes one zero. One two becomes two one. Okay, so one way to think of it
+is graph and exponential form, and then mirror all the points. But let's try this. So, could I plug
+in negative one? What's log base two of negative one? Just looking at this, is there two to
+anything that will give me negative? No. So, this point can exist. I can't plug in negative one.
+I'm looking at the red graph. Two to anything to make zero also can't it happen? But now,
+we're looking, we're going to plug in one. Log base two of one will two to the zero is one.
+So, when I plugged in one, the answer is zero. Two to the one is two. So, when I plug in two,
+I get one. What else? F of four. Two to the second power is four. So, when I plugged in four,
+I get two. Kind of seems like it's square rooting, but it's not. It's like the
+law, like what exponent will make two bigger and bigger and bigger. Two times itself.
+Two to the third is eight. So, when I plug in eight, I get three. Then we get these negatives.
+Two to the negative one is one half. So, when I plug in one half, I get negative one.
+Two to the negative two is one over two squared. And then finally, when I plug in one eighth,
+I have to do to the negative third power. So, when I plot those, what you see is you get this,
+which I didn't draw on this graph, but you actually have a vertical asymptote. You're never going to
+cross x equals zero. So, it's going to keep getting closer and closer and closer, but never actually
+touch it. As I go to the right, I'm going up and to the right. It looks like it's flattening out,
+but it's not just going to slowly go up to the right. So, this is the parent function of a log.
+So, what does that look like? This flips it vertically or horizontally. So, most logs look like this.
+That's when a is positive. But when a is negative, we're actually going to go like that. That's when
+a is negative. A also changes like the curvature of it. So, instead of being super steep or
+it would be less steep. This is your vertical asymptote. So, whatever h is,
+is your vertical asymptote. That's what it like borders along. So, use the opposite of whatever
+h says. And the k value just shifts the graph up and down. Remember, b to the zero is one, b to the
+one is b. So, if you have log b of b, I mean b to the one is b. If you have a one here, this has to
+be a zero. If there's nothing showing, that's log base 10. And then ln means log base of e.
+All right. So, let's graph some of these. Well, the asymptote, because the h value is zero,
+is just at zero. So, that's how I got this asymptote. Then, I want to plug in a point that makes this
+x a one, because three to the zero would be one. Well, if I make this a one and plug in one for x,
+I mean, this means three to the zero has to be one. So, the answer, like the y value is zero,
+when I plug in one for x. So, one zero. And this is actually the starting point for all log
+graphs that are not shifted right or left or up or down. What if I want the inside of the log? So,
+this to be what the base is. Well, I plug in three for x. So, three to the one is three. So,
+meaning when I plug in three, I get one. The domain of these always starts at the vertical asymptote,
+and then goes to the right. So, vertical asymptote to infinity, the h value. And the range is always
+negative infinity to infinity. This is interesting, because as the n behavior, as x goes to the left,
+there is no n behavior to the left. Nothing you can't plug in any of these negative numbers,
+because you'd be plugging in a negative for x. So, the left n behavior actually does not exist.
+And in this unit, for our purposes of algebra 2b, that's always just t and e, the left n behavior,
+but the right n behavior is always up to the right in this class. So, this didn't have anything.
+This just had log of x plus 3 plus 2. So, this is shifted left 3 and up to. And you can see that,
+because we started here, what left 3 up to. To find the vertical asymptote, first step is set the
+inside equal to 0, and then solve it for x. So, this actually should say x. That's our vertical
+asymptote at negative 3. I want to make the inside of this, for my first point, I want to make
+this 1. How does that work? What have to plug in negative 2 for x? So, log base 10, this became 1,
+because I plug in negative 2 plus 3, and then plus 2 just comes from this. Well, this in itself
+is 0, because 10 to the 0 power is 1. So, log base 10 of 1, if there's ever a 1 here,
+it's just this whole thing becomes 0. But then I have to add 2, because it's part of the equation.
+And so, 0 plus 2 is 2. So, when I plug in negative 2, I get 2. When I, another point I want to get
+is to match what's on the inside to what the base is. So, I have to plug in 7 for x. So, when I plug in
+7, I get log base 10 of 10. When these match, this says 10 to the what power is 10? What's 1?
+Add 2, I get 3. So, when I plug in 7, I get 3. And those are my two points. This one
+flattens out, but it's still going to go up into the right forever. So, that's how I get my domain
+and my range. These are always going to be DNA and infinity, because I can't, I stop at a certain
+point to the left, and to the right, I'm going up. What about this one? This is now my
+x plus h, x minus h. There's no h. So, my as and tops at 0. But I'm shifting it up one. So,
+normally we were here, we shifted up one. We want this x to be a 1, because it's going to make
+this log 0. So, I have to plug in 1 for x. E to the 0 is 1. So, this is 0. Then I add 1. Don't forget
+that it's easy to forget from the equation. You have to add everything. So, when I plugged in 1,
+I get 1. That's that point. How did I get 3, 2? Well, if you plug in E, that means this will be E
+and this will be E. So, this is just 1 plus 1. So, I get 2. The point when I plugged in E,
+I got 2. But for graphing purposes, E is approximately 3. So, E comma 2 is actually 3 comma 2 when you're
+graphing. Domain and range are always from the vertical asymptote to infinity. Range is always
+negative infinity to infinity. And behavior to the left doesn't exist. And behavior to the right
+isn't infinity. This one, we have a vertical asymptote at negative 1, because you remember you set
+the inside equal to 0. So, x is negative 1 is our asymptote. You can't plug in anything smaller
+than negative 1. I can't plug in negative 2 because that would make this a negative and that's the
+no go. I want to make the inside 1. So, I plug in 0 for x. So, log base 2 of 1 is 0. Don't ever forget
+that the minus 2 is still part of the function. So, when I plug in 0, I get negative 2. It's right
+there. This is shifted. Left 1 down 2. What if I want the inside to be 1? Well, I plug in,
+it's actually wrong. Oh, I want to make the, I want to make this a 2. I want to make it the
+inside what the base is. So, I plug in 1 for x. So, I plug in 1 for x. I get 2 to log 2 to the what
+makes 2. It's 1. So, it comes up to negative 1. When I plug in 1, I get negative 1. The domain is from
+negative 1 to infinity. The range is from negative 2 to infinity. And then the end behavior is always
+the same. Okay, there's one more graph. This is an ln graph, which means log base e. The asymptote
+is at 0 because there's no h value, but we're shifted down 3. And now we have this 2 multiplier.
+All that is going to do is just like multiply what you get for your log. Well, I want this to be a 1.
+So, I have to plug in 1 for x. e to the what makes 1, 0. So, I have 2 times 0, which is 0, minus 3.
+So, when I plug in 1, I got negative 3. And then I want the base and the answer to match. So, I want
+to plug in e. Well, that's e to what makes e is 1. So, I have 2 times 1 minus 3 is negative 1. So,
+when I plug in e, I got negative 1. But for graphing purposes, that's about 3 negative 1. The domain
+always from the vertical asymptote to infinity. The range goes down forever and up forever.
+And the end behavior stops to the left because to infinity to the right. So, parent function
+always has this 0.10. It's not shifted left or right. Just for your reference,
+this here we're only going to graph the functions that look like this that go up to the right
+and down to the left. But they don't always look like that. So, it's possible that I could give you,
+you're not going to get in this class, but negative log base 2 of x maybe. Or, I could give you
+log base 2 of negative x. That's going to be flipped by these are actually switched. But
+that's why these graphs don't go up to the right like a normal one. So, you're adding a
+negative. But that's just for your reference. All the graphs we're going to do are going to look like
+this. Okay, so it's going to be a vertical asymptote on the left side and it goes up to the right.
+So, there you go. That's a lot, I know. But that's unit 9, day 4.

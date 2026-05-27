@@ -1,0 +1,197 @@
+/* Algebra 2 Playgrounds — wireframe styles */
+
+:root {
+  --paper: #f6f1e4;
+  --paper-2: #efe7d3;
+  --ink: #1d1a14;
+  --ink-2: #3a342a;
+  --ink-soft: #6b6357;
+  --ghost: #b5ad9c;
+  --grid: rgba(29, 26, 20, 0.09);
+  --accent: #d94f2a;       /* tweakable */
+  --accent-2: #2a6fb4;
+  --highlight: #f5d34c;
+  --redline: #e23d2c;
+  --tape: rgba(245, 211, 76, 0.55);
+}
+
+html, body {
+  margin: 0;
+  background: #2a2722;
+  color: var(--ink);
+  font-family: 'Patrick Hand', 'Comic Neue', system-ui, sans-serif;
+}
+
+/* ---- Sketchy SVG filter — applied via class ---- */
+.rough { filter: url(#wf-rough); }
+.rough-soft { filter: url(#wf-rough-soft); }
+
+/* ---- Paper backgrounds ---- */
+.paper {
+  background: var(--paper);
+  position: relative;
+}
+.paper-grid {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.paper-lined {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px);
+  background-size: 100% 28px;
+  background-position: 0 27px;
+}
+.paper-dots {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--grid) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+
+/* ---- Sketchy primitives ---- */
+.sk-box {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: 4px 6px 5px 7px / 5px 4px 7px 6px;
+  box-shadow: 2px 3px 0 rgba(29, 26, 20, 0.18);
+}
+.sk-box-thick {
+  border: 3px solid var(--ink);
+  background: var(--paper);
+  border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+  box-shadow: 3px 4px 0 rgba(29, 26, 20, 0.25);
+}
+.sk-box-dashed {
+  border: 2px dashed var(--ink-2);
+  background: transparent;
+  border-radius: 5px;
+}
+.sk-pill {
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  border-radius: 999px;
+  padding: 4px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.sk-tag {
+  border: 1.5px solid var(--ink-2);
+  background: var(--paper-2);
+  border-radius: 4px 6px 5px 6px;
+  padding: 2px 8px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ---- Typography ---- */
+.f-display { font-family: 'Caveat', 'Patrick Hand', cursive; font-weight: 700; letter-spacing: 0.5px; }
+.f-hand    { font-family: 'Patrick Hand', 'Comic Neue', cursive; }
+.f-marker  { font-family: 'Permanent Marker', 'Caveat', cursive; }
+.f-type    { font-family: 'Special Elite', 'Courier New', monospace; }
+.f-mono    { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+
+/* ---- Placeholder squiggles ---- */
+.ph-line {
+  height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--ink-soft) 0 8px,
+    transparent 8px 12px
+  );
+  opacity: 0.55;
+  border-radius: 2px;
+}
+.ph-line.thick { height: 14px; }
+.ph-line.thin { height: 6px; opacity: 0.4; }
+
+.ph-img {
+  background:
+    linear-gradient(135deg, transparent calc(50% - 1px), var(--ink-soft) calc(50% - 1px), var(--ink-soft) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(45deg, transparent calc(50% - 1px), var(--ink-soft) calc(50% - 1px), var(--ink-soft) calc(50% + 1px), transparent calc(50% + 1px)),
+    var(--paper-2);
+  border: 2px solid var(--ink-2);
+  border-radius: 4px 6px;
+}
+
+/* ---- Tape / Pin / Marker accents ---- */
+.tape {
+  position: absolute;
+  background: var(--tape);
+  border: 1px solid rgba(0,0,0,0.05);
+  width: 56px;
+  height: 16px;
+  transform: rotate(-3deg);
+  top: -8px;
+  left: 16px;
+}
+.pin {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: var(--redline);
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: 1px 2px 0 rgba(0,0,0,0.25), inset -2px -2px 0 rgba(0,0,0,0.2);
+}
+.highlight {
+  background: linear-gradient(transparent 55%, var(--highlight) 55% 92%, transparent 92%);
+  padding: 0 4px;
+}
+.strike { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--redline); }
+.underline-wavy {
+  text-decoration: underline wavy var(--accent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+}
+
+/* ---- Scaffolding overlay (toggleable) ---- */
+.scaffold .sk-box,
+.scaffold .sk-box-thick,
+.scaffold .paper {
+  outline: 1px dashed rgba(255, 0, 0, 0.35);
+  outline-offset: 2px;
+}
+.scaffold .ph-line::after {
+  content: 'text';
+  position: absolute;
+  font-size: 9px;
+  color: red;
+  margin-left: 4px;
+}
+
+/* ---- Density modifier ---- */
+.dense { font-size: 14px; }
+.sparse { font-size: 18px; }
+
+/* ---- Reset link look ---- */
+a { color: inherit; }
+
+/* ---- Helpers ---- */
+.col { display: flex; flex-direction: column; }
+.row { display: flex; flex-direction: row; }
+.gap-4 { gap: 4px; } .gap-6 { gap: 6px; } .gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; } .gap-16 { gap: 16px; } .gap-24 { gap: 24px; }
+.p-8 { padding: 8px; } .p-12 { padding: 12px; } .p-16 { padding: 16px; } .p-24 { padding: 24px; }
+.center { display: flex; align-items: center; justify-content: center; }
+.between { display: flex; align-items: center; justify-content: space-between; }
+.grow { flex: 1; }
+.rot-l { transform: rotate(-1.4deg); }
+.rot-r { transform: rotate(1.2deg); }
+.rot-l2 { transform: rotate(-2.5deg); }
+.rot-r2 { transform: rotate(2.5deg); }
+
+/* ---- Artboard inside design canvas ---- */
+.artboard {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--paper);
+  position: relative;
+  font-family: 'Patrick Hand', system-ui, sans-serif;
+  color: var(--ink);
+}

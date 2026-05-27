@@ -1,0 +1,141 @@
+Okay here is the video for unit 7 stay tuned. This first slide is just about
+signed co-san tangent and we're not really doing it as much as you can use it in day one. So this is just a review of
+this is what we're really learning in day two is angles. So just a little lower here remember like in a board game you have a spinner right it can take this this little thing could spin all the way around it's been as many times as it wants it can also spin in either direction.
+Well in trigonometry going in this direction go if this is where it started and this is where it ended up this is in the positive direction if we went the other way and we went to the right so clockwise that is in the negative direction.
+So notice and wonder how big is this angle let's just take a guess is it about 45 degrees maybe it's 50 degrees or 60 it's somewhere between 40 and 60 degrees.
+We don't know exactly. So I know that a perfect right angle is 90 degrees and then if it was started you know both these lines were on top of each other it'd be zero degrees so it's somewhere in between maybe it's about halfway.
+So what two angles look like when they're superimposed on the x and y axis well here is zero degrees this is 90 going up to here so we're at here right about 45 degrees.
+What about this one this angle went from zero to 90 plus another 45 we got to 135 degrees or here 90 180 and more so 180 plus 45 is 225 degrees.
+And finally going all the way around 90 180 270 all the way so 270 plus 45 is 315.
+The way you draw it it just says draw it in standard position make it set 350 degrees.
+You draw your angle and you need to go around showing the direction you started at you always started zero so that would be 350 degrees.
+You can also go in the reverse direction we went this way you'd actually have negative 45 degrees so for going clockwise we're going this way that would be clockwise that's the negative direction.
+So this is called standard position when they start pointing to the right let me move this start pointing to the right.
+And the measured moving counterclockwise counterclockwise is the positive direction clockwise is the negative direction.
+Here a couple examples estimate the number of degrees in this angle well I know that if I went all the way to here I'd get a 180 some a little bit more probably about 30 degrees more so I'm estimating it's about 210 degrees.
+Well I know that a little bit more than a diagonal is 60 degrees so we went from here down so we went negative 60 degrees.
+The only thing that we saw was this because I'm going down a little bit more than diagonal I'm going negative 60 degrees quadrants.
+Well quadrants 150 degrees is a little bit less than 180 quadrants go 1, 2, 3 and 4 it's in Roman numerals it's just kind of how it works.
+Quadrant 2 is where you would see the terminal side the ending side of 150 degrees.
+About 285 well three like three quarters of the way around is 270 all the way around 360 so it's somewhere in between 285 is in the fourth quadrant.
+So if you want to sketch these where is 30 degrees well a perfect diagonal of these 45 degrees so 30 degrees is remember what a 30 60 90 triangle looks like I think this always helps see I draw this.
+This is what like a 30 60 90 triangle looks like the 30 is less than diagonal and 60 is bigger than diagonal so 30 degrees is about here.
+You remember you need to show where the angle like with the measure of the angle and then also show how you got to that point.
+Part B 150 degrees is 30 less than 180 so you get to here.
+Negative 270 if you're going in the reverse direction the negative 90 negative 180 negative 270.
+Negative 120 that's negative.
+We have this angle is all the way around to 360 plus another 30 would get you to 405 actually 360 plus 45.
+A full circle plus 45 you make sure.
+Sorry getting that making sure that audio works so starting at zero degrees to get to 400 and five would go 360.
+Let's another 45 degrees would get you to 405 degrees and then here.
+Start how do we get to 480 well if I subtract 360.
+I'm subtracting a full term so 120 degrees is where you know this angle would be so I go full circle 360 plus 120 we get you to here.
+No code terminal angles well angles are code terminal if they're terminal sides are in the same place so 140 degrees is actually code terminal negative 220 because 140 gets you if this is 90 140 would mean that the set of portion is 50.
+Negative 220 so this is negative 180 means it just has to be 40 so this total is 90 degrees or 40 up or 50 in that direction.
+They're code terminal because they end in the same place.
+Here's some examples can be two angles one positive one negative that are code terminal give your answer in degrees so if I add 360 I'm just padding so like if I were here and I added a full term I'd be adding 360.
+So that gives me the same angle it's just got a full turn on top of it but I also want a negative code terminal so I can subtract 360 and negative 315 is in the same spot it's just a negative angle.
+So same here add 360 or subtract 360.
+You get positive negative what happens when you have 740.
+Well if I added 360 I'd get a bigger and get 1000 degrees but if I subtract 360 I don't get a negative degree so I have to subtract 360 three times to get a negative code terminal angle.
+Alright, sure the angle with measure 45 degrees at a circle and find a positive code terminal angle such that it's between 0 and 360.
+So negative 45 degrees is going in a clockwise direction to hear.
+And I want a positive code terminal angle so I'm going to add a full circle adding 360 give me 315.
+Now radiance, this slide we kind of did a quick history lesson in class but 360 degrees is like an arbitrary number that the ancient Babylonians made 600 BC but we actually can talk about something other than degrees and if you've seen on your calculator if you press mode you've got radian
+and degree mode.
+The reason radians exist is because of the radius of a circle.
+So if the radius of a circle is right here you can actually imagine this was a string you could place that string that would go around the circle once twice three times four times five times six times in a little bit.
+How many times is that?
+The circumference is two pi times the radius.
+What if the radius is one?
+It would just be the circumference of this circle is two pi.
+So instead of 360 degrees in radians a full circle is two pi.
+So what is a radian is the measure of the angle of the circle that intercepts an arc equal to the radius as circle.
+So if this radius was I don't know five then the circumference of mu two pi times five to be 10 pi.
+But in radians we really want to focus on the radius being one.
+So then a full turn is two pi.
+That's the same as 360 degrees.
+So two pi in radians is 360 degrees is a full turn.
+If we cut that in half we divide by two we get that pi radians is 360 divided by two.
+So it was 180 degrees.
+How much is one radian?
+Well, if pi is 180 degrees if we divide both sides by pi 180 divided by pi is about 57.3 degrees.
+So one radian is about 57.3 degrees and that looks like this.
+So 57.3, 57.3 all the way around.
+So how do we use radians?
+We are going to be using radians instead of degrees pretty much for the rest of this class.
+So starting here I went up 45 degrees.
+That's 1, 8 of a full turn because 1, 4, 2, 4, 3, 4, 4, 4, 5, 4, 6, 4, 7, 4, 8, 4.
+4 of what?
+Well, pi.
+If I go from here to here I get to pi and if I go all the way around I get the 2 pi.
+So here 45 degrees is pi over 4.
+If I go 2 fourths I get to pi over 2, 1 fourth, 2 fourths, 3 fourths, 5.
+four, four, five, five, four, five.
+And that's the same thing.
+Writing, five, four, five is technically,
+you might think of it that way,
+but you're going to see in textbooks
+and ratings, it looks like it's five pi over four.
+One fourth, two, four, three, four, four, four, five,
+fourth, six, fourths, three, five, or two, and seven, fourths.
+And eight, fourths is just two-pack.
+All right, so instead of going 30 degrees, 45, 60, 90,
+we're going to say pi over six, pi over four,
+pi over three, pi over two.
+Well, this looks like a crazy dagger,
+and there's so much going on,
+but there's four different main things.
+There's fourths, so one fourth, two fourths, three fourths,
+four fourths, five fourths, six fourths, seven fourths,
+and eight fourths.
+There's the six, so one sixths, two sixths, three sixths,
+four sixths, five sixths, six over six is pi,
+seven sixths, eight sixths, nine sixths, 10 sixths, 11 sixths.
+And then we also have the 60 degrees, so one,
+which is pi over three, so one third, two thirds,
+three thirds, four thirds, five thirds, and six thirds.
+So we're not going too far to what the unit circle is.
+That's a big thing in pre-calculus,
+but it's good to see how it starts.
+And then finally,
+what a radians look like when you draw it.
+Well, same as degrees, pi over four is one fourths
+of going all the way to pi.
+So pi over four is like a 45 degree angle.
+Five fourths is like one fourth, two fourths, three fourths,
+four fourths will be pi, so five fourths is down here.
+One fifth, the margin dividing this whole 180 degrees
+into fifths, so it'll be a little bit lower than a fourth.
+Seven fifths, imagine going to five fifths,
+six fifths, seven fifths will be down here.
+You had negative one.
+Remember I said one radian.
+It was about 57 degrees.
+So imagine going negative 57 degrees.
+It's about here, and it's probably more than,
+this is probably less than what it actually looks like.
+And then negative two radians is like negative 114 degrees.
+So going past negative 90,
+what if I'm in radians that I want to degrees?
+Well, you either multiply by 180 over pi or pi over 180,
+which one's which?
+Well, if you have degrees and you want degrees to cancel,
+you put the 180 on bottom.
+Just like in chemistry and unit conversion,
+dimensional analysis, you want what's on top
+and what's on bottom to cancel.
+So then I have this at three over eight,
+there's one sixth pi.
+Here I'm in degrees, 45 degrees, so that's a 180 on bottom.
+I've been times 45 reason to itself once,
+because into that four times.
+It just becomes four pi over four.
+Here, three pi over two.
+Well, I have pi, and I want to go to degrees.
+So I go to the pi on bottom, to the pi cancels.
+Three times the 180 divided by two is just 270 degrees.
+And again, here's seven pi over six.
+I have pi, so I prepare the bottom to cancel.
+It's a seven times 180 divided by six, 200, and 10 degrees.
+There you go, unit seven, day two.

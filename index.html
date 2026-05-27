@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Algebra 2 Playgrounds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body { background: var(--paper); }
+
+    /* Notebook binding decoration */
+    .notebook-binding {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 28px;
+      background: var(--paper-3);
+      border-right: 2px solid var(--ink-soft);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      padding: 40px 0;
+      z-index: 50;
+    }
+    .binding-hole {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--ink);
+      background: var(--paper-2);
+      margin: 0 auto;
+    }
+
+    .page-wrapper {
+      padding-left: 44px;
+    }
+
+    /* Red margin line */
+    .content-area {
+      position: relative;
+    }
+    .content-area::before {
+      content: '';
+      position: absolute;
+      left: 180px; /* sidebar width */
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--redline);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    /* TOTW mini graph preview */
+    #totw-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Section heading */
+    .section-heading {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 28px;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+    .section-heading .count {
+      font-family: 'Patrick Hand', cursive;
+      font-size: 15px;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <!-- Notebook spiral binding -->
+  <div class="notebook-binding" aria-hidden="true">
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+    <div class="binding-hole"></div>
+  </div>
+
+  <!-- Nav -->
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search">
+      <span class="search-icon">🔎</span>
+      <input type="text" id="search-input" placeholder="search 23 tools..." autocomplete="off" />
+    </div>
+    <div class="nav-links">
+      <a href="index.html" class="active">home</a>
+      <a href="about.html">about</a>
+    </div>
+  </nav>
+
+  <!-- Pacing banner -->
+  <div class="pacing-banner">
+    <span>👉 RIGHT NOW we're on:</span>
+    <span class="unit-label">U2 · Graphs & Exponents</span>
+    <span>— Day 4 of 6 · Negative Exponents</span>
+  </div>
+
+  <div class="page-wrapper">
+    <div class="two-col content-area" style="margin-top: 24px;">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+
+        <!-- How to use -->
+        <div class="sidebar-section">
+          <div class="how-to-use sk-box rot-l" style="position:relative;">
+            <div class="pin" style="top:-6px; right:16px;"></div>
+            <div class="section-label">HOW TO USE THIS SITE</div>
+            <ol>
+              <li>Pick a unit or topic below.</li>
+              <li>Open a tool — they're <span class="highlight">tiny</span>.</li>
+              <li>Mess with it. Try to break it.</li>
+              <li>Show me what you found.</li>
+            </ol>
+            <div class="no-track">~ no logins · nothing saved ~</div>
+          </div>
+        </div>
+
+        <!-- Units -->
+        <div class="sidebar-section" style="margin-top: 16px;">
+          <div class="section-label f-marker" style="font-size:12px; margin-bottom: 6px;">UNITS</div>
+          <ul class="unit-list">
+            <li>
+              <a href="u1.html">
+                <span class="unit-id">U1 · done</span>
+                <span class="unit-name">Systems &amp; Quadratics</span>
+              </a>
+            </li>
+            <li class="current">
+              <span>▶</span>
+              <a href="u2.html">
+                <span class="unit-id">U2 · now</span>
+                <span class="unit-name">Graphs &amp; Exponents</span>
+              </a>
+            </li>
+            <li>
+              <a href="u3.html">
+                <span class="unit-id">U3 · upcoming</span>
+                <span class="unit-name">Rationals &amp; Imaginary</span>
+              </a>
+            </li>
+            <li>
+              <a href="u4.html">
+                <span class="unit-id">U4 · upcoming</span>
+                <span class="unit-name">Rational Exponents</span>
+              </a>
+            </li>
+            <li>
+              <a href="u5.html">
+                <span class="unit-id">U5 · upcoming</span>
+                <span class="unit-name">Exponential &amp; Log</span>
+              </a>
+            </li>
+            <li>
+              <a href="u6.html">
+                <span class="unit-id">U6 · upcoming</span>
+                <span class="unit-name">Rationals &amp; Polynomials</span>
+              </a>
+            </li>
+            <li>
+              <a href="u7.html">
+                <span class="unit-id">U7 · upcoming</span>
+                <span class="unit-name">Trigonometry</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Kind legend -->
+        <div class="sidebar-section" style="margin-top: 16px;">
+          <div class="section-label f-marker" style="font-size:12px; margin-bottom: 6px;">LEGEND</div>
+          <div style="display:flex; flex-direction:column; gap:4px; font-size:13px;">
+            <span><span class="sk-tag kind-visualizer" style="font-size:10px;">visualizer</span> see it move</span>
+            <span><span class="sk-tag kind-practice" style="font-size:10px;">practice</span> step-by-step</span>
+            <span><span class="sk-tag kind-game" style="font-size:10px;">game</span> race the clock</span>
+            <span><span class="sk-tag kind-reference" style="font-size:10px;">reference</span> look it up</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main content -->
+      <main>
+
+        <!-- Tool of the week -->
+        <div class="totw-card sk-box-thick rot-r" style="position:relative;">
+          <div class="tape" style="left:24px;"></div>
+          <div class="totw-label">★ TOOL OF THE WEEK</div>
+          <div class="totw-title">Absolute Value Grapher</div>
+          <div class="totw-desc">Drag the V. Watch y = a|x − h| + k update live. See what each number actually does.</div>
+          <div class="totw-preview">
+            <canvas id="totw-canvas" width="400" height="140"></canvas>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <a href="tools/abs-value-grapher.html" class="btn accent big">→ open it</a>
+            <span style="font-size:14px; color:var(--ink-soft);">Unit 2 · visualizer · easy</span>
+          </div>
+        </div>
+
+        <!-- Filter + search -->
+        <div class="filter-row">
+          <span class="label f-marker">SHOW:</span>
+          <button class="sk-pill active" data-filter="all" onclick="filterTools(this)">all 23</button>
+          <button class="sk-pill" data-filter="visualizer" onclick="filterTools(this)">visualizers</button>
+          <button class="sk-pill" data-filter="practice" onclick="filterTools(this)">practice</button>
+          <button class="sk-pill" data-filter="game" onclick="filterTools(this)">games</button>
+          <button class="sk-pill" data-filter="reference" onclick="filterTools(this)">reference</button>
+        </div>
+
+        <!-- Tool grid -->
+        <div class="section-heading">
+          The pile of tools
+          <span class="count" id="tool-count">(23)</span>
+        </div>
+        <div class="tool-grid" id="tool-grid">
+          <!-- Populated by JS -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const TOOLS = [
+      { id: 'quad',  name: 'Quadratic Slider Studio',      unit: 'U1', topic: 'Quadratics',      kind: 'visualizer', diff: 1, code: 'Qs', desc: 'Slide a, h, k and watch the parabola move. Vertex form made visual.',           href: 'tools/quadratic-slider.html' },
+      { id: 'subs',  name: 'Substitution Stepper',          unit: 'U1', topic: 'Systems',          kind: 'practice',   diff: 1, code: 'Sb', desc: 'Walk through substitution step by step. No jumping ahead.',                      href: 'tools/substitution-stepper.html' },
+      { id: 'elim',  name: 'Elimination Race',               unit: 'U1', topic: 'Systems',          kind: 'game',       diff: 2, code: 'El', desc: 'Solve systems by elimination — race against yourself.',                          href: 'tools/elimination-race.html' },
+      { id: 'fact',  name: 'Factoring Quadratics Lab',      unit: 'U1', topic: 'Factoring',        kind: 'practice',   diff: 2, code: 'Fq', desc: 'See what happens when you change the factors. Area model included.',             href: 'tools/factoring-lab.html' },
+      { id: 'piece', name: 'Piecewise Function Grapher',    unit: 'U1', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Pw', desc: 'Build piecewise rules and watch open and closed endpoints behave.',            href: 'tools/piecewise-grapher.html' },
+      { id: 'absv',  name: 'Absolute Value Grapher',        unit: 'U2', topic: 'Graphs',           kind: 'visualizer', diff: 1, code: 'Av', desc: 'Drag the V. Watch y = a|x − h| + k update in real time.',                       href: 'tools/abs-value-grapher.html' },
+      { id: 'trans', name: 'Transformations Explorer',      unit: 'U2', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Tx', desc: 'Move a, b, h, and k across parent functions and see what changes.',          href: 'tools/transformations.html' },
+      { id: 'negx',  name: 'Negative Exponent Flipper',     unit: 'U2', topic: 'Exponents',        kind: 'visualizer', diff: 1, code: 'Nx', desc: 'See x⁻² flip into 1/x². No tricks, just the definition.',                       href: 'tools/neg-exponent-flipper.html' },
+      { id: 'dos',   name: 'Difference of Squares',         unit: 'U2', topic: 'Factoring',        kind: 'game',       diff: 2, code: 'DS', desc: 'Spot and factor a²−b² before the timer runs out. Quick drill.',                  href: 'tools/diff-of-squares.html' },
+      { id: 'doc',   name: 'Difference of Cubes',           unit: 'U2', topic: 'Factoring',        kind: 'reference',  diff: 3, code: 'DC', desc: 'The formulas for a³±b³, with visual proof and worked examples.',                 href: 'tools/diff-of-cubes.html' },
+      { id: 'imag',  name: 'Imaginary Number Sandbox',      unit: 'U3', topic: 'Imaginary',        kind: 'visualizer', diff: 1, code: 'Im', desc: 'Plot complex numbers. See what multiplying by i actually does.',                  href: 'tools/imaginary-sandbox.html' },
+      { id: 'qstd',  name: 'Quadratic Standard Form',       unit: 'U3', topic: 'Quadratics',       kind: 'visualizer', diff: 2, code: 'Qf', desc: 'Slide a, b, c and connect vertex, discriminant, and roots.',              href: 'tools/quadratic-standard.html' },
+      { id: 'rex',   name: 'Rational Expression Builder',   unit: 'U3', topic: 'Rationals',        kind: 'visualizer', diff: 2, code: 'Rx', desc: 'Build a rational expression and see its graph, domain, and holes.',               href: 'tools/rational-expressions.html' },
+      { id: 'comp',  name: 'Complete the Square Trainer',   unit: 'U3', topic: 'Quadratics',       kind: 'practice',   diff: 2, code: 'Cs', desc: 'Step through completing the square at your own pace. Each step explained.',      href: 'tools/complete-square.html' },
+      { id: 'ratx',  name: 'Rational Exponents Tower',      unit: 'U4', topic: 'Exponents',        kind: 'game',       diff: 3, code: 'Re', desc: 'Match x^(m/n) to its radical form. Stack your correct answers.',                  href: 'tools/rational-exponents.html' },
+      { id: 'cubic', name: 'Cubic & Radical Grapher',       unit: 'U4', topic: 'Radicals',         kind: 'visualizer', diff: 3, code: 'Cr', desc: 'Compare cubic inflection points with square-root starting points.',           href: 'tools/cubic-radical.html' },
+      { id: 'fcomp', name: 'Composition Machine',           unit: 'U4', topic: 'Functions',        kind: 'visualizer', diff: 2, code: 'Cm', desc: 'Send x through f and g in order. Swap the order and compare.',             href: 'tools/composition.html' },
+      { id: 'inv',   name: 'Inverse Function Revealer',     unit: 'U4', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Iv', desc: 'Reflect f and f⁻¹ over y = x and test one-to-one functions.',             href: 'tools/inverse-function.html' },
+      { id: 'logcv', name: 'Log ↔ Exponential Converter',   unit: 'U5', topic: 'Logs',             kind: 'practice',   diff: 2, code: 'Lg', desc: 'Translate bˣ = y into log form and back until it clicks.',                  href: 'tools/log-converter.html' },
+      { id: 'rsimp', name: 'Rational Simplifier',           unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 2, code: 'Rs', desc: 'Factor first, cancel matching factors, and keep excluded values.',             href: 'tools/rational-simplifier.html' },
+      { id: 'addr',  name: 'Adding Rational Expressions',   unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 3, code: 'Ar', desc: 'Build the LCD from factor chips, rewrite, combine, and simplify.',             href: 'tools/adding-rationals.html' },
+      { id: 'poly',  name: 'Polynomial Sketch Pad',         unit: 'U6', topic: 'Polynomials',      kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Set roots and multiplicities, then sketch cross, bounce, and end behavior.', href: 'tools/polynomial-sketch.html' },
+      { id: 'unitc', name: 'Unit Circle Walker',            unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 3, code: 'Uc', desc: 'Drag around the unit circle and watch sine or cosine trace a wave.',          href: 'tools/unit-circle.html' },
+    ];
+
+    const UNIT_COLORS = { U1: '#dde8cf', U2: '#cfe3f1', U3: '#f1e1cf', U4: '#e8cfe9', U5: '#f4dfbd', U6: '#d8e6df', U7: '#d6dcf4' };
+
+    function buildGrid(tools) {
+      const grid = document.getElementById('tool-grid');
+      grid.innerHTML = '';
+      tools.forEach((t, i) => {
+        const card = document.createElement('a');
+        card.href = t.href;
+        card.className = `tool-card sk-box ${i % 2 === 0 ? 'odd' : 'even'}`;
+        card.dataset.kind = t.kind;
+        card.dataset.name = t.name.toLowerCase() + ' ' + t.topic.toLowerCase() + ' ' + t.unit.toLowerCase();
+        card.style.background = UNIT_COLORS[t.unit] || 'var(--paper)';
+        card.innerHTML = `
+          <div class="tool-card-icon">${t.code}</div>
+          <div class="tool-card-name">${t.name}</div>
+          <div class="tool-card-desc">${t.desc}</div>
+          <div class="tool-card-tags">
+            <span class="sk-tag" style="font-size:10px;">${t.unit}</span>
+            <span class="sk-tag kind-${t.kind}" style="font-size:10px;">${t.kind}</span>
+            <span class="sk-tag" style="font-size:10px;">${'●'.repeat(t.diff)}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    buildGrid(TOOLS);
+
+    let activeFilter = 'all';
+
+    function filterTools(btn) {
+      document.querySelectorAll('.filter-row .sk-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const cards = document.querySelectorAll('.tool-card');
+      let visible = 0;
+      cards.forEach(card => {
+        const matchKind = activeFilter === 'all' || card.dataset.kind === activeFilter;
+        const matchSearch = !q || card.dataset.name.includes(q);
+        if (matchKind && matchSearch) {
+          card.classList.remove('hidden');
+          visible++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+      document.getElementById('tool-count').textContent = `(${visible})`;
+    }
+
+    document.getElementById('search-input').addEventListener('input', applyFilter);
+
+    // TOTW mini graph preview
+    (function() {
+      const canvas = document.getElementById('totw-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+
+      function drawPreview() {
+        const W = canvas.offsetWidth || 400;
+        const H = canvas.offsetHeight || 140;
+        canvas.width = W;
+        canvas.height = H;
+
+        // Animated parameters
+        const a = 0.8 + 0.3 * Math.sin(t * 0.6);
+        const h = 2 * Math.sin(t * 0.4);
+        const k = 1.5 * Math.sin(t * 0.5);
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#efe7d3';
+        ctx.fillRect(0, 0, W, H);
+
+        const ox = W / 2;
+        const oy = H / 2;
+        const scale = W / 16;
+
+        // Grid
+        ctx.strokeStyle = 'rgba(29,26,20,0.08)';
+        ctx.lineWidth = 1;
+        for (let gx = -8; gx <= 8; gx++) {
+          ctx.beginPath();
+          ctx.moveTo(ox + gx * scale, 0);
+          ctx.lineTo(ox + gx * scale, H);
+          ctx.stroke();
+        }
+        for (let gy = -4; gy <= 4; gy++) {
+          ctx.beginPath();
+          ctx.moveTo(0, oy + gy * scale);
+          ctx.lineTo(W, oy + gy * scale);
+          ctx.stroke();
+        }
+
+        // Axes
+        ctx.strokeStyle = 'rgba(29,26,20,0.5)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+        // Graph y = a|x-h|+k
+        ctx.strokeStyle = '#d94f2a';
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        let started = false;
+        for (let px = 0; px < W; px++) {
+          const x = (px - ox) / scale;
+          const y = a * Math.abs(x - h) + k;
+          const py = oy - y * scale;
+          if (py > -20 && py < H + 20) {
+            if (!started) { ctx.moveTo(px, py); started = true; }
+            else ctx.lineTo(px, py);
+          }
+        }
+        ctx.stroke();
+
+        // Vertex dot
+        const vx = ox + h * scale;
+        const vy = oy - k * scale;
+        ctx.fillStyle = '#d94f2a';
+        ctx.beginPath();
+        ctx.arc(vx, vy, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        t += 0.02;
+        requestAnimationFrame(drawPreview);
+      }
+      drawPreview();
+    })();
+  </script>
+</body>
+</html>

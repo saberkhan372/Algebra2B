@@ -1,0 +1,69 @@
+All right, here's a video for unit 4, 8, 1, let me just turn on the laser pointer here.
+So we are going to do radical functions, remember radical means a square root, like you
+could take the square root of 4 and get 2, but about 2 times 2 times 2, that's 8, right?
+You could take the, because we cubed that, you could take the cube root of 8, oh sorry,
+you could take the cube root of 8 and that would be 2. So those are called radicals, it's this symbol,
+but for today we're only going to talk about square roots. Let's look at this first
+graph, right, and we plug in some numbers. So if you plug in
+numbers to this function, what if we plug in negative 1? What's the square root of negative 1?
+It doesn't exist. The square root of 0, the square root of 0 is 0, the square root of 1 is 1,
+things get tricky though, because unless it's a perfect square, you're going to get a weird decimal.
+So we can plug in 4, so we can plug in 9, and here's some points, 0, 0, 1, 1,
+technically 2, 1.41, but that's kind of hard to graph, right? Plug in 4, you get 2, plug in 9,
+you get 3, plug in 16, you get 4. Well let's look at this, we started here at 0, 0.
+And so let's look at this. A square root function can be shifted left and right,
+and shifted up and down, and also have a stretch or a flip. There's the starting point in this
+case, I'm going to always just put vertex in quotes because it's not actually a vertex.
+Now let's think about the domain. It's started, the farthest left, the smallest number you can
+plug in is 0, so it's including 0, all the way to the right to infinity. The lowest Y value gets
+to is 0, and it goes up. I know it's like tapering off and gets less steep, but it's still going to
+go up to the right or ever. It's really only practical to do 3 points, and it's technically,
+think about this. What if we went down in this way? We'd have a sideways parabola,
+but you can't have a sideways parabola because it would fail the vertical line test.
+Something interesting is, if you know this, so a square root function and a squared
+function are inverses of each other, and when inverses happen they get flipped over this line,
+Y equals X, so the point like 2, 1 would become the point 1, 2, or the point 4, 2 would become 2, 4.
+Now you will see this is the parent function, so shifted left and right, up and down,
+it's called HK form. I'm going to use the word vertex, but really it's the starting point.
+So let's think. There's some strategic ways to do this. Here, I know this went left 3,
+down 2, left 3, down 2, and there's, if you plug in a number, let's say we plug in negative 2.
+What does that make the inside? It makes it, if I plug in negative 2, it makes it inside 1,
+so negative 2 plus 3 is 1, 1 minus 2 is negative 1. If you plug in, if I want to make the inside
+of the, I want to make this 4, right? If I plug in 1 for X, I'd give 2 minus 2 is 0, so 1 is 0.
+What did we do? We went right 1 up 1, right 4 up 2, always from that quote vertex, right?
+So, this is the pattern, right 1 up 1, oops, I don't need the software update.
+Oops, I'm just glitching here, there we go.
+Make sure we're still recording, yes. Sorry about that. I want to go back to the
+field in notes, okay, where are we? This is the pattern, okay? Where's the starting point?
+Right 1 up 5, but now we go, we're going to multiply by A. So, this is the pattern, right 1 up 1,
+right 2 down 5, but sorry, right 4 up 2, but we're multiplying that new number by A.
+So, right 1 up 1, but we're going right 1 up 1 times negative 2, right 4 up 2, but we're multiplying
+that 2 by negative 2, so down 4. There's your 3 points. Similar here, 0, 3, and then right 1 up 1
+but times a half, so right 1 up a half, right 4 up 2 times a half is 1.
+There is one big topic that we really need to talk to we haven't yet,
+is that what happens if you put a negative in front of the x? We've never seen this,
+we never had a number in front of the x inside the function. So, it's not this is different than
+A value like this, right? This is a negative, what did it do? It flipped it down.
+Now what we're doing is a flip horizontally, so imagine it's like, you know, twisting it on this,
+this was like sitting on a table, you'd be twisting this this way. These functions flip,
+because they don't have any symmetry, it's going to flip going to the left. So, this is
+look at this, going to the left. What happens? Left 1 up 1, left 2, sorry, left 4 up 2,
+and this has a domain of negative infinity up to 0, and then 0 up to infinity.
+What about this? What happens when there's a negative in front of the x, but there's like a positive
+2? What does this really mean? What I always want you to think of is factor out the negative.
+So, we pull a negative out of this and become a positive x and a negative 2. The negative came out.
+So, this still means right 2 up 4, but it's pointing left, right 2 up 4, and instead of the pattern
+going right 1 up 1, right 4 up 2, you left 1 up 1, left 4 up 2, and the A value is 1, so it's not
+stretching it or flipping it. There's four different ways this could happen. If this is a positive
+here, it's going to point to the right. If this is a negative, it's going to point down. So,
+let me just give you an example. How about negative square root negative x? This means it's going to
+point down, and this means it's going to point left. So, it's going to go that way. If you have
+a positive here, it's going to point to the right, and this is positive. Right and up,
+it could point down to the right. That means this is a positive, this is a negative,
+could go up to the left. If this is a negative, this is a positive, or it could go both ways like this.
+Without graphing, like what do we know? This is a positive, it's going to point to the right,
+but also down, and the vertex is negative 13, negative 18. So, negative 13, negative 18.
+It's going to start from negative 13, go to infinity, and then because it's pointing down,
+it's negative infinity up to negative 18, this should be a bracket. And then here, pointing,
+pull out a negative, shifted left five up 21, pointing left and up. So, negative infinity up to
+negative five, and then from 21 to infinity. There you go, unit four, day one, video.

@@ -1,0 +1,180 @@
+Okay, there's a video for unit 3, day 1, and we're going to talk about imaginary numbers.
+So let's see, a lot of times in math we ask, well what if, right now we're under the
+assumption that you can't square it in negative, but why?
+What if I want to plug in 6, right, what's 6 squared, 36?
+That's a perfect square. So what if I plug in negative 7?
+Negative 7 squared is negative 7 times negative 7, I get 49.
+As far as we know, all perfect squares are positive, right?
+Because it's two numbers times itself, either a positive times a positive makes a positive,
+or a negative times a negative also makes a positive.
+So you can't like take this square root of a negative because it would be like one positive, one negative, and those are different.
+So let's think about this, what number squared makes 25?
+5 squared makes 25. So what does negative, negative 5 squared also makes 25, right?
+What about this? What number squared makes 36?
+Well, 6 squared is 36, but it's not negative.
+Negative 6 squared also makes 36, but how do we get that negative?
+Right now, we don't know, there's nothing that we've come up with and we know that'll work.
+So mathematicians, hundreds of years ago, maybe I'm exactly sure the exact date,
+probably hundreds of years ago, what if there were a type of number that we could square to get a negative?
+Well, they came up with this number or a symbol, which is I, and it's in mathematically, it's, let's see, I don't have a written number here, like that's my normal eye.
+I like to do the math eye as like a little tail.
+It means the square root of negative one, okay?
+So what happens if you square this, I squared?
+Well, you'd square the square root of negative one.
+So square roots and square roots cancel, so you just get negative one.
+This is all you really need to know is that I is the square root of negative one.
+So whenever there's a negative and a square root, it'll come out as I.
+What does that really mean? Well, let's first do some practice with I, okay?
+I wrote this, and this is going to come up a lot.
+Numbers multiply numbers, letters multiply letters.
+So five, I, seven, I.
+Five and seven makes 35.
+I and I makes I squared.
+But I squared is, as you can see here, I squared is negative one.
+So that's like 35 times negative one, so you get negative 35.
+What about this?
+We've got two sets of parentheses, that means we're going to want to foil.
+Six and three makes 18.
+Outer, six times negative two is negative 12, I.
+Inner, three and five, 15, I.
+And last time's last.
+Five times negative two is negative 10.
+I times I is I squared.
+Remember I squared is negative one.
+So you get a combine-like terms, negative 12 and 15, I makes three I, oops.
+Three I, 18 plus three I plus 10.
+And then you can combine the 18 and the 10 to make 28, okay?
+28 plus three I.
+And this is called standard form where the first number is the real part,
+and the I part comes second.
+So I have 18 real numbers plus three I's.
+And I don't want to say I is the same as like X, but you can kind of treat it like a variable.
+What is the square root of 49?
+Seven, right?
+What if there's a negative in there?
+Well, short way of thinking of it.
+If there's a negative and a square root, it just comes out as I.
+And it's nice when it's a perfect square because that's seven I.
+We can also think of negative 49 as negative one times 49.
+The negative one part can be its own square root, so that's the I part.
+And this is the seven part.
+And you normally, it's customary in standard to do that I after the number.
+Here, easy one, right?
+81 is the perfect square.
+The negative makes it nine I.
+What if we wanted to solve?
+Square both sides.
+Sorry, square root both sides.
+Square root of X squared is just X.
+The square root of negative 16.
+Well, 16 is perfect square.
+The square root of the negative makes I, so it's four I.
+What about this?
+Well, first, you want to move the 25 voters of minus 25 to this side.
+So you get X squared equals negative 25.
+Square root both sides.
+The square root and the squared cancel.
+The squared of negative 25 is negative one times 25, so five I.
+So imaginary numbers have I in them.
+Something called a complex number.
+Like, for example, our answer here, 28 plus three I.
+That's actually our first intro and just something called a complex number.
+So there's a real part and an imaginary part.
+Sometimes our answer is just imaginary.
+Sometimes our answer is just a real number, right?
+But if you have both, the real part comes before the imaginary part.
+And it's not always plus, it's not always minus,
+it just depends how it comes out.
+So you did this in algebra one and probably also in geometry.
+But we need to get some practice with simplifying square roots.
+So the radical means the root symbol.
+Well, there's two different ways to do it.
+If you're given 98, the square root of 98, well,
+I don't want you to use a calculator because I would give you a decimal.
+I want you to think, what's the biggest perfect square that goes into 98?
+Well, what you do is you take an 98 and you say,
+four is a perfect square, does four go into it?
+No.
+Does 16 go into it?
+No.
+Does 36?
+No.
+Does 49?
+Ooh, 49 goes into it twice.
+So really, 98 is the same as saying 49 times two.
+And that 49 can be its own root, so seven root two.
+This is the, like, more common way that you'll do it this year.
+The long method is the tree method which you probably did in algebra one.
+You just think, all right, what does that make 75?
+Just first thing comes at minus 25 times three.
+How do you make 25 times five?
+Everything in this tree that is, so we've got five times five times three.
+Anything that comes out as the, there's two of the same,
+it comes out as one of them out of the root.
+And everything that's not, that doesn't have a double stays in the root.
+So that's three was already there.
+This five came out and the root three stays in.
+So three times five is 15 root three.
+You can do 100, two to write 50 times two, 25 times two to make 55 and five.
+So five comes out, two comes out.
+There's really nothing left in there, so you just put it one.
+Five times two is 10, the square root one is one.
+So the square root of this is a perfect square.
+So you could, you know, you could have just done that easily.
+But there you go.
+That's the long way of showing this method.
+Are there any perfect squares that go into 46?
+Well, 46 always start with four.
+Yeah, that's the smallest perfect square.
+Does nine go into it, does 16 go into it?
+Well, to spare you the time,
+I'll tell you that there's no perfect squares to go into it.
+So this is actually the simplest it can get.
+So easy way of thinking of it is if you see a negative in a square root.
+First, do your simplified square root and just make the any negative come out as an I.
+Right? So this is an I and we have square root 50, 25 and two.
+So that's five root two, and it's standard to write the number, then the I, then the root.
+Because just here where if it had said like five root two, I, it's hard to tell,
+like is that root under the root, you know, there's the I under the root or not.
+So that I comes after the number, the root comes last.
+That's just standard notation.
+Here's a good one, 48 is 16 times three.
+The negative just comes out as I, so the negative five is already outside.
+Nothing really happens to this.
+So it's negative five I, 16 times three, well, that's four, right?
+And root three to states, five and four makes 20, so negative 20 high root three.
+And then here, simplest thing you can do is that there's nothing, there's no perfect square
+that goes in in 19, so that just comes out as high.
+All right, last two pages, the quadratic formula, we've got our final x equals negative b plus or minus
+a square root b squared minus four a c all over two a, right?
+So let's look, sometimes the answer to this can be reduced.
+So the quadratic formula is like you take a quadratic, right?
+A parabola, sometimes you can factor it, but sometimes you can't.
+Even if you can or cannot factor it, you can always use a quadratic formula.
+Your a is the front number, your b is the middle coefficient, and your c is the last number.
+Not just plugging it, plugging it, plugging it, well, sometimes there's a greatest common factor.
+There is a greatest common factor between 18 and 12, but there also has to be a factor that goes
+into here. 72 breaks down into 36 times two, so 18 minus six root two, all over 12, and six goes
+into this three times, six goes into this once, six goes into this two times, so three minus root
+two over two, this is actually on the SAT sometimes. What about this one? Two goes into both of these,
+but you got to also have like, it's got to be, if you're going to do a GCF, it's got to be in
+everything. Well, this is four times 11, i comes out, so that's two i root 11. Two goes into this
+once, two goes into that, 16 times two goes into that once, so negative 16 plus i root 11.
+Using the quadratic formula, and then what doesn't say that, but you can't factor this.
+So negative x equals negative b plus or minus the squared, b squared minus four, a, c, all over two,
+a, so negative six plus or minus the squared of 36 minus something. All of this comes out to negative
+160, which is 16 times 10, pull out the i. The 16 becomes four. So negative six plus or minus,
+this becomes four i root 10. Two goes into this twice, two goes into that three times, two goes into
+that seven times, so negative three plus or minus two i root 10, all over seven. What does all this
+mean? Well, just the, we do need to go to in depth into this, but when you factor something,
+and you set those factors equal to zero, so that's it. So this factor into this, that means the
+solutions, right, you've done this before, negative four and one. If you were to graph this, if this
+equals zero, it was y equals all this, right, when is it zero? Well, it's zero at negative four and one,
+that means negative four and one are the x intercepts, and a lot of books will call them that,
+sometimes they call them solutions, and sometimes they call them zeros. They're all interchangeable,
+they're all synonyms of each other, but negative four and one are like points on the graph or it hits.
+What happens if you have a parabola, it's like this? What are the x intercepts? What are the solutions?
+If it doesn't hit the x axis, if it doesn't, we use the quadratic formula, and the solution will
+contain i. So the x intercepts, so after we, what we covered today, we can more accurately say that
+it has no x intercepts, because its solutions are, in fact, imaginary. There you go, that's a unit three
+day one.

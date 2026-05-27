@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Difference of Cubes — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+    @media (max-width: 700px) { .ref-grid { grid-template-columns: 1fr; } }
+    .formula-box { padding: 16px; position: relative; }
+    .formula-type { font-family: 'Permanent Marker', cursive; font-size: 12px; margin-bottom: 8px; }
+    .formula-main { font-family: 'JetBrains Mono', monospace; font-size: 18px; line-height: 1.5; }
+    .formula-note { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 8px; }
+    .example-row { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .example-item { padding: 10px 14px; border: 1.5px dashed var(--ink-2); border-radius: 4px; }
+    .example-expr { font-family: 'JetBrains Mono', monospace; font-size: 15px; }
+    .example-step { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+
+    .mnemonic-box {
+      margin-top: 20px;
+      padding: 14px;
+      background: var(--highlight);
+      transform: rotate(-0.4deg);
+      position: relative;
+    }
+    .mnemonic-letters {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 32px;
+      letter-spacing: 6px;
+      color: var(--accent);
+    }
+    .mnemonic-words {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      margin-top: 6px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 12px;
+    }
+
+    .checker-area { margin-top: 20px; }
+    .checker-inputs {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .checker-inputs input {
+      width: 80px;
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      padding: 6px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      background: var(--paper);
+      color: var(--ink);
+      text-align: center;
+    }
+    .checker-result { font-family: 'JetBrains Mono', monospace; font-size: 16px; padding: 10px 14px; background: var(--ink); color: var(--paper); border-radius: 4px; min-height: 40px; }
+    .cube-ref { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+    .cube-ref span {
+      padding: 5px 9px;
+      border: 1.5px solid var(--ink-2);
+      border-radius: 4px;
+      background: var(--paper-2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+    }
+    .identify-box {
+      margin-top: 20px;
+      padding: 14px;
+      background: var(--paper-2);
+    }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u2.html">← U2</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="page-wrapper" style="max-width: 900px;">
+    <div class="f-type" style="font-size:12px; color:var(--ink-soft); margin-bottom:8px;">
+      <a href="../u2.html">← U2 · Graphs &amp; Exponents</a> &nbsp;·&nbsp; D6
+    </div>
+
+    <div class="f-display" style="font-size:48px; line-height:1;">Difference of <span style="color:var(--accent);">Cubes</span></div>
+    <div class="f-hand" style="font-size:15px; color:var(--ink-soft); margin-top:4px;">The formulas for a³±b³, with examples and a checker. Keep this tab open during homework.</div>
+    <div class="cube-ref">
+      <span>2³ = 8</span>
+      <span>3³ = 27</span>
+      <span>4³ = 64</span>
+      <span>5³ = 125</span>
+    </div>
+
+    <!-- Formulas -->
+    <div class="ref-grid">
+      <div class="formula-box sk-box-thick rot-l" style="background:var(--paper);">
+        <div class="tape"></div>
+        <div class="formula-type">DIFFERENCE OF CUBES</div>
+        <div class="formula-main">
+          a³ − b³<br>
+          = (a − b)(a² + ab + b²)
+        </div>
+        <div class="formula-note">Note: the trinomial in the second factor is <strong>not</strong> factorable.</div>
+      </div>
+
+      <div class="formula-box sk-box-thick rot-r" style="background:var(--paper);">
+        <div class="tape" style="left:auto; right:16px;"></div>
+        <div class="formula-type">SUM OF CUBES</div>
+        <div class="formula-main">
+          a³ + b³<br>
+          = (a + b)(a² − ab + b²)
+        </div>
+        <div class="formula-note">Note: same structure, just the signs flip.</div>
+      </div>
+    </div>
+
+    <!-- Sign mnemonic -->
+    <div class="mnemonic-box sk-box" style="position:relative;">
+      <div class="tape"></div>
+      <div class="f-marker" style="font-size:12px; margin-bottom:6px;">SIGN TRICK — "SOAP"</div>
+      <div class="mnemonic-letters">S O A P</div>
+      <div class="mnemonic-words">
+        <div><strong>S</strong>ame<br><span style="color:var(--ink-soft);">binomial sign = original sign</span></div>
+        <div><strong>O</strong>pposite<br><span style="color:var(--ink-soft);">first trinomial sign = opposite</span></div>
+        <div><strong>A</strong>lways<br><span style="color:var(--ink-soft);">positive</span></div>
+        <div><strong>P</strong>ositive<br><span style="color:var(--ink-soft);">last term always +</span></div>
+      </div>
+    </div>
+
+    <div class="identify-box sk-box">
+      <div class="f-marker" style="font-size:12px; margin-bottom:8px;">FIRST MOVE: IDENTIFY a AND b</div>
+      <div class="f-hand" style="font-size:14px; color:var(--ink-2); line-height:1.5;">
+        Before using the formula, ask: what cubed made each term? Then use the sign pattern:
+        <strong>same</strong>, <strong>opposite</strong>, <strong>always plus</strong>.
+      </div>
+      <div class="f-mono" style="font-size:15px; margin-top:8px;" id="identify-preview"></div>
+    </div>
+
+    <!-- Worked examples -->
+    <div style="margin-top:24px;">
+      <div class="f-marker" style="font-size:13px; margin-bottom:10px;">WORKED EXAMPLES</div>
+      <div class="example-row">
+        <div class="example-item rot-l">
+          <div class="example-expr">x³ − 8</div>
+          <div class="example-step">= x³ − 2³ &nbsp;·&nbsp; a = x, b = 2</div>
+          <div class="example-step">= (x − 2)(x² + 2x + 4)</div>
+        </div>
+        <div class="example-item">
+          <div class="example-expr">27 + x³</div>
+          <div class="example-step">= 3³ + x³ &nbsp;·&nbsp; a = 3, b = x</div>
+          <div class="example-step">= (3 + x)(9 − 3x + x²)</div>
+        </div>
+        <div class="example-item rot-r">
+          <div class="example-expr">8x³ − 125</div>
+          <div class="example-step">= (2x)³ − 5³ &nbsp;·&nbsp; a = 2x, b = 5</div>
+          <div class="example-step">= (2x − 5)(4x² + 10x + 25)</div>
+        </div>
+        <div class="example-item">
+          <div class="example-expr">64 + 27y³</div>
+          <div class="example-step">= 4³ + (3y)³ &nbsp;·&nbsp; a = 4, b = 3y</div>
+          <div class="example-step">= (4 + 3y)(16 − 12y + 9y²)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive checker -->
+    <div class="checker-area">
+      <div class="f-marker" style="font-size:13px; margin-bottom:10px;">TRY YOUR OWN — plug in a and b:</div>
+      <div class="checker-inputs">
+        <span class="f-hand" style="font-size:15px;">a =</span>
+        <input type="number" id="inp-a" value="2" min="1" max="20" />
+        <span class="f-hand" style="font-size:15px;">b =</span>
+        <input type="number" id="inp-b" value="3" min="1" max="20" />
+        <button class="btn accent" onclick="compute()">compute →</button>
+      </div>
+      <div class="checker-result f-mono" id="checker-result"></div>
+    </div>
+
+    <!-- Related -->
+    <div class="row gap-10" style="margin-top:28px; flex-wrap:wrap;">
+      <a href="diff-of-squares.html" class="btn">← Difference of Squares game</a>
+      <a href="factoring-lab.html" class="btn">Factoring Quadratics Lab →</a>
+    </div>
+  </div>
+
+  <script>
+    function compute() {
+      const a = parseFloat(document.getElementById('inp-a').value) || 2;
+      const b = parseFloat(document.getElementById('inp-b').value) || 3;
+      const a3 = Math.round(Math.pow(a, 3));
+      const b3 = Math.round(Math.pow(b, 3));
+      const a2 = Math.round(a * a);
+      const ab = Math.round(a * b);
+      const b2 = Math.round(b * b);
+      const result = document.getElementById('checker-result');
+      result.innerHTML =
+        `${a}³ − ${b}³ = ${a3} − ${b3} = (${a} − ${b})(${a2} + ${ab} + ${b2})` +
+        `<br>${a}³ + ${b}³ = ${a3} + ${b3} = (${a} + ${b})(${a2} − ${ab} + ${b2})`;
+      document.getElementById('identify-preview').innerHTML =
+        `a = ${a}, b = ${b}<br>` +
+        `minus case: same sign is −, opposite sign is +, last sign is +<br>` +
+        `plus case: same sign is +, opposite sign is −, last sign is +`;
+    }
+    compute();
+  </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log ↔ Exponential Converter — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* color language — same value = same color, always */
+    .cb { color: #2a6fb4; }   /* base b  — blue  */
+    .cx { color: #d94f2a; }   /* exponent x — accent red */
+    .cy { color: #2a8a4a; }   /* result y — green */
+
+    /* ── solve-for selector ── */
+    .solve-row { display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    .solve-btn {
+      padding:5px 14px; border-radius:20px; border:2px solid var(--ink);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:13px;
+      cursor:pointer; transition:background .12s, color .12s;
+    }
+    .solve-btn.b-sel { background:#2a6fb4; color:#fff; border-color:#2a6fb4; }
+    .solve-btn.x-sel { background:#d94f2a; color:#fff; border-color:#d94f2a; }
+    .solve-btn.y-sel { background:#2a8a4a; color:#fff; border-color:#2a8a4a; }
+
+    /* ── input row ── */
+    .inputs-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; align-items:flex-end; }
+    .inp-group { display:flex; flex-direction:column; gap:4px; }
+    .inp-lbl {
+      font-family:'Permanent Marker',cursive; font-size:11px;
+    }
+    .inp-lbl.b-lbl { color:#2a6fb4; }
+    .inp-lbl.x-lbl { color:#d94f2a; }
+    .inp-lbl.y-lbl { color:#2a8a4a; }
+    .num-inp {
+      width:80px; border:2.5px solid var(--ink); border-radius:5px;
+      padding:6px 8px; font-family:'JetBrains Mono',monospace; font-size:18px;
+      background:var(--paper); color:var(--ink); text-align:center;
+      transition:border-color .15s, box-shadow .15s;
+    }
+    .num-inp.solved {
+      background:var(--paper-2); border-style:dashed;
+      font-weight:700; pointer-events:none; opacity:0.85;
+    }
+    .num-inp.b-inp.solved { border-color:#2a6fb4; color:#2a6fb4; }
+    .num-inp.x-inp.solved { border-color:#d94f2a; color:#d94f2a; }
+    .num-inp.y-inp.solved { border-color:#2a8a4a; color:#2a8a4a; }
+    @keyframes pop { 0%{transform:scale(1)} 40%{transform:scale(1.12)} 100%{transform:scale(1)} }
+    .num-inp.flash { animation: pop .25s ease; }
+
+    /* ── big form display ── */
+    .forms-panel {
+      display:flex; align-items:center; justify-content:center;
+      gap:10px; flex-wrap:wrap; margin-top:12px;
+    }
+    .form-box {
+      flex:1; min-width:140px; max-width:260px;
+      padding:14px 18px; border-radius:6px; text-align:center;
+      border:2px solid var(--ink-2); background:var(--paper-2);
+    }
+    .form-box .form-lbl {
+      font-family:'Permanent Marker',cursive; font-size:10px;
+      color:var(--ink-soft); margin-bottom:6px;
+    }
+    .form-expr {
+      font-family:'JetBrains Mono',monospace; font-size:26px; line-height:1.2;
+    }
+    .form-expr sup { font-size:0.65em; }
+    .form-expr sub { font-size:0.55em; }
+    .swap-arrow {
+      font-size:28px; color:var(--ink-2);
+      font-family:'JetBrains Mono',monospace; flex-shrink:0;
+    }
+
+    /* ── insight box ── */
+    .insight {
+      margin-top:8px; padding:8px 14px;
+      background:var(--highlight); border-left:4px solid var(--accent);
+      border-radius:3px; font-family:'Patrick Hand',cursive; font-size:14px;
+    }
+
+    /* ── error msg ── */
+    .err-msg {
+      font-family:'Permanent Marker',cursive; font-size:13px;
+      color:var(--redline); min-height:18px; margin-top:4px;
+    }
+
+    /* ── powers table ── */
+    .powers-table { border-collapse:collapse; width:100%; margin-top:8px; }
+    .powers-table td {
+      padding:3px 8px; font-family:'JetBrains Mono',monospace; font-size:12px;
+      border:1px solid var(--ink-2); text-align:center; cursor:pointer;
+    }
+    .powers-table td:hover { background:var(--highlight); }
+    .powers-table th {
+      padding:3px 8px; font-family:'Permanent Marker',cursive; font-size:11px;
+      background:var(--paper-2); border:1px solid var(--ink-2);
+    }
+    .powers-table tr.base-row td:first-child { font-weight:700; font-size:11px; color:var(--ink-soft); }
+
+    /* practice */
+    .practice-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+    .prac-card {
+      padding:8px 10px; border-radius:4px; cursor:pointer;
+      border:1.5px solid var(--ink-2); background:var(--paper);
+      font-family:'JetBrains Mono',monospace; font-size:13px;
+      text-align:center; position:relative;
+    }
+    .prac-card:hover { background:var(--paper-2); }
+    .prac-card .prac-ans {
+      display:none; margin-top:4px; font-weight:700;
+      font-family:'Permanent Marker',cursive; color:var(--accent);
+    }
+    .prac-card.revealed .prac-ans { display:block; }
+    .prac-card .prac-hint { font-size:10px; color:var(--ink-soft); }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u5.html">← U5</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u5.html">← U5 · Exponential &amp; Log</a> &nbsp;·&nbsp; D5</div>
+      <div class="tool-title f-display">Log ↔ Exponential</div>
+      <div class="tool-tagline f-hand">Same relationship — two ways to write it. The <span class="cx">exponent</span> is always what the log finds.</div>
+
+      <!-- solve-for selector -->
+      <div class="solve-row">
+        <span class="f-marker" style="font-size:11px;">SOLVE FOR:</span>
+        <button class="solve-btn" id="btn-b" onclick="setSolveFor('b')">base <span class="cb">b</span></button>
+        <button class="solve-btn x-sel" id="btn-x" onclick="setSolveFor('x')">exponent <span style="color:inherit;">x</span></button>
+        <button class="solve-btn" id="btn-y" onclick="setSolveFor('y')">result <span class="cy">y</span></button>
+      </div>
+
+      <!-- inputs -->
+      <div class="inputs-row">
+        <div class="inp-group">
+          <span class="inp-lbl b-lbl">BASE (b)</span>
+          <input class="num-inp b-inp" id="inp-b" type="number" min="0.01" step="any" value="2" oninput="compute()" />
+        </div>
+        <div class="inp-group">
+          <span class="inp-lbl x-lbl">EXPONENT (x) = log</span>
+          <input class="num-inp x-inp solved" id="inp-x" type="number" step="any" value="" placeholder="?" />
+        </div>
+        <div class="inp-group">
+          <span class="inp-lbl y-lbl">RESULT (y)</span>
+          <input class="num-inp y-inp" id="inp-y" type="number" min="0.001" step="any" value="8" oninput="compute()" />
+        </div>
+        <button class="btn small" onclick="resetInputs()" style="margin-bottom:2px;">↺</button>
+      </div>
+      <div class="err-msg" id="err-msg"></div>
+
+      <!-- big form display -->
+      <div class="forms-panel">
+        <div class="form-box">
+          <div class="form-lbl">EXPONENTIAL FORM</div>
+          <div class="form-expr" id="exp-display">
+            <span class="cb">b</span><sup class="cx">x</sup> = <span class="cy">y</span>
+          </div>
+        </div>
+        <div class="swap-arrow">↔</div>
+        <div class="form-box">
+          <div class="form-lbl">LOGARITHMIC FORM</div>
+          <div class="form-expr" id="log-display">
+            log<sub class="cb">b</sub>(<span class="cy">y</span>) = <span class="cx">x</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- insight -->
+      <div class="insight" id="insight">
+        "log asks: what power do we raise <strong class="cb">b</strong> to in order to get <strong class="cy">y</strong>?"
+        The answer is always the <strong class="cx">exponent x</strong>.
+      </div>
+
+      <!-- quick-tap practice -->
+      <div style="margin-top:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">⚡ QUICK PRACTICE — tap a card to reveal</div>
+        <div class="practice-grid">
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>2</sub>(8) = ?
+            <div class="prac-hint">2^? = 8</div>
+            <div class="prac-ans">3 &nbsp; (2³ = 8)</div>
+          </div>
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>3</sub>(81) = ?
+            <div class="prac-hint">3^? = 81</div>
+            <div class="prac-ans">4 &nbsp; (3⁴ = 81)</div>
+          </div>
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>10</sub>(1000) = ?
+            <div class="prac-hint">10^? = 1000</div>
+            <div class="prac-ans">3 &nbsp; (10³ = 1000)</div>
+          </div>
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>2</sub>(1/4) = ?
+            <div class="prac-hint">2^? = 0.25</div>
+            <div class="prac-ans">−2 &nbsp; (2⁻² = 1/4)</div>
+          </div>
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>5</sub>(1) = ?
+            <div class="prac-hint">5^? = 1</div>
+            <div class="prac-ans">0 &nbsp; (any b⁰ = 1)</div>
+          </div>
+          <div class="prac-card" onclick="this.classList.toggle('revealed')">
+            log<sub>b</sub>(b) = ?
+            <div class="prac-hint">b^? = b</div>
+            <div class="prac-ans">1 &nbsp; (always!)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Pick what you're solving for.</li>
+          <li>Fill in the other two values.</li>
+          <li>The <span class="cx">red value</span> is always the exponent — in both forms.</li>
+          <li>Tap a practice card to check yourself.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE CONNECTION</div>
+        <div style="text-align:center; padding:10px; background:var(--paper); border-radius:4px; border:1.5px dashed var(--ink-2);">
+          <div class="f-mono" style="font-size:14px; line-height:2.2;">
+            <span class="cb">b</span><sup class="cx">x</sup> = <span class="cy">y</span>
+            <br>
+            ⟺
+            <br>
+            log<sub class="cb">b</sub>(<span class="cy">y</span>) = <span class="cx">x</span>
+          </div>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; line-height:1.7; color:var(--ink-2);">
+          Same relationship — different isolation.<br>
+          Exponential isolates <span class="cy">y</span>.<br>
+          Log isolates <span class="cx">x</span> (the exponent).
+        </div>
+      </div>
+
+      <!-- powers reference table -->
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">POWERS TABLE — tap to load</div>
+        <table class="powers-table">
+          <tr>
+            <th>base</th><th>¹</th><th>²</th><th>³</th><th>⁴</th><th>⁵</th>
+          </tr>
+          <tr class="base-row">
+            <td>b=2</td>
+            <td onclick="load(2,1,2)">2</td><td onclick="load(2,2,4)">4</td>
+            <td onclick="load(2,3,8)">8</td><td onclick="load(2,4,16)">16</td>
+            <td onclick="load(2,5,32)">32</td>
+          </tr>
+          <tr class="base-row">
+            <td>b=3</td>
+            <td onclick="load(3,1,3)">3</td><td onclick="load(3,2,9)">9</td>
+            <td onclick="load(3,3,27)">27</td><td onclick="load(3,4,81)">81</td>
+            <td onclick="load(3,5,243)">243</td>
+          </tr>
+          <tr class="base-row">
+            <td>b=5</td>
+            <td onclick="load(5,1,5)">5</td><td onclick="load(5,2,25)">25</td>
+            <td onclick="load(5,3,125)">125</td><td onclick="load(5,4,625)">625</td>
+            <td onclick="load(5,5,3125)">3125</td>
+          </tr>
+          <tr class="base-row">
+            <td>b=10</td>
+            <td onclick="load(10,1,10)">10</td><td onclick="load(10,2,100)">100</td>
+            <td onclick="load(10,3,1000)">1000</td><td onclick="load(10,4,10000)">10k</td>
+            <td onclick="load(10,5,100000)">100k</td>
+          </tr>
+        </table>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:4px;">Each cell shows b^n. Tap to load it into the converter.</div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; margin-bottom:8px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">What is log₂(1)? What power of 2 equals 1? Verify in the converter.</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; margin-bottom:8px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set b = 10, y = 50. What is log₁₀(50)? It won't be a whole number.</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Try solving for b with x = 2 and y = 49. What base, squared, gives 49?</span>
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.4deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">In your own words: what is a logarithm actually doing? Write one sentence.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="neg-exponent-flipper.html">→ Negative Exponent Flipper</a>
+        <a class="related-link f-hand" href="rational-exponents.html">→ Rational Exponents Tower</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let solveFor = 'x'; // 'b', 'x', or 'y'
+
+    function setSolveFor(v) {
+      solveFor = v;
+      // update button styles
+      document.getElementById('btn-b').className = `solve-btn${v==='b'?' b-sel':''}`;
+      document.getElementById('btn-x').className = `solve-btn${v==='x'?' x-sel':''}`;
+      document.getElementById('btn-y').className = `solve-btn${v==='y'?' y-sel':''}`;
+
+      // mark inputs active vs solved
+      const bI = document.getElementById('inp-b');
+      const xI = document.getElementById('inp-x');
+      const yI = document.getElementById('inp-y');
+
+      [bI, xI, yI].forEach(i => { i.classList.remove('solved'); i.removeAttribute('readonly'); });
+      const solvedEl = { b: bI, x: xI, y: yI }[v];
+      solvedEl.classList.add('solved');
+      solvedEl.setAttribute('readonly', true);
+      solvedEl.value = '';
+
+      compute();
+    }
+
+    function fmt(v) {
+      if (!isFinite(v)) return '?';
+      const r = Math.round(v * 10000) / 10000;
+      return r === Math.round(r) ? String(Math.round(r)) : r.toPrecision(5).replace(/\.?0+$/, '');
+    }
+
+    function compute() {
+      const bI = document.getElementById('inp-b');
+      const xI = document.getElementById('inp-x');
+      const yI = document.getElementById('inp-y');
+      const err = document.getElementById('err-msg');
+      err.textContent = '';
+
+      let b = parseFloat(bI.value);
+      let x = parseFloat(xI.value);
+      let y = parseFloat(yI.value);
+
+      // validation helpers
+      const validBase = v => isFinite(v) && v > 0 && Math.abs(v - 1) > 0.0001;
+
+      try {
+        if (solveFor === 'x') {
+          if (!validBase(b)) { err.textContent = 'Base must be > 0 and ≠ 1.'; return; }
+          if (!isFinite(y) || y <= 0) { err.textContent = 'Result (y) must be > 0.'; return; }
+          const solved = Math.log(y) / Math.log(b);
+          xI.value = fmt(solved);
+          flash(xI);
+          updateDisplay(b, solved, y);
+        } else if (solveFor === 'y') {
+          if (!validBase(b)) { err.textContent = 'Base must be > 0 and ≠ 1.'; return; }
+          if (!isFinite(x)) { err.textContent = 'Enter a valid exponent.'; return; }
+          const solved = Math.pow(b, x);
+          yI.value = fmt(solved);
+          flash(yI);
+          updateDisplay(b, x, solved);
+        } else { // solve for b
+          if (!isFinite(x) || x === 0) { err.textContent = 'Exponent must be non-zero.'; return; }
+          if (!isFinite(y) || y <= 0) { err.textContent = 'Result (y) must be > 0.'; return; }
+          const solved = Math.pow(y, 1/x);
+          if (!validBase(solved)) { err.textContent = 'No valid base exists for those values.'; return; }
+          bI.value = fmt(solved);
+          flash(bI);
+          updateDisplay(solved, x, y);
+        }
+      } catch(e) {
+        err.textContent = 'Check your inputs.';
+      }
+    }
+
+    function flash(el) {
+      el.classList.remove('flash');
+      void el.offsetWidth; // reflow to restart animation
+      el.classList.add('flash');
+    }
+
+    function fmtN(v) {
+      // nice display: integers cleanly, decimals to 3 places
+      if (!isFinite(v)) return '?';
+      const r = Math.round(v * 1000) / 1000;
+      return r === Math.round(r) ? String(Math.round(r)) : r.toFixed(3).replace(/\.?0+$/, '');
+    }
+
+    function updateDisplay(b, x, y) {
+      const bS = fmtN(b), xS = fmtN(x), yS = fmtN(y);
+
+      // highlight solved value with bold ring in its color
+      const bHi  = solveFor === 'b' ? `<u class="cb" style="font-weight:900;">${bS}</u>` : `<span class="cb">${bS}</span>`;
+      const xHi  = solveFor === 'x' ? `<u class="cx" style="font-weight:900;">${xS}</u>` : `<span class="cx">${xS}</span>`;
+      const yHi  = solveFor === 'y' ? `<u class="cy" style="font-weight:900;">${yS}</u>` : `<span class="cy">${yS}</span>`;
+
+      document.getElementById('exp-display').innerHTML =
+        `${bHi}<sup>${xHi}</sup> = ${yHi}`;
+
+      document.getElementById('log-display').innerHTML =
+        `log<sub>${bHi}</sub>(${yHi}) = ${xHi}`;
+
+      // insight text
+      const ins = document.getElementById('insight');
+      if (solveFor === 'x') {
+        ins.innerHTML = `"What power do we raise <strong class="cb">${bS}</strong> to in order to get <strong class="cy">${yS}</strong>?" &nbsp;→&nbsp; The answer is <strong class="cx">${xS}</strong>.`;
+      } else if (solveFor === 'y') {
+        ins.innerHTML = `<strong class="cb">${bS}</strong> raised to the power <strong class="cx">${xS}</strong> equals <strong class="cy">${yS}</strong>. Just exponentiation — no logs needed.`;
+      } else {
+        ins.innerHTML = `What base, raised to the power <strong class="cx">${xS}</strong>, gives <strong class="cy">${yS}</strong>? &nbsp;→&nbsp; The base is <strong class="cb">${bS}</strong>.`;
+      }
+    }
+
+    // Load a value from the powers table
+    function load(b, x, y) {
+      // Set inputs, mark x as solved (most natural log scenario)
+      setSolveFor('x');
+      document.getElementById('inp-b').value = b;
+      document.getElementById('inp-y').value = y;
+      compute();
+    }
+
+    function resetInputs() {
+      setSolveFor('x');
+      document.getElementById('inp-b').value = 2;
+      document.getElementById('inp-y').value = 8;
+      compute();
+    }
+
+    // init
+    compute();
+  </script>
+</body>
+</html>

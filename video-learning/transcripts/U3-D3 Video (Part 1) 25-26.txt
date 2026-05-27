@@ -1,0 +1,96 @@
+Okay, kind of a big lesson today, completing the square.
+This is a big topic, like in theory what we're doing doesn't seem that hard, but you can
+get lost in the details of like just minor calculations.
+So just remembering how to square fractions and how to add things to both sides and how
+to balance is going to be important.
+So completing the square is basically, I'll give you a little overview, it's a way
+of going from this form, standard form, to vertex form.
+Because graphing in standard form is kind of tricky.
+If you want to graph in standard form, you need to know this.
+The vertex, the x-coordinate of the vertex, is at negative b over 2a.
+So in this equation, negative b over 2a.
+And then after that, you just do the same thing, you go like write 1 up or down by a.
+In this case, our a is negative 2, so we went like write 1 down 2, write 2 down 8.
+So here is our given equation, and in order to find that vertex, we have to do negative
+b over 2a, that's something I need you to know, negative b over 2a.
+So negative, negative 6, over 2 times negative 2.
+So that's 6 over negative 4.
+You can use calculator, but that's 3 halves.
+So negative 3 halves is negative 1.5.
+So negative 1.5 is right here.
+But how do we know where the y-coordinate is?
+Well, you plug negative 1.5 in for x.
+I'm going to use the calculator, I plug negative 1.5 into here, and into here.
+Negative 2 times 1.5 squared minus 6, oh, it's negative.
+Whoops, let me make sure I did this right.
+That is, yeah, this should say negative at 1.5.
+So should that.
+Let's see, yeah, let's just check that real quick.
+So negative 2 times parentheses negative 1.5 squared, just checking negative 2.
+So I'm right here, I'm checking this.
+Negative 2 times negative 1.5 squared minus 6 times negative 1.5, close parentheses.
+Close 3, yeah, 7.5.
+OK, so this is right.
+So I plugged in negative 1.5, I got 7.5.
+And that's between 2 squares, but it's OK.
+So negative 1, negative 1.5, up to 7.5.
+And then we use our a value.
+So we go right by 1.
+So we're in the middle of 2 squares.
+If we go right by 1, we're still in the middle of 2 squares.
+And down 2, so we're like, we're in the center of the, we're in between these lines.
+So right one, down 2, right 2, down 8, left 1, down 2, left 2, down 8.
+There's your parabola.
+It's kind of tricky, right?
+Well, ideally, if you're good at completing the square,
+you'll be able to shift to vertex form, which is much easier to correct.
+So there's 3 forms.
+There's vertex form, if you already knew.
+Last lesson, we did intercept form, where these are your x intercepts, right?
+So n and m are the, like, where they hit the x-axis.
+Standard form is something we haven't really used that much.
+We didn't use it a lot for factory, right?
+So we have to first, this is the new thing, then, negative be over 2a.
+So every parabola has a vertex, and it can be written in vertex form.
+It can be turned into standard form by just foiling and simplifying.
+So all quadrics have a standard form.
+And then we can get standard form to intercept form if factory, you've already done this.
+So imagine standard form like this, if we just factor it, we'll get intercept form.
+So sometimes it's not factorable, right?
+There is no number that multiplies the C, like product, you can't really do products on factory.
+And we know that we can do the quadratic formula, but what if we want to go to vertex form?
+So here's an interesting one.
+I want to, basically, let's factor this.
+So we'll take a negative 1 out.
+Now what multiplies to positive 16, but adds to negative 8.
+Negative 4 times negative 4.
+If you've foiled this, you'd get back to this.
+So this is x minus 4 twice, there's a negative 1 out front, there's nothing here.
+So this is actually vertex form, and it worked.
+But this happened by accident, right?
+It doesn't always work this well, but let's see if we can come up with a process.
+The process is called completing the square.
+We use it to force the trinomial to factor nicely into two identical factors.
+Because then we can smush them together like this, right?
+Well, let's see if we can come up with a way to know what this number has to be.
+Well, let's foil this.
+x minus 3x minus 3 is x squared minus 6x plus 9x plus 8, foil it.
+We get x squared plus 16x plus 64.
+What's the relationship between 16, 64, or 6 and 9?
+Well, what's half of 6?
+Half of 6 is 3, and if we square that, we get 9.
+What's half of 16?
+8, if we square that, we get 64.
+So that half of this squared gives you a number that makes this perfect square trinomial, okay?
+So completing the square, reverse engineers, that relationship,
+we start with Rb, we divide it by 2, and then square it.
+So B over 2 squared is also something that's we need to know, all right?
+So let's make this a perfect square trinomial.
+Well, take Rb, divide it by 2, so 14 over 2 is 7, square it, that's what goes here.
+So how does this factor now?
+Well, what multiplies to 49, but adds to 14, 7 and 7, all right?
+We have this.
+This is interesting, sometimes you're going to get fractions.
+What's 15, Rb over 2, 15 over 2, what happens when you square 15 over 2?
+Well, you square the 15, and you square the 2.
+So, this is going to be a 2 part, because I'm going to take this call.

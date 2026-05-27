@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Function Composition Machine — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── function pickers ── */
+    .fn-pickers { display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; align-items:flex-end; }
+    .fn-group { display:flex; flex-direction:column; gap:4px; }
+    .fn-lbl { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700; }
+    .fn-lbl.lbl-f { color:#d94f2a; }
+    .fn-lbl.lbl-g { color:#2a6fb4; }
+    select.fn-sel {
+      padding:5px 8px; border:2.5px solid var(--ink); border-radius:5px;
+      font-family:'JetBrains Mono',monospace; font-size:15px;
+      background:var(--paper); color:var(--ink); cursor:pointer;
+    }
+    select.fn-sel.f-sel { border-color:#d94f2a; }
+    select.fn-sel.g-sel { border-color:#2a6fb4; }
+
+    /* ── order toggle ── */
+    .order-row { display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
+    .order-btn {
+      padding:5px 16px; border-radius:20px; border:2px solid var(--ink);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:13px;
+      cursor:pointer; transition:background .12s;
+    }
+    .order-btn.active { background:var(--ink); color:var(--paper); }
+    .swap-note { font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft); }
+
+    /* ── pipeline ── */
+    .pipeline {
+      display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+      margin-top:12px; justify-content:center;
+    }
+    .pipe-box {
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      padding:10px 14px; border-radius:6px; min-width:80px;
+      border:2.5px solid var(--ink); background:var(--paper);
+    }
+    .pipe-box.input-box  { border-color:var(--ink-2); background:var(--paper-2); }
+    .pipe-box.first-box  { border-color:#2a6fb4; background:rgba(42,111,180,0.06); }
+    .pipe-box.second-box { border-color:#d94f2a; background:rgba(217,79,42,0.06); }
+    .pipe-box.output-box { border-color:var(--accent); background:rgba(217,79,42,0.1); }
+    .pipe-lbl { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); }
+    .pipe-val {
+      font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;
+      min-height:28px; transition:color .2s;
+    }
+    .pipe-val.highlight { animation: valPop .4s ease; }
+    @keyframes valPop { 0%{transform:scale(1)} 30%{transform:scale(1.2)} 100%{transform:scale(1)} }
+    .pipe-arrow { font-size:22px; color:var(--ink-2); }
+
+    /* ── x input ── */
+    .x-row { display:flex; gap:10px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+    .x-inp {
+      width:70px; border:2.5px solid var(--ink); border-radius:5px;
+      padding:5px 8px; font-family:'JetBrains Mono',monospace; font-size:18px;
+      background:var(--paper); text-align:center;
+    }
+
+    /* ── formula strip ── */
+    .formula-strip {
+      margin-top:10px; padding:8px 14px;
+      background:var(--paper-2); border:1.5px solid var(--ink-2); border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:15px;
+    }
+
+    /* ── warn box ── */
+    .warn-box {
+      margin-top:8px; padding:7px 12px; border-radius:4px;
+      border-left:4px solid var(--accent); background:var(--highlight);
+      font-family:'Patrick Hand',cursive; font-size:14px; display:none;
+    }
+    .warn-box.show { display:block; }
+
+    /* ── comparison ── */
+    .compare-strip {
+      margin-top:8px; padding:8px 12px; border-radius:4px;
+      background:var(--paper-2); border:1.5px dashed var(--ink-2);
+      font-family:'JetBrains Mono',monospace; font-size:13px; display:none;
+    }
+    .compare-strip.show { display:block; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u4.html">← U4</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u4.html">← U4 · Function Operations</a> &nbsp;·&nbsp; D6</div>
+      <div class="tool-title f-display">Composition Machine</div>
+      <div class="tool-tagline f-hand">x flows through two functions in order. Switch the order — does the answer change?</div>
+
+      <!-- function pickers -->
+      <div class="fn-pickers">
+        <div class="fn-group">
+          <span class="fn-lbl lbl-f">f(x) =</span>
+          <select class="fn-sel f-sel" id="sel-f" onchange="update()">
+            <option value="2x">2x</option>
+            <option value="x+3">x + 3</option>
+            <option value="x-1">x − 1</option>
+            <option value="x2">x²</option>
+            <option value="3x">3x</option>
+            <option value="x/2">x / 2</option>
+            <option value="sqrtx">√x</option>
+            <option value="x2+1">x² + 1</option>
+          </select>
+        </div>
+        <div class="fn-group">
+          <span class="fn-lbl lbl-g">g(x) =</span>
+          <select class="fn-sel g-sel" id="sel-g" onchange="update()">
+            <option value="x+3">x + 3</option>
+            <option value="2x">2x</option>
+            <option value="x-1">x − 1</option>
+            <option value="x2">x²</option>
+            <option value="3x">3x</option>
+            <option value="x/2">x / 2</option>
+            <option value="sqrtx">√x</option>
+            <option value="x2+1">x² + 1</option>
+          </select>
+        </div>
+        <button class="btn small" onclick="swapFns()" style="align-self:flex-end;">⇄ swap f and g</button>
+      </div>
+
+      <!-- order -->
+      <div class="order-row">
+        <span class="f-marker" style="font-size:11px;">COMPUTE:</span>
+        <button class="order-btn active" id="btn-fg" onclick="setOrder('fg')">f ∘ g &nbsp;(f after g)</button>
+        <button class="order-btn" id="btn-gf" onclick="setOrder('gf')">g ∘ f &nbsp;(g after f)</button>
+        <span class="swap-note" id="swap-note"></span>
+      </div>
+
+      <!-- pipeline diagram -->
+      <div class="pipeline" id="pipeline">
+        <div class="pipe-box input-box">
+          <div class="pipe-lbl">INPUT</div>
+          <div class="pipe-val" id="pv-x" style="color:var(--ink);">x</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box first-box" id="first-box">
+          <div class="pipe-lbl" id="first-lbl">APPLY g</div>
+          <div class="pipe-val" id="pv-mid" style="color:#2a6fb4;">g(x)</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box second-box" id="second-box">
+          <div class="pipe-lbl" id="second-lbl">APPLY f</div>
+          <div class="pipe-val" id="pv-out" style="color:#d94f2a;">f(g(x))</div>
+        </div>
+        <div class="pipe-arrow">→</div>
+        <div class="pipe-box output-box">
+          <div class="pipe-lbl">RESULT</div>
+          <div class="pipe-val" id="pv-result" style="color:var(--accent);">?</div>
+        </div>
+      </div>
+
+      <!-- x input -->
+      <div class="x-row">
+        <span class="f-marker" style="font-size:11px;">TRY x =</span>
+        <input class="x-inp" id="x-inp" type="number" value="2" oninput="compute()">
+        <span class="f-hand" style="font-size:13px; color:var(--ink-2);">← change x, watch it flow through</span>
+      </div>
+
+      <!-- formula -->
+      <div class="formula-strip" id="formula-strip">—</div>
+
+      <!-- warning for domain issues -->
+      <div class="warn-box" id="warn-box"></div>
+
+      <!-- comparison (shows both orders at once) -->
+      <div class="compare-strip" id="compare-strip"></div>
+
+      <!-- show both button -->
+      <div style="margin-top:6px;">
+        <button class="btn small" id="btn-compare" onclick="toggleCompare()">show both orders</button>
+        <button class="btn small" onclick="resetAll()" style="margin-left:6px;">↺ reset</button>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Pick f and g from the dropdowns.</li>
+          <li>Type an x value — watch it flow through.</li>
+          <li>Switch between f∘g and g∘f.</li>
+          <li>Click "show both orders" to compare.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">NOTATION</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>f ∘ g</strong> means "f after g" — g runs first.<br>
+          <strong>(f ∘ g)(x) = f(g(x))</strong><br><br>
+          Read inside-out: evaluate g(x) first, then plug that answer into f.<br><br>
+          <strong style="color:var(--accent);">Order matters!</strong> Usually f(g(x)) ≠ g(f(x)).
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Set f = 2x, g = x + 3. Compute f∘g and g∘f at x = 4. Are they the same?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Can you find f and g where f∘g = g∘f? (Hint: try f = 2x and g = 3x.)</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Set g = √x. What inputs are valid? What happens when you try x = −4?</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">DOMAIN WARNING</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          The domain of f∘g is restricted to x-values where g(x) is in the domain of f.<br><br>
+          Example: if f = √x and g = x − 5, then f∘g = √(x−5) only works for x ≥ 5.
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.4deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Find f and g where f∘g ≠ g∘f. Screenshot both pipelines and explain why they differ.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── function library ──
+    const FNS = {
+      '2x':   { label:'2x',     eval: x=>2*x,           domain: ()=>true,   compose: e=>`2(${e})` },
+      'x+3':  { label:'x + 3',  eval: x=>x+3,           domain: ()=>true,   compose: e=>`(${e}) + 3` },
+      'x-1':  { label:'x − 1',  eval: x=>x-1,           domain: ()=>true,   compose: e=>`(${e}) − 1` },
+      'x2':   { label:'x²',     eval: x=>x*x,           domain: ()=>true,   compose: e=>`(${e})²` },
+      '3x':   { label:'3x',     eval: x=>3*x,           domain: ()=>true,   compose: e=>`3(${e})` },
+      'x/2':  { label:'x / 2',  eval: x=>x/2,           domain: ()=>true,   compose: e=>`(${e})/2` },
+      'sqrtx':{ label:'√x',     eval: x=>Math.sqrt(x),  domain: x=>x>=0,    compose: e=>`√(${e})` },
+      'x2+1': { label:'x² + 1', eval: x=>x*x+1,         domain: ()=>true,   compose: e=>`(${e})² + 1` },
+    };
+
+    let order = 'fg'; // 'fg' = f(g(x)),  'gf' = g(f(x))
+    let showCompare = false;
+
+    function getF() { return FNS[document.getElementById('sel-f').value]; }
+    function getG() { return FNS[document.getElementById('sel-g').value]; }
+
+    function fmt(v) {
+      if (!isFinite(v) || isNaN(v)) return '—';
+      const r = Math.round(v * 1000) / 1000;
+      return r === Math.round(r) ? String(Math.round(r)) : r.toPrecision(4).replace(/\.?0+$/, '');
+    }
+
+    // ── order ──
+    function setOrder(o) {
+      order = o;
+      document.getElementById('btn-fg').classList.toggle('active', o==='fg');
+      document.getElementById('btn-gf').classList.toggle('active', o==='gf');
+      update();
+    }
+
+    function swapFns() {
+      const sf = document.getElementById('sel-f');
+      const sg = document.getElementById('sel-g');
+      const tmp = sf.value; sf.value = sg.value; sg.value = tmp;
+      update();
+    }
+
+    // ── main update ──
+    function update() {
+      const f = getF(), g = getG();
+      const isGFirst = order === 'fg'; // g runs first in f∘g
+
+      const first  = isGFirst ? g : f;
+      const second = isGFirst ? f : g;
+      const firstColor  = isGFirst ? '#2a6fb4' : '#d94f2a';
+      const secondColor = isGFirst ? '#d94f2a' : '#2a6fb4';
+
+      // pipeline labels
+      document.getElementById('first-lbl').textContent  = isGFirst ? 'APPLY g' : 'APPLY f';
+      document.getElementById('second-lbl').textContent = isGFirst ? 'APPLY f' : 'APPLY g';
+      document.getElementById('first-box').className  = `pipe-box ${isGFirst?'first-box':'second-box'}`;
+      document.getElementById('second-box').className = `pipe-box ${isGFirst?'second-box':'first-box'}`;
+      document.getElementById('pv-mid').style.color  = firstColor;
+      document.getElementById('pv-out').style.color  = secondColor;
+
+      // composed notation
+      const notation = isGFirst ? 'f(g(x))' : 'g(f(x))';
+      const midLabel = isGFirst ? 'g(x)' : 'f(x)';
+      const outLabel = isGFirst ? 'f(g(x))' : 'g(f(x))';
+      document.getElementById('pv-mid').textContent = midLabel;
+      document.getElementById('pv-out').textContent = outLabel;
+
+      // formula: f(g(x)) = f(g-label) = composed
+      const composedExpr = second.compose(first.label);
+      const secondName = isGFirst ? 'f' : 'g';
+      document.getElementById('formula-strip').innerHTML =
+        `<span>${notation}</span> &nbsp;=&nbsp; ` +
+        `<span style="color:${secondColor}">${secondName}(</span>` +
+        `<span style="color:${firstColor}">${first.label}</span>` +
+        `<span style="color:${secondColor}">)</span>` +
+        ` &nbsp;=&nbsp; <strong>${composedExpr}</strong>`;
+
+      // swap note
+      const swapNote = document.getElementById('swap-note');
+      swapNote.textContent = isGFirst
+        ? `(g runs first → ${g.label} → then f → ${f.label})`
+        : `(f runs first → ${f.label} → then g → ${g.label})`;
+
+      compute();
+    }
+
+    function compute() {
+      const x = parseFloat(document.getElementById('x-inp').value);
+      const f = getF(), g = getG();
+      const isGFirst = order === 'fg';
+      const first  = isGFirst ? g : f;
+      const second = isGFirst ? f : g;
+
+      document.getElementById('pv-x').textContent = isFinite(x) ? fmt(x) : 'x';
+
+      const warn = document.getElementById('warn-box');
+      warn.className = 'warn-box';
+      warn.textContent = '';
+
+      if (!isFinite(x)) {
+        document.getElementById('pv-mid').textContent    = isGFirst ? 'g(x)' : 'f(x)';
+        document.getElementById('pv-out').textContent    = isGFirst ? 'f(g(x))' : 'g(f(x))';
+        document.getElementById('pv-result').textContent = '?';
+        return;
+      }
+
+      // first function
+      if (!first.domain(x)) {
+        warn.textContent = `⚠ x = ${fmt(x)} is not in the domain of ${isGFirst ? 'g' : 'f'}(x) = ${first.label}. The composition is undefined here.`;
+        warn.className = 'warn-box show';
+        document.getElementById('pv-result').textContent = 'undef.';
+        return;
+      }
+      const mid = first.eval(x);
+      document.getElementById('pv-mid').textContent = fmt(mid);
+      flashEl('pv-mid');
+
+      // second function
+      if (!second.domain(mid)) {
+        warn.textContent = `⚠ After applying the first function, we get ${fmt(mid)}, which is not in the domain of the second function. Composition is undefined for x = ${fmt(x)}.`;
+        warn.className = 'warn-box show';
+        document.getElementById('pv-result').textContent = 'undef.';
+        return;
+      }
+      const out2 = second.eval(mid);
+      document.getElementById('pv-out').textContent    = fmt(out2);
+      document.getElementById('pv-result').textContent = fmt(out2);
+      flashEl('pv-out'); flashEl('pv-result');
+
+      // compare strip
+      updateCompare(x, f, g);
+    }
+
+    function updateCompare(x, f, g) {
+      const strip = document.getElementById('compare-strip');
+      if (!showCompare || !isFinite(x)) { strip.className = 'compare-strip'; return; }
+
+      let fgResult = '—', gfResult = '—', same;
+      try {
+        const mid1 = g.eval(x), r1 = f.eval(mid1);
+        fgResult = isFinite(r1) ? fmt(r1) : 'undef.';
+      } catch(e) { fgResult = 'undef.'; }
+      try {
+        const mid2 = f.eval(x), r2 = g.eval(mid2);
+        gfResult = isFinite(r2) ? fmt(r2) : 'undef.';
+      } catch(e) { gfResult = 'undef.'; }
+
+      same = fgResult === gfResult;
+      strip.innerHTML =
+        `<strong>f∘g:</strong> f(g(${fmt(x)})) = <strong>${fgResult}</strong> &nbsp;&nbsp;|&nbsp;&nbsp; ` +
+        `<strong>g∘f:</strong> g(f(${fmt(x)})) = <strong>${gfResult}</strong> &nbsp;&nbsp; ` +
+        `<span style="color:${same?'#2a8a4a':'#d94f2a'}; font-family:'Permanent Marker',cursive;">${same?'✓ equal':'✗ NOT equal — order matters!'}</span>`;
+      strip.className = 'compare-strip show';
+    }
+
+    function flashEl(id) {
+      const el = document.getElementById(id);
+      el.classList.remove('highlight');
+      void el.offsetWidth;
+      el.classList.add('highlight');
+    }
+
+    function toggleCompare() {
+      showCompare = !showCompare;
+      document.getElementById('btn-compare').textContent = showCompare ? 'hide comparison' : 'show both orders';
+      compute();
+    }
+
+    function resetAll() {
+      document.getElementById('sel-f').value = '2x';
+      document.getElementById('sel-g').value = 'x+3';
+      document.getElementById('x-inp').value = 2;
+      order = 'fg';
+      showCompare = false;
+      document.getElementById('btn-compare').textContent = 'show both orders';
+      setOrder('fg');
+    }
+
+    update();
+  </script>
+</body>
+</html>

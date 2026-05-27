@@ -1,0 +1,236 @@
+All right, here's a video for unit 3, day 5,
+and should of rational expressions.
+So the word rational has the word ratio in it,
+which is why it means basically fractions.
+Fractions don't just have to be numbers,
+they can have x in them up until this theory of only seen
+one term rational expressions.
+So this is all one term, right,
+because it's not separated by pluses or minuses,
+like this is 56 and 16 root 3 or 2 terms.
+So everything one term, and we can simplify,
+but this simplify completely, well, 64 and 36
+that go to share four, four goes into that 16 times,
+four goes into that nine times,
+and then the exponent rule still applies
+so 18 minus three is 15.
+So 16 x so 15 over nine.
+Sometimes I like to say pluses and minuses
+ruin the party because you got to be careful, right?
+Everything has to have a common factor,
+even when there's a plus or minus.
+So it happens here a lot in the quadratic formula,
+because like this has to simplify this
+and this all have to share a common factor.
+So here we can pull it two out,
+and here there's a two in the bottom,
+so we can cancel those twos,
+because these terms are being multiplied.
+This is like two times one, right?
+And all we're left with this one minus six i.
+Here, 56 and six, well, root 3 doesn't simplify anymore,
+but 56 and 16, we can pull it four out,
+and there's a four on the bottom.
+So those fours cancel, and then we have that left.
+This, 18 is nine times two.
+There's a negative in there.
+So the negative comes out as five.
+The root nine comes out as three.
+Now we have this.
+This is like a quadratic formula style one, right?
+What can we pull out at the top and pull out at three?
+And we can pull out at three in the bottom.
+So those threes can cancel
+because they're being multiplied, that's a dot.
+And then those threes can cancel,
+and then we're left with this on top and this on bottom.
+There's nothing that four and five share in common.
+Just be careful, because we can only cancel
+over these factors where the whole number numerator
+denominator, so the whole thing,
+like we got to pull a factor out.
+It's just, you gotta be careful.
+So only cancel factors, your factoring problems.
+Don't cancel things that aren't factors at the beginning.
+So this is an example, six plus 18 over three,
+in two different ways.
+Here, six and 18 share three, we pulled a three out.
+So those threes can cancel
+because that's like three times one on the bottom.
+All we're left with is two plus six, which is eight.
+What a lot of people might do, don't fall for this,
+is six and three, you just see that, okay,
+three goes into that one, three goes into that twice.
+So our two plus 18 is left, it's 20,
+that's not the same answer, right?
+So you gotta factor the entire numerator, the entire top.
+Look at example three a, are the x squares factors?
+No, you gotta factor the whole thing, okay?
+It's tempting to just cancel these,
+but this is an entire, is it trinomial?
+Three terms in a binom.
+Bottom is x plus eight, x minus eight, right?
+Because it's factors, a squared minus b squared.
+This factors into minus two plus eight,
+the plus eight can cancel because again,
+those are factors on top and bottom.
+So we're left with x minus two over x minus eight.
+Here we can pull a eight and an x to the third out.
+Here we can pull a six out and a x to the fifth.
+Now x to the six plus three and two x to the six minus one.
+Nothing else can come out of there,
+but eight and six, well, that can cut down in half to four.
+That can become three.
+There's five x's on the bottom and three on top.
+So there's two x's remaining on the bottom,
+or you could do that.
+Three minus five is negative two,
+but negative two would go down to the bottom.
+Now, excluded values.
+Well, think about this.
+This is a really, really important thing.
+You can't divide by zero.
+So there can't be a zero in the denominator.
+And what does that mean in a practical situation?
+Can I have three out of zero chickens?
+No, right, it makes sense.
+Can't divide by zero.
+So there's numbers that aren't in the domain,
+you can't plug them in for x and the denominator.
+So let's look, this is example three, right?
+The denominator here factored out to x plus eight, x minus eight.
+What if we plugged eight in here?
+Eight minus eight is zero, zero times 16 in this case.
+It's still zero.
+But if I plugged it in negative eight,
+negative eight plus eight makes zero in this factor.
+So what you do is you set each factor equal to zero.
+So x can't equal negative eight and x can't equal eight.
+What did I do?
+Well, you set the denominator not equal to zero.
+Basically, I equal sign on the line through it.
+So x can't be negative eight, x can't be eight.
+Those are your excluded values.
+There is no, it's tricky to do part B,
+so we're just gonna skip it.
+It's not two separate problems.
+Basically, you're gonna need to factor completely
+and then state of excluded values.
+So this factor is into plus nine plus seven.
+This factor is into minus eight, x plus seven's factor.
+So all you're left with is x plus nine, x minus eight.
+But excluded values come from the original denominator.
+So yes, these canceled, but you still can't plug in negative seven.
+Even though this is gone, the original problem
+by plug in negative seven, I get zero in the denominator.
+So you set the whole denominator, these factors, right?
+Not equal to zero.
+So x can't be negative seven and x can't be eight.
+All right, so let's do some practice.
+The top a squared minus b squared to three x plus two,
+three x minus two.
+This, you can take an x to the fifth out
+and you can take a five, three x minus two,
+those both canceled.
+This is what's left.
+This is the simplified expression.
+But you set both parts of the denominator,
+you can not equal to zero.
+So five x to the fifth.
+Five x to the, what can I plug in for x
+to make this equal to zero?
+Well, five times zero, right?
+x can't be zero.
+And you can think about that, right?
+If I plug in zero, I get zero.
+And x can't be two thirds.
+This one, another similar problem.
+I won't go into too much detail,
+but we factored, factored, these cancel.
+So this is what you're left with.
+And then the original denominator,
+four x plus seven, four x minus seven,
+we set both not equal to zero.
+So x can't be negative seven fourths or positive seven fourths.
+And a little bit of a recap.
+This negative 9.8 meters per second squared.
+If you don't memorize it, that's okay.
+This is just like a fact of gravity.
+That's what goes in for A.
+B zero is well, initial velocity.
+So if you launch something at like 20 miles an hour,
+that's the initial velocity,
+here's your initial height, T is time.
+These are always going to be,
+I wonder if I have a picture.
+Yeah, they're always like an upside down parabola, right?
+There's a vertex, there's a time it hits the ground,
+there's a time it was launched.
+And then there's this.
+If it says like, what is the speed at that time?
+Well, this is the velocity function.
+Okay, so there's three different things
+that mostly ask for.
+What is the height after a certain time?
+So you plug in a time, right, for T.
+After how long will it be a certain height?
+Well, you set that height equal,
+in this case, the 75, subtracted over.
+So it's a zero here.
+And then you use your polynomial simulator,
+which is on your TI 84 calculus.
+And when is it at the maximum height?
+That is negative B over 2A, that's the vertex.
+And then when you get the, the, when you can actually
+plug that time, it is good.
+Negative B over 2A is the,
+let's see if I did it here.
+9.8 seconds, 9.8 seconds, right?
+That's the time you get to the maximum height,
+but you plug in 9.8 seconds, you'll get a height.
+So let's just look at this question.
+Catapult, curls pumpkin, and a speed of 96 meters per second.
+That's the initial velocity, right?
+And it was released at a catapult at three meters.
+So that's initial height.
+The negative 4.9, and that's just from gravity,
+time squared plus initial velocity,
+time, plus initial height.
+Velocity function, this is the negative 9.8,
+that's from gravity.
+Why are these different, right?
+Well, the height function has a one half in it.
+The velocity one does not.
+What is the pumpkin's height after eight seconds?
+Plug in eight for time.
+And the calculator got 457.4 meters.
+And then when will it hit the ground?
+Well, when is the height zero?
+This is your function.
+I used the polynomial simulator.
+I got two times, right?
+I got negative 0.31 times that possible, right?
+How do we get negative time?
+Well, that is because it was launched at three meters, right?
+And it went up, came down.
+This is when it was launched.
+It fit like went back in time.
+It did start at negative 0.03 one seconds,
+but then it hits the ground at 19 seconds over here.
+And then does it travel high enough
+to reach a basket of 350 meters above the ground?
+Well, how high does it get?
+What's the highest point?
+It's the vertex.
+So negative B over 2A is 9.8 seconds.
+We plugged 9.8 seconds in, we got 473 meters.
+So yeah, I don't go above 350 meters.
+Then what is the domain in range?
+Well, it started at zero seconds
+and it hit the ground at 19.63 seconds.
+That's the time domain, the X, right?
+And the height, the lowest it got to,
+it's going to hit the ground at zero.
+The highest it gets to is the highest,
+the vertex, 473.2 meters.
+There you go, that's unit three, day five.

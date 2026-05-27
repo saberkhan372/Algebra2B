@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding Rational Expressions — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .tool-main { overflow-y: auto; }
+
+    /* ── fraction input row ── */
+    .frac-input-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .frac-input-box {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .frac-num-row, .frac-den-row {
+      display: flex; align-items: center; gap: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+    }
+    .fi {
+      width: 44px; border: 2px solid var(--ink-2); border-radius: 4px;
+      padding: 3px; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      background: var(--paper); text-align: center;
+    }
+    .fi:focus { border-color: var(--accent); outline: none; }
+    .fi.f1c { border-color: #2a6fb4; }
+    .fi.f2c { border-color: #d94f2a; }
+    .fbar { height: 1.5px; background: var(--ink); border-radius: 1px; width: 100%; min-width: 60px; margin: 1px 0; }
+    .op-sel {
+      font-family: 'Permanent Marker', cursive; font-size: 22px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+
+    /* ── preset buttons ── */
+    .preset-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .preset-btn {
+      padding: 4px 10px; border-radius: 16px; border: 1.5px solid var(--ink-2);
+      background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      cursor: pointer; transition: border-color .12s;
+    }
+    .preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── step cards ── */
+    .step-card {
+      margin-top: 8px; padding: 10px 12px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2); border-radius: 6px;
+    }
+    .step-card.result { border-color: var(--accent); background: rgba(217,79,42,0.04); }
+    .step-lbl {
+      font-family: 'Permanent Marker', cursive; font-size: 10px; color: var(--ink-soft);
+      text-transform: uppercase; letter-spacing: .04em; margin-bottom: 6px;
+    }
+
+    /* ── factor chips ── */
+    .fwrap { display: flex; flex-wrap: wrap; gap: 3px; align-items: center; }
+    .fc {
+      display: inline-block; padding: 2px 8px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      border: 2px solid; background: rgba(0,0,0,0.03);
+    }
+    .fc.neutral { color: var(--ink); border-color: var(--ink-2); }
+    .fc.f1 { color: #2a6fb4; border-color: #2a6fb4; background: rgba(42,111,180,0.07); }
+    .fc.f2 { color: #d94f2a; border-color: #d94f2a; background: rgba(217,79,42,0.07); }
+    .fc.shared { color: #208040; border-color: #208040; background: rgba(32,128,64,0.07); }
+    .fc.result { color: var(--ink); border-color: var(--ink-2); font-weight: 700; }
+
+    /* ── LCD assembly display ── */
+    .lcd-row {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+      margin: 6px 0;
+    }
+    .lcd-arrow { font-size: 14px; color: var(--ink-2); }
+    .lcd-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); margin-right: 4px; }
+
+    /* ── inline fraction display ── */
+    .ifrac {
+      display: inline-flex; flex-direction: column; align-items: center;
+      vertical-align: middle; margin: 0 4px; gap: 1px;
+    }
+    .ifrac .in, .ifrac .id {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; flex-wrap: wrap; gap: 2px; align-items: center; padding: 1px 0;
+    }
+    .ifrac .ibar { height: 1.5px; width: 100%; min-width: 18px; background: var(--ink); }
+
+    /* ── step body layout ── */
+    .step-body { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    .step-eq {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px;
+    }
+    .step-eq .op { font-family: 'Permanent Marker', cursive; font-size: 18px; }
+    .step-eq .eq { font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--ink-2); }
+
+    /* ── result display ── */
+    .result-big { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; }
+    .excl { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; margin-top: 5px; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u6.html">← U6</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rational Expressions</a> &nbsp;·&nbsp; D5–D6</div>
+      <div class="tool-title f-display">Adding Rational Expressions</div>
+      <div class="tool-tagline f-hand">Build the LCD from its factors — then rewrite and combine.</div>
+
+      <!-- input area -->
+      <div class="sk-box" style="padding:10px; margin-top:10px;">
+        <div class="frac-input-row">
+          <!-- fraction 1 -->
+          <div class="frac-input-box">
+            <div class="frac-num-row">
+              <input class="fi f1c" id="n1" type="number" value="1" oninput="go()">
+            </div>
+            <div class="fbar"></div>
+            <div class="frac-den-row">
+              <span>(x +</span>
+              <input class="fi f1c" id="d1a" type="number" value="-2" oninput="go()">
+              <span>)(x +</span>
+              <input class="fi f1c" id="d1b" type="number" value="0" placeholder="∅" oninput="go()">
+              <span>)</span>
+            </div>
+          </div>
+
+          <!-- operator -->
+          <button class="op-sel" id="op-btn" onclick="toggleOp()" title="click to flip +/−">+</button>
+
+          <!-- fraction 2 -->
+          <div class="frac-input-box">
+            <div class="frac-num-row">
+              <input class="fi f2c" id="n2" type="number" value="1" oninput="go()">
+            </div>
+            <div class="fbar"></div>
+            <div class="frac-den-row">
+              <span>(x +</span>
+              <input class="fi f2c" id="d2a" type="number" value="3" oninput="go()">
+              <span>)(x +</span>
+              <input class="fi f2c" id="d2b" type="number" value="0" placeholder="∅" oninput="go()">
+              <span>)</span>
+            </div>
+          </div>
+        </div>
+        <div class="f-hand" style="font-size:11px; color:var(--ink-2); margin-top:5px;">
+          ↑ Enter 0 for the second denominator factor to use only one factor (e.g., just x − 2).
+        </div>
+
+        <div class="preset-row">
+          <span class="f-hand" style="font-size:12px; color:var(--ink-2); align-self:center;">presets →</span>
+          <button class="preset-btn" onclick="load(1,'+',1, -2,0, 3,0)">1/(x−2) + 1/(x+3)</button>
+          <button class="preset-btn" onclick="load(2,'+',3,  1,0,-1,0)">2/(x+1) + 3/(x−1)</button>
+          <button class="preset-btn" onclick="load(1,'+',1,  0,0, 2,0)">1/x + 1/(x+2)</button>
+          <button class="preset-btn" onclick="load(3,'-',2, -2,0, 2,0)">3/(x−2) − 2/(x+2)</button>
+          <button class="preset-btn" onclick="load(1,'+',2, -1,1,-1,0)">1/(x²−1) + 2/(x−1)</button>
+        </div>
+      </div>
+
+      <!-- steps -->
+      <div id="steps"></div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE LCD METHOD</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>1. Factor</strong> each denominator.<br>
+          <strong>2. Build the LCD</strong> — include each unique factor once (or twice if it appears twice in one denominator).<br>
+          <strong>3. Multiply</strong> each fraction top and bottom by the missing factors.<br>
+          <strong>4. Add/subtract</strong> the numerators.<br>
+          <strong>5. Simplify</strong> if possible.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">READING THE COLORS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <span style="color:#2a6fb4">■ Blue</span> = factors from fraction 1's denominator<br>
+          <span style="color:#d94f2a">■ Red</span> = factors from fraction 2's denominator<br>
+          <span style="color:#208040">■ Green</span> = factors shared by both<br><br>
+          The LCD contains every factor at least once.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Load the last preset. The denominator (x²−1) is already factored — what is the LCD?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">What happens when both denominators are the same? Set d1a = d2a = 3 and see.</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="rational-simplifier.html">→ Rational Simplifier</a>
+        <a class="related-link f-hand" href="rational-expressions.html">→ Rational Expression Grapher</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── data helpers ──
+    function gcd(a, b) {
+      a = Math.abs(Math.round(a)); b = Math.abs(Math.round(b));
+      while (b) { [a, b] = [b, a % b]; }
+      return a || 1;
+    }
+
+    // Root of [p, q]: x = -q/p
+    function root(f) { return -f[1] / f[0]; }
+    function sameRoot(f1, f2) { return Math.abs(root(f1) - root(f2)) < 0.0002; }
+
+    // ── formatting ──
+    function fmtN(n) {
+      const r = Math.round(n * 100) / 100;
+      return Number.isInteger(r) ? String(Math.round(r)) : r.toFixed(2);
+    }
+
+    // Format (px + q) as display string (no outer parens if solo)
+    function fmtFac(p, q, parens = true) {
+      let s;
+      if (p === 1 && q === 0) s = 'x';
+      else if (q === 0) s = `${fmtN(p)}x`;
+      else if (p === 1) s = q > 0 ? `x + ${fmtN(q)}` : `x − ${fmtN(-q)}`;
+      else s = q > 0 ? `${fmtN(p)}x + ${fmtN(q)}` : `${fmtN(p)}x − ${fmtN(-q)}`;
+      return parens ? `(${s})` : s;
+    }
+
+    // Format polynomial [a, b] = ax+b, or [a, b, c] = ax²+bx+c
+    function fmtPoly(p) {
+      if (p.length === 1) return fmtN(p[0]);
+      const [a, b] = p;
+      if (a === 0) return fmtN(b);
+      let s = '';
+      if (a === 1) s = 'x'; else if (a === -1) s = '−x'; else s = `${fmtN(a)}x`;
+      if (b !== 0) s += b > 0 ? ` + ${fmtN(b)}` : ` − ${fmtN(-b)}`;
+      return s || '0';
+    }
+
+    // Multiply poly [a,b] by linear factor [p,q] → quadratic [Ap, Aq+Bp, Bq]
+    // Or poly [c] (constant) by factor [p,q] → [cp, cq]
+    function polyMulFac(poly, fac) {
+      const [p, q] = fac;
+      if (poly.length === 1) {
+        const c = poly[0];
+        return [c * p, c * q];
+      }
+      const [a, b] = poly;
+      return [a * p, a * q + b * p, b * q];
+    }
+
+    // Add two polynomials (pad to same length)
+    function polyAdd(p1, p2, sign = 1) {
+      const n = Math.max(p1.length, p2.length);
+      const r = [];
+      for (let i = 0; i < n; i++) {
+        const v1 = p1[p1.length - 1 - (n - 1 - i)] || 0;
+        const v2 = p2[p2.length - 1 - (n - 1 - i)] || 0;
+        r.push(v1 + sign * v2);
+      }
+      // Trim leading zeros
+      while (r.length > 1 && r[0] === 0) r.shift();
+      return r;
+    }
+
+    // Format a product of factors: Π(pᵢx+qᵢ) → string "factor1·factor2·..."
+    function fmtDen(factors) {
+      return factors.map(f => fmtFac(...f)).join('');
+    }
+
+    // ── LCD builder ──
+    function buildLCD(den1, den2) {
+      const used1 = new Array(den1.length).fill(false);
+      const used2 = new Array(den2.length).fill(false);
+
+      // Find shared factors
+      for (let i = 0; i < den1.length; i++) {
+        for (let j = 0; j < den2.length; j++) {
+          if (!used1[i] && !used2[j] && sameRoot(den1[i], den2[j])) {
+            used1[i] = true; used2[j] = true; break;
+          }
+        }
+      }
+
+      const shared  = den1.filter((_, i) =>  used1[i]);
+      const only1   = den1.filter((_, i) => !used1[i]);
+      const only2   = den2.filter((_, j) => !used2[j]);
+      const lcd     = [...den1, ...only2];
+      const mult1   = only2;  // what f1 needs to multiply by
+      const mult2   = only1;  // what f2 needs to multiply by
+
+      return { lcd, shared, only1, only2, mult1, mult2 };
+    }
+
+    // ── chip factories ──
+    function chip(text, cls) { return `<span class="fc ${cls}">${text}</span>`; }
+    function wrap(...chips)  { return `<div class="fwrap">${chips.join('')}</div>`; }
+
+    function ifrac(numEl, denEl) {
+      return `<div class="ifrac">
+        <div class="in">${numEl}</div>
+        <div class="ibar"></div>
+        <div class="id">${denEl}</div>
+      </div>`;
+    }
+
+    // ── state ──
+    let currentOp = '+';
+
+    function toggleOp() {
+      currentOp = currentOp === '+' ? '−' : '+';
+      document.getElementById('op-btn').textContent = currentOp;
+      go();
+    }
+
+    // ── main ──
+    function go() {
+      const n1v  = +document.getElementById('n1').value  || 0;
+      const d1av = +document.getElementById('d1a').value || 0;
+      const d1bv = +document.getElementById('d1b').value || 0;
+      const n2v  = +document.getElementById('n2').value  || 0;
+      const d2av = +document.getElementById('d2a').value || 0;
+      const d2bv = +document.getElementById('d2b').value || 0;
+
+      // Build denominator factor arrays
+      // Each factor is [p, q] representing (px + q), here p=1 always
+      // d1b=0 means "no second factor"
+      const den1 = [[1, d1av]];
+      if (d1bv !== 0) den1.push([1, d1bv]);
+      const den2 = [[1, d2av]];
+      if (d2bv !== 0) den2.push([1, d2bv]);
+
+      const num1 = [n1v]; // constant
+      const num2 = [n2v];
+      const sign = currentOp === '+' ? 1 : -1;
+
+      const { lcd, shared, only1, only2, mult1, mult2 } = buildLCD(den1, den2);
+
+      const steps = document.getElementById('steps');
+      steps.innerHTML = '';
+
+      // ── Step 1: Original ──
+      const den1Str = fmtDen(den1);
+      const den2Str = fmtDen(den2);
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 1 — original expression</div>
+          <div class="step-eq">
+            ${ifrac(fmtN(n1v), den1Str)}
+            <span class="op">${currentOp}</span>
+            ${ifrac(fmtN(n2v), den2Str)}
+          </div>
+        </div>`);
+
+      // ── Step 2: LCD Assembly ──
+      // Build chip rows for den1, den2, shared, lcd
+      const den1Chips = den1.map(f => {
+        const isShared = shared.some(s => sameRoot(s, f));
+        return chip(fmtFac(...f), isShared ? 'shared' : 'f1');
+      });
+      const den2Chips = den2.map(f => {
+        const isShared = shared.some(s => sameRoot(s, f));
+        return chip(fmtFac(...f), isShared ? 'shared' : 'f2');
+      });
+
+      // LCD chips: shared first (green), then only1 (blue), then only2 (red)
+      const lcdChips = [
+        ...shared.map(f => chip(fmtFac(...f), 'shared')),
+        ...only1.map(f => chip(fmtFac(...f), 'f1')),
+        ...only2.map(f => chip(fmtFac(...f), 'f2')),
+      ];
+
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 2 — find the LCD</div>
+          <div class="lcd-row">
+            <span class="lcd-label">denom 1:</span>
+            ${wrap(...den1Chips)}
+          </div>
+          <div class="lcd-row">
+            <span class="lcd-label">denom 2:</span>
+            ${wrap(...den2Chips)}
+          </div>
+          <div class="lcd-row" style="margin-top:4px;">
+            <span class="lcd-label">LCD:</span>
+            ${wrap(...lcdChips)}
+            ${shared.length ? `<span class="f-hand" style="font-size:11px; color:#208040; margin-left:4px;">(shared factors appear once)</span>` : ''}
+          </div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:4px;">
+            LCD = <strong>${fmtDen(lcd)}</strong>
+          </div>
+        </div>`);
+
+      // ── Step 3: Rewrite each fraction ──
+      // New numerators after multiplying by missing factors
+      let newNum1 = [...num1];
+      for (const f of mult1) newNum1 = polyMulFac(newNum1, f);
+      let newNum2 = [...num2];
+      for (const f of mult2) newNum2 = polyMulFac(newNum2, f);
+
+      const lcdStr = fmtDen(lcd);
+      const rewriteHTML = mult1.length === 0 && mult2.length === 0
+        ? '<div class="f-hand" style="font-size:13px; color:var(--ink-2);">Same denominator — no rewriting needed.</div>'
+        : `
+          <div class="step-eq" style="margin-bottom:6px;">
+            ${ifrac(
+              `${fmtN(n1v)} · ${mult1.map(f => fmtFac(...f)).join('') || '1'}`,
+              `${den1Str} · ${mult1.map(f => fmtFac(...f)).join('') || '1'}`
+            )}
+            <span class="eq">=</span>
+            ${ifrac(fmtPoly(newNum1), lcdStr)}
+          </div>
+          <div class="step-eq">
+            ${ifrac(
+              `${fmtN(n2v)} · ${mult2.map(f => fmtFac(...f)).join('') || '1'}`,
+              `${den2Str} · ${mult2.map(f => fmtFac(...f)).join('') || '1'}`
+            )}
+            <span class="eq">=</span>
+            ${ifrac(fmtPoly(newNum2), lcdStr)}
+          </div>`;
+
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 3 — rewrite each fraction with the LCD</div>
+          ${rewriteHTML}
+        </div>`);
+
+      // ── Step 4: Combine ──
+      const combined = polyAdd(newNum1, newNum2, sign);
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 4 — ${currentOp === '+' ? 'add' : 'subtract'} the numerators</div>
+          <div class="step-eq">
+            ${ifrac(
+              `<span>${fmtPoly(newNum1)}</span> <span class="op" style="font-size:16px">${currentOp}</span> <span>${fmtPoly(newNum2)}</span>`,
+              lcdStr
+            )}
+            <span class="eq">=</span>
+            ${ifrac(`<strong>${fmtPoly(combined)}</strong>`, lcdStr)}
+          </div>
+        </div>`);
+
+      // ── Step 5: Result ──
+      // Check if numerator and any denominator factor cancel
+      let finalNum = combined, finalDen = [...lcd];
+      // Simple check: if numerator is a constant multiple of a denominator factor
+      // (For now just show the result — advanced simplification is in the simplifier tool)
+      const canSimplify = checkSimplify(combined, lcd);
+
+      const denRoots = [...new Set(lcd.map(f => Math.round(root(f) * 1000) / 1000))];
+      const exclStr  = denRoots.map(r => `x ≠ ${fmtN(r)}`).join(',  ');
+
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card result">
+          <div class="step-lbl">result</div>
+          <div class="result-big">
+            ${ifrac(`<strong>${fmtPoly(combined)}</strong>`, lcdStr)}
+          </div>
+          ${canSimplify ? `<div class="f-hand" style="margin-top:6px; font-size:12px; color:#208040;">💡 This may simplify further — try the Rational Simplifier!</div>` : ''}
+          <div class="excl" style="margin-top:6px;">${exclStr}</div>
+        </div>`);
+    }
+
+    // Lightweight "might simplify" check
+    function checkSimplify(numPoly, denFactors) {
+      if (numPoly.length < 2) return false;
+      for (const f of denFactors) {
+        const r = root(f);
+        const val = numPoly.reduceRight((acc, c, i) => acc + c * Math.pow(r, numPoly.length - 1 - i), 0);
+        if (Math.abs(val) < 0.001) return true;
+      }
+      return false;
+    }
+
+    function load(n1, op, n2, d1a, d1b, d2a, d2b) {
+      document.getElementById('n1').value  = n1;
+      document.getElementById('d1a').value = d1a;
+      document.getElementById('d1b').value = d1b;
+      document.getElementById('n2').value  = n2;
+      document.getElementById('d2a').value = d2a;
+      document.getElementById('d2b').value = d2b;
+      currentOp = op === '+' ? '+' : '−';
+      document.getElementById('op-btn').textContent = currentOp;
+      go();
+    }
+
+    go();
+  </script>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polynomial Sketch Pad — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+
+    /* Controls panel */
+    .controls-panel {
+      display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
+    }
+    .ctrl-row {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .ctrl-label {
+      font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink-soft);
+      min-width: 80px;
+    }
+
+    /* Sign selector */
+    .sign-btns { display: flex; gap: 6px; }
+    .sign-btn {
+      padding: 5px 14px; border: 2px solid var(--ink); border-radius: 6px;
+      font-family: 'Patrick Hand', cursive; font-size: 14px; cursor: pointer;
+      background: var(--paper-2); transition: all 0.15s;
+    }
+    .sign-btn.active.pos { background: #e8f4ec; border-color: #2a8a4a; color: #2a8a4a; font-weight: bold; }
+    .sign-btn.active.neg { background: #fdecea; border-color: var(--redline); color: var(--redline); font-weight: bold; }
+    .sign-btn:hover:not(.active) { background: var(--highlight); }
+
+    /* Zero editor */
+    .zero-list { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start; }
+    .zero-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 6px 10px;
+      background: var(--paper); display: flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      position: relative;
+    }
+    .zero-card .z-label { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); }
+    .zero-card input[type=number] {
+      width: 46px; border: 1.5px solid var(--ink-2); border-radius: 4px;
+      padding: 2px 4px; font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      background: var(--paper); color: var(--ink); text-align: center;
+    }
+    .mult-btns { display: flex; gap: 3px; }
+    .mult-btn {
+      width: 28px; height: 28px; border: 1.5px solid var(--ink-2); border-radius: 4px;
+      background: var(--paper-2); font-family: 'Patrick Hand', cursive; font-size: 12px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.12s;
+    }
+    .mult-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .mult-btn:hover:not(.active) { background: var(--highlight); }
+    .zero-del {
+      position: absolute; top: -8px; right: -8px; width: 18px; height: 18px;
+      background: var(--redline); color: #fff; border-radius: 50%; border: none;
+      font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .add-zero-btn {
+      padding: 6px 12px; border: 2px dashed var(--ink-2); border-radius: 6px;
+      background: transparent; font-family: 'Patrick Hand', cursive; font-size: 14px;
+      cursor: pointer; color: var(--ink-soft); transition: all 0.12s;
+    }
+    .add-zero-btn:hover { background: var(--paper-2); border-color: var(--accent); color: var(--accent); }
+
+    /* Equation display */
+    .eq-line {
+      font-family: 'JetBrains Mono', monospace; font-size: 15px;
+      background: var(--ink); color: #f6f1e4; padding: 6px 12px; border-radius: 4px;
+      display: inline-block; max-width: 100%; overflow-x: auto;
+    }
+
+    /* Info chips */
+    .info-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .ic {
+      padding: 3px 10px; border-radius: 4px; font-family: 'Patrick Hand', cursive; font-size: 13px;
+      border: 1.5px solid var(--ink-2);
+    }
+    .ic.end { background: #fdf0e0; border-color: #c8a000; }
+    .ic.dom { background: var(--paper-2); }
+    .ic.deg { background: #e8f4ec; border-color: #2a8a4a; }
+
+    /* Vocab matcher */
+    .vocab-box {
+      border: 2px dashed var(--ink-2); border-radius: 6px; padding: 10px 12px;
+      background: var(--paper-2); margin-top: 6px;
+    }
+    .vocab-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px;
+    }
+    .vocab-pill {
+      padding: 4px 10px; border-radius: 999px; font-family: 'Patrick Hand', cursive; font-size: 13px;
+      text-align: center; border: 1.5px solid var(--ink-2); background: var(--paper);
+    }
+    .vocab-pill.same { background: var(--highlight); border-color: var(--accent); }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u6.html">← U6</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb">
+        <a href="../index.html">← all tools</a> &nbsp;·&nbsp; U6 · Polynomials
+      </div>
+      <div class="tool-title f-display">Polynomial Sketch Pad</div>
+      <div class="tool-tagline f-hand">Pick your zeros and degree. Sketch the curve from end behavior down to each zero.</div>
+
+      <div class="widget-container" style="flex:1; min-height:200px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <div class="controls-panel">
+        <!-- Equation + info -->
+        <div>
+          <div class="eq-line f-mono" id="eq-display">f(x) = (x)(x − 1)</div>
+          <div class="info-chips" id="info-chips"></div>
+        </div>
+
+        <!-- Leading coefficient sign -->
+        <div class="ctrl-row">
+          <div class="ctrl-label">LEADING a:</div>
+          <div class="sign-btns">
+            <button class="sign-btn active pos" id="btn-pos" onclick="setSign(1)">a &gt; 0 (opens up / right)</button>
+            <button class="sign-btn neg" id="btn-neg" onclick="setSign(-1)">a &lt; 0 (flips)</button>
+          </div>
+        </div>
+
+        <!-- Zeros -->
+        <div class="ctrl-row" style="align-items: flex-start;">
+          <div class="ctrl-label" style="padding-top:8px;">ZEROS:</div>
+          <div>
+            <div class="zero-list" id="zero-list"></div>
+            <button class="add-zero-btn" style="margin-top:6px;" onclick="addZero()">+ add zero</button>
+          </div>
+        </div>
+
+        <!-- Animate row -->
+        <div class="ctrl-row">
+          <button class="btn accent" id="trace-btn" onclick="toggleTrace()">▶ draw slow</button>
+          <button class="btn small" onclick="resetAll()">↺ reset</button>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-soft);">animate the classroom sketching order</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">SKETCHING ORDER</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Add your zeros with their multiplicity.</li>
+          <li>Set the leading coefficient sign.</li>
+          <li>Read the end behavior chips.</li>
+          <li>Hit <strong>▶ draw slow</strong> to trace the curve.</li>
+        </ol>
+      </div>
+
+      <div class="vocab-box">
+        <div class="f-marker" style="font-size:12px;">THESE ALL MEAN THE SAME THING</div>
+        <div class="vocab-grid">
+          <div class="vocab-pill same">zero</div>
+          <div class="vocab-pill same">root</div>
+          <div class="vocab-pill same">solution</div>
+          <div class="vocab-pill same">x-intercept</div>
+        </div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:6px;">
+          If x = 3 is a zero, then (x − 3) is a factor.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">MULTIPLICITY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          <strong>odd (1, 3):</strong> curve <em>crosses</em> through<br>
+          <strong>even (2, 4):</strong> curve <em>bounces</em> off<br>
+          Higher odd: touches & swerves (still crosses)
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Add zeros at x = −2, 0, 3 (all multiplicity 1). Watch it cross all three.</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set x = 2 with multiplicity 2. Does it cross or bounce?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Make a degree-4 polynomial with both ends pointing the same way. Flip a &lt; 0. What changes?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="cubic-radical.html">→ Cubic &amp; Radical Grapher</a>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let aSign = 1;
+    let zeros = [{ x: 0, m: 1 }, { x: 1, m: 1 }];
+    let nextId = 2;
+    let tracing = false, traceReq = null, traceT = 0;
+
+    // ===== POLYNOMIAL EVALUATION =====
+    function evalPoly(xv) {
+      let y = aSign;
+      zeros.forEach(z => { y *= Math.pow(xv - z.x, z.m); });
+      return y;
+    }
+
+    function totalDegree() { return zeros.reduce((s,z)=>s+z.m, 0); }
+
+    // ===== SIGN CONTROL =====
+    function setSign(s) {
+      aSign = s;
+      document.getElementById('btn-pos').classList.toggle('active', s>0);
+      document.getElementById('btn-neg').classList.toggle('active', s<0);
+      update();
+    }
+
+    // ===== ZERO EDITOR =====
+    function addZero() {
+      if (zeros.length >= 5) return;
+      zeros.push({ x: 0, m: 1, id: nextId++ });
+      renderZeroList();
+      update();
+    }
+    function removeZero(i) {
+      zeros.splice(i,1);
+      renderZeroList();
+      update();
+    }
+    function setZeroX(i, v) { zeros[i].x = v; update(); }
+    function setMult(i, m) { zeros[i].m = m; renderZeroList(); update(); }
+
+    function renderZeroList() {
+      const list = document.getElementById('zero-list');
+      list.innerHTML = '';
+      zeros.forEach((z,i) => {
+        const card = document.createElement('div');
+        card.className = 'zero-card';
+        const multBtns = [1,2,3].map(m =>
+          `<button class="mult-btn${z.m===m?' active':''}" onclick="setMult(${i},${m})" title="${m===1?'cross':m===2?'bounce':'swerve'}">${m===1?'×':'∞'[0]+m}</button>`
+        ).join('');
+        card.innerHTML = `
+          <button class="zero-del" onclick="removeZero(${i})">×</button>
+          <div class="z-label">x =</div>
+          <input type="number" value="${z.x}" min="-7" max="7" step="0.5"
+            oninput="setZeroX(${i}, parseFloat(this.value)||0)" style="width:46px;" />
+          <div class="mult-btns">
+            <button class="mult-btn${z.m===1?' active':''}" onclick="setMult(${i},1)" title="cross">1</button>
+            <button class="mult-btn${z.m===2?' active':''}" onclick="setMult(${i},2)" title="bounce">2</button>
+            <button class="mult-btn${z.m===3?' active':''}" onclick="setMult(${i},3)" title="swerve">3</button>
+          </div>
+          <div class="z-label" style="font-size:10px; color:${z.m%2===0?'var(--accent)':'#2a6fb4'};">${z.m%2===0?'bounce':'cross'}</div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    // ===== EQUATION DISPLAY =====
+    function buildEqStr() {
+      const sign = aSign < 0 ? '−' : '';
+      if (zeros.length === 0) return `f(x) = ${sign}1`;
+      const factors = zeros.map(z => {
+        const inner = z.x === 0 ? 'x' : (z.x > 0 ? `x − ${z.x}` : `x + ${Math.abs(z.x)}`);
+        return z.m === 1 ? `(${inner})` : `(${inner})${z.m === 2 ? '²' : '³'}`;
+      });
+      return `f(x) = ${sign}${factors.join('')}`;
+    }
+
+    function endBehavior() {
+      const deg = totalDegree();
+      const even = deg % 2 === 0;
+      if (aSign > 0) {
+        return even
+          ? { left: '↑ left end', right: 'right end ↑', desc: 'both ends up (even degree, a > 0)' }
+          : { left: '↓ left end', right: 'right end ↑', desc: 'left down, right up (odd degree, a > 0)' };
+      } else {
+        return even
+          ? { left: '↓ left end', right: 'right end ↓', desc: 'both ends down (even degree, a < 0)' }
+          : { left: '↑ left end', right: 'right end ↓', desc: 'left up, right down (odd degree, a < 0)' };
+      }
+    }
+
+    function updateInfo() {
+      document.getElementById('eq-display').textContent = buildEqStr();
+      const deg = totalDegree();
+      const eb = endBehavior();
+      document.getElementById('info-chips').innerHTML = `
+        <span class="ic deg">degree: ${deg}</span>
+        <span class="ic end">${eb.left} · ${eb.right}</span>
+        <span class="ic dom">domain: all reals</span>
+      `;
+    }
+
+    // ===== DRAW =====
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * devicePixelRatio;
+      canvas.height = rect.height * devicePixelRatio;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    function lS() { return { W: canvas.width/devicePixelRatio, H: canvas.height/devicePixelRatio }; }
+
+    function computeYScale(W, H, sc) {
+      const ox = W/2;
+      let maxY = 0.01;
+      for (let px=0; px<=W; px+=2) {
+        const xv = (px-ox)/sc;
+        if (xv < -8 || xv > 8) continue;
+        const yv = Math.abs(evalPoly(xv));
+        if (isFinite(yv) && yv > maxY) maxY = yv;
+      }
+      return (H * 0.42) / maxY;
+    }
+
+    function drawGraph(clipPx = null) {
+      resize();
+      const {W,H} = lS();
+      const ox = W/2, oy = H/2, sc = W/18;
+      const ySc = computeYScale(W, H, sc);
+
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      // grid
+      ctx.strokeStyle='rgba(29,26,20,0.07)'; ctx.lineWidth=1;
+      for (let i=-9;i<=9;i++) {
+        ctx.beginPath(); ctx.moveTo(ox+i*sc,0); ctx.lineTo(ox+i*sc,H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,oy+i*sc); ctx.lineTo(W,oy+i*sc); ctx.stroke();
+      }
+      // axes
+      ctx.strokeStyle='rgba(29,26,20,0.4)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+      // tick labels
+      ctx.fillStyle='rgba(29,26,20,0.35)'; ctx.font="10px 'Special Elite',monospace"; ctx.textAlign='center';
+      for (let i=-8;i<=8;i++) { if(i===0||i%2!==0) continue;
+        ctx.fillText(i,ox+i*sc,oy+13);
+        ctx.textAlign='right'; ctx.fillText(-i,ox-4,oy+i*sc+4); ctx.textAlign='center';
+      }
+
+      // zero markers on x-axis
+      zeros.forEach(z => {
+        const zx = ox + z.x * sc;
+        if (zx < 0 || zx > W) return;
+        const isEven = z.m % 2 === 0;
+        ctx.fillStyle = isEven ? var_accent() : '#2a6fb4';
+        ctx.strokeStyle='#1d1a14'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.arc(zx, oy, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        // label
+        ctx.font = "12px 'Patrick Hand',cursive"; ctx.fillStyle = isEven ? var_accent() : '#2a6fb4';
+        ctx.textAlign = 'center';
+        const lbl = isEven ? `x=${z.x}\n(bounce)` : `x=${z.x}\n(cross)`;
+        ctx.fillText(`x=${z.x}`, zx, oy + 18);
+        ctx.font = "10px 'Patrick Hand',cursive"; ctx.fillStyle = 'rgba(29,26,20,0.5)';
+        ctx.fillText(isEven?'bounce':'cross', zx, oy + 30);
+      });
+
+      // end behavior arrows at edges — label near where curve exits canvas
+      const eb = endBehavior();
+      const pyLeftEdge  = oy - evalPoly(-(W/2/sc + 0.5)) * ySc;
+      const pyRightEdge = oy - evalPoly( (W/2/sc + 0.5)) * ySc;
+      ctx.font = "bold 14px 'Caveat',cursive"; ctx.fillStyle='rgba(29,26,20,0.6)';
+      ctx.textAlign='left';  ctx.fillText(eb.left,  8, pyLeftEdge  > H/2 ? H - 10 : 20);
+      ctx.textAlign='right'; ctx.fillText(eb.right, W - 8, pyRightEdge > H/2 ? H - 10 : 20);
+
+      // clip for trace animation
+      if (clipPx !== null) {
+        ctx.save();
+        ctx.beginPath(); ctx.rect(0, 0, clipPx, H); ctx.clip();
+      }
+
+      // curve
+      ctx.strokeStyle='#d94f2a'; ctx.lineWidth=2.5; ctx.lineJoin='round';
+      ctx.beginPath();
+      let first=true;
+      for (let px=0; px<=W; px+=0.5) {
+        const xv=(px-ox)/sc;
+        const yv=evalPoly(xv);
+        const py=oy-yv*ySc;
+        if (!isFinite(py)||py<-H||py>2*H) { first=true; continue; }
+        if (first) { ctx.moveTo(px,py); first=false; } else ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+
+      if (clipPx !== null) ctx.restore();
+    }
+
+    function var_accent() { return '#d94f2a'; }
+
+    // ===== TRACE ANIMATION =====
+    function toggleTrace() {
+      if (tracing) {
+        tracing=false; cancelAnimationFrame(traceReq);
+        document.getElementById('trace-btn').textContent='▶ draw slow';
+        drawGraph();
+      } else {
+        tracing=true; traceT=0;
+        document.getElementById('trace-btn').textContent='◼ stop';
+        const {W} = lS();
+        (function step() {
+          traceT += W/90; // ~90 frames to cross the canvas
+          drawGraph(Math.min(traceT, W));
+          if (traceT < W && tracing) traceReq=requestAnimationFrame(step);
+          else { tracing=false; document.getElementById('trace-btn').textContent='▶ draw slow'; drawGraph(); }
+        })();
+      }
+    }
+
+    // ===== RESET =====
+    function resetAll() {
+      aSign=1; zeros=[{x:0,m:1},{x:1,m:1}]; nextId=2;
+      document.getElementById('btn-pos').classList.add('active');
+      document.getElementById('btn-neg').classList.remove('active');
+      renderZeroList(); update();
+    }
+
+    function update() { updateInfo(); drawGraph(); }
+
+    window.addEventListener('resize', () => update());
+    renderZeroList();
+    update();
+  </script>
+</body>
+</html>

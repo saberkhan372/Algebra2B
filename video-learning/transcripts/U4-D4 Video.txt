@@ -1,0 +1,213 @@
+Here is the notes for unit four day four,
+which is domains of functions algebraically.
+And we're looking at square root functions
+and then something called a rational function
+is basically some function over another function
+where there's x's in the denominator, right?
+And you can never divide by zero
+because that makes undefined.
+So we're looking for what can't we plug in for x?
+What makes the denominator zero?
+And then square root functions,
+remember if there's an x in here,
+that can't be negative,
+because that would be an imaginary number.
+So it's imaginary if x is negative.
+So whatever is in the square root can't be negative
+in the function and we're looking for numbers,
+it's not always just x.
+So let's see.
+The domain is all x values that can be plugged in function
+and result in the real number.
+So we don't want imaginary and we don't want undefined.
+So when all x values work together,
+we want all values, x values work.
+Like all values in general,
+you can get all real numbers,
+which we write as negative infinity to infinity.
+There is this fancy math symbol,
+which is basically like an r with two lines.
+That means all real numbers.
+But sometimes we have it restricted domain.
+So what we're actually gonna look at
+is what you can't plug in for x.
+So what can we plug in for x
+that makes this not negative in the square root?
+And just so you know,
+just a quick reminder, the square root of zero is zero.
+That's okay.
+You can have a square root of zero,
+but you can't have a square root of a negative,
+in a function.
+So, and this is something I want to talk about again.
+When x values plugged in,
+result in the square root of a negative,
+the domain becomes restricted to a specific set of numbers.
+So I just want to go straight down.
+So this is the process.
+What you take the inside of the square root
+and make sure that it's bigger than or equal to zero.
+And it's really all you have to look at in the domain.
+So let's just first take a look.
+This is a square root function.
+Remember, hk is a starting point.
+So positive three and then zero.
+You either a value, go right one up two.
+And then I plugged in seven,
+because seven minus three is four.
+So two times four is two times two is four.
+So we have an x value of three with a closed dot.
+You can plug that in.
+And you can plug in anything bigger than three.
+But you can't plug in anything smaller.
+So three included up to infinity.
+And it's pretty easy to see domain graphically.
+But what if you're not given the graph at all?
+You've just given that.
+All you need to do is take the inside of the square root,
+only and set it equal greater than or equal to zero
+and solve for x.
+So x has to be greater than or equal to three.
+And on a number line, here's three.
+Put a closed circle at three, go to the right.
+That means all number is bigger than three or okay,
+including three.
+So we can say the domain is three included to infinity.
+So let's take a look at a few more.
+When you have negative two x plus eight,
+you just set that greater than or equal to zero.
+Subtract eight.
+But then here we divide by negative two.
+And when you divide by negative,
+you have to flip the inequality sign.
+So if x has to be less than or equal to four.
+So closed circle at four and everything to the left.
+So starting a negative infinity all the way up to four
+included, same thing here.
+Four minus x is greater than or equal to zero.
+Well, I just am moving the x over.
+So before is greater than or equal to x,
+or if we flip that, x is less than or equal to four.
+So it's all numbers leading up to four included.
+Here, three x minus 12 set that a greater than
+or equal to zero, right.
+Square roots by themselves are greater than or equal to zero.
+And then solving, we get x, it has to be bigger than
+or equal to four.
+So it's four included, two infinity.
+Okay, sometimes you have a function with x
+and the denominator, like just a random example.
+You could have three plus x over five minus seven x, right.
+What could I plug in for that to make it zero?
+Well, it depends, but how do we do that?
+We just set the denominator equal to zero
+and that becomes a restricted number.
+So set the denominator equal to zero
+and whatever that comes out to is your domain restriction.
+So sometimes you get a domain consisting
+of all real numbers, but three doesn't work
+and seven doesn't work.
+So x can equal three and x can equal seven.
+What happens is on a number line,
+you have three and seven, right.
+But that's an open circle here and an open circle here.
+Everything to the left of three is okay,
+everything between three and seven is okay
+and everything more than seven.
+So how do we write that as an interval
+from negative infinity up to three, not including three.
+Then we have this fancy math symbol,
+which means the union, we need to skip over to the next.
+It's connected to the next set of numbers from three,
+not included to seven, not included.
+That's this section.
+And then union from seven to infinity.
+So how do we do this?
+I'm just giving a problem like this.
+So let's find the domain.
+Well, set the denominator equal to zero, x is zero.
+So x cannot be zero, that's the only thing it can't be.
+Anything else.
+Negative infinity to infinity.
+What does that look like in a number line?
+Here is zero, it's an open circle
+and it's everything to the left.
+So negative infinity up to zero
+and then zero to infinity.
+Make sure these are parentheses.
+What about if it's x plus two,
+where you set the bottom equal to zero?
+And then so for x, x cannot equal the negative two,
+that's not a number line, that's just x cannot equal negative two.
+So from negative two, so from negative infinity up to negative two,
+union, negative two to infinity.
+And what we say is x equals negative two is a domain restriction.
+And this is our domain.
+Same here.
+Finally, what if it's two x plus one,
+set that equal to zero, subtract one divided by two,
+x can't be one-half.
+So under number line, sorry, negative a half.
+Open circle, but it's okay on both sides.
+So from negative infinity up to negative a half,
+not included, so it's union with parentheses.
+And then from one-half to infinity.
+So what happens if the bottom needs,
+it just has an x squared in it.
+Well, that's something we can factor.
+This factor is into x minus six and x plus two.
+So what makes it zero is positive six and negative two.
+Those are our domain restrictions, negative two and six.
+So from negative infinity up to negative two,
+union, negative two to six, and then from six to infinity.
+Here, this one looks kind of daunting to factor.
+Set it equal to zero.
+We can't pull out a two,
+but I know that two x times x makes two x squared.
+And then some form of five and three.
+Well, if you try three here,
+three x times plus five times two,
+that would be a two-way, that'd be 15.
+But two times three is six and five times one is five.
+So that makes 11 x.
+Set these factors equal to zero.
+We know that x cannot be negative five halves
+and it cannot be negative three.
+So from negative infinity to negative three.
+And then you have to keep track, right?
+Negative three is to the left of negative five halves.
+So from negative three to negative five halves,
+and then from negative five halves to infinity.
+What happens if you have a square root in the denominator,
+right?
+It can't be zero in the denominator
+and the square root can't have a negative in it.
+So it has to be bigger than zero only.
+It can't be zero.
+It's to be bigger than zero.
+So what you do is you set the inside of the square root
+greater than zero, not greater than or equal to,
+just greater than, because it can't be zero.
+So you're given this and it says find the domain.
+2x minus 10 just has to be bigger than zero.
+So x has to be bigger than five when you solve for x.
+Well, that's from open circle.
+So parentheses five to infinity, eight minus x.
+Well, eight minus x has to be bigger than zero.
+So when you add the x over, you get the x on this side
+and it's really saying x is less than eight.
+So it's open circle, everything less than eight.
+So from negative infinity up to eight.
+And here, this last slide, let you take a look at that
+on your own, but this is kind of a breakdown
+of how the domains will look based
+if you have a square root function.
+These are all functions.
+f of x could have an x in the denominator
+or you could have an x in the denominator
+within a square root, right?
+So sometimes if it's inside of the root,
+greater than or equal to zero,
+if it's just x in the denominator, it can't be zero.
+And if it's an x in a square root in the denominator,
+it has to be just greater than zero.

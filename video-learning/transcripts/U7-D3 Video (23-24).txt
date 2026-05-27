@@ -1,0 +1,204 @@
+Well, here's the video for you seven days three. It's how you did to
+the
+Okay, so this is the I'm gonna start with the blank version of the notes and then we're going to the fill that notes
+So one of the most popular
+Amazing park rides and if it is a ferris wheel one ferris wheel has a diameter
+A diameter so right from one side of the other a 50 feet
+Riders board at ground level
+So he's a
+Red and here um they board at ground level
+And the wheel moves counterclockwise, so imagine this is zero feet off the ground
+This is 50 feet off the ground
+Each ride consists of four rotations and you can assume that the ferris wheel
+It's been at a constant rate
+So let's figure out the height. Okay, well when there's zero rotations versus a full rotation
+We're still going to be at zero feet
+Okay
+At
+a quarter of a rotation
+So if we're here, right, so this is 50 feet
+So we're here at a quarter rotation
+Or at 25 feet because we're halfway up
+At a half rotation, so again, this is like
+That's a half rotation. That's 50 feet off the ground
+And one quarter one half three quarters of a rotation where it's moved back to 25 feet off the ground
+What about the eighth?
+These are kind of tricky
+So let's take a look. Let's take let me draw a picture
+What this looks like
+Okay, so this
+We're zero feet off the ground
+When we're here we're 25 feet off the ground
+What about when we're here? Here's the center of the circle
+How tall is this? Well
+We have
+We make this a little bit better
+We have a 45 45 90 triangle
+Okay
+And then there's this extra part
+I want to find out how long this is
+Well, this is 25 because the radius of this circle
+It's 25. They said the diameter is 50. So the radius of the circle is 25
+And this is the
+A a root 2 template for a 45 45 90 triangle
+A 45 45
+Both a root 2 is equal to 25
+That's the hypotenuse right? Then if we divide by root 2
+Get that a is
+17.7 I believe and we go to the fill-out notes
+Okay
+Here this is the a root 2 side
+If you divide by root 2 you get 17.7 feet. That's how long it is from the 20 foot or 25 foot halfway point
+minus
+This part or so from the 25
+Foot halfway point two
+Where that the first we'll get through it at 8th of a turn to hear this distance. Let me change the color of the sequence here
+This distance is 17.7 feet, but the whole distance is 25
+So you have to do
+25
+minus
+17.7
+You get to 7.3 feet. That's how high the riders are at a 1-8 turn
+So this is 7
+7.3 feet off the ground then at a quarter turn we're at 25 feet
+At another quarter turn we're going to add
+17.7
+So we're at almost at the top height 42.7 feet
+At the highest at a full half turn right a half turn. We're going to be at 50 feet
+And then at the eighth we're going to go from 50 feet. We're going to drop down 7.3 feet. So we're at 42.7
+And we're going to go down to 25 feet and then back to 7.3
+So let's sketch what this looks like
+I did it half a turn we're at 50 feet at a full turn we're back to zero
+At the quarters we're at 25 feet. So three quarters
+At the ace I'm just using this as my X. This is my Y. So at an eighth or at 7.3
+We got the 25
+42.7
+50 back down to 45
+42.7
+Down to 25 down to 7.3 and down to the ground. Okay, so this is a
+Looks like a hill right we get this is think of the riders and the ferris where you get the base
+When you go up and up and up you get to the top of the ferris wheel and then you go back down
+Well, what did we just make? It's a model the height of the rider and the ferris wheel you used a periodic function
+Periodic function is a function his values repeat over regular intervals just think about it
+You went up to the top of the ferris wheel and back down
+What's gonna happen after you get that a lot of well?
+Just four rotations in the right you go up again and back down right so this continue to just keep going like this
+All right
+So what if we had a different amusement park and a ferris wheel design so that half the wheel is actually below the ground
+The diameter of this underground ferris wheel is still 50 feet. So this is a 25 foot radius
+And then when you get to the top that means you 25 feet off the ground or you're 25 feet below ground
+Right the top of the ride used 25 feet of the route above the ground and bottom the ride beaches 25 feet below the ground
+So negative 25
+Riders forward the car is a ground level so you go here and you still move kind of clockwise so
+We know that at a quarter turn you made a 25 feet
+At a half a turn you're back down to zero feet off the ground because this is ground level at a three quarters turn your negative 25 feet
+But remember we found out that if the in this triangle
+This and this and this is a 45 45 90 triangle
+How do we know that?
+Because we're making a right angle
+We're making a radius of the circle
+And we know that the distance from here to here is the same as the distance from here to here to here
+So we have a 45 45 90 triangle you can see
+How else do we know well? Yeah because this is a quarter turn
+Right, so this is a quarter turn right here
+That's a 45 degree angle so this has to be 45
+Okay, so this side of the triangle is
+17.7
+So that's how high you went after an eighth of a turn and up to 25 feet and back down to 17.7 back to zero
+And we'd be down here at negative 17.7 feet negative 25 feet
+A little bit higher up to negative 17.7 feet back to zero, so we're gonna graph this
+We started zero feet we went up to 17.7 up to 25
+Back down to zero all the way down to negative 25 and up
+This is gonna keep repeating right so you're gonna get this
+What you will find out is a periodic function. This is actually going to sign and cosine graphs look like
+It's gonna just repeat over and over again this up back down up
+So this is in my own words you're gonna make it up your own words the characteristics in my mind there that the graph goes up
+Just as much as it goes down and
+The midpoint is right in the middle. So it's symmetric about this point or sort of symmetric right so it goes the same height up
+As it does down about this central point
+All right, so now
+Instead of using numbers of rotations, we're gonna recreate this using angle measure
+So I did use 90 180 270 360
+50 and so on
+Notice you just get up to this giant number
+1080 is like three full term or four full terms
+What happens if you get to 90 degrees?
+And 360 degrees and 1080 but I want to use radiance remember a full turn 360 degrees is two pi
+So we're doing this is that first
+This is that first graph where it was you know after a quarter turn
+It got up to 25 feet and then it got up to 50 feet
+And then it got back down to 25 feet back down this year. That's that first year. So that's off the graph
+Just gonna keep repeating that
+I did one two three full
+Turns here
+But I did radiance as well because a full 360 degrees is two pi if you cut two pi and half you get pi
+So I put that so how many squares is it the two pi it's one two three four
+So at two squares are at pi and then you cut that in half for it pi over two
+So one half two halves three halves four halves five halves six halves seven halves and so on
+Now what about that second fare so the underground fare sweet
+We were at zero degrees
+Then when we had a full quarter turn
+So I'm gonna go back to this one render
+Attic this is a full turn so at a quarter turn with 25 feet
+So at a quarter turn nine degrees or 25 feet
+Then at a half turn
+Which is
+Under an eight degrees or pi we get back down to zero
+And then we start going underground to negative 25
+at one and a half turns
+And then a one or sorry at
+three
+One and a half turns so one full turn
+This 360 degrees we've done we've gone up to the max
+We get back down to the zero height and then down to negative height and then here
+Okay, then that's gonna keep repeating
+So let's talk about what this graph looks like and what it means so
+Whenever you have a wave
+It's called a periodic function. Why is it called periodic function because it repeats
+This shape from high
+to low back to high over and over again
+one
+Section that you can repeat this is called a period
+So there's some parts about it. There's a midline and how do you find the midline? Well, you look at the highest point which in this case is
+two
+And the lowest point
+In this case, well actually it's one so here's to highest point is one
+However, why why value one the lowest point is a wide value of negative one
+So right in the middle zero
+So the midline is right between the highest and the lowest point
+How do you find a period? Well, you go from the peak of one of the hills to another peak
+And you measure that distance so this is going from
+one square before two
+To where it ends is right at two. It's kind of a weird period, but
+We're not asking any questions about this one
+So this would be like how many squares is it from one peak is 1 2 3 4 5 6 7 8 9 10 11 12 13 square
+So like period of
+13 squares or in this case from two to eight
+It's a six so a little bit more than six units
+the one full
+Going from the highest down to the lowest back to the highest one period
+So amplitude is from the midline to the maximum height in this case. It's one
+And wheel one what's your amplitude
+Well here is our graph from real one. Here's our highest point and our lowest point. What's the middle?
+Here is our midline
+It's right here
+Here's our midline so from that midline up to the top is a amplitude remember the amplitudes from the midline to the highest point or from the midline to the lowest point
+It's not the whole height. It's not 50. It's from the midline to the highest. So that's 25 feet
+Okay
+What about wheel two in the second graph
+Here's our midline
+From the midline to the highest point is so 25 feet. So you know what we're in the other ferris wheel like our midline was
+There's 25 feet. But here our midline is the ground or zero feet where we get up to 25 feet and go down to negative 25 feet
+Lastly
+We got the amplitude is 25 the midlines are different and the period
+Well, how long does it take to do one full cycle? So in this case, we're gonna go from
+Zero up to the highest down to the lowest
+But there is we haven't completed a full cycle yet because there's also low to high
+to get back from
+middle high to low
+Low back to high to the middle, right? That's one full cycle. We look like this
+One full cycle who did that in a distance of two parts. So in one full turn we've done one full cycle
+Okay, so no matter what if you're going above and below the ground or just your
+Ferris wheel is completely above the ground. You're doing
+One full cycle in a full rotation, which is too packed
+Now you go. That's unit seven day three

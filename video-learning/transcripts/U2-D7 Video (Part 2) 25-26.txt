@@ -1,0 +1,44 @@
+All right, we're back very short part two here.
+So just three iterate, if a is one, you go right one up one,
+right two up four.
+But if a is not one, let's say a is two, well, first when you go right
+one, you go up by a.
+In this case, a is two, right one up two.
+And you go right to up by how much?
+Well, you go a times four.
+Because remember we went right to up four.
+Well, imagine it's four times one.
+So this case is four times two.
+So right one up two, right two up eight.
+And in this case, here's our vertex.
+Right one up seven.
+So one comma seven.
+But our a value is three.
+It's negative three.
+So right one down three.
+And then it's three times four.
+Because it should have been four, but it's like times three, right?
+So right two down twelve.
+And then domain, we still go right and left forever.
+Change is low to high.
+So the lowest it gets to is negative five.
+The highest it gets to is infinity.
+Here, domain and range is still going to go left and right forever.
+So what x value will this get to is negative infinity to infinity.
+But low to high is actually negative infinity up to seven included.
+If you do see something where the a value is a fraction,
+there's one in the homework.
+You can still do the pattern.
+You'll have to plot like in between squares.
+So just as an example, it's not in the notes, but here.
+But what if we went like right one up a half, left one up a half?
+That would be like y equals one half x squared.
+The a value is one half.
+You're going to see that in the homework.
+But some good news.
+You're not going to see that on tests,
+because it's really impossible to grade like a half of a square.
+So just try your best on the homework.
+But there you go.
+That is a unit two, day seven.
+And that's the end of that new material for unit two.

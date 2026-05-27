@@ -1,0 +1,223 @@
+Alright, here's a video for Unit 9, Day 3. We're going to go over the lyrics of a Beyoncé song.
+So first, we gave everyone these lyrics, the lyrics to Crazy and Love.
+And we asked everybody to go through the song and to randomly choose five words.
+So basically, I just kind of didn't close my eyes, but just wasn't one, two, three, four, five.
+And I chose five random words, okay?
+Then, I put those five random words here.
+Such crazy way, looking baby, because we're just the five random words I found.
+This word has four letters, five, and so on.
+I added up the amount of letters and divided it by five words.
+That gives me the average word length.
+The average word length, sorry, is 4.6 letters from the five random words I chose.
+Then, I had the class pick five random words, find their average.
+And we put the dot plot up here.
+This is called a dot plot, because this is the range of values.
+And we just put a dot wherever they had an average word length.
+So, some people had an average word length of three, 3.2, maybe 3.3, 3.7, not exact, right?
+But here's the dot plot.
+Someone had an average word length of seven.
+Then, the computer did it.
+And what I did was we made the words of the song correspond to a number.
+So, I look and stare so deep in your eyes.
+These are all the lyrics.
+Word one has number one and so on.
+There are 297 words in this song.
+And then, what we did is we did one to 297 and generated a random number.
+204, 13, 122, 134.
+They did that a bunch of times.
+And then, table one.
+We wanted to see what the computer's average word length was.
+And it turns out that the average of all these dots was 3.53.
+Now, how are the dot plot different?
+Sorry.
+How are the dot plots different?
+Well, the average here was a little bit higher than the average here.
+The average here was 4.1.
+This is called mu.
+It's a u with a tail in front.
+It gives you an average of 4.1.
+Sorry for my dog.
+This gives you an average of 3.53.
+Which one is more biased?
+Well, if I'm just trying to choose random words from this song,
+I'm going to be a little bit more biased.
+Then, I would, as I was, trying to, we did a computerized random
+general.
+Same.
+So, back here, we can see that the clock passed dot plot has a little bit more variability.
+It's a little bit more spread out.
+What do you think is a better estimator?
+Well, the computer is a better estimator.
+And, what do you think the real mean is it's probably closer to the computer generated one.
+So, it's somewhere between maybe 3 and 4 is the average word length.
+Well, it's known that Beyonce did write the lyrics.
+And the average word length of her songs is 3.64.
+Based on the samples, do we have evidence that she didn't write the song?
+Well, no.
+Because the computer average is pretty close to the real average.
+The real average is 3.64.
+The computer at choosing words at random gave me a word average of 3.53.
+So, she probably did write the song.
+Now, there are two kinds of samples we took just now.
+We took a convenient sample, which is just, in this case, for the ones we chose.
+It gives a biased response.
+The true statistics version of choosing that random.
+It's got to basically be computerized.
+It can't have much human interaction of choosing randomly.
+We call that a simple random sample.
+Where every sample we take has every word and equal chance of being chosen.
+So, that Google's random number generator is a really good randomizer.
+It's better than humans can do.
+So, let's see if we can understand it in a journalism study.
+So, this magazine asked, should drivers be banned from using all cell phones?
+The readers of the magazine were encouraged to vote online.
+It found that 85% said yes, and 15% said no.
+What type of sample is it?
+Again, this is a convenient sample because we encouraged the study of encouraged readers to vote online.
+It was only readers of the magazine.
+And the issue is should drivers be banned from using all cell phones?
+Well, we only surveyed readers of this magazine.
+It's definitely biased.
+It's a convenient sample.
+And then why is it biased?
+Because only people who are passionate about an issue will answer.
+Is 85% do you think it's more or less than the average of the population?
+Well, 85% is probably pretty high because people who voted yes are going online from a magazine and responding to a survey.
+So, they're going to be more passionate about what they think.
+So, 85% is probably higher than the real average.
+And to help eliminate bias, the reporter said she'll go out and ask people if they should be banned.
+She lives close to the high school.
+So, she goes out to the parking lot at 3 p.m. and school gets getting out.
+And that's the first hundred people she sees.
+Again, this is a convenient sample because she just went to a small cluster of people.
+In this case, it was high school students.
+The sample is high school students.
+So, it's going to be a little biased because we're not getting an actual random sample of the population of drivers.
+And then how could parade magazine avoid the bias?
+Well, they could choose random names from a population.
+If they had some sort of a database of all the drivers in a certain state and just randomly chose them and had them force them to respond,
+we'd probably get a different set of data than 85 and 15%.
+Okay, now let's take a part two.
+How many pairs of shoes do you own?
+Well, we went to the class.
+In this case, we only got like nine responses.
+But I had everyone tell me around how many pairs of shoes they own.
+Some people own 15 shoes, some people own 40 shoes, some people own 5 and so on.
+This is the dot plot.
+This is on your homework, so you need to know how to do this.
+This is called the stem plot.
+This means zero, five, five pairs of shoes, zero, nine, nine pairs of shoes,
+one, zero, so 10 pairs of shoes, 15 pairs of shoes, 20, 21, 24, 27.
+There was no one in the 30s and someone had 40 pairs of shoes.
+Let's do that as a bar graph, also known as a histogram.
+Between zero and five pairs of shoes, there was one person, between five and 10 pairs of shoes.
+I kind of fudged the numbers here, but there are four people that had between five and 10 pairs of shoes.
+Between 10 and 15 and 15 and 20, there was only one person that had that many shoes.
+There were two people that had between 20 and 25 pairs of shoes and so on.
+So again, you need to know what a dot plot is, how to read it.
+This one's pretty easy to read.
+A stem plot is new to you probably, but you've got to know how to read that.
+And a bar graph, or also the official term as a histogram.
+Now let's find the mean, which is the average, and the median, which is the middle.
+To find the average, you just add up all the numbers and divide by how many numbers there are.
+The average pairs of shoes was 24.
+To find the median, it's got to be an order.
+The numbers have to go either up or down in order, so this is going up the number.
+And you cross off the first and the last.
+And then first and last and first and last.
+So you get to a middle.
+If we were to get two numbers, we'd have to average those two and get the middle.
+But this one is an odd number of numbers, so that there is a middle.
+Okay, what do you think is a more appropriate measure of center?
+That's probably the median, because this 40 is a lot of shoes to own.
+So the median is a little bit lower number.
+It's probably a closer representation of the real measure of center.
+So those measures of centers is mean.
+Median is also mowed, which is the number that shows up the most.
+It's actually no mowed here, because age number shows up once.
+Multiple people had 15 pairs of shoes.
+Then 15, if 15 showed up more than once, they would be the mowed.
+All right, then we're going to talk about shape of distribution.
+If there was a lot of data towards the 15, most of the data's in the middle,
+and there's not much data on the other ends, it's a symmetric distribution.
+If most of the people had the low number and just a couple people had the high numbers of shoes,
+we would say this is skewed right.
+And then, right, obviously, if more people had more pairs of shoes, it would be skewed left.
+There's a saying in statistics that the skew follows the tail.
+So this is the tail.
+So the tail is on the right, so you'd call it skewed right.
+And if the tail is on the left, you'd call it skewed left.
+Symmetric doesn't really have a tail.
+Either side, symmetric is most of the data is right in the middle.
+What's easiest to read?
+Well, just believe me that this is the answer that we're looking for is,
+it's easy to read a bar, a histogram, because you can really see who owns
+what most people own between five and ten shoes.
+And this data is kind of added this bar to make it because our data is really spread out.
+But if we had a lot more data, we'd probably get people have owned between the five and ten.
+Or five and fifteen pairs of shoes.
+If these two bars are really high, that would be the highest amount.
+And it's easy to read that.
+Okay, so this stuff is on the homework.
+This is a dot plot of the number of points scored by the University of Michigan team in 12 games.
+So in one game, they scored 15 points.
+In another game, they scored 24 points and so on, 34.
+We're going to put all that data in order and recreate a dot plot, or a stem plot.
+So there is 14.
+Nobody had zero, one, two, three, up to nine points.
+14 is this number.
+This is 20.
+This is 21.
+This is 23.
+23.
+24.
+Right.
+All the way up to 38.
+This is called a stem plot.
+Or sometimes it's called a stem and leaf plot.
+What kind of shape does this have?
+Well, most of the data look, there's only one, two, three, four dots that are really away from the center.
+So I'm going to create this kind of shape.
+This is symmetric.
+Most of the data is in the middle.
+Are there any outliers?
+So there's a formula for outliers.
+Outliers is any number that's less than quartile 1 minus 1.5 times inner quartile range.
+High outliers are any numbers that are more than quartile 3 plus 1.5 times inner quartile range.
+What the heck is quartiles?
+Well, in these numbers, we're going to find the median.
+The real median is because there's an even number of numbers.
+We crossed off all the numbers and we had 24 and 26.
+25 is the median.
+Then on the left-hand side of the median, we did the same thing.
+The middle of the left side was 22 and the middle of the right side is 31.
+When we got to here, we had two numbers.
+We had to find the middle of 28 and 34.
+That's 31.
+So this number, this is q1 and this is q3.
+These numbers are really important because 50% of the data is between q1 and q3.
+That is called the inner quartile range.
+So we did q3 minus q1.
+50% of the data is between 22 and 31.
+That's the inner quartile range.
+This is called a box and whisker plot.
+So 14 is the lowest, 38 is the highest.
+We had q1 and q3 make this box.
+And then the median, which was 25, is in the box as well.
+Notice there's more data on the right side of the median, so it's skewed left.
+This is the tail.
+And this inner quartile range shows us that this is 25% of the data.
+This is 25% of the data.
+This is 25 and this is 25 and 4 quartiles.
+That's what this IQR is.
+So let's see.
+Some people thought that 14 points might be an outlier.
+So let's see.
+Is 14 an outlier?
+Well, you take your q1, which is 22.
+And minus 1.5, this is part of formula.
+The inner quartile range.
+So 22 minus 1.5 times 9 is 9.
+So any number, if any game they scored less than 9 points, that would be an outlier.
+So that is on the homework.
+And that is unit nine, day three.

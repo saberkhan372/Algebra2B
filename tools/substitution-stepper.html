@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Substitution Stepper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .stepper-stage { flex: 1; overflow-y: auto; padding: 8px 0; }
+    .problem-display {
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .problem-display .sys-label { font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink-soft); margin-bottom: 6px; }
+    .equation-line { font-family: 'JetBrains Mono', monospace; font-size: 20px; margin-bottom: 4px; }
+    .equation-line .eq-num { color: var(--accent); margin-right: 10px; font-family: 'Caveat', cursive; font-weight: 700; font-size: 16px; }
+
+    .step-card {
+      margin-bottom: 12px;
+      padding: 12px 16px;
+      border-radius: 4px 6px 5px 7px / 5px 4px 7px 6px;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      box-shadow: 2px 3px 0 rgba(29,26,20,0.1);
+    }
+    .step-card.active { border-color: var(--accent); background: var(--highlight); }
+    .step-card.done   { opacity: 0.7; }
+    .step-card.locked { opacity: 0.4; }
+
+    .step-header { display: flex; gap: 10px; align-items: baseline; margin-bottom: 6px; }
+    .step-num { font-family: 'Permanent Marker', cursive; font-size: 13px; color: var(--accent); }
+    .step-title { font-family: 'Caveat', cursive; font-weight: 700; font-size: 18px; }
+    .step-content { font-family: 'Patrick Hand', cursive; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+    .step-math { font-family: 'JetBrains Mono', monospace; font-size: 15px; margin: 6px 0; padding: 6px 10px; background: var(--paper-2); border-radius: 3px; }
+
+    .answer-input {
+      display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap;
+    }
+    .answer-input input {
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      padding: 5px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      background: var(--paper);
+      width: 100px;
+    }
+    .answer-input input.correct { border-color: var(--green); background: #d4edda; }
+    .answer-input input.wrong   { border-color: var(--redline); background: #f8d7da; }
+    .check-feedback { font-family: 'Permanent Marker', cursive; font-size: 14px; }
+    .check-feedback.good { color: var(--green); }
+    .check-feedback.bad  { color: var(--redline); }
+
+    .problem-picker {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .prob-btn { cursor: pointer; }
+    .prob-btn.active { background: var(--ink); color: var(--paper); }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Quadratics</a> &nbsp;·&nbsp; D1</div>
+      <div class="tool-title f-display">Substitution Stepper</div>
+      <div class="tool-tagline f-hand">Walk through substitution step by step. Enter your answer at each stage.</div>
+
+      <div class="stepper-stage">
+        <!-- Problem picker -->
+        <div class="problem-picker">
+          <span class="f-marker" style="font-size:12px; align-self:center;">PROBLEM:</span>
+          <button class="sk-pill prob-btn active" data-prob="0" onclick="loadProblem(0, this)">P1</button>
+          <button class="sk-pill prob-btn" data-prob="1" onclick="loadProblem(1, this)">P2</button>
+          <button class="sk-pill prob-btn" data-prob="2" onclick="loadProblem(2, this)">P3</button>
+          <button class="sk-pill prob-btn" data-prob="3" onclick="loadProblem(3, this)">P4</button>
+          <button class="btn small" onclick="resetProblem()">↺ restart</button>
+        </div>
+
+        <!-- System display -->
+        <div class="problem-display sk-box-thick">
+          <div class="sys-label">SOLVE THE SYSTEM:</div>
+          <div id="eq1" class="equation-line"><span class="eq-num">①</span><span id="eq1-text"></span></div>
+          <div id="eq2" class="equation-line"><span class="eq-num">②</span><span id="eq2-text"></span></div>
+        </div>
+
+        <!-- Steps -->
+        <div id="steps-container"></div>
+
+        <!-- Final result -->
+        <div id="solution-box" class="sk-box rot-r" style="display:none; padding:14px; background:var(--highlight);">
+          <div class="f-marker" style="font-size:14px; color:var(--green);">✓ SOLVED!</div>
+          <div id="solution-text" class="f-mono" style="font-size:18px; margin-top:6px;"></div>
+          <div id="check-text" class="f-hand" style="font-size:14px; line-height:1.4; margin-top:8px;"></div>
+          <button class="btn accent" style="margin-top:10px;" onclick="nextProblem()">next problem →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Read the system of equations.</li>
+          <li>Follow each step — fill in the answer.</li>
+          <li>If you're stuck, hit "show hint".</li>
+          <li>Try all 4 problems!</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SUBSTITUTION STEPS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          <span style="color:var(--accent);">①</span> Isolate one variable in one equation.<br>
+          <span style="color:var(--accent);">②</span> Substitute into the other equation.<br>
+          <span style="color:var(--accent);">③</span> Solve for the remaining variable.<br>
+          <span style="color:var(--accent);">④</span> Back-substitute to find the other.<br>
+          <span style="color:var(--accent);">⑤</span> Check both equations!
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Which step trips you up most often?</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="elimination-race.html">→ Elimination Race</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROBLEMS = [
+      {
+        eq1: 'y = 2x + 1',  eq2: '3x + y = 16',
+        steps: [
+          { title: 'Identify the isolated variable', instruction: 'Equation ① already has y isolated. What is y equal to?', hint: 'y = 2x + 1', answer: '2x+1', display: 'y = 2x + 1' },
+          { title: 'Substitute into equation ②', instruction: 'Replace y in 3x + y = 16 with (2x + 1). Simplify. What do you get?', hint: '3x + (2x+1) = 16  →  5x + 1 = 16', answer: '5x+1=16', display: '3x + (2x + 1) = 16  →  5x + 1 = 16' },
+          { title: 'Solve for x', instruction: 'Solve 5x + 1 = 16. What is x?', hint: '5x = 15  →  x = 3', answer: '3', display: '5x = 15  →  x = 3' },
+          { title: 'Back-substitute to find y', instruction: 'Plug x = 3 back into y = 2x + 1. What is y?', hint: 'y = 2(3) + 1 = 7', answer: '7', display: 'y = 2(3) + 1 = 7' },
+        ],
+        solution: 'x = 3, y = 7',
+        check: ['① 7 = 2(3) + 1 → 7 = 7', '② 3(3) + 7 = 16 → 16 = 16']
+      },
+      {
+        eq1: 'x = 4 − y',  eq2: '2x − y = 5',
+        steps: [
+          { title: 'Identify the isolated variable', instruction: 'Equation ① has x isolated. What is x equal to?', hint: 'x = 4 − y', answer: '4-y', display: 'x = 4 − y' },
+          { title: 'Substitute into equation ②', instruction: 'Replace x in 2x − y = 5 with (4 − y). Simplify.', hint: '2(4−y) − y = 5  →  8 − 2y − y = 5  →  8 − 3y = 5', answer: '8-3y=5', display: '2(4−y) − y = 5  →  8 − 3y = 5' },
+          { title: 'Solve for y', instruction: 'Solve 8 − 3y = 5. What is y?', hint: '−3y = −3  →  y = 1', answer: '1', display: '−3y = −3  →  y = 1' },
+          { title: 'Back-substitute to find x', instruction: 'Plug y = 1 into x = 4 − y. What is x?', hint: 'x = 4 − 1 = 3', answer: '3', display: 'x = 4 − 1 = 3' },
+        ],
+        solution: 'x = 3, y = 1',
+        check: ['① 3 = 4 − 1 → 3 = 3', '② 2(3) − 1 = 5 → 5 = 5']
+      },
+      {
+        eq1: 'y = −x + 6',  eq2: 'x + 2y = 9',
+        steps: [
+          { title: 'Identify the isolated variable', instruction: 'Equation ① has y isolated. Write it out.', hint: 'y = −x + 6', answer: '-x+6', display: 'y = −x + 6' },
+          { title: 'Substitute into equation ②', instruction: 'Replace y in x + 2y = 9. Simplify.', hint: 'x + 2(−x + 6) = 9  →  x − 2x + 12 = 9  →  −x + 12 = 9', answer: '-x+12=9', display: 'x + 2(−x+6) = 9  →  −x + 12 = 9' },
+          { title: 'Solve for x', instruction: 'Solve −x + 12 = 9. What is x?', hint: '−x = −3  →  x = 3', answer: '3', display: '−x = −3  →  x = 3' },
+          { title: 'Back-substitute to find y', instruction: 'Plug x = 3 into y = −x + 6. What is y?', hint: 'y = −3 + 6 = 3', answer: '3', display: 'y = −3 + 6 = 3' },
+        ],
+        solution: 'x = 3, y = 3',
+        check: ['① 3 = −3 + 6 → 3 = 3', '② 3 + 2(3) = 9 → 9 = 9']
+      },
+      {
+        eq1: '2x + y = 10',  eq2: 'y = x − 1',
+        steps: [
+          { title: 'Identify the isolated variable', instruction: 'Equation ② has y isolated. What is y?', hint: 'y = x − 1', answer: 'x-1', display: 'y = x − 1' },
+          { title: 'Substitute into equation ①', instruction: 'Replace y in 2x + y = 10 with (x − 1). Simplify.', hint: '2x + (x−1) = 10  →  3x − 1 = 10', answer: '3x-1=10', display: '2x + (x−1) = 10  →  3x − 1 = 10' },
+          { title: 'Solve for x', instruction: 'Solve 3x − 1 = 10. What is x?', hint: '3x = 11  →  x = 11/3', answer: '11/3', display: '3x = 11  →  x = 11/3 ≈ 3.67' },
+          { title: 'Back-substitute to find y', instruction: 'Plug x = 11/3 into y = x − 1. What is y?', hint: 'y = 11/3 − 1 = 8/3', answer: '8/3', display: 'y = 11/3 − 1 = 8/3' },
+        ],
+        solution: 'x = 11/3, y = 8/3',
+        check: ['① 2(11/3) + 8/3 = 10 → 10 = 10', '② 8/3 = 11/3 − 1 → 8/3 = 8/3']
+      },
+    ];
+
+    let currentProb = 0, currentStep = 0;
+
+    function normalize(s) {
+      return s.replace(/\s+/g, '').replace(/−/g, '-').toLowerCase();
+    }
+
+    function loadProblem(idx, btn) {
+      currentProb = idx;
+      currentStep = 0;
+      document.querySelectorAll('.prob-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      const p = PROBLEMS[idx];
+      document.getElementById('eq1-text').textContent = p.eq1;
+      document.getElementById('eq2-text').textContent = p.eq2;
+      document.getElementById('solution-box').style.display = 'none';
+      renderSteps();
+    }
+
+    function renderSteps() {
+      const p = PROBLEMS[currentProb];
+      const container = document.getElementById('steps-container');
+      container.innerHTML = '';
+      p.steps.forEach((step, i) => {
+        const card = document.createElement('div');
+        const isActive = i === currentStep;
+        const isDone = i < currentStep;
+        const isLocked = i > currentStep;
+        card.className = `step-card ${isActive ? 'active' : isDone ? 'done' : 'locked'}`;
+        card.innerHTML = `
+          <div class="step-header">
+            <span class="step-num">STEP ${i+1}</span>
+            <span class="step-title">${step.title}</span>
+          </div>
+          <div class="step-content">${step.instruction}</div>
+          ${isDone ? `<div class="step-math">${step.display} ✓</div>` : ''}
+          ${isActive ? `
+            <div class="step-math" id="step-math-${i}" style="display:none;">${step.display}</div>
+            <div class="answer-input">
+              <input type="text" id="step-input-${i}" placeholder="your answer" onkeydown="if(event.key==='Enter') checkStep(${i})" />
+              <button class="btn small accent" onclick="checkStep(${i})">check →</button>
+              <button class="btn small" onclick="showHint(${i})">hint</button>
+            </div>
+            <div class="check-feedback" id="step-fb-${i}"></div>
+          ` : ''}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function checkStep(i) {
+      const input = document.getElementById(`step-input-${i}`);
+      const fb = document.getElementById(`step-fb-${i}`);
+      const step = PROBLEMS[currentProb].steps[i];
+      const userVal = normalize(input.value);
+      const correct = step.answer.split('|').map(normalize);
+      const isOk = userVal.length > 0 && correct.includes(userVal);
+      if (isOk) {
+        input.classList.add('correct');
+        fb.textContent = '✓ Correct!';
+        fb.className = 'check-feedback good';
+        setTimeout(() => {
+          currentStep = i + 1;
+          if (currentStep >= PROBLEMS[currentProb].steps.length) {
+            showSolution();
+          } else {
+            renderSteps();
+            document.querySelector('.step-card.active input')?.focus();
+          }
+        }, 700);
+      } else {
+        input.classList.add('wrong');
+        fb.textContent = '✗ Not quite — try again or hit hint.';
+        fb.className = 'check-feedback bad';
+        setTimeout(() => { input.classList.remove('wrong'); }, 1000);
+      }
+    }
+
+    function showHint(i) {
+      const math = document.getElementById(`step-math-${i}`);
+      if (math) math.style.display = 'block';
+    }
+
+    function showSolution() {
+      const box = document.getElementById('solution-box');
+      const p = PROBLEMS[currentProb];
+      box.style.display = 'block';
+      box.className = 'sk-box rot-r';
+      box.style.padding = '14px';
+      box.style.background = 'var(--highlight)';
+      document.getElementById('solution-text').textContent = `Solution: ${p.solution}`;
+      document.getElementById('check-text').innerHTML = `<strong>Check both originals:</strong><br>${p.check.join('<br>')}`;
+    }
+
+    function resetProblem() { loadProblem(currentProb, null); }
+    function nextProblem() { loadProblem((currentProb + 1) % PROBLEMS.length, document.querySelectorAll('.prob-btn')[(currentProb + 1) % PROBLEMS.length]); }
+
+    loadProblem(0, document.querySelector('.prob-btn'));
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+Here is your video for unit 6A6, actually we did this before.
+It does most lesson graphs with polynomials, so there's a couple ways to graph, but first
+thing you always have to do is factor, because when you factor, for example, if you
+add x squared minus 64, right, that's our function, so I don't know how to graph that,
+what I do know is that this factor is to x plus 8 and x minus 8, meaning we have
+x intercepts at negative 8 and positive 8.
+The factor shows up once, so this factor only shows up once, it's going to go through
+the axis, and if this factor only shows up once, it's going to go through.
+If you had something like this, where it was x plus 8, x plus 8, that would, that's
+showing up twice, so at 8, it would bounce off the axis, or here, at negative 8 and
+positive 8, they both go through.
+So we have different kinds of factoring, but we just did difference of squares, that's
+this one, difference of cubes, you've already learned, product sum is like what you've
+been doing since algebra 1, and then grouping is when you have four terms, and you take
+out a GCF from the first two terms and a GCF from the second two terms, and there you go.
+So here is the formula for difference of cubes, this is the one that you haven't done
+really until this year, an example of that is like x to the third minus 8.
+This is the third, the cubed root of that, this is x, and the cubed root of 8 is 2.
+So this factors into x minus 2, x squared plus 2x, and then plus that 2 squared, so plus
+4.
+So this is a difference of cubes now, how they work, well, polynomials only have smooth curves,
+they can't have a sharp curve, and they can't have a break, so which of the following
+represent the polynomial will only this one, and this one because they're smooth curves,
+and they don't have sharp corners, and they don't have any breaks.
+Okay, now polynomials with an even degree, both ends will point the same one, so they
+have an odd degree, like this one, this is x to the first, x to the first, so this is
+third degree, one end points, one way, one end points another, if the leading coefficient
+mean it, this front member is negative, the graph will go, well, they kind of set it wrong,
+this leading coefficient is a one, leading coefficient is a positive number, so it goes
+up to the right, and because it's an even degree, both end points the same way, this leading
+coefficient's negative, so it goes down to the right, and it's an even degree, so both
+ends point down, this is x to the first, x to the first, x to the first, so third degree,
+but the leading coefficient's negative, so it goes down to the right, and because it's an
+odd degree, the other end is going to point the opposite way, so down to the right, up
+to the left, this leading coefficient's positive is going to go up to the right, down
+to the left, so here we go, how do you factor this?
+Next, we'll take out a GCF, this is x to the fourth minus 81, which is x squared plus
+nine, x squared minus nine, this one keeps going into x plus three, x minus three, because
+of difference of squared, this factor, we set it equal to zero, and move the nine over,
+and square root, we get plus or minus three, i, so we have x equals negative three, x equals
+three, and then this one gave us plus or minus three, i, so we have four zeros, two
+of them are real, two of them are imaginary, or we use the word complex, because they
+have i in them, a highest degree is fourth, so it's a fourth degree and a leading coefficient's
+positive, so that's graphic, we only have two real roots, three and negative three, because
+the leading coefficient's positive is going to go up to the right, and both have multiplicity
+of one, so it's going to go through and through, here, take out a GCF, we can factor
+like negative 25 times negative four, this negative three, nine, both of these keep going,
+we have roots, we have negative five, positive five, negative two, and positive two, four
+real roots, all with multiplicity of one, so they're all going to go through fourth degree
+and the leading coefficient's positive, so do this one from scratch, we have five and
+negative five, five, and negative five, two, and negative two, leading coefficient's positive
+is going to go up to the right, and the degree is four, so it's going to go up to the right
+and go through, through, and through, if one of these, if this had showed up twice or four
+times, we'd go balance off the axis, but all of these had multiplicity of one, okay,
+factor, we can take out, it's kind of tricky, we can take out a two x, and we're left with eight x
+to the six plus 27, if we take out this two x, this becomes something we can do using a to the third
+minus b to the third, remember a minus b, a squared plus a b plus b squared, that's how this
+factors, this, when I set it equal to zero, I get plus or minus root three has i, this, I use
+polynomial, I get four imaginary roots, this one, if I set it equal to zero, because technically,
+this is a factor two, we can set equal to zero, only have one real root, leading coefficient's
+positive, the degree is odd, so one end points up, one end points down, and the only real root
+is zero, so it goes through here, let's take out a nine x, and we're left with this,
+this factors into x to the fourth plus three, x to the fourth plus two, here we get zero, it's the
+only real root, the rest, because when you, to the fourth root of both of these,
+we get four, we actually get eight imaginary roots and one real root, so it's ninth degree
+positive, leading coefficient, so it's going to go up to the right, down to the left, and the
+only real root is the one I go through. Now, this is the final part, intercept form, this means
+x equals negative two, this means x equals three, this means x equals negative six, and negative six,
+well, because this shows up twice, this would be a negative, that means that negative six is
+going to bounce, because of multiplicity two, it shows up twice, so we've got x equals negative two,
+x equals three, x equals negative sixth, and all of this is the root of graph this,
+at negative six, negative two, and three, we'd have our x intercepts, leading coefficient's
+negative, so it goes down to the right, and it goes through negative three, because it
+positive three, because it shows up once, it goes through negative two, it's going to bounce,
+how do I know what the degree is with x to the one, x to the one, x to the one, so it's got a
+degree of four. Now, calculated graphing, if you want to graph anything, make sure you're in the
+main screen, you press y equals, plug in a function, then you press graph, if you can't see anything
+your graph, press this button, zoom, zoom box will give you a 10 by 10, zoom standard will also
+give you like the normal screen where zero, zero is in the middle, but if you want to do something
+else, go all the way down to the bottom, zoom fit will make your graph fit in the screen,
+so here when I graphed this, I was able to do the second trace, and I found my x intercept,
+so I was press second trace, and then you click zero, when you get to zeros, it's going to
+ask for the left boundary and the right boundary, so go a little bit to the left using the arrows,
+a little bit to the left of your x intercept, a little bit to the right, you press enter after each one,
+and then press enter after you press guess, and it'll tell you where your x intercept is, so here
+the x intercepts, we're negative one point three three six for this, and zero point seven six,
+so fourth degree, only two real intercepts, here third degree, we had three real intercepts,
+I'll post another video of the actual calculator, but this is how graphing works, and just
+really pay attention to intercept form, because this is going to be the most useful for the test.

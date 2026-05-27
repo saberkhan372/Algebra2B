@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Negative Exponent Flipper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* mode tabs */
+    .mode-tabs {
+      display: flex; gap: 0; border-bottom: 2px solid var(--ink);
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .mode-tab {
+      padding: 6px 16px; border: none; background: transparent;
+      font-family: 'Permanent Marker', cursive; font-size: 13px;
+      cursor: pointer; color: var(--ink-soft); border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.15s;
+    }
+    .mode-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+    .mode-tab:hover:not(.active) { background: var(--paper-2); }
+
+    .mode-panel { display: none; }
+    .mode-panel.active { display: flex; flex-direction: column; gap: 16px; flex: 1; }
+
+    /* ===== BASIC FLIP ===== */
+    .flipper-stage {
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 18px; padding: 8px 16px;
+    }
+    .expr-display { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+    .expr-box {
+      border: 3px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 18px 28px; background: var(--paper); text-align: center;
+      box-shadow: 3px 4px 0 rgba(29,26,20,0.18); min-width: 140px; transition: background 0.3s;
+    }
+    .expr-box.highlighted { background: var(--highlight); }
+    .expr-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
+    .expr-math { font-family: 'JetBrains Mono', monospace; font-size: 36px; line-height: 1; color: var(--ink); }
+    .expr-math sup, .expr-math sub { font-size: 0.65em; }
+    .arrow-label { font-family: 'Caveat', cursive; font-weight: 700; font-size: 28px; color: var(--accent); }
+    .fraction-display { display: flex; flex-direction: column; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 28px; }
+    .fraction-display .numerator { border-bottom: 3px solid var(--ink); padding-bottom: 4px; }
+    .fraction-display .denominator { padding-top: 4px; }
+    .controls-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; justify-content: center; }
+    .base-input { display: flex; align-items: center; gap: 8px; }
+    .base-input label { font-family: 'Permanent Marker', cursive; font-size: 13px; }
+    .base-input input[type=number] {
+      width: 60px; border: 2px solid var(--ink); border-radius: 4px; padding: 4px 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; background: var(--paper); color: var(--ink); text-align: center;
+    }
+    .exp-controls { display: flex; gap: 8px; align-items: center; }
+    .exp-btn {
+      width: 36px; height: 36px; border: 2px solid var(--ink); border-radius: 50%;
+      background: var(--paper); font-size: 20px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: background 0.1s;
+      font-family: 'Patrick Hand', cursive;
+    }
+    .exp-btn:hover { background: var(--paper-2); }
+    .exp-display { font-family: 'JetBrains Mono', monospace; font-size: 18px; min-width: 40px; text-align: center; }
+    .examples-strip { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .example-chip {
+      border: 1.5px solid var(--ink-2); border-radius: 999px; padding: 4px 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; cursor: pointer;
+      background: var(--paper-2); transition: background 0.1s;
+    }
+    .example-chip:hover { background: var(--highlight); }
+    .explanation-row {
+      max-width: 480px; text-align: center; font-family: 'Patrick Hand', cursive;
+      font-size: 15px; color: var(--ink-2); line-height: 1.5;
+    }
+
+    /* ===== MULTI-STEP ===== */
+    .problem-nav { display: flex; align-items: center; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .prob-chip {
+      border: 2px solid var(--ink); border-radius: 6px; padding: 6px 14px;
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; cursor: pointer;
+      background: var(--paper-2); transition: background 0.15s;
+    }
+    .prob-chip.active { background: var(--highlight); border-color: var(--accent); }
+    .prob-chip:hover:not(.active) { background: #e8e2d1; }
+
+    .step-sequence { display: flex; flex-direction: column; gap: 10px; max-width: 540px; margin: 0 auto; }
+    .step-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 10px 14px;
+      background: var(--paper); opacity: 0.25; transition: opacity 0.35s, background 0.35s;
+      position: relative;
+    }
+    .step-card.revealed { opacity: 1; }
+    .step-card.revealed.step-1 { background: #e8f4ec; border-color: #2a8a4a; }
+    .step-card.revealed.step-2 { background: #dde9f6; border-color: #2a6fb4; }
+    .step-card.revealed.step-3 { background: #fdf0e0; border-color: #d94f2a; }
+    .step-card.revealed.step-4 { background: var(--highlight); border-color: #c8a000; }
+
+    .step-num {
+      font-family: 'Permanent Marker', cursive; font-size: 10px;
+      position: absolute; top: 6px; right: 10px; opacity: 0.5;
+    }
+    .step-lbl { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-bottom: 3px; }
+    .step-expr { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: var(--ink); }
+
+    .step-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    /* ===== FACTOR vs TERM ===== */
+    .fvt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 600px; margin: 0 auto; }
+    @media (max-width: 600px) { .fvt-grid { grid-template-columns: 1fr; } }
+
+    .fvt-card {
+      border: 3px solid var(--ink); border-radius: 8px; padding: 14px 16px;
+      text-align: center; position: relative;
+    }
+    .fvt-card.valid { background: #e8f4ec; border-color: #2a8a4a; }
+    .fvt-card.invalid { background: #fdecea; border-color: var(--redline); }
+    .fvt-badge {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      padding: 2px 10px; border-radius: 999px; font-family: 'Permanent Marker', cursive; font-size: 12px;
+    }
+    .fvt-card.valid .fvt-badge { background: #2a8a4a; color: #fff; }
+    .fvt-card.invalid .fvt-badge { background: var(--redline); color: #fff; }
+    .fvt-expr { font-family: 'JetBrains Mono', monospace; font-size: 22px; margin: 10px 0 4px; }
+    .fvt-note { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+    .fvt-result { font-family: 'JetBrains Mono', monospace; font-size: 20px; margin-top: 8px; }
+    .fvt-card.valid .fvt-result { color: #2a8a4a; }
+    .fvt-card.invalid .fvt-result { color: var(--redline); }
+
+    .party-banner {
+      background: var(--highlight); border: 3px dashed #c8a000; border-radius: 8px;
+      padding: 12px 18px; text-align: center; max-width: 500px; margin: 0 auto;
+    }
+    .party-banner .f-display { font-size: 22px; color: var(--accent); }
+
+    .fvt-examples { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+    .fvt-chip {
+      border: 1.5px solid var(--ink-2); border-radius: 999px; padding: 4px 12px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; cursor: pointer;
+      background: var(--paper-2); transition: background 0.1s;
+    }
+    .fvt-chip.active { background: var(--highlight); border-color: var(--accent); }
+    .fvt-chip:hover { background: #e8e2d1; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u2.html">← U2</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right: none;">
+      <div class="tool-breadcrumb">
+        <a href="../u2.html">← U2 · Graphs &amp; Exponents</a> &nbsp;·&nbsp; D4
+      </div>
+      <div class="tool-title f-display">Negative Exponent Flipper</div>
+      <div class="tool-tagline f-hand">See x⁻ⁿ become 1/xⁿ — and know when the flip is valid.</div>
+
+      <!-- Mode tabs -->
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="basic">Basic Flip</button>
+        <button class="mode-tab" data-mode="multi">Multi-Step</button>
+        <button class="mode-tab" data-mode="factor">Factor vs Term</button>
+      </div>
+
+      <!-- ===== MODE: BASIC FLIP ===== -->
+      <div id="mode-basic" class="mode-panel active">
+        <div class="flipper-stage">
+          <div class="expr-display">
+            <div class="expr-box" id="left-box">
+              <div class="expr-label">NEGATIVE EXPONENT</div>
+              <div class="expr-math" id="left-expr">x<sup>−2</sup></div>
+            </div>
+            <div class="arrow-label">=</div>
+            <div class="expr-box" id="right-box">
+              <div class="expr-label">FRACTION FORM</div>
+              <div class="expr-math" id="right-expr">
+                <div class="fraction-display">
+                  <div class="numerator">1</div>
+                  <div class="denominator" id="denom">x<sup>2</sup></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="explanation-row" id="explanation">
+            A negative exponent means "flip to the denominator." x⁻² = 1/x² because x⁻² · x² = x⁰ = 1.
+          </div>
+
+          <div class="controls-row">
+            <div class="base-input">
+              <label>BASE:</label>
+              <input type="number" id="base-input" value="0" min="-9" max="9" step="1" />
+              <span class="f-hand" style="color:var(--ink-soft); font-size:13px;">(0 = variable x)</span>
+            </div>
+            <div class="exp-controls">
+              <span class="f-marker" style="font-size:13px;">EXPONENT:</span>
+              <button class="exp-btn" onclick="changeExp(-1)">−</button>
+              <div class="exp-display f-mono" id="exp-display">−2</div>
+              <button class="exp-btn" onclick="changeExp(+1)">+</button>
+            </div>
+            <button class="btn accent" onclick="animateFlip()">▶ flip it!</button>
+            <button class="btn small" onclick="resetTool()">↺</button>
+          </div>
+
+          <div>
+            <div class="f-marker" style="font-size:12px; text-align:center; margin-bottom:6px;">QUICK EXAMPLES</div>
+            <div class="examples-strip">
+              <div class="example-chip" onclick="setExample(2,-1)">2⁻¹</div>
+              <div class="example-chip" onclick="setExample(3,-2)">3⁻²</div>
+              <div class="example-chip" onclick="setExample(0,-3)">x⁻³</div>
+              <div class="example-chip" onclick="setExample(5,-2)">5⁻²</div>
+              <div class="example-chip" onclick="setExample(0,-1)">x⁻¹</div>
+              <div class="example-chip" onclick="setExample(4,-3)">4⁻³</div>
+              <div class="example-chip" onclick="setExample(0,-4)">x⁻⁴</div>
+              <div class="example-chip" onclick="setExample(10,-2)">10⁻²</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== MODE: MULTI-STEP ===== -->
+      <div id="mode-multi" class="mode-panel">
+        <div class="f-hand" style="font-size:14px; text-align:center; color:var(--ink-2);">
+          The classroom rule: <strong>apply exponent rules first, then flip what's still negative.</strong>
+        </div>
+
+        <div class="problem-nav" id="prob-nav"></div>
+
+        <div class="step-sequence" id="step-seq"></div>
+
+        <div class="step-btns">
+          <button class="btn" id="next-step-btn" onclick="revealNextStep()">▶ next step</button>
+          <button class="btn small" onclick="resetSteps()">↺ restart</button>
+        </div>
+      </div>
+
+      <!-- ===== MODE: FACTOR vs TERM ===== -->
+      <div id="mode-factor" class="mode-panel">
+        <div class="party-banner">
+          <div class="f-display">🎉 "Plus or minus ruins the party."</div>
+          <div class="f-hand" style="font-size:14px; margin-top:6px;">
+            You can only flip a <strong>factor</strong> (connected by ×). Terms connected by + or − cannot be flipped as one fraction.
+          </div>
+        </div>
+
+        <div>
+          <div class="f-marker" style="font-size:12px; text-align:center; margin-bottom:10px;">PICK AN EXAMPLE:</div>
+          <div class="fvt-examples" id="fvt-examples"></div>
+        </div>
+
+        <div class="fvt-grid" id="fvt-grid"></div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li><strong>Basic Flip</strong> — see the definition.</li>
+          <li><strong>Multi-Step</strong> — apply rules, then flip.</li>
+          <li><strong>Factor vs Term</strong> — know when NOT to flip.</li>
+        </ol>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">What is 2⁻³? Use Basic Flip to check.</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.4deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In Multi-Step: why does x⁻⁴ ÷ x⁻¹³ end up on top (not flipped)?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">In Factor vs Term: why does x⁻² + y³ ruin the party?</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE 4-STEP RULE</div>
+        <ol class="f-hand" style="font-size:13px; line-height:1.6; padding-left:18px; margin:0;">
+          <li>Identify factors vs terms.</li>
+          <li>Apply exponent rules (multiply/divide same base).</li>
+          <li>Flip any remaining negative-exponent factors.</li>
+          <li>Confirm all exponents are positive.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea;">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">⚠ WATCH OUT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.4;">
+          A negative exponent ≠ a negative number.<br>
+          x⁻² means 1/x², not −x².
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="diff-of-squares.html">→ Difference of Squares</a>
+        <a class="related-link f-hand" href="rational-exponents.html">→ Rational Exponents Tower</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== MODE TABS =====
+    document.querySelectorAll('.mode-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('mode-' + tab.dataset.mode).classList.add('active');
+      });
+    });
+
+    // ===== BASIC FLIP =====
+    let base = 0, exp = -2, animating = false;
+    function baseStr() { return base === 0 ? 'x' : String(base); }
+    function superscript(n) {
+      const map = {'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+      return String(Math.abs(n)).split('').map(c => map[c]||c).join('');
+    }
+    function computeValue() {
+      if (base === 0) return null;
+      const num = Math.pow(base, Math.abs(exp));
+      return Number.isFinite(num) ? num : null;
+    }
+    function updateDisplay() {
+      const b = baseStr(), absE = Math.abs(exp);
+      document.getElementById('left-expr').innerHTML = `${b}<sup>${exp}</sup>`;
+      let numerHTML = '1', denomHTML;
+      if (base !== 0) {
+        const val = computeValue();
+        if (val !== null) {
+          if (exp < 0) { denomHTML = String(val); }
+          else { numerHTML = String(Math.pow(base,exp)); denomHTML = '1'; }
+        } else { denomHTML = `${b}<sup>${absE}</sup>`; }
+      } else {
+        if (exp < 0) { denomHTML = absE===1 ? 'x' : `x<sup>${absE}</sup>`; }
+        else { numerHTML = absE===1 ? 'x' : `x<sup>${absE}</sup>`; denomHTML = '1'; }
+      }
+      document.getElementById('right-expr').innerHTML =
+        `<div class="fraction-display"><div class="numerator">${numerHTML}</div><div class="denominator">${denomHTML}</div></div>`;
+      document.getElementById('exp-display').textContent = String(exp);
+      let expl;
+      if (exp < 0) {
+        if (base !== 0) {
+          const val = computeValue();
+          expl = `${b}${exp} means flip to the bottom: 1 ÷ ${b}${superscript(absE)} = ${val!==null?'1/'+val:'1/'+b+superscript(absE)}.`;
+        } else {
+          expl = `x${superscript(exp)} = 1/x${superscript(absE)}. The negative moves x to the denominator.`;
+        }
+      } else if (exp === 0) {
+        expl = `Anything to the power 0 equals 1. (Even ${b}⁰ = 1.)`;
+      } else {
+        expl = `Positive exponent: ${b}${superscript(exp)} stays on top. No flip needed.`;
+      }
+      document.getElementById('explanation').textContent = expl;
+    }
+    function changeExp(delta) {
+      exp = Math.max(-6, Math.min(6, exp+delta));
+      document.getElementById('left-box').classList.remove('highlighted');
+      document.getElementById('right-box').classList.remove('highlighted');
+      updateDisplay();
+    }
+    function setExample(b, e) {
+      base = b; exp = e;
+      document.getElementById('base-input').value = b;
+      document.getElementById('left-box').classList.remove('highlighted');
+      document.getElementById('right-box').classList.remove('highlighted');
+      updateDisplay();
+    }
+    document.getElementById('base-input').addEventListener('input', function() {
+      base = parseInt(this.value)||0; updateDisplay();
+    });
+    function animateFlip() {
+      if (animating) return; animating = true;
+      const lb = document.getElementById('left-box'), rb = document.getElementById('right-box');
+      lb.classList.remove('highlighted'); rb.classList.remove('highlighted');
+      lb.classList.add('highlighted');
+      setTimeout(() => {
+        rb.classList.add('highlighted');
+        setTimeout(() => { lb.classList.remove('highlighted'); animating = false; }, 800);
+      }, 400);
+    }
+    function resetTool() {
+      base = 0; exp = -2;
+      document.getElementById('base-input').value = 0;
+      document.getElementById('left-box').classList.remove('highlighted');
+      document.getElementById('right-box').classList.remove('highlighted');
+      updateDisplay();
+    }
+    updateDisplay();
+
+    // ===== MULTI-STEP =====
+    const PROBLEMS = [
+      {
+        label: 'x⁻¹¹ · x⁴',
+        steps: [
+          { cls:'step-1', lbl:'Identify like bases (both x, connected by ×):', expr:'x⁻¹¹ · x⁴' },
+          { cls:'step-2', lbl:'Add exponents — same base, multiplication:', expr:'x⁻¹¹⁺⁴ = x⁻⁷' },
+          { cls:'step-3', lbl:'Exponent is still negative — flip the factor:', expr:'1 / x⁷' },
+          { cls:'step-4', lbl:'All exponents positive? ✓', expr:'Answer: 1/x⁷' },
+        ]
+      },
+      {
+        label: 'x⁻⁴ ÷ x⁻¹³',
+        steps: [
+          { cls:'step-1', lbl:'Identify like bases (both x, connected by ÷):', expr:'x⁻⁴ / x⁻¹³' },
+          { cls:'step-2', lbl:'Subtract exponents — same base, division:', expr:'x⁻⁴ ⁻ ⁽⁻¹³⁾ = x⁹' },
+          { cls:'step-3', lbl:'Exponent is positive — no flip needed!', expr:'x⁹ stays on top' },
+          { cls:'step-4', lbl:'All exponents positive? ✓', expr:'Answer: x⁹' },
+        ]
+      },
+      {
+        label: 'x⁻² · y³',
+        steps: [
+          { cls:'step-1', lbl:'Different bases — no rule to combine them:', expr:'x⁻² · y³' },
+          { cls:'step-2', lbl:'Identify which factor has a negative exponent:', expr:'x⁻² is negative; y³ is fine' },
+          { cls:'step-3', lbl:'Flip only the x⁻² factor:', expr:'y³ / x²' },
+          { cls:'step-4', lbl:'All exponents positive? ✓', expr:'Answer: y³/x²' },
+        ]
+      },
+      {
+        label: '(x³)⁻²',
+        steps: [
+          { cls:'step-1', lbl:'Power of a power — multiply the exponents:', expr:'(x³)⁻² = x^(3·(−2))' },
+          { cls:'step-2', lbl:'Compute 3 × (−2):', expr:'= x⁻⁶' },
+          { cls:'step-3', lbl:'Exponent is negative — flip:', expr:'1 / x⁶' },
+          { cls:'step-4', lbl:'All exponents positive? ✓', expr:'Answer: 1/x⁶' },
+        ]
+      },
+    ];
+
+    let curProb = 0, stepsRevealed = 0;
+
+    function buildProbNav() {
+      const nav = document.getElementById('prob-nav');
+      nav.innerHTML = '';
+      PROBLEMS.forEach((p,i) => {
+        const btn = document.createElement('button');
+        btn.className = 'prob-chip' + (i===curProb?' active':'');
+        btn.textContent = p.label;
+        btn.onclick = () => { curProb=i; stepsRevealed=0; buildProbNav(); buildSteps(); };
+        nav.appendChild(btn);
+      });
+    }
+
+    function buildSteps() {
+      const seq = document.getElementById('step-seq');
+      seq.innerHTML = '';
+      const prob = PROBLEMS[curProb];
+      prob.steps.forEach((s,i) => {
+        const card = document.createElement('div');
+        card.className = 'step-card ' + s.cls + (i < stepsRevealed ? ' revealed' : '');
+        card.id = 'step-card-' + i;
+        card.innerHTML = `<div class="step-num">STEP ${i+1}</div><div class="step-lbl">${s.lbl}</div><div class="step-expr">${s.expr}</div>`;
+        seq.appendChild(card);
+      });
+      document.getElementById('next-step-btn').textContent =
+        stepsRevealed >= prob.steps.length ? '✓ done!' : '▶ next step';
+      document.getElementById('next-step-btn').disabled = stepsRevealed >= prob.steps.length;
+    }
+
+    function revealNextStep() {
+      const prob = PROBLEMS[curProb];
+      if (stepsRevealed < prob.steps.length) {
+        stepsRevealed++;
+        buildSteps();
+      }
+    }
+
+    function resetSteps() { stepsRevealed=0; buildSteps(); }
+
+    buildProbNav(); buildSteps();
+
+    // ===== FACTOR vs TERM =====
+    const FVT_EXAMPLES = [
+      {
+        label: 'x⁻² · y³',
+        validExpr: 'x⁻² · y³', validNote: 'x⁻² and y³ are FACTORS (connected by ×).',
+        validResult: '= y³/x²  ✓',
+        invalidExpr: 'x⁻² + y³', invalidNote: 'Plus separates TERMS — each term must be handled separately. Cannot combine as one fraction.',
+        invalidResult: '≠ y³/x²  ✗',
+      },
+      {
+        label: 'a⁻³ · b²',
+        validExpr: 'a⁻³ · b²', validNote: 'a⁻³ and b² are FACTORS (connected by ×).',
+        validResult: '= b²/a³  ✓',
+        invalidExpr: 'a⁻³ − b²', invalidNote: 'Minus separates TERMS — you cannot flip both across the same bar.',
+        invalidResult: '≠ b²/a³  ✗',
+      },
+      {
+        label: 'x⁻² · x⁴',
+        validExpr: 'x⁻² · x⁴', validNote: 'Same base factors — apply rule first: x⁻²⁺⁴ = x².',
+        validResult: '= x²  ✓',
+        invalidExpr: 'x⁻² + x⁴', invalidNote: 'Plus separates terms. x⁻² + x⁴ cannot be simplified with exponent rules.',
+        invalidResult: 'stays as x⁻² + x⁴  ✗',
+      },
+    ];
+
+    let curFVT = 0;
+
+    function buildFVTExamples() {
+      const strip = document.getElementById('fvt-examples');
+      strip.innerHTML = '';
+      FVT_EXAMPLES.forEach((ex,i) => {
+        const chip = document.createElement('div');
+        chip.className = 'fvt-chip' + (i===curFVT?' active':'');
+        chip.textContent = ex.label;
+        chip.onclick = () => { curFVT=i; buildFVTExamples(); buildFVTGrid(); };
+        strip.appendChild(chip);
+      });
+    }
+
+    function buildFVTGrid() {
+      const ex = FVT_EXAMPLES[curFVT];
+      document.getElementById('fvt-grid').innerHTML = `
+        <div class="fvt-card valid">
+          <div class="fvt-badge">✓ VALID MOVE</div>
+          <div class="fvt-expr">${ex.validExpr}</div>
+          <div class="fvt-note">${ex.validNote}</div>
+          <div class="fvt-result">${ex.validResult}</div>
+        </div>
+        <div class="fvt-card invalid">
+          <div class="fvt-badge">✗ PARTY RUINED</div>
+          <div class="fvt-expr">${ex.invalidExpr}</div>
+          <div class="fvt-note">${ex.invalidNote}</div>
+          <div class="fvt-result">${ex.invalidResult}</div>
+        </div>
+      `;
+    }
+
+    buildFVTExamples(); buildFVTGrid();
+  </script>
+</body>
+</html>

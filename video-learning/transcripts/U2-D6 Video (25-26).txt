@@ -1,0 +1,220 @@
+Okay, here we go. Here's the video for unit two, day six,
+different types of squares and cubes.
+There's a pattern when you're foiling
+and it's special when you have a variable plus a number
+and a variable minus that same number.
+You'll see something interesting that happens.
+If it's as simplified and all you can do here is like multiply, right?
+If you have two parentheses with two things,
+and we learned this a long time ago, you have to foil.
+First test versus x squared, outer is minus seven x,
+inner plus seven x.
+All right, just did backwards, that's fine.
+And then minus 49. But what happens?
+The plus seven x and the minus seven x cancel each other out,
+so you just get x squared minus 49.
+But what happens if it's x minus seven squared,
+meaning we can expand it out. It's this thing twice.
+What happens if it's identical?
+Well, x squared minus seven x minus seven x plus 49.
+These don't cancel.
+So you end up most of the time when you foil two terms,
+you get three terms, one, two, three.
+But in this example, we have basically two terms,
+two terms, two terms, and it ends up with two terms.
+Foyling me comes just first times last.
+And this only happens when you have a difference of squares,
+meaning the first number and the second number are the same,
+but there's a plus and a minus.
+Notice here, three x to the fifth times three x to the fifth.
+Well, let's just take a look at that.
+What is three x to the fifth times three x to the fifth?
+Numbers multiply numbers and letters multiply letters.
+So three tens three is nine, x to the fifth and x to the fifth.
+And the exponent adds, so you get nine x to the tenth.
+And then outer is, well, three times 19 is 57,
+three times negative 19 is negative 57.
+These cancel, and then negative 19 times 19 is negative 361.
+So this is actually the same process as this.
+We don't really need to think about the middle terms cancel out.
+Now, we can do the opposite.
+If you're given two numbers squared,
+we can factor it out into a plus b, a minus b.
+So these two numbers are perfect squares.
+X squared is a perfect square, it's x times x.
+64 is a perfect square, and it's plus and minus.
+So plus eight minus eight.
+It's called difference of squares,
+because it must be a subtraction symbol here.
+Is nine and four, are nine and four perfect squares?
+Yeah.
+Nine x squared is three x times three x.
+Four y squared is two y times two y, and one's plus one's minus.
+And I want you to think of it this way.
+So what squared minus what squared?
+How do you get x to the sixth?
+x to the third time x to the third,
+or x to the third squared?
+And then how do you get 981?
+Nine squared.
+So think of x to the sixth as x to the third squared,
+and 81 as nine squared.
+And that's what goes.
+These two numbers will go here and here and here and here.
+You'll probably get two point where you're like,
+oh, 16 is four, four and four,
+and y to the tenth is y to the fifth,
+but let's take one step at a time here.
+So how do you get 16, 4 squared?
+And how do you get x to the 16?
+Well, x to the eighth squared,
+because that's x to the eighth times x to the eighth, right?
+And x bonus add.
+And then how do you get y to the tenth?
+Same process five times two, so five squared,
+like y to the fifth squared is y to the tenth.
+So one plus one's minus,
+and it's always using this formula.
+Sometimes you, if it just says factor,
+you always want to factor completely,
+and three is not a perfect square,
+and 75 is not a perfect square,
+but there's a GCF.
+You can take out a three from the beginning,
+and then we have x times x,
+25 is five times five.
+Here, 49 and 36 are perfect squares.
+I should use like seven and six,
+but x to the seventh,
+well, I can't like do x to the three,
+this doesn't work, right?
+You can't mean you could x to the 3.5 squared,
+but then this one,
+you just want to see if you can take out a GCF first.
+So we can, we can take out an x,
+and then we have x to the sixth,
+which is x to the third,
+x to the third,
+and then we can take the x out of this game,
+so it's just six minus six.
+There is a second pattern with two terms,
+but what if they're perfect cubes,
+all right, and a couple down here,
+like two to the third,
+two times two times two is eight.
+Three times three times three is 27.
+Four times four times four is 64,
+five times five times five is 125.
+These are some that you might see,
+and it's just kind of good to get some familiarity with those.
+Start with identifying what A and B are,
+because it's like, think of what it took,
+what to the third power is that number.
+So like, I look at eight,
+oh, I know that's two to the third,
+or I look at 64, I know that's four to the third,
+and you can think of it as this, right?
+What number to the third power is in here?
+And let's look at this.
+This actually can be some or difference of cubes,
+so it actually can be plus or minus,
+but these both have to be perfect cubes.
+For example, x to the third power,
+you can actually take the third root of it,
+and then get x.
+That's what would go at like,
+if this was a x to the third,
+this just to the one would just be x,
+and this would be x squared,
+or if this was 64, right?
+Four times four times four is 64,
+so this one would be four,
+and this one would be four square, which is 16.
+And if it's a plus,
+the thing in the first parentheses is a plus,
+the next sign in the next set of parentheses is a minus.
+That's why it's not a typo.
+This says plus minus, this is minus plus,
+and this is always a plus at the end.
+So start with identifying what your A and your B is.
+So here we go.
+x to the third.
+Well, that's what does it take to get x to the third?
+Well, just x.
+And what does it take to get 27 is 3 to the third?
+So x and 3 are my A and B,
+and this is a plus,
+so the formula starts with plus,
+then it's minus, then it's plus.
+This is always plus, these are always opposites.
+So A plus B parentheses,
+A squared minus, what's A, B?
+It's x times 3, which is 3x.
+Plus B squared, which is 9.
+How do you get 8, 2 times 2 times 2?
+So 2x to the third,
+and then 1 times 1 times 1 is still 1,
+so it's actually a perfect cube as well.
+But this one's a minus.
+So if it's minus, the first thing's minus.
+So it's 2x minus 1.
+And then what happens if you square 2x?
+Well, it's 2 squared x squared.
+So 4x squared.
+This is a minus, so this is a plus.
+A times B, which is 2x times 1,
+is just 2x.
+And then what's 1 squared is just 1.
+Here, 125 is 5 times 5 times 5 times 5.
+So 5x to the third.
+How do you get y to the 15?
+Well, y to the fifth to the third.
+5 times 3, right?
+This is a minus.
+So if it's a minus, the first one's minus.
+It's a 5x minus, y to the fifth.
+This term squared.
+So 5x squared is 25x squared.
+Plus AB.
+So 5x times y to the fifth.
+So 5x, y to the fifth.
+Plus, y to the tenth.
+How do you get y to the tenth?
+Well, y to the fifth squared.
+Here, 128.
+It's not a perfect cube.
+And you can do on a calculator if you press the math button.
+You go down here, take a cube root.
+So what is, what does that say, 128?
+Is 128 a perfect cube?
+No.
+And also, if you press second in this, well,
+wait a minute, in the math section, math,
+you can actually take any root.
+So I could take like the sixth root of,
+it is not going to work, but 1,000.
+Yeah.
+So I can take any root.
+It's like what to the sixth power is 1,000.
+Well, remember, GCF, I can take it on x to the fourth from both
+of these.
+So I'm left with only three x's here.
+And I can take a two out.
+And then 64 is 4 times 4 times 4 times 4.
+27 is 3 times 3 times 3.
+This GCF just stays out the whole time.
+And then I'm left with 4x to the third.
+And this is 3 to the third.
+So this is my a to the third plus b to the third.
+So I use that formula here.
+Okay.
+Yeah.
+That is the notes.
+So this is a pretty, not simple lesson because I'm going to
+provide this unit on the unit.
+They're sorry, this formula on the test,
+but eventually you're going to have to know this one by heart.
+This is, I mean, it looks, this is the beginning of,
+there's not too many big formulas you have to know.
+So just know that this one is coming up that you'll
+have to memorize for next unit.

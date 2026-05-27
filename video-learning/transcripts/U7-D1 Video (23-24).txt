@@ -1,0 +1,186 @@
+Okay, here's the video for unit seven day one
+Flashback to geometry class. We're doing so good to us stuff right triangle trigonometry
+The remember psychotoea do you have an angle here the side opposite?
+There's three sides have to a triangle right there's a side opposite of the angle
+There's the side that would be adjacent to the angle and then there's a hypotenuse
+I thought this is always a cross from the right angle. So no matter what this is always the hypotenuse
+But whether or not you have
+Information about the opposite in hypotenuse
+The adjacent hypotenuse or the adjacent and the opposite determines which trig function you're going to use so sign
+Don't call this sin. It's called sign
+cosine and candid
+The reason it's called so guitar is because it's sign
+Equal to the side opposite
+over adjacent
+cosine is equal to the side
+adjacent
+Over the hypotenuse
+Intangent is equal to opposite over adjacent. All right, so you've got
+There's a reason so guitar is in that order
+So
+We do have sign cosine and tangent angle a here. So for angle a we have opposite of our hypotenuse
+We have cosine adjacent of our hypotenuse and tangent opposite over adjacent
+There are three other trig functions and what they are are the reciprocal
+Of psychotoea and I like telling it show Chicago
+So a good morning
+that
+When you flip
+Opposite and hypotenuse to get hypotenuse over opposite the
+Reciprocal of sign is called cosecant
+The reciprocal of cosine is called secant and the reciprocal of tangent is called cotangent
+Annoying an crazy thing is that they didn't
+Call the reciprocal of cosine cosecant. We think that would be the logical way to do it
+But that's just not how it happened
+So sine goes with cosecant cosine goes with secant and then tangent goes with cotangent
+So they were abbreviated like the sine of a cosine of a tangent of a cosecant of a secant and cotangent
+So here's a triangle but this is upside down. So this is the hypotenuse
+We're looking at angle x. This should be the side adjacent and this is the side opposite
+So if you want to do sine of angle x, you're going to be opposite over hypotenuse
+So 12 over 13
+Cosine of x, adjacent over hypotenuse of 5 over 13
+Tangent of x
+Opposite of adjacent, so 12 over 5
+To get these to get
+Cosecant secant of cotangent
+You take the fractions from sine cosine of tangent and flip them
+So 12 over 13 becomes 13 over 12
+5 over 13 comes 13 over 5
+12 over 5 becomes 5 over 12
+So the
+ratios like if you want to figure out how to find cosecant
+You just do 1 over sine
+Or cosine is 1 over cosecant is 1 over cosine
+Cotangent is 1 over tangent and when you put something 1 over sine, what you're doing is 1 over this fraction which flips it
+All right, so finding sides given an angle
+If you know
+This is 41 degrees
+And I want to find side a b, which is right here hypotenuse
+Well, I know the adjacent and I want the hypotenuse so I a and h
+So I'm going to use cosine cosine
+Of the angle 41 degrees
+Is adjacent over hypotenuse
+7.4 is the adjacent side of hypotenuse is a b, which we don't know
+cosine of 41 put in your calculator you get
+Let's go to four decimal places in an intermediate step
+Because when you have four decimal places
+You get a more precise answer
+So 0.7547 is equal to 7.4 over a b
+Switch these spots. So a b is 7.4 over
+0.7547 and then you get
+Side should say side a b is 9.8
+Now
+We also have this side side bc
+That side opposite
+And adjacent we use tangent same process
+But tangent of 41 it's a decimal is equal to bc over 7.4
+Multiply both side by 7.4
+And you get side bc is 6.43
+Once your answers are with two decimal places, but any intermediate step
+Is going to have
+four decimal places
+Solving triangles solving triangles says solve triangle RST for all angles in size
+We know
+Let's just say this said 6.8. This is 3.8. It's all we know
+Well
+We want to find measure of angle r. We know the opposite. I mean adjacent of angle r
+So we're going to use tangent tangent of angle r is
+3.8 over 6.8
+So opposite over adjacent
+But I have tangent in angle r
+I want to find a ring r is but it's stuck inside a tangent
+So what I do is tangent of negative one. Now what I do want to say
+It's a tangent of negative one is not the same thing as code tangent
+Okay
+Code tangent is one over tangent
+Or tangent negative one
+Is not the same thing. It's an inverse not a reciprocal
+This is super important
+Once you took it's really internalized that
+This is a fact that inverse tangent is not the same thing as code tangent
+So we have
+Tangent inverse of both sides
+Not tangent inverse and tangent are canceling each other out that's all pointed
+On this side you press second tangent of 3.8 over 6.8. You get this value with down angle hard
+Now all three angles in a triangle or 180
+So 180 minus 29.2 minus 90 gives this angle
+So we have all three angles
+But we need this side
+How can we do this side?
+We know of 6.8 and 3.8 a squared plus b squared
+Equals c squared
+So we just use Pythagorean theorem to find the side rs and now we have recited angle this triangle
+So find the values of the six true functions of angle x
+Well
+Angle x
+Off the silt over whole plot news is three over five
+Cosine and jason over five misses four over five tangent
+Opposite over a jason is three over four
+And to get toast you can't see can't and co tangent. That's when they say six true functions. They want all six of these
+We get just flip the fraction to five thirds
+See can't would be five fourths tangent would be four thirds
+All right here
+Find a c and b a to the nearest tent
+That's one decimal place. So finding a c. We know the adjacent to this angle
+We didn't want to find opposite to opposite in a jason is tangent
+Tangent of this angle is equal to opposite to side a c
+Over side b c which is 8.9
+Four decimal places a c over 8.9. So multiply both sides by 8.9 and you get side a c is 5.8
+You want to find side
+b a
+Well, I just found out that this side is 5.8
+So I'm going to say 8.9 squared plus 5.8 squared equals c squared
+Oh, she's put that guarantee or you could do adjacent array of hotness. You can use trig to find side d
+Solve by using inders
+Right, this is the kind of rear to do tangent negative one or side negative one
+If you want to find angle a and you know the opposite image a c
+Tangent of angle a is five over seven
+Inverse tangent of both sides because these cancel each other out which gives you angle a
+Tangent inverse five over seven is 35.5 degrees. So that's this angle
+The same is true for here, but we're using sign because you have opposite hypotenuse
+Here we have adjacent and hypotenuse that you use
+This is wrong. This should be cosine
+It's answers probably wrong, but that's where you look high in the video
+Just know that you have adjacent and hypotenuse. You should use cosine
+Special right triangle. So this is a big part of the homework and a big part of this lesson
+If you have a 45 45 90 triangle the ratios of the sides are one
+One one one root two if it's not one. Let's call it x x x and x root two
+This is true for all 45 45 90 triangles. So if this was five, this would be five this would be five root two
+Because this is eight
+This is also going to be eight in this side is going to be eight root two
+Because this side is ten
+Because this side is ten
+I know that the a root two side is ten
+So if you divide by root two you get that a is ten root two. So this side is ten over root two and this side is ten over root two
+Right a a root two
+We also have 30 60 90 triangles. The ratio is one
+This is side across from the 30 degree angle
+twice so 1x 2x and x root three
+The longest side of hypotenuse is the 2x side and across from the 60 is the x root three side
+So if you I know the shorts that alongside is ten
+Then I know that this side is half as long. So it's five and this side is that
+five root three
+So if I know the short side is nine. I know the long side is twice that. So eighteen and this is going to be
+nine root three. So a a root three two
+Here they gave me nine or three over two is across from the 60
+That's the a root three side
+So if nine root three over two
+Is equal to the a root three and get rid of the root three and we have nine over two is equal to a
+A is nine over two that's this side and then I double that so nine root two times two will just give me nine
+So here's some practice of some of these on the homework, but if you have 45 the other angle has to be 45
+They give me this is two root two. So this is two root two
+And then this is two root two times root two
+When you have root two times through two you get root four
+Which is just two times two so four. So this side's four
+Here they gave us the hypotenuse which is that a root two side
+So a root two
+Is equal to four
+Be divided by root two you get four over root two or these sides
+These sides always match
+Here this is a 30 16 90 triangle
+Cross from we 30 we just we don't know anything about this side, but we do know the two a side
+Two a 16 so the a side is eight and the side would be eight root three
+Here they gave us the short side
+So we double that we get four
+And then the short side root times root three is right here
+There you go
+That is unit seven day one

@@ -1,0 +1,214 @@
+Okay, now for what I think is the good stuff, the real, putting these exponential functions
+to use a lot of real world scenarios, actually use exponential functions and the main
+one is interest.
+So you can either gain or lose money on an investment, you know, you could put money into
+a car, but that's going to appreciate every time you could put money into a savings account
+and that's going to gain money over time.
+The stock market's a little, it varies, right?
+So right, according to this in 2023, it's not doing so great, but all the way up until
+from like, you know, the 2008 to 2020, it was steadily going up.
+So let's talk about this.
+Here are three kinds of formulas that you'll get.
+Simple interest, which you'll get a little bit of interest once a year.
+You could get interest compounded, so it means you get a piece of the interest and times
+a year, so you might get it every week, every month, every day, four times a year, but you're
+still getting the same amount of interest, it's just split up.
+Or you're getting that interest continuously split up into like infinitely small seconds.
+So what I think is, if you're pumping gas at the gas station, that the money is just,
+you know, rolling like, so you're getting that money at a steady stream, but in general,
+you're pretty much going to get the same amount, it's just how many times a year does
+it split into.
+So let's look at this formula.
+The amount that you end with is equal to the amount that you start with times one, let's
+think plus for now, plus the interest rate to an exponent of how many years.
+The interest rate, let's say there was 5%, you always have to make it a decimal because
+just percents are useful, but they're not useful in calculation, so you have to move the
+decimal twice.
+So if you have 5.4%, you'd have to move it once twice, so 0.054, and make sure you use
+the whole percent.
+If you're losing money over time, you'd actually subtract the interest rate.
+So if you had one minus 5%, you'd be at 95% over time every year, you'd make 95%
+of your money, which is not a good thing.
+Okay, example, what is the starting amount?
+That's your, remember, it's about you, and with is equal to the amount you start with,
+1 plus the rate to the time.
+So what's the starting amount?
+That's the principle that has to be here.
+The principle is 4.3.
+What is the rate?
+Well, because it's 1.02, that has to be 1 plus 0.02, so 0.02 is the rate, but let's make it
+a percent, 2%, and it's this growth.
+Well, because the base is bigger than 1, it's going to be growing.
+So let's see.
+Last year's parents deposited $1,000 into a savings account for their own personal
+vacation when he was born.
+Given an interest rate of 3.25%, how much will they have to vacation on their own without
+him when he graduated at 18?
+So $1,000 that you put in, so again, this is your formula, $1,000 is your principle.
+The rate is 3.25%, so you have to go $1,2, which makes 0.035, and we're going to let
+this sit for 18 years, so that's your time.
+So plug everything in $1,000, $1,000 plus 0.035 is $1.035 to the 18th.
+Now, I'll try and make a separate video of the calculator.
+You could plug this all in to a calculator, the graphing calculator, make sure you're using
+parentheses in an exponent.
+You can't really do this on your phone.
+You would have, well, the last year's parents would have $1,700, because the more you
+put in in the beginning, the more you actually make.
+So because they only put in $1,000, even after 18 years, at this savings account rate,
+which is actually a pretty normal savings account rate, you'd have $1,700, so not a huge
+increase, but it's definitely something.
+So example two, Ginny is trying to find a bank that offers her an interest rate where
+she can deposit $300 at the start of high school, at the end of four years have $1,000
+when she graduates, in order to buy a mortal combat arcade machine.
+What interest rate does Ginny need?
+Well, the principle she wants to put in $300, it's going to be four years.
+She wants the ending amount to be $1,000, but we don't actually know the rate.
+So here's our formula because it's simple interest.
+$1,000 is the amount you want, it's equal to $300, times one plus the rate to the fourth
+because four years.
+Well, we want to get this, we're solving, we're isolating for our, so let's get rid of
+the $300 by dividing, that's $3,33 is equal to one plus R to the fourth.
+To get rid of a fourth exponent, we fourth rooted.
+This is also something you can do on a calculator, four, three, to $3,33 is $1,35.
+This is equal to one plus R, because of those cancel.
+So track one, you get 0.35, which means that 35% interest rate, which is huge.
+And just to give you a little context, if you put money in just like chase bank or random
+savings account, you're going to make between three and four percent.
+So 35% is kind of a imaginary amount.
+All right, these are all funny, weird questions, so just bear with us here.
+Some of this bought a souped up Tesla two years ago, since then is depreciated, decreased,
+it's gone down in value by 20% per year.
+If it is now worth 97, 280, what was the original cost?
+So this is going down.
+So remember, it's one plus or minus the rate.
+So the time was two years, the rate is 20%, so we got to go one, two, so 0.2.
+The amount at the end is 97, 280, but we don't know the principle, we don't know how much
+it costs in the beginning.
+So 97, 280 is equal to the principle, I don't know.
+And then one minus the rate to the two, because it's two years.
+One minus 0.2 is 0.8, and 0.8 squared is 0.64, so you can divide both sides at 0.64, and
+you get the solvig isolating for the principle, the car initially cost $152,000.
+Okay, compound interest.
+There's another situation where the interest earned, one period can then have interest
+charge on it, the following period.
+So let's talk about this.
+So if you're making interest, you could either make it once a year, or you could make it
+end times a year.
+It's just the same amount, like 5% interest, but you're getting it in that 5% split up
+into four times a year, or you're getting the 5% a little piece of it.
+You're getting 1-12 of it every month, or you're getting 1-52 of the interest every week,
+or daily 365, so just think quarterly means four monthly, there's 12 months in a year, so
+it's 12, there's 52 weeks in a year, so it's 52, and then daily 365.
+This looks exactly the same, except you're dividing the interest rate by n, and you're
+multiplying the amount of times it's compounded end times, so that you're multiplying
+time by n and dividing the rate by n.
+So you're looking for the word compounded number of times.
+So Janice borrowed $450 from a shady loan shark.
+We don't know why, so we're going to mine our own business.
+So she borrowed $450, but they charge an interest rate of 400%, it's compounded weekly.
+How much will Janice owe the loan shark after one year, though?
+One year, oops, key word here, that's our time.
+So here's our formula.
+Amount she put in is 450, well actually borrowed is 450, rate is 400%.
+So here's the decimal, one, two, it's actually 4.0, or after one year, and
+because it says compounded weekly, our n is 52, so 52 is our n, so
+amount equals principal, one plus the rate over the n to the nt.
+Let's simplify this first.
+So 4 over 52 is 0.0769, we'll add that to one, and then 52 times one is just 52.
+I think it's best to do 1.0769 to the 52, and you get 47.16, multiply that by a principal.
+And she owes, after one year she owes $21,000.
+So again, kind of unrealistic, but you don't want to borrow money at high interest rates,
+because look at how fast it grows.
+Another one, Miranda invests $20,000 in a dog wellness center, yoga, pedicure,
+massage, et cetera, that is projected to pay 8% interest compounded quarterly.
+So she's going to make money in our investment.
+Old B. Miranda's total profit after three years, assuming the business is successful.
+So here's our formula, because it says compounded quarterly.
+That means our n is going to be 4.
+She put in $20,000, her rate is 8% so 1, 2 makes 0.08, and her time is 3 years.
+So $20,000, 1 plus the interest rate over n to the nt, that makes 12 up there, 0.08 over 4 is 0.02.
+So 1.02 to the 12 gives you this.
+I think it's best to either do 4 decimal places, or if you're using a calculator, just don't round.
+So if you do 1.02 to the 12, it's going to have some super long decimal.
+Then just press Times $20,000.
+So after three years, she'll have $25,000 in her investment.
+It's not like she didn't make $25,000, but she made $5,364.
+Okay, because she put in $20,000, this is the amount at the end.
+Finally, compounded continuously.
+Think of this as money on a gas pump, just rolling in.
+So you're getting money every second, it's not even every second, it's just continuous.
+That's where this number E comes in.
+And there used to be a, I don't know if it's still around, but there used to be shampoo.
+And there's how I remember this called per plus, and they had really weird commercials.
+It was like an all-in-one shampoo conditioner, but per, P times E raised to the RT is the formula.
+And this is if it's compounded continuously, you're looking for the word compounded continuously.
+E, we're going to use the button on the calculator.
+So biologist is researching a species of bacteria that can be used to create robot brains.
+He initially put 75 bacteria into a favorable growth medium.
+If the bacteria grow continuously, that's our keyword.
+At a rate of 23.5% per hour, how many bacteria will be present six hours later?
+So we're actually not using, we're going to use hours because it's the rate per hour and then six hours.
+So our time is six, our rate, because it was 23.5, we're going to go one, two, get 0.235.
+You put in your principal's 75 bacteria.
+So 75 E to the 0.235 to the same six.
+If you plug this all in at once to the graphing calculator, the TI 84, 85, you're going to get 307.19.
+So there's 307 bacteria after six hours.
+Now, another one.
+You deposit money in an account in order to save enough to buy an octopus to be your acting coach.
+Don't sure how that works.
+If you plan to start your career in eight years and you need to have $150,000,
+how much you need to deposit an interest rate of 3.8% is compounded continuously.
+That's our keyword.
+So there's our per PE to the RT.
+Eight years is our time.
+The amount you put in is $150,000.
+How much do you need to deposit?
+So we don't know the principal, but the rate is 3.8% so you go one, two, get 0.038.
+Here's our formula.
+The amount at the end, you want $150,000, is equal to some unknown initial investment
+times e to the rate times time.
+Whenever you can do parentheses, multiplication, do 0.038 times 8, you get this.
+If your calculator has more digits, just leave it.
+So e to this exponent is 1.3552, divide both sides by so 150,000 divided by this gives
+you 110,000, 679, so you'd have to put in this much money to get 150,000 after eight
+years.
+I think this is the last one.
+Okay, Simone is trying to sell a piece of jewelry worn by a general's wife in the Trojan
+War in order to pay for coachella tickets for the rest of her life.
+In theory, it is 32, 50 years old, but a skeptical buyer intends to use carbon dating
+to prove if it is authentic.
+There would have been about 1.3 times 10 to the negative 12, so that means moving the decimal
+12 times, really small number, grams of carbon 14 in the sample when the jewelry was
+new, given a continuous decay rate of this.
+How much carbon should be present now if it is not a fix?
+So this is probably the hardest one.
+It's still continuous decay.
+So still, it's amount equals PE to the RT.
+Well, the initial amount principle is 1.3 times 10 to the negative 12, where they were
+saying and hoping if it's real, then it was 32, 50 years your time.
+And here's your rate.
+The rate is right here and time is 32, 50 years.
+So this, you can plug all into the TI calculator and you get principal, comes out to 8.75,
+6, 1 times 10 to the negative 13.
+That's an even smaller number.
+It means you move the decimal 13 times to the left.
+So this way less, but that's how you would be able to tell if this was a real item.
+So remember change per sense to a decimal, don't round, because if you have it all
+in calculator, once you get a more precise answer, pay attention to words such as depreciate
+or decrease, because it means you'd have to subtract the rate.
+In order to use E, it has to say continuous and if you're going to use E, don't use the
+number three.
+Use the E button on the calculator.
+So I'll see if, yeah, I'll make another video with the calculator.
+I'll see if I can get a TI 84, maybe I have it, I don't hear.
+All right, so if I want to do, let's see, P, E to the other.
+So let's say I put in 100, $100,000, close parentheses, and then I put press second and
+then E to the X is this button down there where it says LN, I can't really show you.
+But halfway down the left column, the button says LN, if I press second, I get E to the
+X.
+And then when E to the, let's say I want to, I'm making 4% interest rates of 0.04 times
+10 years.
+So there's $100,000 in a savings account and 4% interest for 10 years, you would have
+almost $150,000.
+There you go, that's an unrounded number, it's not like I want to do it all separately.
+Okay, so that's unit nine, day three.

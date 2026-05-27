@@ -1,0 +1,158 @@
+All right, here is the lesson for unit 6, day 1, we're doing, this is probably the last unit,
+unit 6, and we're going to look at rational functions.
+So when you see real-world rational, we've got the word ratio in it, right?
+Something over, a number over another number is a ratio, but a rational function is
+when there is an x in the denominator.
+There can be an x in the numerator and denominator, but there definitely has to be an x.
+Some sort of variable in the denominator.
+We're going to talk about the most basic one, which is 1 over x.
+Okay, I'll call this the parent function, and we're going to look at what does the graph of 1 over x look like?
+Okay?
+So let's do a little x and y chart, x, y, and we'll think about what happens when you do
+1 over x.
+What if I plug in 0?
+What's 1 over 0?
+It's undefined, right?
+So that is why we have a vertical asymptote here at 0.
+What if I plug in 1 and get 1 over 1 is 1?
+What about negative 1?
+1 over negative 1 is negative 1.
+1 if I plug in 2 and get 1 half, right?
+What if I plug in 3?
+I'd get 1 third and 4, I'd get 1 fourth.
+So the bigger the number we plug in, the smaller the fraction.
+If I plug in 8, I'd get 1, 8, 1, 9, 1, 10, 1, 1, 1,000.
+But I'd get to a giant number like if I plug in a million, I'd get 1 1 million.
+Is that 0?
+Is 1 1 million?
+Is 0 now?
+It's close to 0, but it's not.
+So what happens is we get closer and closer to this red line.
+This horizontal line is called a horizontal asymptote.
+And it's at 0.
+What about going the other direction?
+What if I plug in negative 2?
+I'd get negative 1 half, right?
+Negative 3, I'd get negative 1 third and so on.
+So it's actually on this end.
+Same process, I'm getting closer and closer to the dotted line.
+So notice we have a horizontal asymptote and a vertical asymptote.
+Because if you do 1 over 0, it's undefined.
+And then if this gets really, really big, as x goes to infinity,
+you get closer and closer to 0.
+You get a vertical asymptote.
+Now, there is not really an hk here.
+So here's the parent function.
+hk is actually going to talk about our asymptotes,
+which is our red dotted lines.
+So this down here, x minus h, is your vertical asymptote.
+And your k value is your horizontal asymptote.
+So in this case, when we did y equals 1 over x, right,
+we had a vertical asymptote 0 and a horizontal asymptote
+at 0.
+So 0 and 0, right?
+Because 1, the function 1 over x, these are both 0's.
+What if this was like a 4?
+So x minus 4, we'd have a vertical asymptote 4.
+And this was like plus 2.
+We'd have a horizontal asymptote 2.
+What does this number do?
+What does the a do?
+It kind of changes the curvature.
+So instead of being close to the axes,
+it'd be less curved.
+But we'd still be in the upper right hand corner
+in the lower left hand corner.
+So it's interesting because a vertical shift, in this case,
+affects the horizontal line.
+What does that mean?
+It's like your k value is the up and down shift.
+But that affects this horizontal asymptote.
+So let's look at this.
+What is the vertical asymptote here?
+The vertical asymptote comes from there.
+So it's the 9.
+And the horizontal asymptote comes from your k value.
+Here, the vertical asymptote is 0.
+And the horizontal asymptote is negative 7.
+OK, I'm going to let you graph transformations.
+And they're going to be kind of simple
+because we're just going to look at this, the parent function,
+where it's in the upper right hand corner
+and the lower left hand corner.
+Once you start throwing in things where there's
+x in the top, where this is not a one,
+there's a lot of, there's a lot of terminologies,
+but we're going to keep it simple today.
+OK, graph each rational function state the equation
+but the asymptote and the domain in range.
+OK, where is our vertical asymptote?
+Vertical asymptote is at negative 3.
+Horizontal asymptote is at 2.
+They're negative 3 dotted line, 2 dotted line.
+It's the same as this graph.
+So we just do our upper right, lower left.
+But it's shifted left 3 and up 2.
+What's our domain?
+Well, this is going to go off to the left forever.
+So as x goes left, we get, it will go left forever
+and go right forever.
+But we can't, it doesn't exist at negative 3.
+So negative infinity up to negative 3
+and then from negative 3 to infinity
+and then low to high, negative infinity to 2
+and then 2 to 3.
+Then we have a similar thing.
+4, these are vertical asymptote
+and because there's no number here,
+0 is our horizontal asymptote.
+It does ask for domain in range.
+So let's throw that in there.
+The domain is negative infinity up to 4.
+And from 4 to infinity, the range is from negative infinity
+to 0 and from 0 to infinity.
+OK.
+Stretching it is to visually settle the show up on graphs.
+So let's let, I'm going to show you Desmos real quick.
+OK.
+This looks, let's reopen this.
+Rational slider.
+OK.
+So I have x minus h in the bottom, k value from the above.
+So look what happens when I change the h value.
+I'm changing the vertical asymptote.
+So it's not changing the curvature.
+It's just making it go left and right.
+When I change the k value, we're going to go up and down, right?
+But it's not changing the red lines.
+It's just changing where they are.
+So left, right, up, down.
+When I change the a value, that's when I start changing
+the curvature and what if a became negative?
+What do you think will happen?
+Vertical flip, vertical flip, right?
+So that's what happens when you do a stretch.
+So when there's a negative, it doesn't matter
+if it's in the numerator or the denominator.
+OK.
+Negative 1 over x is the same as negative 1 over x,
+or 1 over negative x.
+It's all the same.
+It would change the fact that instead of being upper right
+and lower left, it would be here and here.
+So this versus this.
+Well, let's pull a negative out of this
+and then just throw it up in front.
+It makes it vertical flip.
+Where's our vertical asymptote?
+1, horizontal asymptote at negative 4.
+And then instead of being upper right and lower left,
+it's upper left, lower right, like this.
+Domain and range.
+Here, again, we have a flip.
+Where's our vertical asymptote?
+Negative 5, vertical asymptote at 2.
+So negative 5 and 2, it's got that flip.
+So upper left, lower right.
+OK.
+Negative, you're a 6 day 1.

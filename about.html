@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — A2 Playgrounds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 800px) { .about-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="about.html" class="active">about</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper" style="max-width:1000px;">
+    <div class="f-type" style="font-size:12px; color:var(--ink-soft); margin-bottom:8px;">
+      <a href="index.html">← back to playgrounds</a>
+    </div>
+
+    <div class="about-layout">
+
+      <!-- Left: Letter -->
+      <div>
+        <div class="about-letter paper-lined sk-box" style="position:relative; padding:32px 40px;">
+          <div class="date-line f-hand">Fall 2025 · re: this website</div>
+
+          <div class="f-display" style="font-size:44px; line-height:1; margin-top:8px;">Hey —</div>
+
+          <div class="letter-body f-hand" style="margin-top:12px;">
+            <p>
+              This is a little corner of the internet I made for our Algebra 2 class.
+              Every "playground" here is a <span class="highlight">tiny tool</span> that lets you mess
+              with one idea from class — factoring, imaginary numbers, exponents, all of it.
+            </p>
+            <p>
+              <span class="f-marker" style="font-size:15px;">There's no login. Nothing is graded.</span>
+              Nothing here is tracked. Drag stuff. Break it.
+              See what happens. Then come back and tell me what you saw.
+            </p>
+            <p>
+              Each tool is built around one question: <em>"what if you could just see it?"</em>
+              Equations are great. Moving equations are better.
+            </p>
+            <p>
+              If something on this site is confusing, or broken, or just kind of meh —
+              <span class="underline-wavy">tell me</span>. I'll fix it. This thing is alive.
+            </p>
+
+            <div style="margin-top:24px;">
+              <div class="f-marker" style="font-size:26px; color:var(--accent);">~ Mr. K</div>
+              <div class="f-type" style="font-size:12px; color:var(--ink-soft); margin-top:4px;">room 207 · Algebra 2 · Periods 3 &amp; 4</div>
+            </div>
+          </div>
+
+          <!-- Stats row -->
+          <div class="stats-row" style="margin-top:32px; padding-top:20px; border-top:1px dashed var(--ink-soft);">
+            <div class="stat-box sk-box-dashed rot-r" style="padding:12px 8px; text-align:center;">
+              <div class="stat-num f-display">12</div>
+              <div class="stat-label f-hand">tools (so far)</div>
+            </div>
+            <div class="stat-box sk-box-dashed rot-l" style="padding:12px 8px; text-align:center;">
+              <div class="stat-num f-display">4</div>
+              <div class="stat-label f-hand">units mapped</div>
+            </div>
+            <div class="stat-box sk-box-dashed rot-r" style="padding:12px 8px; text-align:center;">
+              <div class="stat-num f-display">0</div>
+              <div class="stat-label f-hand">accounts, ever</div>
+            </div>
+            <div class="stat-box sk-box-dashed rot-l" style="padding:12px 8px; text-align:center;">
+              <div class="stat-num f-display">$0</div>
+              <div class="stat-label f-hand">cost to use</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div style="margin-top:24px;">
+          <div class="f-marker" style="font-size:14px; margin-bottom:12px;">QUESTIONS PEOPLE ACTUALLY ASK</div>
+          <div class="faq-list">
+            <div class="faq-item sk-box" style="margin-bottom:10px; padding:12px 14px;">
+              <div class="faq-q f-display">Do I need an account?</div>
+              <div class="faq-a f-hand">Nope. There are no accounts on this site. Nothing is saved — not your answers, not your progress, nothing.</div>
+            </div>
+            <div class="faq-item sk-box" style="margin-bottom:10px; padding:12px 14px; transform:rotate(-0.3deg);">
+              <div class="faq-q f-display">Will this be on the test?</div>
+              <div class="faq-a f-hand">The <em>ideas</em> inside the tools, yes. The tools themselves, no. These are for understanding, not memorizing.</div>
+            </div>
+            <div class="faq-item sk-box" style="margin-bottom:10px; padding:12px 14px; transform:rotate(0.4deg);">
+              <div class="faq-q f-display">It says I got it wrong but I think I'm right...</div>
+              <div class="faq-a f-hand">Take a screenshot, send it to Mr. K. Bugs happen — I genuinely want to know when something's broken.</div>
+            </div>
+            <div class="faq-item sk-box" style="margin-bottom:10px; padding:12px 14px;">
+              <div class="faq-q f-display">Can my parents use it?</div>
+              <div class="faq-a f-hand">Yes! These tools are for understanding the math, not completing an assignment. Anyone curious is welcome.</div>
+            </div>
+            <div class="faq-item sk-box" style="padding:12px 14px; transform:rotate(-0.2deg);">
+              <div class="faq-q f-display">Are you tracking me?</div>
+              <div class="faq-a f-hand">No analytics, no cookies, no logins. The site genuinely does not know who you are.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Teacher pack + credits -->
+      <div style="display:flex; flex-direction:column; gap:16px;">
+
+        <!-- Sticky note -->
+        <div class="sk-box-thick rot-r" style="padding:14px; background:var(--highlight); position:relative;">
+          <div class="tape" style="left:20px;"></div>
+          <div class="f-marker" style="font-size:12px; color:var(--ink-2);">FOR TEACHERS</div>
+          <div class="f-hand" style="font-size:14px; line-height:1.4; margin-top:6px;">
+            Steal anything. The tools are MIT-licensed — use them, remix them, share them.
+            Email me for source code, lesson plans, and the rubric.
+          </div>
+          <div style="margin-top:10px; color:var(--accent); font-family:'Patrick Hand',cursive; font-size:14px;">→ teacher pack coming soon</div>
+        </div>
+
+        <!-- Teacher pack box -->
+        <div class="sk-box" style="padding:14px; background:var(--paper-2);">
+          <div class="f-marker" style="font-size:12px; color:var(--accent);">★ TEACHER PACK</div>
+          <div class="f-display" style="font-size:24px; line-height:1; margin-top:4px;">Steal this stuff.</div>
+          <div class="f-hand" style="font-size:14px; margin-top:8px; line-height:1.4;">
+            All tools are open source. Lesson plans and the pacing guide match the tools exactly.
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px; margin-top:12px; font-family:'Patrick Hand',cursive; font-size:14px;">
+            <span>📄 Pacing plan (PDF)</span>
+            <span>📄 Lesson plans (12 · PDF)</span>
+            <span>📄 Quiz rubric</span>
+            <span>&lt;/&gt; source code</span>
+            <span>📧 kothari@school.edu</span>
+          </div>
+        </div>
+
+        <!-- Credits -->
+        <div class="sk-box-dashed" style="padding:12px;">
+          <div class="f-marker" style="font-size:12px; margin-bottom:6px;">CREDITS</div>
+          <div class="f-hand" style="font-size:13px; line-height:1.4;">
+            Built by Mr. K. Inspired by
+            <a href="https://saberkhan372.github.io/CC-Fest-Coding-Camp/index.html" class="underline-wavy">CC Fest</a>,
+            Bret Victor, and the kids who said <em>"wait — can I see that again?"</em>
+          </div>
+          <div class="f-type" style="font-size:11px; color:var(--ink-soft); margin-top:8px;">
+            Fonts: Caveat · Patrick Hand · Permanent Marker · Special Elite · JetBrains Mono
+          </div>
+        </div>
+
+        <!-- Back to tools -->
+        <a href="index.html" class="btn accent" style="justify-content:center;">← back to all tools</a>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

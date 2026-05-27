@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elimination Race — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .race-stage { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:16px; overflow-y:auto; }
+
+    .system-display { width:100%; max-width:520px; padding:16px 20px; position:relative; }
+    .eq-row { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+    .eq-tag { font-family:'Caveat',cursive; font-weight:700; font-size:18px; color:var(--accent); width:26px; }
+    .eq-text { font-family:'JetBrains Mono',monospace; font-size:22px; }
+
+    .step-area { width:100%; max-width:520px; display:flex; flex-direction:column; gap:10px; }
+    .mini-label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); }
+
+    .step-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .step-row .prompt { font-family:'Patrick Hand',cursive; font-size:15px; flex:1; }
+    .step-row input {
+      border:2px solid var(--ink); border-radius:4px; padding:5px 10px;
+      font-family:'JetBrains Mono',monospace; font-size:18px;
+      background:var(--paper); width:90px; text-align:center;
+    }
+    .step-row input.ok  { border-color:var(--green); background:#d4edda; }
+    .step-row input.err { border-color:var(--redline); background:#f8d7da; }
+    .step-row .mini-fb { font-family:'Permanent Marker',cursive; font-size:13px; }
+    .step-row .mini-fb.good { color:var(--green); }
+    .step-row .mini-fb.bad  { color:var(--redline); }
+
+    .time-display { font-family:'Caveat',cursive; font-weight:700; font-size:48px; color:var(--ink); line-height:1; }
+    .time-display.fast { color:var(--green); }
+    .time-display.warning { color:var(--redline); }
+
+    .pb-bar { width:100%; max-width:520px; height:8px; border:2px solid var(--ink); border-radius:999px; overflow:hidden; }
+    .pb-fill { height:100%; background:var(--accent); transition:width 0.05s linear; }
+
+    .best-time { font-family:'Special Elite',monospace; font-size:13px; color:var(--ink-soft); }
+    .game-result { display:none; flex-direction:column; align-items:center; gap:14px; text-align:center; }
+    .game-result.show { display:flex; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none; align-items:center;">
+      <div class="tool-breadcrumb" style="width:100%;"><a href="../u1.html">← U1 · Systems &amp; Quadratics</a> &nbsp;·&nbsp; D2</div>
+      <div class="tool-title f-display" style="text-align:center;">Elimination Race</div>
+      <div class="tool-tagline f-hand" style="text-align:center;">Solve by elimination. Beat your best time.</div>
+
+      <div class="race-stage" id="race-stage">
+        <div class="time-display" id="timer-disp">0.0</div>
+        <div class="best-time" id="best-disp">best: —</div>
+        <div class="pb-bar"><div class="pb-fill" id="pb-fill" style="width:100%;"></div></div>
+
+        <div class="system-display sk-box-thick">
+          <div class="eq-row"><span class="eq-tag">①</span><span class="eq-text" id="eq1"></span></div>
+          <div class="eq-row"><span class="eq-tag">②</span><span class="eq-text" id="eq2"></span></div>
+        </div>
+
+        <div class="step-area">
+          <div class="mini-label">STEP 1 — Combine the equations. What's left after one variable cancels?</div>
+          <div class="step-row">
+            <span class="prompt" id="step1-prompt"></span>
+            <input type="text" id="inp-step1" placeholder="e.g. 3x=9" disabled onkeydown="if(event.key==='Enter') checkStep1()" />
+            <button class="btn small" onclick="checkStep1()" id="btn1" disabled>✓</button>
+            <span class="mini-fb" id="fb1"></span>
+          </div>
+
+          <div class="mini-label" id="lbl2" style="opacity:0.3;">STEP 2 — Solve for x (or y)</div>
+          <div class="step-row">
+            <span class="prompt" id="step2-prompt" style="color:var(--ink-soft);"></span>
+            <input type="text" id="inp-step2" placeholder="e.g. x=3" disabled onkeydown="if(event.key==='Enter') checkStep2()" />
+            <button class="btn small" onclick="checkStep2()" id="btn2" disabled>✓</button>
+            <span class="mini-fb" id="fb2"></span>
+          </div>
+
+          <div class="mini-label" id="lbl3" style="opacity:0.3;">STEP 3 — Back-substitute. Find the other variable.</div>
+          <div class="step-row">
+            <span class="prompt" id="step3-prompt" style="color:var(--ink-soft);"></span>
+            <input type="text" id="inp-step3" placeholder="e.g. y=4" disabled onkeydown="if(event.key==='Enter') checkStep3()" />
+            <button class="btn small" onclick="checkStep3()" id="btn3" disabled>✓</button>
+            <span class="mini-fb" id="fb3"></span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:4px;">
+          <button class="btn accent big" id="start-btn" onclick="startRound()">▶ Go!</button>
+          <button class="btn" onclick="newProblem()" id="new-btn" style="display:none;">↺ new problem</button>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="game-result" id="result-screen">
+        <div class="f-display" style="font-size:56px; color:var(--accent);" id="result-time"></div>
+        <div class="f-marker" style="font-size:16px;">seconds</div>
+        <div class="f-hand" style="font-size:18px;" id="result-msg"></div>
+        <div class="sk-box" style="padding:12px 20px; width:100%; max-width:420px;">
+          <div class="f-hand" style="font-size:15px;" id="result-solution"></div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+          <button class="btn accent big" onclick="startRound()">▶ race again</button>
+          <button class="btn" onclick="newProblem()">new problem</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO RACE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Hit <strong>Go!</strong> — timer starts.</li>
+          <li>Solve each step and press Enter.</li>
+          <li>Beat your best time!</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">ELIMINATION STEPS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          <span style="color:var(--accent);">①</span> Make one variable cancel by combining equations.<br>
+          <span style="color:var(--accent);">②</span> Solve for the remaining variable.<br>
+          <span style="color:var(--accent);">③</span> Sub back in to find the other.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">TIP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5;">
+          Think "combine" instead of only add/subtract. Signs decide whether the terms cancel.
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="substitution-stepper.html">→ Substitution Stepper</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROBLEMS = [
+      { eq1:'x + y = 7', eq2:'x − y = 3', op:'subtract', combined:'2y = 4', step1ans:['2y=4','y=4/2'], step2:'y', step2ans:['2','y=2'], step3:'x', step3ans:['5','x=5'], sol:'x = 5, y = 2' },
+      { eq1:'2x + y = 11', eq2:'x + y = 7',  op:'subtract', combined:'x = 4',  step1ans:['x=4'],        step2:'x', step2ans:['4','x=4'], step3:'y', step3ans:['3','y=3'], sol:'x = 4, y = 3' },
+      { eq1:'3x + y = 14', eq2:'x + y = 6',  op:'subtract', combined:'2x = 8', step1ans:['2x=8'],       step2:'x', step2ans:['4','x=4'], step3:'y', step3ans:['2','y=2'], sol:'x = 4, y = 2' },
+      { eq1:'x + 2y = 10', eq2:'x − 2y = 2', op:'add',      combined:'2x = 12',step1ans:['2x=12'],      step2:'x', step2ans:['6','x=6'], step3:'y', step3ans:['2','y=2'], sol:'x = 6, y = 2' },
+      { eq1:'5x + y = 17', eq2:'3x + y = 11',op:'subtract', combined:'2x = 6', step1ans:['2x=6'],       step2:'x', step2ans:['3','x=3'], step3:'y', step3ans:['2','y=2'], sol:'x = 3, y = 2' },
+    ];
+
+    let prob = PROBLEMS[0], timerInterval = null, startTime = 0, elapsed = 0;
+    let bestTime = Infinity, step = 0;
+
+    function norm(s) { return s.replace(/\s+/g,'').replace(/−/g,'-').toLowerCase(); }
+
+    function newProblem() {
+      clearInterval(timerInterval);
+      prob = PROBLEMS[Math.floor(Math.random() * PROBLEMS.length)];
+      step = 0;
+      elapsed = 0;
+      document.getElementById('result-screen').classList.remove('show');
+      document.getElementById('race-stage').style.display = 'flex';
+      document.getElementById('eq1').textContent = prob.eq1;
+      document.getElementById('eq2').textContent = prob.eq2;
+      document.getElementById('step1-prompt').textContent = `${prob.eq1} ${prob.op === 'add' ? '+' : '−'} (${prob.eq2}) =`;
+      document.getElementById('step2-prompt').textContent = `Solve for ${prob.step2}:`;
+      document.getElementById('step3-prompt').textContent = `Substitute back, find ${prob.step3}:`;
+      ['inp-step1','inp-step2','inp-step3'].forEach(id => { const el=document.getElementById(id); el.value=''; el.disabled=true; el.className=''; });
+      ['btn1','btn2','btn3'].forEach(id => document.getElementById(id).disabled = true);
+      ['fb1','fb2','fb3'].forEach(id => { document.getElementById(id).textContent=''; });
+      ['lbl2','lbl3'].forEach(id => document.getElementById(id).style.opacity='0.3');
+      document.getElementById('start-btn').style.display = 'inline-flex';
+      document.getElementById('new-btn').style.display = 'none';
+      document.getElementById('timer-disp').textContent = '0.0';
+      document.getElementById('timer-disp').className = 'time-display';
+      document.getElementById('pb-fill').style.width = '100%';
+    }
+
+    function startRound() {
+      newProblem();
+      document.getElementById('start-btn').style.display = 'none';
+      document.getElementById('new-btn').style.display = 'inline-flex';
+      document.getElementById('inp-step1').disabled = false;
+      document.getElementById('btn1').disabled = false;
+      document.getElementById('inp-step1').focus();
+      startTime = Date.now();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        elapsed = (Date.now() - startTime) / 1000;
+        const d = document.getElementById('timer-disp');
+        d.textContent = elapsed.toFixed(1);
+        d.className = 'time-display' + (elapsed < 15 ? ' fast' : elapsed > 40 ? ' warning' : '');
+      }, 50);
+    }
+
+    function checkInput(inputId, answers, fbId, onCorrect) {
+      const input = document.getElementById(inputId);
+      const fb = document.getElementById(fbId);
+      const val = norm(input.value);
+      const ok = val.length > 0 && answers.some(a => val === norm(a));
+      if (ok) {
+        input.classList.add('ok');
+        fb.textContent = '✓'; fb.className = 'mini-fb good';
+        setTimeout(onCorrect, 400);
+      } else {
+        input.classList.add('err');
+        fb.textContent = '✗'; fb.className = 'mini-fb bad';
+        setTimeout(() => { input.classList.remove('err'); fb.textContent = ''; }, 900);
+      }
+    }
+
+    function checkStep1() {
+      checkInput('inp-step1', prob.step1ans, 'fb1', () => {
+        document.getElementById('lbl2').style.opacity = '1';
+        document.getElementById('inp-step2').disabled = false;
+        document.getElementById('btn2').disabled = false;
+        document.getElementById('inp-step2').focus();
+        step = 1;
+      });
+    }
+    function checkStep2() {
+      checkInput('inp-step2', prob.step2ans, 'fb2', () => {
+        document.getElementById('lbl3').style.opacity = '1';
+        document.getElementById('inp-step3').disabled = false;
+        document.getElementById('btn3').disabled = false;
+        document.getElementById('inp-step3').focus();
+        step = 2;
+      });
+    }
+    function checkStep3() {
+      checkInput('inp-step3', prob.step3ans, 'fb3', () => {
+        clearInterval(timerInterval);
+        const t = (Date.now() - startTime) / 1000;
+        const isRecord = t < bestTime;
+        if (isRecord) bestTime = t;
+        document.getElementById('best-disp').textContent = `best: ${bestTime.toFixed(1)}s`;
+        setTimeout(() => showResult(t, isRecord), 600);
+      });
+    }
+
+    function showResult(t, isRecord) {
+      document.getElementById('race-stage').style.display = 'none';
+      const rs = document.getElementById('result-screen');
+      rs.classList.add('show');
+      document.getElementById('result-time').textContent = t.toFixed(2);
+      document.getElementById('result-msg').textContent = isRecord ? '🏆 New best time!' : t < 20 ? '⚡ Fast!' : t < 40 ? '👍 Good pace.' : 'Keep practicing — you\'ll get faster.';
+      document.getElementById('result-solution').innerHTML = `Solution: <strong>${prob.sol}</strong>`;
+    }
+
+    newProblem();
+    document.getElementById('start-btn').style.display = 'inline-flex';
+  </script>
+</body>
+</html>

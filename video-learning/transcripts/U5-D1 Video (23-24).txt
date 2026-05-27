@@ -1,0 +1,163 @@
+Okay, here's the video for unit nine, day one, the last unit.
+All about when there's a variable in the exponent, okay?
+It's not the same thing as x to the second.
+It's some number which we'll call a to the x.
+And how can that move around?
+Well, how can you change that function?
+So, what does the word exponential have in it?
+It has the word exponent.
+So, you're going to be thinking there should be some sort of variable in the exponent, okay?
+So, this has an x in the exponent, but this does not.
+This is just a quadratic or parabola.
+This is good.
+This one's good.
+You can also use add or subtract numbers, but there's still a variable in the exponent.
+And here, the variable is the base and the number.
+There's no variable in the exponent, so this is a cubic function.
+Quick review of exponent rules, anything to the zero power is always one.
+And anything to the first power is just what it already was.
+But you have to be careful because what does negative three squared say?
+That says negative three times negative three, which is positive nine.
+Whereas this one says negative three times three, which is negative nine.
+And then here, negative exponents go to the bottom and become a positive exponent.
+It works the other way too, or if it's a negative exponent in the bottom, it goes to the top.
+So, here's an unshifted basic exponential graph.
+So, let's plot some points.
+When you plug in zero, two to the zero, anything to the zero is one.
+So, it's that point.
+And when you plug in one, so two to the one is two, two to the second is four.
+And then times two again is eight, times two is 16, times two is just 32.
+So, you can see it gets really big fast.
+So, in four, there are five movements to the right.
+You're already at 32, then maybe 64.
+You could get to 2048 really fast.
+And then when you go the other way, two to the negative one is one over two to the one.
+Two to the negative two is one over two squared.
+Maybe one eighth, one sixteenth, one thirty-two, one sixty-fourth, one over one twenty-eight.
+It's going to keep getting smaller and smaller.
+But it's just going to get more fraction year and fraction year.
+But it'll never actually hit zero, because one over one million is still not zero.
+And this is actually going to create an asymptote.
+So, exponential functions have a horizontal asymptote.
+And where does that come from?
+It comes from V. Let's just go down here real quick.
+The parent function, the K value shifts things up and down as the horizontal.
+So, whatever K is, is the horizontal asymptote.
+And the H value moves the graph left and right.
+And the A value makes things go up faster or up slower.
+It's a stretch.
+And then if it's a negative A value, like this, you're going to go down.
+So, let's look at some examples in real life.
+Where does this show up?
+Well, COVID was exponential, right?
+Because three people, each of those three people gave it to three more people.
+And you already have nine.
+And you give it those next nine people, give it to three more, they give it to 27 people.
+And that's why it grows so fast.
+We're going to do an entire day of interest rates.
+Human population grows that way, bacteria growth grows that way.
+But then there's things that go, which we'll actually do in day two, they decay exponentially.
+And something that decays exponentially is radioactive materials, like used in nuclear power plants, right?
+The materials will be cut in half.
+And then that half will be cut in half again becomes a fourth of what you had and then eighth of what you have.
+So, this is for the next day.
+This is just showing like in March of 2020, things just skyrocketed.
+Once it becomes an exponential growth, it just grows to 4,000 people in a matter of days.
+So you can look through these two, here's more just examples of things that grow exponentially.
+So let's look at a way to graph these.
+So you always want to find the asymptote and that's whatever the k value is.
+In this case, it just said three to the x.
+Well, that's also minus zero because it's not shifted that there is no number there and the k value is zero.
+So the asymptote is zero.
+You always want to do your first point to make the exponent zero.
+And to do that, in this case we're just going to plug in zero.
+So three to the zero is one, so here's your point.
+And then you plug in another point to make it one, to make the exponent one,
+always choose to plug in one.
+So three to the one is three and you only need two points because you want to see from where the exponent is zero.
+That's your like, it's not a vertex but you're starting point.
+See they're going to go up that way or up that way or it might go down exponentially.
+So you have to plot at least two points, the domain of these, they go left forever.
+And I know it gets really steep but you can plug in any x value.
+It's just going to get more and more up to the right.
+So domain is negative infinity to infinity.
+The range goes from the k value.
+So you're asymptote to infinity and then just be careful with these end behaviors.
+This is saying as we go to the left, we're approaching zero and as we go to the right, we're approaching infinity.
+What happens if you add a one half?
+So six to the x and three to the x are going to look really similar, but what will the one half do?
+It doesn't really, it actually looks like the same graph here, right?
+Almost.
+It's at three here.
+But what happened?
+The asymptotes is zero, but then you plug in zero and you get one half.
+And you plug in one, so one half times six to the one is one half times six is only three.
+If we did another one, we do one half of six squared.
+So half 36 would be at 18.
+I know it's still going to grow exponentially.
+This just makes it grow a little slower.
+The domain of these are always negative infinity to infinity.
+The range is always from the k value to infinity.
+If you're going up, if you're going up, it's going to be
+asymptote to infinity.
+As we go left, we're going to zero, and as we go right, we go to infinity.
+What happens if we want to go and add a k value, and we want to shift it right to?
+So your new starting point, it used to be a zero one, but we've shifted it to the right
+too.
+This now has a k value of one, so that's your asymptote at one.
+We want to make this exponent zero.
+That's our first point.
+So we want to plug in two.
+So two times three to the zero is two times one plus one gives you three.
+So that's how you get the point two three.
+And we want to make the exponent one, we plug in three.
+So two times three to the one is six plus one is seven.
+So when you plug in three, you get seven.
+Domain is the same as always, but range now.
+Because we have an asymptote at one, the range is from one to infinity.
+And as we go left, our end behavior is approaching that asymptote which is one.
+As we go right, we're approaching infinity.
+This one is going to grow slower.
+But we have an asymptote now at two.
+So we're going to draw and always draw it in because without it, the graph is not complete.
+So you have a dotted line at two.
+We want to make the asymptote or the exponent zero, you just plug in zero.
+So one third times three to the zero is just one third times one plus two is two and
+a third which is right there.
+And then we plug in another number, we plug in one because we want to make the exponent
+one.
+One third times three is just one plus two, it actually just, it should be three.
+So it's actually going to go down there.
+One third times three is one plus two is only three.
+So that's wrong.
+But it's close.
+Domain negative infinity to infinity and then range from the asymptote which is two to infinity
+is we go left, we're approaching two and as we go right, we're approaching infinity.
+This is the last example.
+The only thing that's different now is we have a plus one.
+So the asymptope here because it's the k value is plus zero.
+So we're asymptope down there at zero.
+But we want to make this zero.
+We plug in negative one.
+So four times two to the zero is just four times one which is four.
+So negative one four and then we want to make that exponent one.
+So what we plug in, we plug in zero.
+Four times two to the one is four times two is eight.
+So at zero, we're at eight, we plug in one, we double it again, we get four times four,
+we get 16.
+Asymptope zero, so it's zero to infinity and we're approaching zero as we go to the left
+and we're approaching infinity as we go to the right.
+So an unshifted parent function is going to look like this where actually where zero one
+is the point.
+The domain and range is always from the k value to infinity and then as we approach the
+asymptope to the left and we go to infinity to the right.
+So this last slide is just showing you this would be growth, this would be decay which
+is next class.
+But if you want a little quick preview, that's when x is in the exponent, but the number
+in here is less is anywhere, so the base is anywhere between zero, well, let me write it
+like this, the base is anywhere bigger than zero, but less than one.
+So what if it was one half, if you plug in zero, you get one still, but if you do one
+half to the second power, you get one fourth, if you do that again, you get one eighth,
+one sixteenth, so that's why it's getting lower and lower and then as we'll see next time
+one half to the negative one, it's actually two over one and then so on and so forth.
+So it keeps going up, okay, so that's day one of unit nine.

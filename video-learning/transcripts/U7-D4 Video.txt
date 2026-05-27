@@ -1,0 +1,183 @@
+Alright, here is the video, the last video of Unit 7, Unit 7-8-4.
+Signing cosine graphs is what we'll start with, and then we're going to look at the unit circle.
+So, just a quick reminder, we have two kinds of triangles.
+We have 30, 60, 90 triangles, and these sides are going to be, if we're going to use, like, non-decimals.
+If the, it's kind of like the A, one half, A, and A root three.
+But if you want to use numbers, it would be like one, one half, and then root three over two.
+So, this is also over two. That's the same thing as saying, you know, the A, two A, and A root three.
+What is cutting them in half? So, what if the radius of the hypotenuse was one?
+Then this would be one, this would be half of that, and this would be half of that, times root three.
+Then we have the 45, 45, 90 triangles, which look like this.
+And if the hypotenuse is one, both of these would be root two over two, and root two over two.
+That's why, at 30 degrees, at 45 degrees, and 60 degrees, 90 degrees, we have these special relationships.
+This is a 30 degree angle, that's pi over six radians.
+This is a 45 degree angle, that's pi over four radians, and then 60 degree angles are pi over three.
+How does that show up on a circle? Well, remember, I'll do it up here, if you have a circle with axes going through it.
+This is zero radians, going all the way around would be two pi.
+So, this would be half of that, this would be a quarter of the way around, it's pi over two, and then one and a half pi is three pi over two.
+And then when you cut that into force, we've got one fourth, two fourths, three fourths, four fourths is pi, five fourths, six fourths is three pi over two, and seven fourths.
+What if we did the thirds, or the six, then I'll look like this.
+We've got one sixth, two sixths is pi over three, three sixths, four sixths is four pi over three, and five sixths.
+We still have pi right here, that's six over sixth, then we've got seven, six, eight over six is, let's see, one third, two thirds, three third, four pi over three, four pi over three, five third,
+and then, so we've got, I'm doing it this way, one sixth, two sixth, three sixth, four sixth is one two three.
+This is, sorry, this is a two, two pi over three, so I'm just simplifying the fraction, so right, this is one four pi over six simplifies to two over three.
+That's how I'm getting this, one sixth, two sixth, three sixth, four sixth, six over six, seven over six, eight over six is four thirds, nine over six, ten over six is five pi over three, and lastly, eleven sixth.
+So, we've got the fourths, those are 45 degree angles, pi over fours, we've got the sixth, which are going to be all of these, and then we've got thirds, which are all of these.
+I know it looks like a lot, but that's because the unit circle is everything showing at once.
+So, we're going to use radians, and before we do that, we have to talk about what a reference angle is, because if we're right here, that angle is what we're looking for, not, and what we're going to use the trig four.
+We're not going to use this negative five pi over three angle, because if we're here, we're actually going to make a right triangle.
+We're going to know what this angle is. How much is that? Well, we have five pi over three, and we're trying to get all the way to the gap back down to zero.
+I went one third, two thirds, three thirds, four thirds, five thirds.
+How much more do we need to get to six thirds, or to a full circle? We need pi over three, or this one.
+225 is all the way over here. It's this black line. Well, how much do we need to get back to 180, because that's going to give us a triangle, and I want to use this angle.
+Well, we just do one, they're 225 minus 180, and it's this, it's 45 degrees, and the reference angle is always positive.
+It's, think about it as wherever your angle line ends up, how much more does it take to get to the x axis?
+How about here? We went all the way to here. It's 15 fourths.
+How much does it take to get to 16 fourths, which would be two pi, or a full circle? I need one more fourth.
+So that reference angle is pi over four, which looks like one of these.
+What about this? I went backwards 11 pi over six. Well, negative 12 pi over six would be all the way to the x axis.
+So we're just got a reference angle of pi over six.
+Now, let's only look at the first quadrant. We've got 30 degree angles, which will make a 30 degree angle here.
+That's your pi over six. We have a 45 degree angle.
+That's going to make your pi over fours.
+And we also have this 60 degree angle, which is going to make your thirds, your pi over three.
+That's this angle.
+Oops, pi over three.
+Now, remember, on the far side of a 30 degree angle is one half and root three over two.
+On the far sides of the opposite and adjacent of pi over four, the 45 degree angle is root two over two and root two over two.
+And then the 60, this is 60 degrees for the 30 degrees up here.
+So the adjacent is one half and the opposite is root three over two.
+So just looking at this across from 30 degrees is one half is the y value and the x value is root three over two.
+At 45 degrees, we have both root two over two as the y value and the x value.
+And then here, 60 degrees, this is the short side.
+So this is one half and this is the long side, which is root three over two.
+We're doing this without a calculator and no decimals.
+Okay.
+Well, let's graph one full period of the opposite.
+So basically the one half, root two over two and root three over two.
+At one half, we're at an angle of 30 degrees, which is pi over six.
+We're at one half.
+Then at pi over four, we're at root two over two is the y value, which is about 0.7.
+So it's like right here.
+Then at 60 degrees, we're at root three over two, which is about 0.87, it's about right here.
+And then we get all the way to 90 degrees or pi over two, that's a height of one.
+And then we start going back down to root three over two, root two over two and one half.
+That's going here, here and here.
+And then once we get to pi, what is our y value?
+Well, it's a zero.
+Then we go down, we're going down to negative a half, negative root two over two, and negative
+root three over two, all the way until we get to this angle, this one and a half pi, right?
+Root three over two are y values, negative one, which is down here.
+And then we repeat, we get to our root three over two, root two over two, one half.
+All the way to zero, the y value is zero, one two.
+That's right, a two pi.
+And we connect to the dots, we have this graph.
+And this is going to keep going, it's going to keep repeating this cycle over and over again.
+The highest we get to is one, the lowest we get to is negative one.
+And I know it doesn't ask for it.
+But the amplitude of this is one.
+And we did a full cycle in a distance of two pi.
+And the midline, because the middle of this, the highest and lowest is right.
+The highest is one, the lowest is negative one, right in the middle.
+The midline is y equals zero.
+It's this line.
+Okay, what if we did the adjacent side?
+So meaning, here's your angle, just at 30 degrees, or pi over six, where's our adjacent side?
+This is the long side, it's root three over two.
+So we're already at, let's see, at zero, at zero angle,
+we have an x value of one.
+And then we go down, then we go to root three over two.
+And then at this 45, we're back to root two over two.
+Here, at this angle, which is the 60 degrees, or pi over three,
+the adjacent side is one half.
+So that's why we get to, at root pi over three, at the third, at one half.
+And we get here, the x value, we're looking at the x values now, is zero.
+And then we get going back to the one half, is your x value root two for two.
+And then here, the x value is root three over two.
+So we're going negative through to, and we get all the way to here, to negative one.
+Then, at the third, so I'm going to, actually, the sixth, so what is this?
+Seven pi over six, we have a adjacent value of negative,
+we went left, negative root three over two, negative root two over two, negative one.
+That's our negative one half, that's from here.
+And then we get to an x value of zero, once we get to three pi over two.
+And we go up to a half, that's coming from here.
+That's coming from here.
+And then here is the 45 degree angle, that's root two over two.
+And then here, the 30 degree reference angle, is our final root three over two.
+And then we get all the way to here is one.
+So this is going down, and it's going to repeat.
+Our lowest point, and our highest point, to determine our amplitude,
+our amplitude is still one.
+It's doing a full cycle in two pi.
+And the midline is still y equals zero.
+Because the highest it gets to is one, the lowest it gets to is negative one,
+so right in the middle is your midline.
+What do we just graph?
+We just graph sine and cosine.
+The way I think of it is sine, kind of looks like a snake to me.
+So it goes up and down and snakes back and forth.
+Or a cosine graph looks like a cup.
+And I really, really want to stress.
+If this was like a microversion of this, cosine graphs would go down and up,
+but they'd also keep going, keep doing that.
+A sine graph starts high, goes low.
+No, it doesn't.
+A sine graph starts in the middle, goes up, down, and up.
+That's one cycle.
+And it's going to do that again.
+So this is a cosine graph.
+It looks like a cup.
+Or this is a sine graph.
+Looks like a snake.
+Those are unofficial terms, of course.
+But look.
+I mean, this is something you'll learn more in pre-calc,
+but this portion right here still looks like a cosine graph
+that says shifted.
+And we'll understand that why.
+We'll understand that more next year.
+OK.
+Now the unit circle.
+This is still the x and the y axis.
+So all the way over here, this is a unit.
+So a circle with a radius of 1.
+So I went right 1 up 0.
+I went 0 left and right, but I went up to 1.
+I went left 1 up and down 0.
+I went left and right 0 and down 1.
+Now I kind of color coded these.
+So all the orange ones are your pi or 6's.
+So you've got 1, 6, 2, 3.
+So 1, 2, 3, 4, 5, 6.
+6 over 6.
+And then we've got these.
+7, 6, and 11, 6.
+All of those are a triangle that looks like this.
+This is a y-value 1.5 and an x-value of root 3 over 2.
+What about the 45?
+This is an y-value of root 2 over 2 and an x-value of root 2 over 2.
+Why are some of them negative though?
+Well, if I look at this angle,
+I went left by a half and down by root 3 over 2.
+That's why I get this as my point.
+I'm thinking of it as where is the actual point on the circle?
+I went left to half down by root 3 or 2.
+So everything is an either.
+A 6, which is the small angle.
+It's a 45, which is root 2 over 2, root 2 over 2.
+Or it's a 60 degree angle where this side is the long side,
+which is root 3 over 2.
+And this side is 1 and a half.
+So there you go.
+Unit 7, day 4.
+That's really good.
+It's a 1, 2, 3, 3.
+It's a 2, 3, 4.
+It's a 1, 2, 3.
+It's a 2, 3.
+It's a 3, 2, 3.
+The 2, 1, 4, 6, 4.
+The 2, 3, 4, 4, 4, 5, 6, 6.
+And this is the 1, 2, 4, 4, 4.
+This is the 2, 3, 2, 4, 4, 6, 4, 4, 4, 5, 6.
+I went left by a 5, 4, 4, 5, 4, 4, 7, 4, and this is the 2.

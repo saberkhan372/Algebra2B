@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Difference of Squares — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    .game-stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 16px;
+    }
+
+    .score-bar {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+    }
+    .score-item { text-align: center; }
+    .score-num { font-family: 'Caveat', cursive; font-weight: 700; font-size: 36px; color: var(--accent); line-height: 1; }
+    .score-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); }
+
+    .timer-bar {
+      width: 100%;
+      max-width: 480px;
+      height: 10px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .timer-fill {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.1s linear, background 0.3s;
+      border-radius: 999px;
+    }
+    .timer-fill.warning { background: var(--redline); }
+
+    .question-card {
+      width: 100%;
+      max-width: 480px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+    }
+    .question-card .q-prompt {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 13px;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+    .question-card .q-expr {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 40px;
+      color: var(--ink);
+      line-height: 1;
+    }
+
+    .answer-choices {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .choice-btn {
+      padding: 12px 16px;
+      border: 2.5px solid var(--ink);
+      border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      background: var(--paper);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.12s, transform 0.08s;
+      box-shadow: 2px 3px 0 rgba(29,26,20,0.12);
+    }
+    .choice-btn:hover { background: var(--paper-2); transform: translateY(-1px); }
+    .choice-btn.correct { background: #d4edda; border-color: var(--green); color: var(--green); }
+    .choice-btn.wrong   { background: #f8d7da; border-color: var(--redline); color: var(--redline); }
+
+    .feedback-msg {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 20px;
+      min-height: 28px;
+      text-align: center;
+    }
+    .feedback-msg.good { color: var(--green); }
+    .feedback-msg.bad  { color: var(--redline); }
+
+    .precheck-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .precheck-chip {
+      border: 1.5px solid var(--ink-2);
+      border-radius: 4px;
+      background: var(--paper-2);
+      padding: 4px 8px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 13px;
+      color: var(--ink-2);
+    }
+
+    .game-over-screen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .game-over-screen.visible { display: flex; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u2.html">← U2</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none; align-items:center;">
+      <div class="tool-breadcrumb" style="width:100%;"><a href="../u2.html">← U2 · Graphs &amp; Exponents</a> &nbsp;·&nbsp; D6</div>
+      <div class="tool-title f-display" style="text-align:center;">Difference of Squares</div>
+      <div class="tool-tagline f-hand" style="text-align:center;">Factor a²−b² before the timer runs out. 10 rounds.</div>
+
+      <!-- Active game -->
+      <div class="game-stage" id="game-stage">
+        <div class="score-bar">
+          <div class="score-item grow">
+            <div class="score-num" id="score">0</div>
+            <div class="score-label">SCORE</div>
+          </div>
+          <div class="score-item grow">
+            <div class="score-num" id="round-num">1</div>
+            <div class="score-label">ROUND</div>
+          </div>
+          <div class="score-item grow">
+            <div class="score-num" id="streak">0</div>
+            <div class="score-label">STREAK 🔥</div>
+          </div>
+        </div>
+
+        <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
+
+        <div class="question-card sk-box-thick">
+          <div class="q-prompt">FACTOR THIS:</div>
+          <div class="q-expr" id="q-expr">x² − 9</div>
+          <div class="precheck-row" id="precheck-row"></div>
+        </div>
+
+        <div class="answer-choices" id="choices"></div>
+        <div class="feedback-msg" id="feedback"></div>
+
+        <button class="btn" id="start-btn" onclick="startGame()" style="font-size:18px; padding:10px 28px;">▶ Start Game</button>
+      </div>
+
+      <!-- Game over -->
+      <div class="game-over-screen" id="game-over">
+        <div class="f-display" style="font-size:52px; color:var(--accent);" id="final-score">0</div>
+        <div class="f-marker" style="font-size:18px;">points</div>
+        <div class="f-hand" style="font-size:16px;" id="final-msg">Nice work!</div>
+        <div class="sk-box" style="padding:12px 20px; margin-top:8px; width:100%; max-width:420px;" id="review-box"></div>
+        <button class="btn accent big" onclick="startGame()">▶ play again</button>
+        <a href="diff-of-cubes.html" class="btn">next: Difference of Cubes →</a>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO PLAY</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>You get 10 rounds.</li>
+          <li>Pick the correct factoring before time runs out.</li>
+          <li>Faster = more points. Streaks = bonus points.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE PATTERN</div>
+        <div style="text-align:center; padding:10px; border:1.5px dashed var(--ink-2); border-radius:4px;">
+          <div class="f-mono" style="font-size:16px;">a² − b² = (a+b)(a−b)</div>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; color:var(--ink-2);">
+          The key: two squares with a minus between them. Always factors into sum × difference.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">QUICK CHECKS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          x² − 25 = (x+5)(x−5) ✓<br>
+          4x² − 9 = (2x+3)(2x−3) ✓<br>
+          x² + 9 = ? (sum of squares — can't factor!) ✗
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="diff-of-cubes.html">→ Difference of Cubes</a>
+        <a class="related-link f-hand" href="factoring-lab.html">→ Factoring Quadratics Lab</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTIONS = [
+      { expr: 'x² − 9',    correct: '(x+3)(x−3)',    wrong: ['(x−3)²', '(x+9)(x−1)', '(x+3)²'], check: ['two terms', 'minus sign', 'x² and 9 are squares'] },
+      { expr: 'x² − 25',   correct: '(x+5)(x−5)',    wrong: ['(x−5)²', '(x+25)(x−1)', 'not factorable'], check: ['two terms', 'minus sign', 'x² and 25 are squares'] },
+      { expr: '4x² − 1',   correct: '(2x+1)(2x−1)',  wrong: ['(2x−1)²', '(4x+1)(x−1)', '(x+2)(x−2)'], check: ['two terms', 'minus sign', '4x² and 1 are squares'] },
+      { expr: 'x² − 16',   correct: '(x+4)(x−4)',    wrong: ['(x−4)²', '(x+8)(x−2)', '(x+16)(x−1)'], check: ['two terms', 'minus sign', 'x² and 16 are squares'] },
+      { expr: '9x² − 4',   correct: '(3x+2)(3x−2)',  wrong: ['(3x−2)²', '(9x+4)(x−1)', '(3x+4)(x−1)'], check: ['two terms', 'minus sign', '9x² and 4 are squares'] },
+      { expr: '25 − x²',   correct: '(5+x)(5−x)',    wrong: ['(x+5)²', '(5−x)²', 'not factorable'], check: ['two terms', 'minus sign', '25 and x² are squares'] },
+      { expr: 'x² − 49',   correct: '(x+7)(x−7)',    wrong: ['(x−7)²', '(x+49)(x−1)', '(x+1)(x−49)'], check: ['two terms', 'minus sign', 'x² and 49 are squares'] },
+      { expr: '16x² − 9',  correct: '(4x+3)(4x−3)',  wrong: ['(4x−3)²', '(16x+9)(x−1)', '(4x+1)(4x−9)'], check: ['two terms', 'minus sign', '16x² and 9 are squares'] },
+      { expr: 'x² − 100',  correct: '(x+10)(x−10)',  wrong: ['(x−10)²', '(x+50)(x−2)', '(10+x²)(10−x²)'], check: ['two terms', 'minus sign', 'x² and 100 are squares'] },
+      { expr: '36 − 25x²', correct: '(6+5x)(6−5x)',  wrong: ['(6−5x)²', '(36+25x)(1−x)', '(6+x)(6−x)'], check: ['two terms', 'minus sign', '36 and 25x² are squares'] },
+    ];
+
+    let round = 0, score = 0, streak = 0, timerInterval = null, timeLeft = 0;
+    const TIME_PER_Q = 8; // seconds
+    let answered = false;
+    let wrongs = [];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startGame() {
+      document.getElementById('game-over').classList.remove('visible');
+      document.getElementById('game-stage').style.display = 'flex';
+      document.getElementById('start-btn').style.display = 'none';
+      round = 0; score = 0; streak = 0; wrongs = [];
+      updateScoreUI();
+      nextQuestion();
+    }
+
+    function updateScoreUI() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('round-num').textContent = round + 1;
+      document.getElementById('streak').textContent = streak;
+    }
+
+    function nextQuestion() {
+      if (round >= 10) { endGame(); return; }
+      answered = false;
+      const q = shuffle(QUESTIONS)[round % QUESTIONS.length];
+      window._currentQ = q;
+      document.getElementById('q-expr').textContent = q.expr;
+      document.getElementById('precheck-row').innerHTML = q.check.map(c => `<span class="precheck-chip">${c}</span>`).join('');
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className = 'feedback-msg';
+
+      const choices = shuffle([q.correct, ...q.wrong.slice(0, 3)]);
+      const choicesEl = document.getElementById('choices');
+      choicesEl.innerHTML = '';
+      choices.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.textContent = c;
+        btn.onclick = () => checkAnswer(c, btn);
+        choicesEl.appendChild(btn);
+      });
+
+      updateScoreUI();
+      startTimer();
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      timeLeft = TIME_PER_Q;
+      const fill = document.getElementById('timer-fill');
+      fill.style.width = '100%';
+      fill.classList.remove('warning');
+
+      timerInterval = setInterval(() => {
+        timeLeft -= 0.1;
+        const pct = Math.max(0, (timeLeft / TIME_PER_Q) * 100);
+        fill.style.width = pct + '%';
+        if (pct < 25) fill.classList.add('warning');
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          if (!answered) timeOut();
+        }
+      }, 100);
+    }
+
+    function checkAnswer(choice, btn) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timerInterval);
+      const q = window._currentQ;
+      const isCorrect = choice === q.correct;
+      const pointsEarned = isCorrect ? Math.round(10 + timeLeft * 5 + streak * 2) : 0;
+
+      document.querySelectorAll('.choice-btn').forEach(b => {
+        if (b.textContent === q.correct) b.classList.add('correct');
+        else if (b === btn && !isCorrect) b.classList.add('wrong');
+        b.style.pointerEvents = 'none';
+      });
+
+      const fb = document.getElementById('feedback');
+      if (isCorrect) {
+        score += pointsEarned;
+        streak++;
+        fb.textContent = streak >= 3 ? `${streak} in a row! +${pointsEarned} pts` : `✓ Nice! middle terms cancel. +${pointsEarned} pts`;
+        fb.className = 'feedback-msg good';
+      } else {
+        streak = 0;
+        wrongs.push({ expr: q.expr, correct: q.correct, chosen: choice });
+        fb.textContent = `✗ It's ${q.correct}. Watch out: (a−b)² keeps a middle term.`;
+        fb.className = 'feedback-msg bad';
+      }
+
+      updateScoreUI();
+      round++;
+      setTimeout(() => nextQuestion(), 1400);
+    }
+
+    function timeOut() {
+      answered = true;
+      const q = window._currentQ;
+      streak = 0;
+      wrongs.push({ expr: q.expr, correct: q.correct, chosen: 'time!' });
+      document.querySelectorAll('.choice-btn').forEach(b => {
+        if (b.textContent === q.correct) b.classList.add('correct');
+        b.style.pointerEvents = 'none';
+      });
+      const fb = document.getElementById('feedback');
+      fb.textContent = `Time! It's ${q.correct}`;
+      fb.className = 'feedback-msg bad';
+      round++;
+      setTimeout(() => nextQuestion(), 1400);
+    }
+
+    function endGame() {
+      clearInterval(timerInterval);
+      document.getElementById('game-stage').style.display = 'none';
+      document.getElementById('game-over').classList.add('visible');
+      document.getElementById('final-score').textContent = score;
+      const msg = score >= 120 ? '🔥 On fire! Factoring master.' : score >= 80 ? 'Solid work! Keep going.' : 'Good start — play again to improve!';
+      document.getElementById('final-msg').textContent = msg;
+
+      if (wrongs.length > 0) {
+        let html = '<div class="f-marker" style="font-size:11px;margin-bottom:6px;">REVIEW THESE:</div>';
+        wrongs.forEach(w => {
+          html += `<div class="f-hand" style="font-size:13px; margin-bottom:3px;"><span class="f-mono">${w.expr}</span> → <span style="color:var(--green);">${w.correct}</span></div>`;
+        });
+        document.getElementById('review-box').innerHTML = html;
+      } else {
+        document.getElementById('review-box').innerHTML = '<div class="f-hand" style="font-size:14px; color:var(--green); text-align:center;">Perfect score! 🎉 No mistakes.</div>';
+      }
+    }
+  </script>
+</body>
+</html>

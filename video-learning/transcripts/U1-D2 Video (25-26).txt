@@ -1,0 +1,140 @@
+Okay, here is a lesson on unit 1, a 2, but substitution and elimination.
+So in the previous lesson, on day 1, we grab two lines, two linear equations.
+So in this case, this is the first equation, it's got a Y intercept of 3, and we went
+up 1 over 2, up 1 over 2, but you can also go down 1, left 2, down 1, left 2, we have
+this red line.
+The second equation, we had to switch things around, so we got it in the slope intercept
+form, Y intercept of negative 7, and a slope of down 2 over 1, so down 2 over 1, but you
+can also go up 2 over 1, up 2 over 1, until we got this point.
+This is where they cross at negative 4, 1, and as you can see, that is a solution,
+and that's the X and the Y, that's true for both of these equations.
+But what if you don't always want to graph?
+Sometimes it won't even fit on the graph, and we have to do things algebraically.
+Algebraically means there's no graph needed.
+It's definitely graphing is still part of algebra, but we're going to do things without
+graphing right now.
+So elimination is when you take two equations, and you, I like to think of them as combining
+instead of adding or subtracting, and it's tricky, because I would say think of this as
+adding, but when you do negative 3Y plus 3Y, well, this is like saying 3Y minus 3Y.
+Is it subtraction?
+Is it addition?
+I think combine.
+So if we combine these, we get 7X.
+These cancel each other out, and we combine these, we get 28.
+Well, 7X equals 28, which we divide both side by 7, we get X equals 4, and what we can
+do is we can take that X equals 4 and plug it in.
+So 2X minus 3Y equals 23, let's plug the 4 in for X.
+Everything cancels out until we get Y equals negative 5.
+So we got 4, negative 5, and that would be, if we were to graph these, 4, negative 5 would
+be where that lines cross, and we can actually check to make sure we did the math right.
+Let's plug in 4 and negative 5 to here, and we get that 23 equals 23.
+Let's plug in 4 and negative 5 into this equation, and we also get that 5 equals 5.
+Great.
+For this one, we have 6X and 6X, negative Y, and negative 8Y.
+Well, neither of those are going to cancel out, but what happens?
+What if we take the second equation and multiply it by negative 1?
+So this becomes negative 6X, positive 8Y, and negative 20.
+Well, what do we get?
+When we combine these two highlighted equations, the X is cancel, but we have 8Y minus
+Y is 7Y, and then we have negative 8, and negative 20 is negative 28, Y is negative 4.
+Well, once we find that Y is negative 4, we can plug it into either the original equations.
+It shows the first one here, and plug negative 4 in for this Y.
+So 6X minus minus 4 equals negative 8.
+So 6X plus 4 is negative 8 minus 4 from both sides, and divide it out.
+X is negative 2.
+So we have X equals negative 2, and Y equals negative 4.
+We solve for both unknown variables.
+In example 2, these are kind of nice, because everything is kind of solved out for us.
+This one we had to multiply by negative 1.
+But we're going to do some better little bit harder.
+So this is 6 and 3, 5, and negative 9.
+Those aren't going to cancel each other out.
+And what my strategy is, is say, OK, which one's going to be easier to cancel?
+If I did this times 9, and this times 5, these are both the 45 and negative 45, yeah, that would work.
+But what if I just make this times negative 2, everything times negative 2?
+Well, that makes 6 and negative 6.
+Negative 9 times negative 2 is 18.
+12 times negative 2 is negative 24, and now I'm going to combine the two highlighted equations.
+The X's cancel, and we are left with 5 and 8 is 23.
+47 minus 24 is 23, but that's great.
+Y is 1.
+So once you get that Y equals 1, let's plug it into this equation.
+6X plus 5 times 1, it's 47.
+6X plus 5 is 47 minus 5 from both sides.
+6X equals 42, so X equals 7.
+We check 47 equals 47, 12 equals 12.
+What I did here, I plugged 7 and 1 in for X and Y, and it makes sense.
+I know I'm not checking every single one, but the equations like this is that you can check every problem to really know that you've got it right before you even turn in the problem.
+Here, we have 7 and 6 and 5 and negative 2.
+Well, what if I multiply this one by 5 and this one by 2?
+They both be 10 and negative 10.
+In this case, just like here, well actually, here's one where they multiply both equations to get that Y is to cancel.
+I gave us X equals negative 3 and Y equals 2.
+You could check those, but those will work.
+The other technique that we will use is substitution.
+So no matter how much you prefer elimination, you need to know both, so you can follow directions for full credit.
+And sometimes substitution is useful, and it comes up a lot in algebra 2.
+So 3X minus 5Y equals negative 16 is equation 1.
+And this is telling me that Y is the same thing as 2X minus 8.
+So I'm going to take this 2X minus 8 and plug it in for that Y.
+So 3X minus 5, instead of writing Y, I'm going to write 2X minus 8 and parentheses, and we have to distribute in that negative 5.
+Negative 5 times 2 is negative 10, negative 5 times negative 8 is positive 40.
+Simplify everything up and we get X equals to 8.
+Once we found that X equals to 8, we can actually plug that into this X right here and find that Y equals 8.
+And we can check 3 times 8 minus 5 times 8 is 24 minus 40, negative 16 equals negative 16.
+We can also check that the second one, this one right here, let's just quickly do that.
+Does 8 equal 2 times 8 minus 8 is 8 equals 16 minus 8, yeah.
+And then in this one, well, we know that X equals 24 minus 5Y, let's plug that into this X.
+2 times 24 minus 5Y, distribute, make sure we distribute in that 2.
+We find that 2 times this minus 11Y equals negative 78.
+Well, we combine the negative 10Y and negative 11Y, that's more negative, so negative 21Y minus the 48 from both sides.
+Divide both sides by negative 21, we get Y equals 6.
+Once you plug that Y equals 6 into here, we can find what X is.
+And make sure you're boxing your answers.
+If these ones are really nice, because Y equals something and X equals something is very easy to substitute it.
+But sometimes you have to think about which might be more convenient to isolate.
+So here, these aren't isolated.
+These are kind of messier problems, so here we go.
+Let me just check this out real quick, dividing by either 11 or 13, the first equation is messy.
+Either a great fraction of being decimals, making them very hassle.
+What should we isolate instead?
+Well, in this case, what I did is I took the second equation, and I minus 3X of negative 2Y equals negative 3X minus 1.
+And I divided everything by negative 2.
+So Y equals 3 over 2X plus 1-2, and I distributed everything in.
+This is a little tricky, right?
+So 11X plus 13 times Y, well, I just found out why is this, so I plugged it in, equals 37.
+13 times 3 is 39 over 2.
+13 times 1 is 13 over 2.
+And then, this is 11X, basically 11X over 1.
+And this is 39X over 2.
+Well, I can get a common denominator times 2 times 2.
+And then, that's 22X over 2 plus 39X over 2 plus 13 over 2.
+Let's also get a common denominator here, and as you can see, everything is over 2, right?
+So 22 plus 39 is 61X, minus 13 over 2 from 74 over 2, we get 61 over 2.
+So you get 61X over 2 equals 61 over 2.
+Well, you can see, we can either multiply both sides by 2, that will get rid of these, and you get X equals 1.
+Once you find the next equals 1, you plug that in to either equation, I think I used this one, and I found
+it Y equals 2.
+And lastly, I just realized, for this one, I used elimination, but we want to use substitution, right?
+So here's what I'll do.
+I will take the first equation, and isolate it for, let's isolate it for Y.
+So 3Y equals negative 6X plus 15, to find everything by 3, so Y equals 6 over 3 is 2, so negative 2X plus 15 over 3.
+And then let's substitute this in for the second Y.
+So 5X minus 7 times negative 2X plus 15 over 3 is equal to negative 73.
+So 5X, and let's distribute a negative 7.
+So 5X plus 14X minus, what's 15 times 7?
+15 times 7 is 105, so 105 over 3 is equal to negative 73.
+5 and 14 is 19X minus 105 over 3.
+Let's get a common denominator, so times 3, times 3.
+What is 73 times 3?
+19, so 19X minus 105 over 3 is equal to negative 219 over 3.
+So let's add 105 over 3 to both sides.
+So we get 19X is equal to, let's see, 219 minus 105 is 114 over 3, so it's negative.
+And let's multiply both sides by 3, bear with me when I use calculator.
+We've got 3 times 19 is 57 is equal to negative 114, divide by 57, X equals negative 2.
+And then we'll plug that in to the second equation.
+You can actually plug it in right here, and I'll show you all the steps, so we don't.
+Nothing is ambiguous here, so negative 2 times negative 2 plus 15 over 3.
+Y equals 4 plus 15 over 3, uh-oh, let's make a common denominator.
+This is over 1, so times 3, times 3, 12 over 3 plus 15 over 3, that's 27 over 3, so Y equals 9.
+And that is what we've got by using elimination, so we know that everything works out, so there you go.

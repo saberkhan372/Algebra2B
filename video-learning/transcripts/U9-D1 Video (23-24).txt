@@ -1,0 +1,103 @@
+here is unit nine, date one. This is a two-part lesson, so here's part one. We're
+going to give you some scenarios. This whole chapter is about probability
+statistics. So Pepsi, we're in a contest, and then some of the caps said to try
+again, some said you're a winner. They say that one in six wins a prize. So to find
+out if it's true, 30 students in a class and went out and they bought one bottle
+of soda each, two of them got cast say your winner. Does this give convincing
+evidence that one in six is true? Well, let's see, because they got two out of
+30. Okay, that's a, is that the same as a one in six, one divided by six is
+there with me, is about a point one six or a sixteen percent chance of winning two
+out of 30, is point zero six, that's a six percent chance of winning. Well, does this give
+convince the evidence that it's only 30 kids we're on the bottom. Think how many bottles of soda Pepsi is making.
+Millions. We only have 30 people prior, so they're not really convincing, so the sample size is
+very small. Okay, now we're going to do the game. We did a game where 30 people are rolling
+a dice. So you're going to roll or not 30 people, but everyone in the class gets a dice
+and you roll it 30 times. Okay, we're going to say that if you roll a six, you win a prize.
+Everyone rolled it. How many times did you roll a six? So every dot represents the one in the
+class. Someone rolled a six seven out of 30 times. Someone rolled a six ten out of 30 times.
+Right? A bunch of people wrote a six seven out of 30 times. No one rolled a six one or two times.
+Well, what percentage of the time did the class get two or fewer prizes? Zero out of 24 people.
+So we got 24 data points. Zero out of 24 rolled. They go, they got a prize one or two times.
+So again, we rolled it. We rolled a dice 30 times. If you got a six, you win.
+This is how many times they got a six. These people got six out of 30.
+Does it seem possible that the company is telling you truth? Yeah, because 30 students is a small sample size.
+We can't actually say for sure if you're going to get a winning result from only 30 people trying to
+you need to be in the tens of thousands or more because of how many bottles of sort of
+aiming. So we're going to define some things here in data with individuals, which are the people in
+things that you're like studying and variables, which are things about them that can change.
+So variables that can change are either categorical like a label or a quantitative meaning like there's an
+actual data about them. So here, individuals in this study are basically here.
+We have 40 students who give them a survey. The first four students in the class are as
+fathers. And we got their gender, their freshman sophomore junior senior, the GPA, their pulse,
+where hand they use, how many kids are in their family, how much homework they do,
+how much sleep they get, if they have a smartphone.
+Well, the individuals in the study are the 40 students and the variables are all of these.
+Because everything here in this top row can vary.
+Is it categorical or quantitative? Well, categorically, it's just a label, quantitative are numbers that we can actually
+average for. We can find the average number of females and males, or that we can find a number of males.
+We can find the number of freshmen, sophomore, and so on. We can get an average GPA. We can get an average pulse.
+We can find the number of hand, dominant hands. We can't find the number of homework minutes because this is a range of values.
+So I can't say that there is definitively like an average of 15 minutes on homework at night because you can't find an average of a range of values.
+So here are the ages of the 40 students in the class.
+We are going to put an age distribution here. So the ages are 14, 15, 16, 17, and 18.
+How many 14-year-olds here are there? So we just look through the list.
+Oops. 1, 2, 3, 4, 5 is 5 to 14-year-olds out of 40 students.
+So the frequencies that it shows up five times, but relative to the class is 5,
+or 5, 14-year-olds out of 40 students at the 12% average, or 12% of the class is 14 years old.
+10% of the class is 15. There is 9, 16-year-olds, and 9 out of 40 is 22% of the class, 16, 42% of the class,
+is 17 and only 12% of the class is 18. If we add up all these values, that will be 100%.
+It has to be because we need to have 100% of the class to make this next sense.
+We are going to jump to part 2, which is what your social media choice.
+So we use TikTok, Instagram, and Snapchat.
+We are going to see, this is your most used, and we are going to be using the green block this year.
+So we had everyone look at their screen time and see the amount of minutes used per app.
+9 people use TikTok the most. 6 people use it instead of most. 3 people use Snapchat the most.
+Out of 18 people in the class, 9 of them out of 18 used TikTok the most.
+So that is up to 50% relative frequency, 50% of the class use TikTok the most.
+33% of the class use instead of most and 17 used Snapchat for 17%.
+Now we are going to make a bar, graph, and a pie, bar chart.
+Sometimes called a histogram.
+It is here. 9 used TikTok.
+6 used instead of most. 3 used Snapchat the most.
+You can also make a pie graph. So 50% of the chart of a pie graph is TikTok.
+A third, 33% is Instagram, and 17% is Snapchat.
+Well, what is the difference between the two?
+The pie chart shows the percent out of the total.
+So out of the 100 kids in the class it is easy to see that 50% is TikTok.
+This chart is better at showing you who use it the most.
+So there is benefits to each.
+And what we are going to find out in teacher lessons is it can be bias.
+Right? We are going to see right here.
+Which cell phone speaks to you?
+So research of 517 18 to 34 year olds.
+And what type of phone they use?
+Out of 517 people.
+769 is iPhone.
+214 is Android.
+And a hundred and forty other.
+Google pixel phone.
+Well, look at this.
+The center showed the graph here.
+And you can see the Android is way higher than iPhone or other.
+What is misleading about it?
+We have the Y axis starting at 120.
+So, yeah, there is a hundred and seventy or sixty nine iPhone users.
+214.
+But if you start at 120, we are not really showing the rest of the graph.
+If you do it this way starting at zero,
+you can see that iPhones and Android is a bit more evenly matched.
+Because these numbers aren't that far from each other.
+And if you start at 120, it is going to look like Android is way more.
+Now we are going to do relative frequency.
+The number of iPhone users out of the total of people surveyed is 33%.
+So, we are going to put that here.
+The number of Android users out of the total people surveyed is 41%.
+They are not that far apart.
+And then other is 26%.
+So, we can make a pie graph and a histogram or a bar chart of each.
+And it kind of shows that Android iPhones really close.
+It is close while other is a little bit less.
+This is not a perfect drawing.
+You can do a pie graph maker or bar chart maker on Google.
+And it will make it for you.
+So, that is unit nine, day one, part one and two.

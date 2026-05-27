@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Circle Walker — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .tool-main { overflow-y: auto; }
+
+    .canvas-wrap { width:100%; aspect-ratio:2/1; max-height:380px; position:relative; }
+    canvas { width:100%; height:100%; display:block; border-radius:6px; cursor:crosshair; touch-action:none; }
+
+    .ctrl-row { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; align-items:center; }
+    .ctrl-btn {
+      padding:4px 14px; border-radius:20px; border:2px solid var(--ink);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:12px;
+      cursor:pointer; transition:background .12s;
+    }
+    .ctrl-btn.active { background:var(--ink); color:var(--paper); }
+    .ctrl-btn.anim { border-color:var(--accent); }
+    .ctrl-btn.anim.active { background:var(--accent); }
+
+    .info-row { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+    .info-chip {
+      padding:3px 10px; border-radius:4px; border:1.5px solid var(--ink-2);
+      font-family:'JetBrains Mono',monospace; font-size:12px;
+    }
+    .ic-angle  { border-color:#8b4513; color:#8b4513; background:rgba(139,69,19,0.06); }
+    .ic-sin    { border-color:#2a6fb4; color:#2a6fb4; background:rgba(42,111,180,0.07); }
+    .ic-cos    { border-color:#d94f2a; color:#d94f2a; background:rgba(217,79,42,0.07); }
+    .ic-quad   { border-color:#208040; color:#208040; background:rgba(32,128,64,0.07); }
+    .ic-ref    { border-color:var(--ink-2); color:var(--ink-2); }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u7.html">← U7</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u7.html">← U7 · Trigonometry</a></div>
+      <div class="tool-title f-display">Unit Circle Walker</div>
+      <div class="tool-tagline f-hand">Drag the point — watch the sine wave trace out the y-coordinate.</div>
+
+      <div class="canvas-wrap">
+        <canvas id="cv"></canvas>
+      </div>
+
+      <div class="ctrl-row">
+        <button class="ctrl-btn active" id="btn-sin" onclick="setMode('sin')">sin</button>
+        <button class="ctrl-btn" id="btn-cos" onclick="setMode('cos')">cos</button>
+        <button class="ctrl-btn active" id="btn-snap" onclick="toggleSnap()">⬡ snap 30°/45°</button>
+        <button class="ctrl-btn active" id="btn-deg" onclick="toggleUnits()">degrees</button>
+        <button class="ctrl-btn anim" id="btn-anim" onclick="toggleAnim()">▶ animate</button>
+      </div>
+
+      <div class="info-row">
+        <span class="info-chip ic-angle" id="ic-angle">θ = 0°</span>
+        <span class="info-chip ic-angle" id="ic-rad">= 0</span>
+        <span class="info-chip ic-sin"   id="ic-sin">sin θ = 0</span>
+        <span class="info-chip ic-cos"   id="ic-cos">cos θ = 1</span>
+        <span class="info-chip ic-quad"  id="ic-quad">Q1 (+, +)</span>
+        <span class="info-chip ic-ref"   id="ic-ref">ref = 0°</span>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE BIG IDEA</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7;">
+          The unit circle has <strong>radius 1</strong>.<br><br>
+          Any point on it is <strong>(cos θ, sin θ)</strong>.<br><br>
+          <span style="color:#2a6fb4">sin θ</span> = the <strong>y-coordinate</strong><br>
+          <span style="color:#d94f2a">cos θ</span> = the <strong>x-coordinate</strong><br><br>
+          As θ increases, the y-coord traces out the <strong>sine wave</strong>.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SPECIAL ANGLES</div>
+        <table style="font-family:'JetBrains Mono',monospace; font-size:11px; width:100%; border-collapse:collapse;">
+          <tr style="color:var(--ink-2)"><th style="text-align:left;padding:2px 4px">θ</th><th style="padding:2px 4px">sin</th><th style="padding:2px 4px">cos</th></tr>
+          <tr><td style="padding:2px 4px">0°</td><td style="text-align:center">0</td><td style="text-align:center">1</td></tr>
+          <tr><td style="padding:2px 4px">30°</td><td style="text-align:center; color:#2a6fb4">1/2</td><td style="text-align:center; color:#d94f2a">√3/2</td></tr>
+          <tr><td style="padding:2px 4px">45°</td><td style="text-align:center; color:#2a6fb4">√2/2</td><td style="text-align:center; color:#d94f2a">√2/2</td></tr>
+          <tr><td style="padding:2px 4px">60°</td><td style="text-align:center; color:#2a6fb4">√3/2</td><td style="text-align:center; color:#d94f2a">1/2</td></tr>
+          <tr><td style="padding:2px 4px">90°</td><td style="text-align:center; color:#2a6fb4">1</td><td style="text-align:center; color:#d94f2a">0</td></tr>
+          <tr><td style="padding:2px 4px">180°</td><td style="text-align:center">0</td><td style="text-align:center; color:#d94f2a">−1</td></tr>
+          <tr><td style="padding:2px 4px">270°</td><td style="text-align:center; color:#2a6fb4">−1</td><td style="text-align:center">0</td></tr>
+        </table>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">QUADRANT SIGNS</div>
+        <div class="f-hand" style="font-size:12px; line-height:1.8;">
+          <span style="color:#208040">■ Q1 (0°–90°): sin+, cos+</span><br>
+          <span style="color:#2a6fb4">■ Q2 (90°–180°): sin+, cos−</span><br>
+          <span style="color:#d94f2a">■ Q3 (180°–270°): sin−, cos−</span><br>
+          <span style="color:#8b4513">■ Q4 (270°–360°): sin−, cos+</span>
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Drag slowly from 0° to 360°. When does sin = 0? When does sin = 1?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Turn on snap. Find the angle where sin = cos. What angle is it? Why?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('cv');
+    const ctx    = canvas.getContext('2d');
+
+    // ── special angles ──
+    const π = Math.PI;
+    const SNAP_ANGLES = [0, π/6, π/4, π/3, π/2, 2*π/3, 3*π/4, 5*π/6,
+                         π, 7*π/6, 5*π/4, 4*π/3, 3*π/2, 5*π/3, 7*π/4, 11*π/6, 2*π];
+    const EXACT = new Map([
+      [0,       { sin:'0',     cos:'1',     radStr:'0',      degStr:'0°'   }],
+      [30,      { sin:'1/2',   cos:'√3/2',  radStr:'π/6',    degStr:'30°'  }],
+      [45,      { sin:'√2/2',  cos:'√2/2',  radStr:'π/4',    degStr:'45°'  }],
+      [60,      { sin:'√3/2',  cos:'1/2',   radStr:'π/3',    degStr:'60°'  }],
+      [90,      { sin:'1',     cos:'0',     radStr:'π/2',    degStr:'90°'  }],
+      [120,     { sin:'√3/2',  cos:'−1/2',  radStr:'2π/3',   degStr:'120°' }],
+      [135,     { sin:'√2/2',  cos:'−√2/2', radStr:'3π/4',   degStr:'135°' }],
+      [150,     { sin:'1/2',   cos:'−√3/2', radStr:'5π/6',   degStr:'150°' }],
+      [180,     { sin:'0',     cos:'−1',    radStr:'π',      degStr:'180°' }],
+      [210,     { sin:'−1/2',  cos:'−√3/2', radStr:'7π/6',   degStr:'210°' }],
+      [225,     { sin:'−√2/2', cos:'−√2/2', radStr:'5π/4',   degStr:'225°' }],
+      [240,     { sin:'−√3/2', cos:'−1/2',  radStr:'4π/3',   degStr:'240°' }],
+      [270,     { sin:'−1',    cos:'0',     radStr:'3π/2',   degStr:'270°' }],
+      [300,     { sin:'−√3/2', cos:'1/2',   radStr:'5π/3',   degStr:'300°' }],
+      [315,     { sin:'−√2/2', cos:'√2/2',  radStr:'7π/4',   degStr:'315°' }],
+      [330,     { sin:'−1/2',  cos:'√3/2',  radStr:'11π/6',  degStr:'330°' }],
+      [360,     { sin:'0',     cos:'1',     radStr:'2π',     degStr:'360°' }],
+    ]);
+
+    // ── state ──
+    let theta    = π / 3;  // 60°
+    let mode     = 'sin';
+    let snapOn   = true;
+    let showDeg  = true;
+    let dragging = false;
+    let animating = false;
+    let animReq   = null;
+
+    // ── canvas setup ──
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      const w = canvas.clientWidth, h = canvas.clientHeight;
+      if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+        canvas.width  = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        ctx.scale(dpr, dpr);
+      }
+    }
+
+    function dims() {
+      const W = canvas.clientWidth, H = canvas.clientHeight;
+      const cx = W * 0.25, cy = H * 0.5;
+      const r  = Math.min(W * 0.22, H * 0.44);
+      const wx0 = W * 0.52;
+      const ww  = W * 0.45;
+      const wAmp = r;
+      const wXsc = ww / (2 * π);
+      return { W, H, cx, cy, r, wx0, ww, wAmp, wXsc };
+    }
+
+    // ── snap ──
+    function snapAngle(a) {
+      if (!snapOn) return ((a % (2*π)) + 2*π) % (2*π);
+      let best = 0, bestDist = Infinity;
+      for (const sa of SNAP_ANGLES) {
+        const d = Math.min(Math.abs(a - sa), 2*π - Math.abs(a - sa));
+        if (d < bestDist) { bestDist = d; best = sa; }
+      }
+      return best % (2 * π);
+    }
+
+    // ── exact info ──
+    function exactInfo() {
+      const deg = Math.round(theta * 180 / π);
+      return EXACT.get(deg) || null;
+    }
+
+    function fmtVal(v) {
+      return (Math.round(v * 1000) / 1000).toFixed(3).replace(/\.?0+$/, '');
+    }
+
+    function fmtAngle() {
+      const deg = Math.round(theta * 180 / π);
+      const exact = EXACT.get(deg);
+      if (showDeg) return exact ? exact.degStr : `${deg}°`;
+      if (exact)   return exact.radStr;
+      return `${fmtVal(theta)} rad`;
+    }
+
+    function fmtRad() {
+      const deg = Math.round(theta * 180 / π);
+      const exact = EXACT.get(deg);
+      return exact ? exact.radStr : `${fmtVal(theta)} rad`;
+    }
+
+    function sinExact() {
+      const info = exactInfo();
+      if (info) return info.sin;
+      return fmtVal(Math.sin(theta));
+    }
+    function cosExact() {
+      const info = exactInfo();
+      if (info) return info.cos;
+      return fmtVal(Math.cos(theta));
+    }
+
+    function quadrant() {
+      const d = ((Math.round(theta * 180 / π) % 360) + 360) % 360;
+      if (d < 90)  return { n: 'Q1', sign: '(+, +)', color: '#208040' };
+      if (d < 180) return { n: 'Q2', sign: '(−, +)', color: '#2a6fb4' };
+      if (d < 270) return { n: 'Q3', sign: '(−, −)', color: '#d94f2a' };
+      return { n: 'Q4', sign: '(+, −)', color: '#8b4513' };
+    }
+
+    function refAngle() {
+      const d = ((Math.round(theta * 180 / π) % 360) + 360) % 360;
+      if (d <= 90)  return d;
+      if (d <= 180) return 180 - d;
+      if (d <= 270) return d - 180;
+      return 360 - d;
+    }
+
+    // ── drawing ──
+    function drawGrid(d) {
+      const { cx, cy, r } = d;
+      ctx.strokeStyle = 'rgba(29,26,20,0.06)'; ctx.lineWidth = 1;
+      for (let i = -1; i <= 1; i += 0.5) {
+        const px = cx + i * r, py = cy + i * r;
+        ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, d.H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(d.W * 0.49, py); ctx.stroke();
+      }
+    }
+
+    function drawQuadrantShading(d) {
+      const { cx, cy, r } = d;
+      const QCOLS = [
+        'rgba(32,128,64,0.07)',  // Q1
+        'rgba(42,111,180,0.07)', // Q2
+        'rgba(217,79,42,0.07)',  // Q3
+        'rgba(139,69,19,0.07)',  // Q4
+      ];
+      // Canvas arc: 0=right, going clockwise
+      // Math: Q1=0→90, Q2=90→180, Q3=180→270, Q4=270→360
+      // Canvas angles (y-flipped): -π/2→0, -π→-π/2, π→π/2 (clockwise means negative in math terms)
+      const quads = [
+        [-π/2, 0],  // Q1 in math = canvas 0 to -π/2 (counterclockwise from right to top)
+        [π, -π/2],  // actually let me use canvas arc directly
+      ];
+      // Simpler: draw via bezier or just pie slices using canvas arc
+      const starts = [-π/2, -π, π/2, 0]; // canvas angles for Q1,Q2,Q3,Q4
+      for (let q = 0; q < 4; q++) {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, starts[q], starts[q] - π/2, true); // counterclockwise
+        ctx.closePath();
+        ctx.fillStyle = QCOLS[q];
+        ctx.fill();
+      }
+    }
+
+    function drawCircleDecor(d) {
+      const { cx, cy, r } = d;
+
+      // Circle outline
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2*π);
+      ctx.strokeStyle = 'rgba(29,26,20,0.25)'; ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.35)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx - r - 10, cy); ctx.lineTo(cx + r + 10, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - r - 10); ctx.lineTo(cx, cy + r + 10); ctx.stroke();
+
+      // Axis labels: 1, −1 on axes
+      ctx.fillStyle = 'rgba(29,26,20,0.3)';
+      ctx.font = "9px 'Special Elite', monospace";
+      ctx.textAlign = 'center'; ctx.fillText('1', cx + r + 6, cy - 4);
+      ctx.fillText('−1', cx - r - 6, cy - 4);
+      ctx.fillText('1', cx + 4, cy - r - 6);
+      ctx.fillText('−1', cx + 6, cy + r + 10);
+
+      // Quadrant labels
+      const lblColors = ['#208040', '#2a6fb4', '#d94f2a', '#8b4513'];
+      const lblPos = [
+        [cx + r * 0.55, cy - r * 0.55],
+        [cx - r * 0.55, cy - r * 0.55],
+        [cx - r * 0.55, cy + r * 0.55],
+        [cx + r * 0.55, cy + r * 0.55],
+      ];
+      const lblTxt = ['(+,+)', '(−,+)', '(−,−)', '(+,−)'];
+      ctx.font = "9px 'Special Elite', monospace"; ctx.textAlign = 'center';
+      for (let q = 0; q < 4; q++) {
+        ctx.fillStyle = lblColors[q];
+        ctx.fillText(lblTxt[q], lblPos[q][0], lblPos[q][1]);
+      }
+    }
+
+    function drawAngle(d) {
+      const { cx, cy, r } = d;
+      const sinT = Math.sin(theta), cosT = Math.cos(theta);
+      const ptX = cx + cosT * r, ptY = cy - sinT * r;
+
+      // Angle arc near center
+      const arcR = r * 0.22;
+      ctx.beginPath(); ctx.arc(cx, cy, arcR, 0, -theta, true);
+      ctx.strokeStyle = '#8b4513'; ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Angle label
+      const midA = -theta / 2;
+      const lblX = cx + Math.cos(midA) * (arcR + 10);
+      const lblY = cy + Math.sin(midA) * (arcR + 10);
+      ctx.fillStyle = '#8b4513';
+      ctx.font = "10px 'Patrick Hand', cursive"; ctx.textAlign = 'center';
+      ctx.fillText('θ', lblX, lblY);
+
+      // Radius line
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(ptX, ptY);
+      ctx.strokeStyle = 'rgba(29,26,20,0.6)'; ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // sin projection (vertical, blue): from point down to x-axis
+      ctx.beginPath(); ctx.moveTo(ptX, ptY); ctx.lineTo(ptX, cy);
+      ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 1.8;
+      ctx.setLineDash([4, 3]);
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // cos projection (horizontal, red): from point left to y-axis
+      ctx.beginPath(); ctx.moveTo(ptX, ptY); ctx.lineTo(cx, ptY);
+      ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 1.8;
+      ctx.setLineDash([4, 3]);
+      ctx.stroke(); ctx.setLineDash([]);
+
+      // sin label on the projection
+      if (Math.abs(sinT) > 0.1) {
+        const slx = ptX + (cosT >= 0 ? 8 : -8);
+        const sly = (ptY + cy) / 2;
+        ctx.fillStyle = '#2a6fb4';
+        ctx.font = "10px 'Patrick Hand', cursive";
+        ctx.textAlign = cosT >= 0 ? 'left' : 'right';
+        ctx.fillText('sin θ', slx, sly);
+      }
+
+      // cos label on the projection
+      if (Math.abs(cosT) > 0.1) {
+        const clx = (ptX + cx) / 2;
+        const cly = ptY + (sinT >= 0 ? -6 : 10);
+        ctx.fillStyle = '#d94f2a';
+        ctx.font = "10px 'Patrick Hand', cursive"; ctx.textAlign = 'center';
+        ctx.fillText('cos θ', clx, cly);
+      }
+
+      // Point label (cos, sin)
+      const info = exactInfo();
+      const cosStr = info ? info.cos : fmtVal(cosT);
+      const sinStr = info ? info.sin : fmtVal(sinT);
+      ctx.fillStyle = 'rgba(29,26,20,0.7)';
+      ctx.font = "9px 'JetBrains Mono', monospace";
+      const padX = cosT >= 0 ? 6 : -6;
+      const padY = sinT >= 0 ? -6 : 12;
+      ctx.textAlign = cosT >= 0 ? 'left' : 'right';
+      ctx.fillText(`(${cosStr}, ${sinStr})`, ptX + padX, ptY + padY);
+
+      // Draggable handle
+      ctx.beginPath(); ctx.arc(ptX, ptY, 7, 0, 2*π);
+      ctx.fillStyle = mode === 'sin' ? '#2a6fb4' : '#d94f2a';
+      ctx.fill();
+      ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2; ctx.stroke();
+    }
+
+    function drawWave(d) {
+      const { H, wx0, ww, wAmp, wXsc, cy } = d;
+      const sinT = Math.sin(theta), cosT = Math.cos(theta);
+      const val = mode === 'sin' ? sinT : cosT;
+      const wColor = mode === 'sin' ? '#2a6fb4' : '#d94f2a';
+      const wLabel = mode === 'sin' ? 'y = sin θ' : 'y = cos θ';
+
+      // Axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.3)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(wx0, cy - wAmp - 8); ctx.lineTo(wx0, cy + wAmp + 8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(wx0 - 4, cy); ctx.lineTo(wx0 + ww + 4, cy); ctx.stroke();
+
+      // Y-axis labels
+      ctx.fillStyle = 'rgba(29,26,20,0.3)';
+      ctx.font = "9px 'Special Elite', monospace"; ctx.textAlign = 'right';
+      ctx.fillText('1', wx0 - 3, cy - wAmp + 3);
+      ctx.fillText('−1', wx0 - 3, cy + wAmp + 3);
+
+      // X-axis labels (π marks)
+      const xLabels = [
+        [π/2,  'π/2'],  [π, 'π'], [3*π/2, '3π/2'], [2*π, '2π'],
+      ];
+      ctx.textAlign = 'center';
+      for (const [a, lbl] of xLabels) {
+        const px = wx0 + a * wXsc;
+        ctx.strokeStyle = 'rgba(29,26,20,0.1)'; ctx.lineWidth = 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(px, cy - wAmp); ctx.lineTo(px, cy + wAmp); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = 'rgba(29,26,20,0.3)';
+        ctx.fillText(lbl, px, cy + wAmp + 12);
+      }
+
+      // Wave curve (full period)
+      ctx.strokeStyle = wColor; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      let started = false;
+      for (let a = 0; a <= 2*π + 0.01; a += 0.02) {
+        const wv = mode === 'sin' ? Math.sin(a) : Math.cos(a);
+        const px = wx0 + a * wXsc;
+        const py = cy - wv * wAmp;
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Wave label
+      ctx.fillStyle = wColor;
+      ctx.font = "11px 'Patrick Hand', cursive"; ctx.textAlign = 'left';
+      ctx.fillText(wLabel, wx0 + 2, cy - wAmp - 12);
+
+      // Current angle marker (vertical line on wave)
+      const thetaNorm = ((theta % (2*π)) + 2*π) % (2*π);
+      const curX = wx0 + thetaNorm * wXsc;
+      ctx.strokeStyle = 'rgba(29,26,20,0.2)'; ctx.lineWidth = 1;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(curX, cy - wAmp); ctx.lineTo(curX, cy + wAmp); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Current point on wave
+      const curY = cy - val * wAmp;
+      ctx.beginPath(); ctx.arc(curX, curY, 6, 0, 2*π);
+      ctx.fillStyle = wColor; ctx.fill();
+      ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2; ctx.stroke();
+
+      // Return curX, curY for connector
+      return { curX, curY };
+    }
+
+    function draw() {
+      resize();
+      const d = dims();
+      const { cx, cy, r } = d;
+
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, d.W, d.H);
+
+      // Panel divider
+      ctx.strokeStyle = 'rgba(29,26,20,0.1)'; ctx.lineWidth = 1;
+      ctx.setLineDash([4, 6]);
+      ctx.beginPath(); ctx.moveTo(d.W * 0.5, 0); ctx.lineTo(d.W * 0.5, d.H); ctx.stroke();
+      ctx.setLineDash([]);
+
+      drawGrid(d);
+      drawQuadrantShading(d);
+      drawCircleDecor(d);
+      drawAngle(d);
+      const { curX, curY } = drawWave(d);
+
+      // Connector: horizontal line from circle point to wave point (same y — this is the KEY)
+      const sinT = Math.sin(theta), cosT = Math.cos(theta);
+      const val = mode === 'sin' ? sinT : cosT;
+      const ptX = cx + cosT * r;
+      const ptY = cy - (mode === 'sin' ? sinT : cosT) * r; // on circle
+      // Note: ptY = cy - val*r, curY = cy - val*wAmp, but r=wAmp so ptY = curY ✓
+      const wColor = mode === 'sin' ? '#2a6fb4' : '#d94f2a';
+      ctx.strokeStyle = `${wColor}60`; ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(ptX, ptY);
+      ctx.lineTo(curX, curY);
+      ctx.stroke(); ctx.setLineDash([]);
+
+      updateChips();
+    }
+
+    function updateChips() {
+      const deg = ((Math.round(theta * 180 / π) % 360) + 360) % 360;
+      const exact = EXACT.get(deg);
+      const q = quadrant();
+      const ref = refAngle();
+
+      document.getElementById('ic-angle').textContent =
+        showDeg ? (exact ? exact.degStr : `${deg}°`) : '';
+      if (!showDeg) {
+        document.getElementById('ic-angle').textContent = exact ? exact.radStr : `${fmtVal(theta)} rad`;
+        document.getElementById('ic-rad').textContent = '';
+      } else {
+        document.getElementById('ic-angle').textContent = exact ? exact.degStr : `${deg}°`;
+        document.getElementById('ic-rad').textContent  = exact ? `= ${exact.radStr}` : `= ${fmtVal(theta)} rad`;
+      }
+
+      const sinStr = exact ? `sin θ = ${exact.sin}` : `sin θ = ${fmtVal(Math.sin(theta))}`;
+      const cosStr = exact ? `cos θ = ${exact.cos}` : `cos θ = ${fmtVal(Math.cos(theta))}`;
+      document.getElementById('ic-sin').textContent  = sinStr;
+      document.getElementById('ic-cos').textContent  = cosStr;
+
+      const qEl = document.getElementById('ic-quad');
+      qEl.textContent = `${q.n} ${q.sign}`;
+      qEl.style.color = q.color; qEl.style.borderColor = q.color;
+
+      document.getElementById('ic-ref').textContent  = `ref = ${ref}°`;
+    }
+
+    // ── controls ──
+    function setMode(m) {
+      mode = m;
+      document.getElementById('btn-sin').classList.toggle('active', m === 'sin');
+      document.getElementById('btn-cos').classList.toggle('active', m === 'cos');
+      draw();
+    }
+
+    function toggleSnap() {
+      snapOn = !snapOn;
+      document.getElementById('btn-snap').classList.toggle('active', snapOn);
+      theta = snapAngle(theta);
+      draw();
+    }
+
+    function toggleUnits() {
+      showDeg = !showDeg;
+      const btn = document.getElementById('btn-deg');
+      btn.textContent = showDeg ? 'degrees' : 'radians';
+      btn.classList.toggle('active', showDeg);
+      updateChips();
+    }
+
+    function toggleAnim() {
+      if (animating) {
+        animating = false;
+        animReq && cancelAnimationFrame(animReq);
+        document.getElementById('btn-anim').textContent = '▶ animate';
+        document.getElementById('btn-anim').classList.remove('active');
+      } else {
+        animating = true;
+        document.getElementById('btn-anim').textContent = '⏹ stop';
+        document.getElementById('btn-anim').classList.add('active');
+        (function step() {
+          theta = (theta + 0.022) % (2 * π);
+          if (snapOn) {
+            // Don't snap during animation — too jerky
+          }
+          draw();
+          if (animating) animReq = requestAnimationFrame(step);
+        })();
+      }
+    }
+
+    // ── drag ──
+    function evtPt(e) {
+      const rect = canvas.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      return [src.clientX - rect.left, src.clientY - rect.top];
+    }
+
+    function onDown(e) {
+      const [px, py] = evtPt(e);
+      const d = dims();
+      const { cx, cy, r } = d;
+      const sinT = Math.sin(theta), cosT = Math.cos(theta);
+      const hx = cx + cosT * r, hy = cy - sinT * r;
+      if (Math.hypot(px - hx, py - hy) < 20) {
+        dragging = true;
+        if (animating) toggleAnim();
+      }
+    }
+
+    function onMove(e) {
+      if (!dragging) return;
+      const [px, py] = evtPt(e);
+      const { cx, cy } = dims();
+      const raw = Math.atan2(-(py - cy), px - cx);
+      theta = snapAngle(((raw % (2*π)) + 2*π) % (2*π));
+      draw();
+    }
+
+    function onUp() { dragging = false; }
+
+    canvas.addEventListener('mousedown',  onDown);
+    canvas.addEventListener('mousemove',  onMove);
+    canvas.addEventListener('mouseup',    onUp);
+    canvas.addEventListener('mouseleave', onUp);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); onDown(e); }, { passive: false });
+    canvas.addEventListener('touchmove',  e => { e.preventDefault(); onMove(e); }, { passive: false });
+    canvas.addEventListener('touchend',   onUp);
+
+    window.addEventListener('resize', draw);
+    draw();
+  </script>
+</body>
+</html>

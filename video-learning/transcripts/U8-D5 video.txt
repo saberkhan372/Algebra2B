@@ -1,0 +1,126 @@
+So unit 8, day 5 is the first day we're going to be graphing these 1 over x functions,
+the irrational function of everyone knows an x in the top of the bottom of sometimes just the
+bottom. So let's think about fractions first. If I put 2 in the bottom of the fraction, it
+makes 1 1 1 or 1 3rd or 1 4th. But that's this bottom number, it gets bigger and bigger,
+what's happening to the fraction, what's happening to the actual value, it's getting smaller,
+because 1 1 million is a really, really tiny number. But about a fraction, what if I put like the
+fraction into the bottom, it'd be 1 over 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 means you
+keep change flip, you flip the bottom and it becomes positive 2 or 1 1 8th in the bottom and make 8th.
+So the smaller this value is, the bigger the actual value comes out to. So this is a really,
+really small fraction, but if it's in the bottom of a fraction, it becomes a really big number.
+So let's plug in some points to the graph 1 over x. So we plug in, I like to start 0,
+I plug in 0 for x, 1 over 0 is undefined. So I'm actually going to put this thing called an
+asymptote. What if I plug in, let's kind of just jump around here a little bit, if I plug in 1,
+1 over 1 is 1. So if I plug in 1, I get 1, that's at this point. If I plug in negative 1,
+1 over negative 1 is negative 1. So negative 1 is a point.
+So what about a half? If I plug in a half, 1 over a half makes 2. So a half, I'm up there at 2.
+What about a negative number? Like negative a half. At negative a half, it's 1 over negative a half,
+negative 2. Let's wait down here. If I plug in a not even smaller x value, like negative 1, 4,
+I did down there at 4, or negative 1, a, I did down there at negative 8. What about big numbers?
+Like 8. Well, 1, I said when the x value is 8, I'm at 1, 8. When the x value is 10, I'm at 1, 10.
+So we're actually getting closer and closer and closer to this.
+And same with this. We're getting close to the axes, but never actually hitting them.
+You know, if I plug in a million for x, it'd be 1, 1, 1, million, or a billion, 1 billion. We never
+actually hit the x axis, and we're never going to hit the y axis. Those are called asymptotes.
+So do you think it'll ever hit the axis? No.
+An asymptote is a line. It's like a dotted line that approaches as we had to infinity.
+So in the previous graph, x equals 0, and y equals 0 that the asymptote. So x equals 0 is this,
+y equals 0 is this. Vertical asymptotes are the vertical ones, horizontal ones,
+and the horizontal asymptote is actually related to the end behavior, because this graph, as x goes
+to infinity, the y values approach 0. But you know, we can just say it's 0. The left,
+as x approaches negative infinity, we're also approaching 0.
+So what's the parent function or like how does this shift?
+The graph 1 over x minus 2 plus 3. All we did was take 1 over x when we shifted it, remember,
+the left and right shifts are always opposite. So this is right, 2, and this is not opposite,
+it would be up to 3. So we take this graph, this graph, and shift the asymptotes right to
+and up to 3. So it's possible we could have an a value. Well, that's actually due to shift.
+So if this is the regular one, if we shifted it left and down, it would be the same thing
+which is in a different area. What about flipping? What if we made the a value negative,
+we take the upper right and lower left and then flip them, so this becomes lower right and upper
+so if the a value flips, the entire graph flips over the x axis, and then if you have an h
+and a k value, you're shifting the asymptotes left and right and up and down. So left and right shifts
+happen because of h and so it's opposite and the k value shifts stuff up and down.
+So those actual h and k values are your dotted lines. So let's say h was this looks like it's
+a two or something. If it was two, we put a dotted line at two and if k was four, we put a dotted
+line at four and you go up to right and lower left as long as the a value is positive.
+So let's try a couple kind of went into the parent function as unshifted. So let's see
+well let's see graph has two curves that run along the graph to the plane in a second.
+Something important to note is that these graphs don't have an x or y intercept.
+They're never going to hit the axes because they get really, really close, but the bigger
+like the number, the closer it gets, the little like I could plug in a 100 trillion,
+but it's still one 100 trillion. It's not exactly zero. As they go to the right,
+as I go to the left. So the domain of these are from negative infinity to the asymptotes
+and then from the asymptote to infinity, whatever the h and the k value is actually what this
+is here and then the n behavior is whatever the k value is. So as I've approached infinity
+and approaching zero, as I approach negative infinity and approaching zero,
+these graphs have two curves. Sometimes they're upper right, lower left, but if you flip it,
+it's going to be upper left, lower right. And I mean upper left and lower right of these asymptotes.
+So like you're creating one, two, three, four quadrants. And then this is upper right, lower left,
+but shifted down the three, the k values down three. So it looks like that.
+All right, we're going to graph this, put dotted lines at your k value and your h value.
+And we're going to plug in one or two values on the left and right of the asymptote. And we're
+going to choose specific numbers that are right next to the asymptote. And then you mirror it. So you
+only have to choose one number and then you mirror it to the other side of the vertical asymptote.
+So here we have a number that's, this is one, that's your h value. So I'm going to put a dotted line
+at one and negative three is your k value. So I'm going to put a dotted line at negative three
+or a values positive. So it's upper right and lower left. But how did I get these pink dots? Well,
+here's the asymptote. That's at one. So I'm going to plug in two. I get two over two minus one,
+minus three. That's two minus three is negative one. So when I plugged in two, I got negative one.
+I'm sorry, I got four to get. I know why I wrote that two negative one. So then we get,
+if you plug in two, you get negative one. And then this number from the asymptote I went
+from the, for like where they're asymptotes cross. I go right one up two.
+From this asymptote, I'm going to go left one down two. So I have another dot here
+because I really want to be thorough in this first one. So you see, so here's where they cross
+at one. What if I plug in three? Well, that would be two over three minus one, which is two.
+That's one minus three is negative two. So when I plug in three, I get negative two.
+So if you notice, that's right two and up one. So the left two down one.
+These dots are what the actual graph are going to go through. So the blue line is the graph
+and the dotted pink lines are the asymptotes. And they asked them to have shifted
+right one down three. That's can be seen from the H and K values. Domain is negative infinity
+to one. And then union from one to infinity. And the range is negative infinity to negative three,
+union negative three to infinity. And as x approaches infinity, you're approaching the horizontal
+asymptotes. You're approaching negative three. And as x approaches negative infinity, you're approaching
+negative three. These values are always the K values, whatever this is. So here, this is shifted
+left two. So I'm going to put a vertical asymptote negative two. And this is plus zero. So I'm
+going to put my horizontal asymptote zero. The negative flips it, remember it should have been up
+here and down here. But we can also just plug in a number. So here's our where our asymptotes
+cross that negative two x equals negative two. So let's plug in negative one. See what happens?
+Negative one over negative one plus two. It's just negative one over one which is negative one.
+So when I plug in negative one, I got negative one. That's a point. Here's what asymptotes cross
+went right one down one. So I'm going to go left one up one and we're mirror it. And then it has to
+go through that dot. So it has to be in this general quadrant. So the root both and through both
+then try to get as close to the axes as you can without ever crossing them. It should never
+should never be like the root and it should never cross. Domain negative infinity to negative two,
+union negative two, doing infinity. Range negative infinity to zero, zero to infinity. Then as
+x approaches infinity, you're approaching zero as x approaches negative infinity or approaching zero.
+Two more. So this is shifted right to right for down seven. Right for down seven. So I'm
+going to put an asymptote for vertical asymptote is this number horizontal asymptote at negative
+seven. And then I'm going to plug in a value right next to it. So this is four. So I'm going to plug in
+five negative two over five minus four is negative two minus seven is negative nine. So when I plug
+in five, I got negative nine. I'm going to mirror that. So I write one down two. I'm going to go
+left one up two. I technically only need one dot. I just mirror it because if you go right one
+down two, you could go right two down one. How do I know that? Well, look, look at like the
+symmetry here. This is one away diagonally. If you go, if you go that way, you can also go that
+with these crashes and naturally around the asymptotes. So through the dots, domain and range,
+where's this negative infinity up to four? And then from four to infinity. And the range is
+negative infinity up to negative seven. And then from negative seven to infinity. And then the
+end behavior, they're both approaching the K value. This is the last example. This is shifted left
+in right zero. It's not shifted left or right. There's just no, there's no x plus or minus
+eight. This value means we shift up five. So at zero and then at five. And here is zero. So I'm
+going to plug in one to see what happens. You get three over one plus five. So when I plugged in one,
+I got eight. That's right one up three. So I'm going to go left one down three. I'm
+symmetric symmetry tells me I'm going to go right three up one as well because I went left one
+down three. I'm also going to go left three down one. And then I'm going to go through those dots.
+Domain negative and zero. Zero turns into range. Negative infinity to five. Five during
+infinity. And the end behavior is that it's approaching five. As I go to the right and as I go to the
+left. So they're not always this simple. But in this chat in this class, we're only going to do
+ones that, you know, have one asymptote for a zone vertical. But it's possible you could have
+a ton of vertical asymptotes. And you can only have one horizontal asymptote. Sometimes it's
+slanted. And what happens is you have these like, it's called a hyperbola going, they always kind of
+nestle into the asymptotes. But sometimes you have, if you have two asymptotes, you're going to have
+what it looks like. What we just did, you have a middle part. The middle part might be a parabola.
+The middle part might look like an x to the third graph. And then you might have these slant asymptotes.
+But that's a little bit more of an advanced topic for what we're doing. Right now,
+all of our examples are just going to have a left and right shift in an up and down
+shift. And then just a number like that. All right. So there you go. That's unit five,
+right here. Eight de five.

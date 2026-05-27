@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rational Simplifier — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .tool-main { overflow-y: auto; }
+
+    /* ── coeff grid ── */
+    .coeff-grid {
+      display: grid; grid-template-columns: 90px repeat(3, 56px); gap: 5px 8px;
+      align-items: center; margin-top: 8px;
+    }
+    .coeff-head { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink-2); text-align:center; }
+    .coeff-lbl  { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-2); }
+    .coeff-inp {
+      width:100%; border:2px solid var(--ink-2); border-radius:4px;
+      padding:4px; font-family:'JetBrains Mono',monospace; font-size:15px;
+      background:var(--paper); text-align:center; box-sizing:border-box;
+    }
+    .coeff-inp:focus { border-color:var(--accent); outline:none; }
+    .divider-row { grid-column:1/-1; height:1.5px; background:var(--ink-2); border-radius:1px; margin:2px 0; }
+
+    /* ── presets ── */
+    .preset-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .preset-btn {
+      padding:4px 10px; border-radius:16px; border:1.5px solid var(--ink-2);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:12px;
+      cursor:pointer; transition:border-color .12s;
+    }
+    .preset-btn:hover { border-color:var(--accent); color:var(--accent); }
+
+    /* ── step cards ── */
+    .step-card {
+      margin-top:8px; padding:10px 12px;
+      background:var(--paper-2); border:1.5px solid var(--ink-2); border-radius:6px;
+    }
+    .step-card.result { border-color:var(--accent); background:rgba(217,79,42,0.04); }
+    .step-lbl {
+      font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft);
+      text-transform:uppercase; letter-spacing:.03em; margin-bottom:6px;
+    }
+
+    /* ── factor chips ── */
+    .fwrap { display:flex; flex-wrap:wrap; gap:3px; align-items:center; }
+    .fchip {
+      display:inline-block; padding:2px 8px; border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:14px;
+      border:2px solid; background:rgba(0,0,0,0.03);
+    }
+    .fchip.neutral { color:var(--ink); border-color:var(--ink-2); }
+    .fchip.c0 { color:#c03020; border-color:#c03020; background:rgba(192,48,32,0.07); }
+    .fchip.c1 { color:#2060b0; border-color:#2060b0; background:rgba(32,96,176,0.07); }
+    .fchip.c2 { color:#208040; border-color:#208040; background:rgba(32,128,64,0.07); }
+    .fchip.c3 { color:#9060c0; border-color:#9060c0; background:rgba(144,96,192,0.07); }
+    .fchip.cancel { text-decoration:line-through; opacity:.45; }
+
+    /* ── inline fraction ── */
+    .ifrac {
+      display:inline-flex; flex-direction:column; align-items:center;
+      vertical-align:middle; margin:0 4px; gap:1px;
+    }
+    .ifrac .in, .ifrac .id {
+      font-family:'JetBrains Mono',monospace; font-size:14px;
+      display:flex; flex-wrap:wrap; gap:3px; align-items:center; padding:2px 0;
+    }
+    .ifrac .ibar { height:1.5px; width:100%; min-width:20px; background:var(--ink); }
+
+    /* ── result display ── */
+    .result-expr {
+      font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:700;
+      margin-top:4px;
+    }
+    .excl { color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:13px; margin-top:5px; }
+    .excl-note { color:var(--ink-2); font-family:'Patrick Hand',cursive; font-size:12px; margin-top:2px; }
+
+    /* ── info text ── */
+    .no-cancel { font-family:'Patrick Hand',cursive; font-size:14px; color:var(--ink-2); }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u6.html">← U6</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rational Expressions</a> &nbsp;·&nbsp; D1–D2</div>
+      <div class="tool-title f-display">Rational Simplifier</div>
+      <div class="tool-tagline f-hand">Factor top and bottom — then cancel the matching pieces.</div>
+
+      <!-- inputs -->
+      <div class="sk-box" style="padding:10px; margin-top:10px;">
+        <div class="coeff-grid">
+          <div></div>
+          <div class="coeff-head">x²</div>
+          <div class="coeff-head">x</div>
+          <div class="coeff-head">constant</div>
+
+          <div class="coeff-lbl">numerator</div>
+          <input class="coeff-inp" id="a" type="number" value="1"  oninput="go()">
+          <input class="coeff-inp" id="b" type="number" value="0"  oninput="go()">
+          <input class="coeff-inp" id="c" type="number" value="-4" oninput="go()">
+
+          <div class="divider-row"></div>
+
+          <div class="coeff-lbl">denominator</div>
+          <input class="coeff-inp" id="d" type="number" value="0"  oninput="go()">
+          <input class="coeff-inp" id="e" type="number" value="1"  oninput="go()">
+          <input class="coeff-inp" id="f" type="number" value="-2" oninput="go()">
+        </div>
+
+        <div class="preset-row">
+          <span class="f-hand" style="font-size:12px; color:var(--ink-2); align-self:center;">try →</span>
+          <button class="preset-btn" onclick="preset(1,0,-4,  0,1,-2)">x²−4 / (x−2)</button>
+          <button class="preset-btn" onclick="preset(1,1,-6,  1,-1,-2)">x²+x−6 / x²−x−2</button>
+          <button class="preset-btn" onclick="preset(2,4,0,   1,0,-4)">2x²+4x / x²−4</button>
+          <button class="preset-btn" onclick="preset(1,0,-9,  1,-6,9)">x²−9 / x²−6x+9</button>
+          <button class="preset-btn" onclick="preset(1,5,6,   1,2,0)">x²+5x+6 / x²+2x</button>
+        </div>
+      </div>
+
+      <!-- steps -->
+      <div id="steps"></div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE PROCESS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>1. Factor</strong> the numerator.<br>
+          <strong>2. Factor</strong> the denominator.<br>
+          <strong>3. Cancel</strong> factors that appear in both.<br>
+          <strong>4. State</strong> excluded values — x-values that made the <em>original</em> denominator = 0.<br><br>
+          <span style="color:var(--accent);">⚠ You can only cancel <em>factors</em>, not terms.</span><br>
+          First factor, then cancel.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">USEFUL PATTERNS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>Difference of squares:</strong><br>
+          x²−a² = (x−a)(x+a)<br><br>
+          <strong>Perfect square tri.:</strong><br>
+          x²−2ax+a² = (x−a)²<br><br>
+          <strong>Factor out GCF first:</strong><br>
+          3x²+6x = 3x(x+2)
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Load x²−9 / x²−6x+9. Which factor cancels? How many times does (x−3) appear?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Can you find inputs where nothing cancels? What does that tell you about the original expression?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="rational-expressions.html">→ Rational Expression Grapher</a>
+        <a class="related-link f-hand" href="factoring-lab.html">→ Factoring Lab</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── math ──
+    function gcd(a, b) {
+      a = Math.abs(Math.round(a)); b = Math.abs(Math.round(b));
+      while (b) { [a, b] = [b, a % b]; }
+      return a || 1;
+    }
+
+    // Factor ax² + bx + c
+    // Returns { k, factors: [[p,q],...], irred: {a,b,c}|null }
+    // Meaning: k * Π(pᵢx+qᵢ) [* irred]
+    function factorPoly(a, b, c) {
+      if (a === 0 && b === 0) return { k: c, factors: [], irred: null };
+
+      // Linear
+      if (a === 0) {
+        const g = gcd(Math.abs(b), Math.abs(c));
+        const K = b < 0 ? -g : g;
+        return { k: K, factors: [[b / K, c / K]], irred: null };
+      }
+
+      // Extract GCF of |a|,|b|,|c|
+      const nonz = [Math.abs(a), Math.abs(b)].concat(c !== 0 ? [Math.abs(c)] : []);
+      const g = nonz.reduce((acc, v) => gcd(acc, v));
+      const K = a < 0 ? -g : g;
+      const A = a / K, B = b / K, C = c / K; // A > 0
+
+      if (C === 0) {
+        return { k: K, factors: [[1, 0], [A, B]], irred: null };
+      }
+
+      const disc = B * B - 4 * A * C;
+      if (disc < 0) return { k: K, factors: [], irred: { a: A, b: B, c: C } };
+
+      const sqD = Math.sqrt(disc);
+      if (Math.abs(sqD - Math.round(sqD)) > 0.0002) {
+        return { k: K, factors: [], irred: { a: A, b: B, c: C } };
+      }
+
+      const sd = Math.round(sqD);
+      const D2A = 2 * A;
+      const r1Num = -B + sd, r2Num = -B - sd;
+      const g1 = gcd(Math.abs(r1Num), D2A), g2 = gcd(Math.abs(r2Num), D2A);
+      const r1n = r1Num / g1, r1d = D2A / g1; // root1 = r1n/r1d
+      const r2n = r2Num / g2, r2d = D2A / g2; // root2 = r2n/r2d
+
+      // A * (r1d·x − r1n)/r1d * (r2d·x − r2n)/r2d
+      // = A/(r1d·r2d) * (r1d·x − r1n) * (r2d·x − r2n)
+      const prod = r1d * r2d;
+      if (A % prod !== 0) return { k: K, factors: [], irred: { a: A, b: B, c: C } };
+
+      return {
+        k: K * (A / prod),
+        factors: [[r1d, -r1n], [r2d, -r2n]],
+        irred: null,
+      };
+    }
+
+    // Root of linear factor [p,q]: x = -q/p
+    function root(p, q) { return -q / p; }
+
+    function sameRoot(f1, f2) {
+      return Math.abs(root(...f1) - root(...f2)) < 0.0002;
+    }
+
+    // ── formatting ──
+    function fmtN(n) {
+      const r = Math.round(n * 1000) / 1000;
+      if (Number.isInteger(r)) return String(Math.round(r));
+      // try to show as fraction
+      const g = gcd(Math.abs(Math.round(r * 10)), 10);
+      return r.toFixed(2).replace(/\.?0+$/, '');
+    }
+
+    function fmtFactor(p, q) {
+      if (p === 1 && q === 0) return 'x';
+      if (q === 0) return `${fmtN(p)}x`;
+      if (p === 1) return q > 0 ? `(x + ${fmtN(q)})` : `(x − ${fmtN(-q)})`;
+      return q > 0 ? `(${fmtN(p)}x + ${fmtN(q)})` : `(${fmtN(p)}x − ${fmtN(-q)})`;
+    }
+
+    function fmtIrred(a, b, c) {
+      let s = a === 1 ? '' : fmtN(a);
+      s += 'x²';
+      if (b !== 0) s += b > 0 ? ` + ${fmtN(b)}x` : ` − ${fmtN(-b)}x`;
+      if (c !== 0) s += c > 0 ? ` + ${fmtN(c)}` : ` − ${fmtN(-c)}`;
+      return s;
+    }
+
+    function fmtPoly(a, b, c) {
+      if (a === 0 && b === 0) return fmtN(c);
+      let s = '';
+      if (a !== 0) s = (a === 1 ? '' : a === -1 ? '−' : fmtN(a)) + 'x²';
+      if (b !== 0) {
+        if (s) s += b > 0 ? ` + ${fmtN(Math.abs(b))}x` : ` − ${fmtN(-b)}x`;
+        else s = (b === 1 ? '' : b === -1 ? '−' : fmtN(b)) + 'x';
+      }
+      if (c !== 0) {
+        if (s) s += c > 0 ? ` + ${fmtN(c)}` : ` − ${fmtN(-c)}`;
+        else s = fmtN(c);
+      }
+      return s || '0';
+    }
+
+    // ── chip builders ──
+    const CCLS = ['c0', 'c1', 'c2', 'c3'];
+
+    function chip(text, cls, cancel = false) {
+      const cc = cancel ? ' cancel' : '';
+      return `<span class="fchip ${cls}${cc}">${text}</span>`;
+    }
+
+    function kChip(k) {
+      if (k === 1) return '';
+      if (k === -1) return `<span style="font-family:'JetBrains Mono',monospace">−</span>`;
+      return chip(fmtN(k), 'neutral');
+    }
+
+    // Build chip row for a factored poly
+    // fObjs: [{f:[p,q], colorIdx, cancelled}], or null for plain display
+    function factorChips(k, factors, irred, fObjs = null) {
+      const parts = [];
+      const kStr = kChip(k);
+      if (kStr) parts.push(kStr);
+
+      factors.forEach((f, i) => {
+        const text = fmtFactor(...f);
+        if (fObjs) {
+          const fo = fObjs[i];
+          const ccls = fo.colorIdx >= 0 ? CCLS[fo.colorIdx % 4] : 'neutral';
+          parts.push(chip(text, ccls, fo.cancelled));
+        } else {
+          parts.push(chip(text, 'neutral'));
+        }
+      });
+
+      if (irred) parts.push(chip(`(${fmtIrred(irred.a, irred.b, irred.c)})`, 'neutral'));
+      if (parts.length === 0) parts.push(chip(fmtN(k), 'neutral'));
+
+      return `<div class="fwrap">${parts.join('')}</div>`;
+    }
+
+    // ── inline fraction ──
+    function ifrac(numHTML, denHTML) {
+      return `<div class="ifrac">
+        <div class="in">${numHTML}</div>
+        <div class="ibar"></div>
+        <div class="id">${denHTML}</div>
+      </div>`;
+    }
+
+    // ── main ──
+    function go() {
+      const a = +document.getElementById('a').value || 0;
+      const b = +document.getElementById('b').value || 0;
+      const c = +document.getElementById('c').value || 0;
+      const d = +document.getElementById('d').value || 0;
+      const e = +document.getElementById('e').value || 0;
+      const f = +document.getElementById('f').value || 0;
+
+      const steps = document.getElementById('steps');
+
+      if (d === 0 && e === 0 && f === 0) {
+        steps.innerHTML = '<div class="step-card"><div class="step-lbl">error</div><div class="no-cancel" style="color:var(--accent)">Denominator is zero — expression is undefined.</div></div>';
+        return;
+      }
+
+      const numF = factorPoly(a, b, c);
+      const denF = factorPoly(d, e, f);
+
+      // Match factors
+      const nFObjs = numF.factors.map(fac => ({ f: fac, colorIdx: -1, cancelled: false }));
+      const dFObjs = denF.factors.map(fac => ({ f: fac, colorIdx: -1, cancelled: false }));
+      let ci = 0;
+      for (const nfo of nFObjs) {
+        for (const dfo of dFObjs) {
+          if (!nfo.cancelled && !dfo.cancelled && sameRoot(nfo.f, dfo.f)) {
+            nfo.cancelled = true; dfo.cancelled = true;
+            nfo.colorIdx = ci; dfo.colorIdx = ci++;
+            break;
+          }
+        }
+      }
+      const hasCancels = nFObjs.some(x => x.cancelled);
+
+      // All original denominator roots → excluded values (deduplicated)
+      const origDenRoots = [...new Set(denF.factors.map(fac => root(...fac)).map(r => Math.round(r * 1000) / 1000))];
+
+      steps.innerHTML = '';
+
+      // ── Step 1: Original ──
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 1 — original expression</div>
+          ${ifrac(fmtPoly(a,b,c), fmtPoly(d,e,f))}
+        </div>`);
+
+      // ── Step 2: Factor both ──
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 2 — factor numerator and denominator</div>
+          ${ifrac(
+            factorChips(numF.k, numF.factors, numF.irred),
+            factorChips(denF.k, denF.factors, denF.irred)
+          )}
+          ${numF.irred ? `<div class="no-cancel" style="margin-top:6px;">⚠ The numerator has an irreducible factor: (${fmtIrred(numF.irred.a, numF.irred.b, numF.irred.c)})</div>` : ''}
+          ${denF.irred ? `<div class="no-cancel" style="margin-top:6px;">⚠ The denominator has an irreducible factor: (${fmtIrred(denF.irred.a, denF.irred.b, denF.irred.c)})</div>` : ''}
+        </div>`);
+
+      // ── Step 3: Cancel ──
+      if (!hasCancels) {
+        steps.insertAdjacentHTML('beforeend', `
+          <div class="step-card">
+            <div class="step-lbl">Step 3 — look for common factors</div>
+            <div class="no-cancel">No factors cancel — this expression is already fully simplified.</div>
+          </div>`);
+        // Still show excluded values
+        if (origDenRoots.length) {
+          steps.insertAdjacentHTML('beforeend', `
+            <div class="step-card result">
+              <div class="step-lbl">excluded values</div>
+              <div class="excl">x ≠ ${origDenRoots.map(fmtN).join(',  x ≠ ')}</div>
+              <div class="excl-note">These x-values make the denominator = 0.</div>
+            </div>`);
+        }
+        return;
+      }
+
+      // Show fraction with strikethrough
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card">
+          <div class="step-lbl">Step 3 — cancel common factors (same color = same factor)</div>
+          ${ifrac(
+            factorChips(numF.k, numF.factors, numF.irred, nFObjs),
+            factorChips(denF.k, denF.factors, denF.irred, dFObjs)
+          )}
+        </div>`);
+
+      // ── Step 4: Simplified result ──
+      const remNum = nFObjs.filter(x => !x.cancelled);
+      const remDen = dFObjs.filter(x => !x.cancelled);
+
+      // Compute k ratio
+      const kG = gcd(Math.abs(numF.k), Math.abs(denF.k));
+      const kN = numF.k / kG, kD = denF.k / kG;
+      const negSign = (kN < 0) !== (kD < 0);
+      const kNAbs = Math.abs(kN), kDAbs = Math.abs(kD);
+
+      // Build simplified numerator parts
+      const snParts = [];
+      if (kNAbs !== 1) snParts.push(chip(String(kNAbs), 'neutral'));
+      for (const fo of remNum) snParts.push(chip(fmtFactor(...fo.f), 'neutral'));
+      if (numF.irred) snParts.push(chip(`(${fmtIrred(numF.irred.a, numF.irred.b, numF.irred.c)})`, 'neutral'));
+      if (snParts.length === 0) snParts.push('<span style="font-family:\'JetBrains Mono\',monospace">1</span>');
+
+      const sdParts = [];
+      if (kDAbs !== 1) sdParts.push(chip(String(kDAbs), 'neutral'));
+      for (const fo of remDen) sdParts.push(chip(fmtFactor(...fo.f), 'neutral'));
+      if (denF.irred) sdParts.push(chip(`(${fmtIrred(denF.irred.a, denF.irred.b, denF.irred.c)})`, 'neutral'));
+
+      const negPfx = negSign ? '<span style="font-family:\'JetBrains Mono\',monospace; font-size:18px;">−</span>' : '';
+
+      let resultHTML;
+      if (sdParts.length === 0) {
+        resultHTML = `<div class="result-expr">${negPfx}<div class="fwrap" style="display:inline-flex">${snParts.join('')}</div></div>`;
+      } else {
+        resultHTML = `<div class="result-expr">${negPfx}${ifrac(
+          `<div class="fwrap">${snParts.join('')}</div>`,
+          `<div class="fwrap">${sdParts.join('')}</div>`
+        )}</div>`;
+      }
+
+      const excludedStr = origDenRoots.map(r => `x ≠ ${fmtN(r)}`).join(',  ');
+
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card result">
+          <div class="step-lbl">simplified result</div>
+          ${resultHTML}
+          <div class="excl">${excludedStr}</div>
+          <div class="excl-note">All x-values that make the original denominator = 0 must be excluded.</div>
+        </div>`);
+    }
+
+    function preset(a, b, c, d, e, f) {
+      document.getElementById('a').value = a;
+      document.getElementById('b').value = b;
+      document.getElementById('c').value = c;
+      document.getElementById('d').value = d;
+      document.getElementById('e').value = e;
+      document.getElementById('f').value = f;
+      go();
+    }
+
+    go();
+  </script>
+</body>
+</html>

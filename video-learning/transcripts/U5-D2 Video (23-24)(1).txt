@@ -1,0 +1,169 @@
+Alright, here is video for unit 9-day 2, which instead of functions that go up, that would
+be exponential growth.
+We now have functions that go down, which is exponential decay.
+They're really closely related, but the difference is, for example, this would be 2 to
+the x, whereas this would be 2 to the negative x.
+What is that?
+Because of exponent rules, you flip the base and make it a positive exponent.
+So we'll get into that in a second, but we can skip the joke.
+It's basically saying you could have, the amount of time spent complaining is exponentially
+related to time spent doing homework.
+You could have, there's so much time you spend, I don't think any of you complain about
+doing homework in this class, so I appreciate that.
+And you all do your homework, so let's jump into it.
+So rules of exponents is that if you have a fraction with a negative exponent, you can flip
+that fraction and make it a positive exponent.
+So 3 over 5 to the negative 2 is 5 over 3 to the 2.
+What also works is if you have something like 2 to the negative x, you flip the inside, make
+it 1 half, and make it a positive x, and that's really what we're doing today.
+So if you want to plot some points here, this is 2 to the negative x.
+Just like I said, 2 to the negative x is the same thing as saying 1 half to the positive
+x.
+And you really want to do everything with a positive exponent, because it's hard to think
+of what a negative exponent would do, so you think make it positive, and then you can do
+the math.
+So let's use this function 1 half to the x.
+So 1 half to the 0, well anything to the 0 powers 1, so the point is 0, 1 half, just
+times, first power is 1 half, 1 half squared is 1 half times 1 half, so 1 fourth times
+it by half again.
+You get an 8 times a half again, you get 1 16th, so that is these points.
+So the farther I go to the right, the closer I'm getting to like 0.
+But what about these numbers when I plug in negative 1?
+Well, 1 half to the negative 1 means you flip the inside.
+So 1 half becomes positive 2 to the positive 1.
+1 half to the negative 2 becomes 2 over 1 squared, so you get 4.
+1 half to the negative 3 gives you 2 over 1 to the third, which is 2 times 2 times 2, which
+is 8, and then 1 half to the negative 4 means 2 to the fourth, which is 2 times 2 times
+2 times 2, which you get 16.
+So as you go to the left, I'm going to get bigger.
+The next one would be 32, and then 64, and then so on.
+This is going to have a horizontal asymptote because if I plugged in, let's say 100, well
+that would be 1 half times a half a hundred times, which is like a really, really small
+number, but even if you get another number, I plug it in a thousand racks.
+It still wouldn't be 0, so that's going to give us a horizontal asymptote.
+So some examples, I think the best example of this is because a lot of you are in chemistry
+right now, radioactive elements, like uranium, plutonium, and the things they use for nuclear
+power and nuclear bombs, those elements break down over time.
+So if you have one gram of something, after it's called a half life, after about 50 years,
+you'd have half a gram, and then you'd have another 50 years, you'd have half of that
+amount, and then about 50 years, you'd have half of that amount and so on, until you
+almost have nothing, but if you'd never actually really get to zero.
+exponential growth for us to keep.
+If you have a positive exponent, you're going to be growing up to the right.
+This has a negative exponent, but really, because we want to flip it, it has a positive
+exponent.
+So this one, though, has a positive exponent, but you could flip the inside and make it
+a negative exponent, and a negative exponent means decay.
+So let's talk about that in a different way.
+So if you have a base, meaning this part, the stuff in parentheses, the base of the exponent,
+if that's between zero and one, if it's a fraction, you're going to have decay.
+If that base is more than one, you're going to have growth.
+So two to the x3 to the x5 to the x10 to the x, but as soon as you have like one half
+or one fourth, or one eight, or one six, or even zero point nine nine nine nine nine,
+anything less than one, but more than zero will be decay.
+If you like flow charts, you can see is the base greater than one, so it's like four, right?
+So yes, is the exponent negative, no, so it's growth.
+Is the base positive, or sorry, bigger than one, yes, but if this was negative x, is
+the exponent negative, then it'd be decay.
+Is the base greater than one, no, like zero point two, five, and the exponent is not negative
+then it's decay, but if it's less than one, and it's a negative exponent, and be flipping,
+so it'd be a positive exponent with a number bigger than one, so it'd be growth.
+All right, all you're doing with these is looking at the base, so which ones are growth,
+which ones are decay.
+This is less than one, so it's decay.
+This is more than one, but it's a negative exponent, so we'll flip it, which makes it
+less than one, so it's decay.
+This is less than one, but it's a negative exponent, so point one, two, five is one, eight,
+which means we'll flip it, make it a positive exponent, which means growth.
+This is more than one positive exponent, so growth.
+More than one positive exponent, growth.
+Three halves, even though it's a fraction, that's one and a half, so it's more than one
+positive exponent, growth.
+This is more than one, but it's a negative exponent, so we'll flip it to make it five
+eighths, which is less than one, so it's decay.
+This one, be careful, this is not the base, this is, so positive exponent, and a base
+greater than one, so it's growth.
+So to graph these, your horizontal asymptote will be your k value, and you need two points.
+So remember, this is the a times b to the x minus h plus k.
+Your this value right here is your horizontal asymptote, and so this is two times three
+to the negative x plus zero.
+So we'll make it, the asymptote is zero, which is down here, and the strategy for this
+is to make the exponent zero at first.
+So two times three to the negative zero is just zero, so it's two times three to zero,
+which is one, so it's just two times one, so two, so zero, two.
+So if I want to make this exponent positive one, let's plug in negative one for x, so
+it's negative negative, so if I plug in negative one for x, it'll be two times three
+to the negative negative one, which is just two times three, so you get six.
+So as soon as you have two points, if you connect the dots, you're either going, this
+is got to be decay, so we're going down, it's going to go up to the left.
+The domain of these is always negative infinity, the range is always the k value to infinity.
+As we go to the left, the y value is approaching infinity, and as we go to the right, the y
+value is approaching zero, or the k value, what about this one?
+This is decay, because the base is less than one, and the exponent's positive, even though
+it's a plus one, the exponent's still positive.
+This is your k value, so you have a horizontal, asymptote two.
+Now we want to make the exponent zero, so what could I plug in for x to make x plus one
+equals zero?
+You can do that mathematically and say, okay, what's x plus one?
+I want to make it zero, minus one, that means I need to plug in negative one.
+So one half to the negative one plus one is one half to the zero, so that's one plus
+two, you get three.
+So at negative one, you get three.
+At negative two, what if we plug in negative two, that makes one half to the negative
+two plus one, which is one half to the negative one, you flip that, it becomes positive
+two plus two, so you get four.
+So negative two, four.
+We already knew it's decay, so we know that it's going to go through these points
+and approach two, as we go to the right, and approach infinity as we go to the left.
+The range is always the k value to infinity.
+The domain is always negative infinity to infinity.
+This one, well, the base is less than one, but it's got a negative exponent, so it's
+actually growth, because what that's saying is four to the x plus one.
+So we have a k value of one, that's our asymptote, if we want to plug in zero, because
+we want to make the exponent zero, so that's one fourth to the zero is one, plus one
+gives us two, and let's say we want this to be negative one, so we plug in one,
+so you have a choice here.
+Either way, it's going to give you a point that's going to get, because this is growth.
+If I chose a point over here, it gave me something smaller than two, but because I'm choosing
+a point over here, it's going to give me something bigger than two.
+So when I plug in one, I get one fourth to the negative one, which is actually four, add
+one, you get five.
+When I plug in one, I get five.
+Domain always negative infinity to infinity, the range is the k value to infinity.
+As we go left, we're approaching, this is actually wrong, we're approaching one, which
+is the k value, and as we go right, we're approaching infinity.
+Last thing, we're going to do next class a lot of things involving the letter E. E is like,
+pi.
+It's a number that goes on forever, and it's used to approximate interest when an amount
+of rate of interest accumulates continuously, the mathematician in the 1700s, forgot his first
+name, his last name is Yuler, so E actually stands for his last name, found this number
+E, which is really useful in approximating interest formulas, but it's always, always
+used E to the X. It's an exponential constant, it's an exponential constant, so when you're
+just graphing, when you're not using a calculator, you can approximate E to be three, but
+in the next unit, in the next lesson, we're actually going to be using E on the calculator.
+So, here we go.
+This is a k value of zero, so we have an asymptote of zero, and we know the base is E, which
+is bigger than one, and the positive exponent, so this is growth, so let's plug in negative
+one for X, because that would be two E to the zero, anything to the zero is just one,
+so it's two times one.
+So when we plug in negative one, we got two, right there, and we know it's growth, so
+it's got to go up, so let's plug in zero, you get two E to the one, but E to the one is
+about three, so in these notes, I did a decimal, but two times E to the one is also approximately
+two times three, which is about six, so really, if you're not using a calculator, you can
+approximate it to six, but I just wanted to show you that 2.71 times two is about 5.4,
+so we're a little bit off, but it's still for the graphing, you can use three, but when
+we're doing our calculations of the calculator, E is like a stored number in the graphing
+calculator.
+This is the last one we're going to do, because this is a negative exponent, that's really
+saying one over E to the X, so that's less than one, so this is decay, we have a K value
+this time of one, and we are going to put our asymptote at one, and this is decay,
+so what if we want our exponent to be zero, we would plug in zero, so E to the zero is
+one plus one gives us two, what if we want an exponent to be positive one, well if we plug
+in negative one, that's E to the negative negative one, so E to the one, which is like
+three plus one is around four, so you could say it's about four, kind of ignore the fact
+that I didn't use three, and these notes we'll use it in class, we'll use, when we're
+doing E will approximate it with three, domain is always negative into infinity, because
+it's just, just think of E as a number, I mean it is a number, it's just one of those
+numbers that goes on forever, which is called irrational, so as we go left, we're approaching
+infinity, and as we go right, we're approaching our k value, which is one, okay, so that's
+unit nine, day two.

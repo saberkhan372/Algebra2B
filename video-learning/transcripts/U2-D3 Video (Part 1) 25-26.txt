@@ -1,0 +1,180 @@
+All right, here is unit two, a three, absolute value functions and transformations.
+Transformations is a really big topic because all functions and graphs, let's just think
+of it as a graph can transform, they can move up and down, they can move left and right,
+and there's more specific words than wider and narrower but we're just going to use
+like the simplified versions of describing it.
+What we really call up and down and left and right is a shift and I'm going to switch
+between this and Desmos so you see.
+So this is a graph of an absolute value, it can move up and down, it can move left and right,
+let's call the shift, right, horizontal, the shift right, you can shift left,
+you can also shift up, you can shift down, then we have something here like a stretch.
+What does that look like?
+What does a stretch well imagine?
+I pulling it up, I'm making like steeper, I can also stretch, I can make it wider, I can also
+make it go upside down, okay.
+So all of those moves that you state are called transformations and the parent function
+is the unshifted graph, the most basic one.
+So like when we did Y equals X squared and it's just like that U shape, that was just unshifted
+or this square root of X. Notice how there's no numbers other than like one and X.
+I mean yeah there's an operation on it like we square X but it's not like X minus 3, right.
+Basically the idea is we start, we don't always want to start from scratch.
+We're going to learn how different things are modified, another second sneak preview.
+What does this plus 1 and this minus 2 do to the graph?
+When we'll get there.
+So the most basic one that we know is Y equals X. Imagine you have Y equals slope of 1
+and Y intercept of 0, right.
+Y equals MX plus B but the most basic parent function of that is with a slope of 1
+and Y intercept of 0, right.
+Y intercept of 0 up one over one.
+This is unshifted.
+We know that like we already know some transformations.
+Slope is a stretch.
+So if we go like up to over one, up to over one, we know we've now stretched it vertically
+and the Y intercept is a shift.
+So we could do, let's hold on.
+Imagine I wanted to shift it up to, right.
+We could do that or I wanted to shift it right to, you could do that.
+What does that look like in a function?
+How do we add numbers to it?
+So here we go.
+Let's just fill in a basic parent function for the absolute value function.
+Which is Y equals the absolute value of X.
+It makes anything you plug in for X. It makes it positive, right.
+So if I plug in negative 2 and take the absolute value of negative 2, I get 2.
+If I get negative 1, I get 1.
+If I get 0, I get 0.
+1, it stays positive 2.
+Sorry, this is wrong.
+I should say 2, 2, right.
+And then, so let's graph this.
+0, 0, 1, or negative 1, 1, negative 2, 2, right.
+It's a V shape.
+And we're now getting into some new terminology like Vertex.
+Vertex is the center in a way.
+0, 0.
+And if we were to shift this around, imagine we're moving the vertex left or right or up or down.
+But this one is unshifted.
+And let's think about slope.
+What's going on in the right?
+It's going up one over one.
+And the left is going up one over one.
+But it's also the both going up.
+So we saw some transformation for re-crafting.
+Let's make some predictions about the following functions.
+What do you think will happen?
+And if I take that V shape and do it minus 2 at the end.
+This, another typo, no matter what.
+Through this, I shift it down to, okay.
+What do you think this negative will do?
+Well, instead of going up like this,
+the negative in front of the function shifts it upside down.
+So the vertical flip.
+And then here, what do you think is going to happen?
+Well, this means it shifts up to 3.
+So if this negative wasn't there, your graph would go like this.
+Because the negative is there, and we shifted it up 3,
+it shifted up 3 to point it down.
+Part of the purpose of parent function is to avoid using big tables,
+because we don't know what to do a table.
+But let's see one with a table.
+What is this 2 in front?
+Do, well, let's say we plugged in, let's just start here.
+Let's say we plugged in 1.
+Well, it's 2 times 1.
+So we get 2.
+What if we plugged in negative 1?
+It's still 2 times 1.
+So we get 2.
+If we plugged in 2, we get 4.
+So what happened?
+Well, I'm going to call this a vertical stretch by a factor of 2.
+And what does that look like?
+Because the original was up 1 over 1.
+This is the old one.
+And this is the new one.
+We stretched it up.
+The new slopes are up 2 over 1.
+The slope was doubled.
+And where did that number go?
+I went in front of the absolute value.
+What about this?
+Now, this is where it's tricky.
+So just said, first glance, x minus 3.
+What if I told you that I was going to shift right 3?
+Well, why?
+What do you mean minus 3?
+Shouldn't that go left 3?
+Well, think about this.
+If I wanted this to be like, let's say right here, there's no shift here.
+If I plug in 0, I get 0.
+What do I have to plug in for x for this to be 0?
+I'd have to plug in 3.
+So I'd have to plug in something like this is the vertex at 0, 0.
+This is the new vertex 3 to the right because I have to plug in a number 3 times bigger.
+Well, sorry.
+A number that I added 3 to.
+So if I plug in 1, 1 minus 3 is negative 2, I get 2.
+If I plug in 2, 2 minus 3 is negative 1.
+I get 1, I plug in 3, I get 0.
+And here's some points.
+This now is the same as this blue graph, but shift to the right 3 because we needed to counteract
+for a plus or minus 3.
+So left and right shifts if are always opposite.
+So if this said y equals absolute value of x plus 3, this would be a shift.
+Well, which way?
+Yes, left 3.
+You can start to put all these ideas together.
+And a parent function has an HK form, meaning this is like really common.
+And you'll see I did it here in Desmos.
+You can add, hopefully this opens.
+Yeah.
+Absolutely value with sliders.
+OK.
+I put in h and k.
+And now I can add a slider to h and k.
+So if I remember, if I want to go, what if I wanted to like my h values of x minus
+x minus h?
+So as we can even turn that out.
+h.
+If I go to the right, if I go to the right, the bigger the number.
+And the other thing about this, this is saying x minus h.
+So x minus 3 is shifted right 3.
+So they all have this form.
+This is the stretch.
+OK.
+And I think there's a list right here.
+8 determines two different things.
+It can be the stretch.
+And it also means it can flip upside down like this.
+It's a vertical flip.
+And then h is the left and right, but it's opposite.
+k is the up and down.
+And it's not opposite.
+So if it says, you know, like the k value at the end is plus 3, that's a shift of 3.
+It's not opposite.
+And then wherever you have to describe the transformations,
+these vocab and day 5 for now we're going to go and short it.
+So if we shift the vertex left and right or up and down,
+it's now a new spot.
+We can also change a, and it'll change the slope.
+And it'll just, it's a V shape no matter what.
+So do the slope up to the right first,
+and then just go up to the left and the same fashion.
+So here, what's my slope?
+1.
+But where's my vertex?
+Well, this is plus 1.
+So we shifted left 1 and down 2, left 1 and down 2.
+Eventually you're going to be able to look at this,
+and you don't need to think shifts.
+You'll be like, oh, the vertex, the center,
+the negative 1, negative 2.
+Our slope is still up 1 over 1.
+So here's our graph.
+Here, the shift right to up 0.
+So our 2 comma 0 is our vertex.
+But our number, our slope is like down 1 over 1.
+Right?
+And there was no 0 here.
+You just have to assume it.
+And 1 second.

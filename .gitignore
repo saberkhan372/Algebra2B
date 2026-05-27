@@ -1,0 +1,11 @@
+teacher and student work/
+
+.DS_Store
+*.log
+
+# Local video transcription runtime/cache. Keep transcripts, notes, PDFs, and contact sheets.
+video-learning/.venv/
+video-learning/models/
+
+# Local assistant/session settings with machine-specific absolute paths.
+.claude/settings.local.json

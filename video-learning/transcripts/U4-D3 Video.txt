@@ -1,0 +1,178 @@
+Okay, here are the notes for unit four, day three.
+I have my little spongebob meme here,
+because we can never forget when you square root both sides,
+never forget the plus or minus.
+Okay, so solving with square roots means
+we're actually looking for x equals something.
+Sometimes it's one answer, sometimes it's two,
+but sometimes you have to make sure
+that the solutions work,
+because you might get answers
+that you plug back into the original equation
+and they don't make sense, they don't work.
+Those are called extraneous solutions.
+So sometimes you have a negative in the square root
+or it just doesn't work out
+and the left doesn't equal the right.
+So that solution can be crossed out.
+So here's an example, we have two x,
+the square root of two x minus one equals four.
+Well, if you wanna get x, right now it's in case
+in a square root, so let's square it.
+And when you square both sides,
+you don't need a plus or minus,
+we're just squaring it to get rid of the square root.
+You square the other side, you get 16, add the one over,
+and you get x equals 17 halves.
+In this case, it's basically the same problem,
+but first we have to move the four over
+and then divide the five out so you get
+the square root of three x minus two equals eight.
+That's what 40 over five gives us.
+And then you square both sides gives you 64.
+Notice we're not square rooting both sides,
+we're squaring it, so there's no plus or minus yet.
+Three x minus two equals 64, add the two over x is 22.
+There's a couple more where we square both sides,
+but right now there's a square root on both sides,
+so all that happens is when you square both sides,
+the square root just goes away,
+and you just solve for x, and just is one answer.
+So let's just quickly check that that works.
+Fucking five, the square root of 15 minus nine
+is equal to the square root of 16 minus 10
+is the square root of six equal to the square root of six, yes.
+And on the right, we square root both sides,
+we got x equals negative one.
+So you have the square root of negative one plus eight
+is equal to the square root of five plus two.
+Is that true?
+Is the square root of seven equal to the square root of seven,
+yes, right?
+Okay, a couple more.
+In this case, we have a square root on this side,
+so we're gonna square it, but when you square this whole side,
+you're squaring something with two terms.
+So you actually have to foil this.
+When you foil it, you end up getting
+x plus three on the left side,
+and then this is what it foils out to,
+move everything around, and you get this is all equal to zero.
+But this is not what x equals, you have to factor it.
+And you set your factors equal to zero,
+x is negative two or x equals one,
+but can x be negative two?
+Well, let's check.
+Negative two plus three is equal to negative two
+plus one is the square root of one equal to negative one.
+No, so we can cross out that answer,
+and then one does work.
+That's this work over here.
+All right, extraneous solutions.
+That was like negative two.
+A negative two is an extended solution we caught
+by doing the work, but ends up not working when you check.
+So when you plug it in, it doesn't work.
+It's called an extraneous solution.
+All right, so here, same process.
+Square both sides, so you have to foil this,
+and then this comes out to a quadratic equation.
+So you factor it, x equals six, and x equals two.
+Well, you check six, and it works,
+but you check two, you plug it in.
+So that would be four, so the square root of one is one.
+That doesn't equal negative one.
+Here you square, well, first we gotta move the two over.
+You square both sides, that means you have to factor
+that it or foil this.
+When you foil this, you get all this right here.
+You move the x over, move the six over,
+and then you get this, which does factor.
+And this is kind of an ugly answer,
+but x is one fourth, and x is negative two,
+but if you plug in one fourth,
+you get the square root of six and a fourth minus two.
+Well, that equal two times a fourth,
+well, two times a fourth is a half.
+That doesn't make sense.
+Like the square root of six and a quarter
+is some decimal, and you minus two,
+it's not gonna be a half exactly.
+But if you plug in negative two,
+you get negative four equals square,
+so two minus,
+does this work?
+Negative two, plus six.
+So you got negative two, this actually doesn't work, does it?
+So if you have, you're plugging in negative two
+as an answer, you get negative two plus six,
+so square root of four minus two,
+this actually doesn't work,
+because this is two minus two, which is zero,
+so no solution.
+So it's possible for radicals,
+which is a square root,
+to be written as a fractional exponent,
+and this is something that's good enough for the test.
+You could have a square root of a number,
+and that's to the half.
+Did you figure out the third root of a number?
+That's to the one third.
+If you have a negative exponent,
+it goes to the bottom,
+and if you have a negative fraction,
+it goes to the bottom,
+but that's to the one half is on the bottom now,
+it's a square root on the bottom.
+So it can be anything.
+So if you, no matter what,
+the top number is the exponent,
+and the bottom number is the root.
+So here's a couple of practice problems.
+To the negative one half,
+it goes to the bottom,
+but to the one half is like five to the one,
+but you square root it.
+Here to the one third is just the third root.
+Here's negative, so you put it on the bottom,
+and that's to the seventh power and the fifth root.
+Here's not negative,
+so it's just to the fifth and the third root.
+This is the, the two, the one half,
+so it's all square rooted.
+This is to the second power, and then the third root.
+This is to the fifth power, and it's the square root.
+And this one is the fourth root,
+and to the fifth power.
+So no matter what, if it's to the one half,
+that's all you're gonna do on the test is the one half,
+just showing you what might happen in precalc.
+You might have a higher level exponent,
+but right now we're just gonna do to the one half,
+and you always have to check your answer.
+So here's the last one, last page here.
+This is just x, and this is all to the one half.
+That's the same thing as saying this whole thing was square rooted.
+So you square both sides,
+you end up getting the square root goes away,
+you've got a quadratic that you have to factor,
+but this is the same thing twice.
+So you just get x equals negative one, you have to check,
+well, plug a negative one, you get negative one
+equals two, the square root of two,
+but that's not true.
+So there's actually no solution.
+And here, you move the x over to you square this side
+and you square this side.
+So 4x minus seven to the one half is like the square root
+of it, you square it.
+This fact boils out, you move this over,
+you get this quadratic, and it checked our solutions
+right here.
+x equals four and x equals two.
+When you plug in four, you end up getting negative one
+equals negative one, but when you plug in two,
+you get two equals negative one, if it's not true,
+so you can just cross out that answer, okay?
+So that is day four.
+Unit four.

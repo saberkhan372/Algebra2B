@@ -1,0 +1,195 @@
+All right, here we go, unit two, day four, negative exponents.
+There's also a quiz review on the back, and remember, if you're watching in 2025, our quiz
+will be after the camping trip for the gold day.
+But I think the quiz is before the camping trip on the blue day.
+All right, negative exponents.
+So if you have a negative exponent, it can be turned into a positive exponent if you put it on the bottom of a fraction.
+So for example, x to the negative three is like saying one over x to the three.
+And it works backwards too, so x to the negative two on the bottom of a fraction will become x squared on the top of a fraction.
+So for now, we don't leave negative exponents.
+We always want to have a positive exponent in the answer.
+It's kind of weird because in calculus, you actually get to leave them,
+but we need to, we need to know how to you to mess with them for now.
+So a couple of examples, if it's on the bottom, it goes to the top and it becomes positive.
+If it's on the top, it goes to the bottom, it becomes positive.
+If you have only one, that's a negative exponent.
+Just put that one on the bottom.
+If you have two variables that have negative exponents, put the both on the bottom.
+This is a typo.
+I should say pi.
+And then if you have only one on the bottom, again the inner typo.
+So let's see, y to the b will go to the top and you can y to the b.
+So let's just see.
+It also doesn't work with addition and subtraction.
+So plus, I would say plus is a minus has ruined the party.
+So x to the negative 2 plus y to the 3 is not the same as something like this.
+Or this notice that x and y, they both have exponents with a being multiplied.
+Here they're being added and you can't break that up.
+I know there are things we can do, but not today.
+Okay, so simplify completely.
+y to the negative 2 is on the bottom.
+So let's just pop it up to the top.
+It becomes x to the seventh y squared.
+Here, these are both negative exponents.
+And they're on top of a denominator of just one.
+So let's flip it basically and put x to the 3, y to the 6th on the bottom.
+And then here, these are both negative exponents.
+So let's pop them both up top and so you get negative 6 stays up top.
+x to the 9th goes up, y to the 1 goes up and then kind of over 1.
+But you don't really need to put y to the 1.
+You don't need to put over 1.
+So you can just leave it like that.
+All the exponents we've been using work just as well.
+Negative exponents.
+So all the rules from before still go into play.
+So look at this one.
+These are both x's.
+And they both have exponents.
+So you add them.
+So negative 11 plus 4 is negative 7.
+But it's a negative exponent.
+So you can't have negative exponents in your answer.
+So you put it in the denominator.
+Add 9 and negative 3.
+You get 6.
+That's positive.
+So we just leave it.
+1, 6.
+So minus 1 minus 6 is x to the negative 5.
+Let's put it in the denominator.
+So we can positive.
+They're both x.
+So we'll subtract what's negative 4 minus minus 13.
+It's negative 4 plus 13, which is x to the 7th.
+We can leave it.
+All right.
+The x is and the y is 2 minus minus 3.
+It's x to the 5th.
+It's a negative 5 minus 1.
+It's y to the negative 6th.
+So we have x to the 5th.
+Y to the negative 6th.
+But we can't have a negative exponent in the answer.
+So we'll put it in the denominator.
+Lastly, pem dots.
+So parentheses comes first.
+So 1 minus minus 8 means x to the 9th inside the parentheses.
+And then 9 and the negative 2 in the outside we do multiplies.
+So x to the negative 18th.
+Put it in the denominator.
+All right.
+That's negative exponents.
+Kind of a short lesson because we've got to do some quiz review.
+So we did that into the first page.
+Negative exponents.
+Bondomials just means like one term without adding subtracting.
+Is it a function?
+That's the vertical line test.
+Or does one number map to two different numbers?
+And we'll talk about that.
+Domain, range, and n behavior we'll do.
+Use your calculator.
+And then absolute value graph.
+So is this a function?
+Well, you make a vertical line and it hits three times.
+So no vertical line hits more than one.
+So it's not a function.
+The domain is left and right forever.
+I added these arrows.
+If you ever see like just basically a point ending without
+like a dot on it, it'll just assume it's an arrow.
+It's just because it's our screenshots from Desmos.
+So it's not a function, but it doesn't have a domain.
+The farthest left, it'll go as negative infinity.
+And the farthest right, it'll go as infinity.
+The farthest down, so range is low to high.
+Well, this is going to continue low forever and continue high forever.
+So it's also negative infinity to infinity.
+The n behavior, as we go left, we're going down.
+Now that we go right, we're going up.
+Is this a function?
+Well, two maps to negative one, four maps to negative one.
+It's fine.
+This is a function.
+And just to be clear, this would not be a function if,
+let's just say, for example, two maps to negative one,
+but two also maps to like three.
+You can't, two can't map to two different numbers.
+So this is a function.
+The domain is just all the inputs as a list.
+And the range is all the outputs as a list.
+Here, evaluate around the nearest thousandth.
+Let me see if this will work.
+Let's see.
+See if I can do this.
+Okay.
+I'm going to press, I want a square root, so second.
+And then down in the middle left here, x squared.
+And then I'm going to press alpha fraction.
+And there's no parentheses, right?
+So negative six squared plus 11 squared all over three.
+Put it all in at once.
+You get 5.323, because it says round to the nearest thousandth.
+So three decimal places.
+If you didn't get 5.323, then you did something wrong.
+Solve on a graphing calculator, a graphed both of these.
+So remember, to graph, you press y equals.
+And I'm going to clear this and clear this.
+I've been a graph, the left.
+And I'm going to graph the right separately.
+So one, so fraction, one-half x plus six.
+And I know I accidentally put it in the second spot,
+but it doesn't really matter.
+The second one of the right one plus the square root of negative x.
+Remember, negatives and minuses are not the same thing.
+You press graph.
+We've got two lines.
+Now, I want to see where they intersect.
+So I press second.
+And then up here, I press trace.
+And I go down to intersect.
+I can either go down to it or just press the number five.
+Here is, we'll say, first curve.
+And it'll be like on the blue one or the red one.
+Then I press enter.
+Then it'll say second curve.
+It'll be on the other one, the blue or the red.
+You press enter.
+And then you'll press guess.
+You press enter.
+So it intersects at negative 5.3.
+That's where the x is intersect.
+And then graphing a absolute value.
+So remember, this number shifts at left and right,
+but it's opposite.
+This number shifts it up and down, but it's not opposite.
+So this has a vertex at negative 2, 3.
+And this is the slope.
+So my slope is down 2 over 3.
+It's just a coincidence.
+Those are like the same numbers.
+So left to up 3.
+And then my slope is down 2 over 3.
+Down 2 over 3.
+There we go.
+It goes in both directions.
+My domain is, it goes left forever and right forever.
+And range is low to high always.
+So the lowest it'll get to.
+What y value will just get to?
+Negative infinity.
+And the highest it gets to, the highest y value
+is the tip of the vertex.
+Because this one points down, it's low to high.
+It's always low to high, but this one points down.
+So it's negative infinity up to like up to 3 with a bracket.
+For example, I don't know.
+Let's say 1, 2, and it pointed up.
+The domain of this would still be negative infinity to infinity,
+but the range, the lowest it got to is 2,
+and the highest it'll go to is infinity.
+So just note that, you know, if it's either pointing up
+or down, it'll be different.
+So there you go.
+That's the quiz review.
+And this is Unit 2 Day 4.

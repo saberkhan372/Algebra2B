@@ -1,0 +1,90 @@
+All right, here's the video for unit 63, fundamental theorem of algebra, so big
+lesson. The first thing you need to know is that we have a polynomial in three or
+more terms. The biggest exponent is called the degree, so this is a third degree
+polynomial. So find the degree of each of these. If it just says x, this is x to
+the first, so that's the first degree polynomial. Highest exponent here is to the
+third, so it's a third degree, and you got to be careful with this one. I rewrote
+this with the negative x to the sixth being first, which means this is the highest
+exponent, so it's a sixth degree polynomial. So what is the fundamental theorem
+about the rule? It says that a polynomial of nth degree, so if it's like, or nth degree
+has n roots, or x intercept, so for example, if it's a seventh degree polynomial, it'll
+have seven roots, or x, seven solutions. A fourth degree polynomial will have four
+solutions and so on. Remember the word zeros and roots are what you get when you set the
+factors equal to zero, or the polynomial. This is in standard form with the exponents
+going down in order, and if we were to factor all this, I'm not saying that this is
+not necessarily a factor form of this, but x plus three, x squared minus six, x minus
+seven, x plus one. This is x to the first, x squared, x, and x, so we're going to add
+up all those exponents, and we'll get the degree of this polynomial. So these are both
+fifth degree polynomials, they're just in different forms. This is standard form, this
+is factored form. So, what does that look like as an on a graph? Well, we have third degree
+polynomial means it has three real roots, or it can have three real roots, so this is factored,
+x plus two means it's going to hit it negative two. x minus one means it's going to
+hit it x equals one, and x minus three means it's going to hit it x equals three. Well,
+how do we know it's a third degree polynomial because it has three roots? Now, let's
+look at this, so this is taken straight from Desmos, x to the fifth is the fifth degree
+polynomial, but it only hits three times. How is that possible? Well, there are some imaginary
+roots. Okay, an example is like x minus three, i is one of the roots. Well, that means
+x plus three, i will be another root, and we're going to see that that happens because
+all complex or imaginary roots come in pairs. So, they come in pairs called conjugate pairs.
+So, if I have the root x plus five minus two, then I'll also get the root x plus five
+plus two, i, because when you get the plus or minus i, you're always, you're square
+rooting both sides, you're always going to get a plus or minus. This is the real number,
+this is the imaginary number, it's the imaginary number that goes plus or minus. You're
+always going to get some number plus the imaginary, some number minus the imaginary.
+So, what are the conjugates of these? Four minus three i, the conjugate is four plus three
+i, negative five plus two point seven i, we change this to minus two point seven i, negative
+six minus i root five would be negative six plus i root five, and hopefully you get
+the picture here. The other one I'll focus on is seven i would be like x plus seven i,
+you'd also have x minus seven i, that's the conjugate. So, here, how many real and imaginary
+zeros could you have? Imaginary and complex for the same thing. Oops, complex and imaginary,
+it's just that's in and of each other. Complex just means it has a real part and
+the imaginary part. So, like this is a complex number, well this is just an imaginary number.
+Okay, if it has one root, it can only have one real root, but if it's a degree of two,
+we could have two imaginary roots and two real roots, or like either or. The thing is complex
+roots always come in pairs, so you can only have two complex roots or four complex roots
+or six complex roots. So, what would that look like? And you can have an odd number of
+real zeros. So, what would that look like here? This is a second degree polynomial, so there
+could be two real or two complex zeros. Here, fourth degree, so you could have four real and
+zero complex. You could have two real and two complex because it adds up to four. You could have
+zero real and four complex. If it's to the seventh, you could have seven real and zero complex,
+and then what I do is it, okay, there could be two complex, which means there'd have to be five
+real. There could be four complex, which means there has to be three real, because the number of
+real and imaginary has to add up to the degree. There's seven roots in general, and then there
+could be six complex in one real. Here, there could be zero complex in six real. There could be two
+complex, four real, four complex, two real, and so on. All right, what if a zero shows up more
+than one? What if this factored out? You got x minus three, x minus one, x minus one. That means
+the root of x equals one, like the x intercept shows up twice. Look what happens when you graph it.
+It goes and it bounces off the axis, but it goes through the axis of x equals three. Let's see if
+we can find a pattern here. When you have a zero or x intercept or factor, it shows up an even
+amount of times. That means it's going to bounce off the axis, but if you have a factor that shows
+up an odd amount of times, this only shows up once, it's going to go through the axis. So if there
+were four of these, it would still bounce off the axis at one. If there were three of these, which is
+odd, it would still go through. So here we go. This is x equals three. Our x equals negative three.
+So this is x plus three and it goes through. This one flattens out, but it still goes through,
+so x plus one. And then this bounces at x equals positive two. So x minus two has to show up at least
+two times. And you can write it out the same thing twice, or you can write it with a squared,
+because that's just exponent rules. Here we go. Can you list the factors in multiplicity of the graph?
+Well, this goes through a negative three. So x plus three has to be an odd amount of times, just
+once we'll assume it bounces at two. So x minus two can show up two times or four times or six times.
+And then five also goes through, so x minus five. Now this is just a possibility. You could have one,
+two, three. This has multiplicity, two. So four root roots, but there could be imaginary roots
+that we can't see. All right. How do we find all roots in multiplicity? Well, you just factor.
+This factors, and the x minus two, x minus two, so x equals two is the root with the
+multiplicity of two, because it shows up twice. This third degree, there's going to be three roots.
+We can take an x out of everything, and then factor this. This factor means x equals zero is one
+of the roots, then x equals negative seven is one of the roots, but it shows up multiplicity of two.
+Last thing we'll do, difference of squares. How do you factor something with two terms?
+With the first term and the second term are perfect squares, like four and nine.
+Well, square root of four is two times two. Square root of nine is three times three.
+There's a subtraction sign in the middle. We know it's going to work, because we foil this.
+two x times two x is four x squared. Outer is minus six x. Inner is plus six x, which
+cancel each other out, and then last time's last is minus nine. So you end up getting four x squared
+minus nine, which is what we want. So in this last section, we're going to see one is a perfect
+square. So one x squared is just one times one, and then 81 is nine times nine, but one's positive
+one's negative. You could have written it like this x minus nine x plus nine. That's how the formula
+says it, but personally, I just like writing the positive first, but either one's okay.
+Here, nine is a perfect square. It's three times three. 49 is seven times seven.
+Four x squared is two x times two x. 25 is five times five. One's positive. One's negative.
+Ooh, last one. These aren't perfect squares, but I could take out a GCF that I'm left with one
+and 64. One is x times x. 64 is eight times eight. One positive. One negative, but leave the two out
+There you go. That's unit six, day three.

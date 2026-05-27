@@ -1,0 +1,88 @@
+Okay, unit four of day two notes, they're going to be on square root functions is the main
+topic of today, but the first page is a review.
+So in order to find the inverse of this, remember, this is y, this is x, so we'll switch
+x and y, and you want to get y by itself.
+So we're going to subtract two and divide by three, so you get x minus two over three,
+we'll get rid of those three, you get y minus one by itself, y minus one squared, but
+in order to get rid of that, you square root both sides, but never forget that when you
+square root both sides, you always get a plus or minus.
+So plus or minus square root of x minus two over three, and you add the one over, so
+the inverse, if this started as f of x, then the inverse would be f inverse of x.
+So looking at this as a graph, this was the original function, right?
+It's a parabola, and the inverse of a parabola happens to be a square root function, but
+when you square root it, you get the plus or minus.
+It turns out that this is not a function, even though it is the inverse, it's not a function
+because it fails the vertical line test.
+So what do we discover?
+The inverse of a graph is reflected over the line y equals x.
+So basically means if you have x comma y, and you make it y comma x, right here, the
+point two comma five, the inverse graph gets five comma two, and zero five gets five,
+zero, okay?
+Also the domain in range get flipped in the inverse.
+The range becomes a domain, and the domain becomes the range.
+The plus or minus means it's not a function, but it is a sideways parabola, okay?
+Are these functions, this is back to the vertical line test?
+No, yes, no, right?
+Fails vertical line test, passes, passes, fails, fails.
+So the vertical line test tells if it's a function or not.
+The horizontal line test, we're going to show right here, the horizontal line test tells
+if the inverse is a function.
+So right here, anytime I draw horizontal line, and it only hits once, the inverse is a function,
+hlt, but here it fails the vertical line test.
+So just to reiterate, the vertical line test tells us if it's a function or not, the horizontal
+line test tells us if the inverse is a function or not, all right?
+So let's use the horizontal line test real quick.
+Horizontal line test tells us, yes, the inverse is a function, no, the inverse is not a
+function, no, no, no, no, no, yes, and no.
+Now the real meat and potatoes of the day, it's right here, a square root function.
+So this is the parent graph for a square root function, okay?
+So a square root function has an a value, x minus h is in the square root plus k.
+So that's, these are the instructions, let's look at an example.
+So the hk values kind of like the vertex, remember it's always the opposite of this number.
+So negative three, and it's the regular version of k, negative three one is the original
+starting point.
+And based off our a value, because a is equal to two, you always go, to the right one,
+you always go right one, and then you go up or down by your a value.
+since a is two, you go up to, then we want to plug in another x value, which is our third
+point, that makes it a, this a perfect square.
+So what plus three, you know, our perfect square, our options are one is a perfect square,
+four, nine, sixteen, well, the first thing I can think of is that I plug in one, I get
+one plus three, now it give us four.
+So when you plug in one for x, you get two times one plus three, so root four plus one,
+that gives you five.
+So when I plug in one, I got five, one five, and all you need to graph this is three points.
+Starting point a value point, and a third point, and it's always going to go up to the
+right.
+Sometimes they'll go down to the right, and which we'll see in the next example, the domain
+started at negative three, and goes to infinity, and the range started at one and goes
+to infinity.
+There will never be left-end behavior for these, because they always don't have anything
+that'll last, but the right-end behavior, this is going to go up to the right forever,
+so up to infinity.
+So this one, the starting point, hk, remember it's opposite of h, so it's positive one,
+positive four, then you use your a value, which is negative one, so right one, down one, and
+then I plug in five for x, because if you plug in five, you get five minus one, so negative
+one times root four plus four, that's negative one times two, so negative two plus four is
+two.
+So when you plug in five, you get two, that's our third point, so this becomes a downward
+sloping parabola from one to infinity, from negative infinity, because this is going to
+go down to the right forever.
+So from negative infinity up to four, there's never a left-end behavior, but there is
+a right-end behavior, and our last graph is the hk value, opposite of h, so negative
+two, regular k value, negative three, which is right here.
+Our a value is one-half, so you go right one, put up a half, and why did I choose this
+third point?
+Why did I choose two for x?
+Because two plus two gives you root four, so one-half times root four minus three is one-half
+times two, which is one minus three is negative two, so when I plug in two, I get negative
+two, that ends up being my third point, connect the dots, this is going to go up to the
+right forever, so the domain starts at negative two, goes to infinity.
+The range goes from negative three up to infinity.
+There's never a left-end behavior, and the right-end behavior goes up to infinity.
+So there is the possibility that square root graphs could go to the left, but we will not
+be graphing these.
+All of our graphs are going to go up to the right, or down to the right.
+And then this last slide is just a recap that the square root parent function looks, looks
+like this.
+Remember, hk is your starting point, h is always opposite, k is not opposite, and your a value
+is your, you go right one and up and down by a, alright, so that's unit four.

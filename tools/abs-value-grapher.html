@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Absolute Value Grapher — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: default; }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u2.html">← U2</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <!-- Left: widget -->
+    <div class="tool-main">
+      <div class="tool-breadcrumb">
+        <a href="../u2.html">← U2 · Graphs &amp; Exponents</a> &nbsp;·&nbsp; D1
+      </div>
+      <div class="tool-title f-display">Absolute Value Grapher</div>
+      <div class="tool-tagline f-hand">Drag the red dot. The equation changes with you.</div>
+
+      <div class="widget-container" style="flex:1; min-height:220px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <div class="equation-display" style="margin-top:10px;">
+        <span class="eq-label f-marker">EQUATION</span>
+        <span id="equation" class="f-mono" style="font-size:20px;">y = |x|</span>
+      </div>
+
+      <div class="sliders-row" style="margin-top:10px;">
+        <div class="slider-group">
+          <span class="param-name f-mono">a</span>
+          <input type="range" id="slider-a" min="-3" max="3" step="0.1" value="1" />
+          <span class="param-val f-mono" id="val-a">1.0</span>
+        </div>
+        <div class="slider-group">
+          <span class="param-name f-mono">h</span>
+          <input type="range" id="slider-h" min="-6" max="6" step="0.1" value="0" />
+          <span class="param-val f-mono" id="val-h">0.0</span>
+        </div>
+        <div class="slider-group">
+          <span class="param-name f-mono">k</span>
+          <input type="range" id="slider-k" min="-6" max="6" step="0.1" value="0" />
+          <span class="param-val f-mono" id="val-k">0.0</span>
+        </div>
+        <button class="btn small" onclick="resetGraph()">↺ reset</button>
+      </div>
+    </div>
+
+    <!-- Right: sidebar -->
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Drag the <span style="color:var(--accent);">red dot</span> to move the vertex.</li>
+          <li>Use sliders to adjust <strong>a</strong>, <strong>h</strong>, and <strong>k</strong>.</li>
+          <li>Watch the equation update live.</li>
+        </ol>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Move the vertex two units LEFT. What changed in the equation?</span>
+        </div>
+
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.4deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set <strong>a = −1</strong>. What happened to the V?</span>
+        </div>
+
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(-0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Can you make the V touch the <em>bottom-right corner</em> of the graph?</span>
+        </div>
+
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.2deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q4.</span>
+          <span class="f-hand" style="font-size:13px;">What does <strong>a</strong> control? Try a = 0.5 vs a = 2.</span>
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px 12px; background:var(--highlight); transform:rotate(-0.7deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Screenshot anything weird. We'll talk about it next class.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
+        <a class="related-link f-hand" href="neg-exponent-flipper.html">→ Negative Exponent Flipper</a>
+      </div>
+
+      <div style="margin-top:8px; padding:8px; border:1.5px solid var(--ink-soft); border-radius:4px;">
+        <div class="f-type" style="font-size:10px; color:var(--ink-soft); margin-bottom:4px;">ABOUT THIS EQUATION</div>
+        <div class="f-hand" style="font-size:12px; line-height:1.4; color:var(--ink-2);">
+          <strong>a</strong> = stretch/flip &nbsp;·&nbsp;
+          <strong>h</strong> = left/right shift &nbsp;·&nbsp;
+          <strong>k</strong> = up/down shift
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let a = 1, h = 0, k = 0;
+    let dragging = false;
+    const canvas = document.getElementById('graph-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = rect.width  * devicePixelRatio;
+      canvas.height = rect.height * devicePixelRatio;
+      canvas.style.width  = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+
+    function logicalSize() {
+      return { W: canvas.width / devicePixelRatio, H: canvas.height / devicePixelRatio };
+    }
+
+    function getScale(W) { return W / 20; }
+
+    function draw() {
+      resize();
+      const { W, H } = logicalSize();
+      const ox = W / 2, oy = H / 2;
+      const sc = getScale(W);
+
+      // background
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, W, H);
+
+      // grid lines
+      ctx.strokeStyle = 'rgba(29,26,20,0.07)';
+      ctx.lineWidth = 1;
+      for (let i = -10; i <= 10; i++) {
+        ctx.beginPath(); ctx.moveTo(ox + i*sc, 0); ctx.lineTo(ox + i*sc, H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, oy + i*sc); ctx.lineTo(W, oy + i*sc); ctx.stroke();
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+      // tick numbers
+      ctx.fillStyle = 'rgba(29,26,20,0.35)';
+      ctx.font = "10px 'Special Elite', monospace";
+      ctx.textAlign = 'center';
+      for (let i = -9; i <= 9; i++) {
+        if (i === 0) continue;
+        if (i % 2 === 0) {
+          ctx.fillText(i, ox + i*sc, oy + 13);
+          ctx.textAlign = 'right';
+          ctx.fillText(-i, ox - 4, oy + i*sc + 4);
+          ctx.textAlign = 'center';
+        }
+      }
+
+      // y = a|x-h|+k
+      ctx.save();
+      ctx.strokeStyle = '#d94f2a';
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      let first = true;
+      for (let px = 0; px <= W; px += 0.5) {
+        const x = (px - ox) / sc;
+        const y = a * Math.abs(x - h) + k;
+        const py = oy - y * sc;
+        if (first) { ctx.moveTo(px, py); first = false; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.restore();
+
+      // vertex dot
+      const vx = ox + h * sc;
+      const vy = oy - k * sc;
+      ctx.fillStyle = '#d94f2a';
+      ctx.strokeStyle = '#1d1a14';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(vx, vy, 7, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      // vertex label
+      ctx.fillStyle = '#1d1a14';
+      ctx.font = "12px 'Patrick Hand', cursive";
+      ctx.textAlign = 'left';
+      ctx.fillText(`(${h.toFixed(1)}, ${k.toFixed(1)})`, vx + 10, vy - 8);
+    }
+
+    function fmtNum(n) {
+      const v = Math.round(n * 10) / 10;
+      return v % 1 === 0 ? v.toFixed(0) : v.toFixed(1);
+    }
+
+    function updateEq() {
+      const aVal = a;
+      let aStr;
+      if (aVal === 1) aStr = '';
+      else if (aVal === -1) aStr = '−';
+      else if (aVal < 0) aStr = '−' + fmtNum(Math.abs(aVal));
+      else aStr = fmtNum(aVal);
+
+      let innerStr;
+      if (h === 0) innerStr = 'x';
+      else if (h > 0) innerStr = `x − ${fmtNum(h)}`;
+      else innerStr = `x + ${fmtNum(Math.abs(h))}`;
+
+      let kStr = '';
+      if (k > 0) kStr = ` + ${fmtNum(k)}`;
+      else if (k < 0) kStr = ` − ${fmtNum(Math.abs(k))}`;
+
+      document.getElementById('equation').textContent = `y = ${aStr}|${innerStr}|${kStr}`;
+    }
+
+    function syncSliders() {
+      document.getElementById('slider-a').value = a;
+      document.getElementById('slider-h').value = h;
+      document.getElementById('slider-k').value = k;
+      document.getElementById('val-a').textContent = fmtNum(a);
+      document.getElementById('val-h').textContent = fmtNum(h);
+      document.getElementById('val-k').textContent = fmtNum(k);
+    }
+
+    function resetGraph() {
+      a = 1; h = 0; k = 0;
+      syncSliders(); updateEq(); draw();
+    }
+
+    ['a', 'h', 'k'].forEach(p => {
+      document.getElementById(`slider-${p}`).addEventListener('input', function() {
+        const v = parseFloat(this.value);
+        if (p === 'a') a = v;
+        if (p === 'h') h = v;
+        if (p === 'k') k = v;
+        document.getElementById(`val-${p}`).textContent = fmtNum(v);
+        updateEq(); draw();
+      });
+    });
+
+    function getCanvasPos(e, canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = devicePixelRatio;
+      return {
+        x: (e.clientX - rect.left),
+        y: (e.clientY - rect.top)
+      };
+    }
+
+    function hitVertex(mx, my) {
+      const { W, H } = logicalSize();
+      const sc = getScale(W);
+      const vx = W/2 + h*sc, vy = H/2 - k*sc;
+      return Math.hypot(mx - vx, my - vy) < 16;
+    }
+
+    function moveVertex(mx, my) {
+      const { W, H } = logicalSize();
+      const sc = getScale(W);
+      h = Math.round(((mx - W/2) / sc) * 10) / 10;
+      k = Math.round((-(my - H/2) / sc) * 10) / 10;
+      h = Math.max(-8, Math.min(8, h));
+      k = Math.max(-8, Math.min(8, k));
+      syncSliders(); updateEq(); draw();
+    }
+
+    canvas.addEventListener('mousedown', e => {
+      const p = getCanvasPos(e, canvas);
+      if (hitVertex(p.x, p.y)) { dragging = true; e.preventDefault(); }
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const p = getCanvasPos(e, canvas);
+      moveVertex(p.x, p.y);
+    });
+    window.addEventListener('mouseup', () => dragging = false);
+    canvas.addEventListener('mousemove', e => {
+      const p = getCanvasPos(e, canvas);
+      canvas.style.cursor = hitVertex(p.x, p.y) ? 'grab' : 'crosshair';
+    });
+
+    canvas.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const p = { x: t.clientX - rect.left, y: t.clientY - rect.top };
+      if (hitVertex(p.x, p.y)) { dragging = true; e.preventDefault(); }
+    }, { passive: false });
+    canvas.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      moveVertex(t.clientX - rect.left, t.clientY - rect.top);
+    }, { passive: false });
+    canvas.addEventListener('touchend', () => dragging = false);
+
+    window.addEventListener('resize', draw);
+    draw();
+    updateEq();
+  </script>
+</body>
+</html>

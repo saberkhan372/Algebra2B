@@ -1,0 +1,79 @@
+Okay, we're back. When you divide 15 over, you'll be over 2 squared, well that's 15
+squared, 2 squared, and so when you end up getting the like perfect square
+of trinomial, so check this one out. The like x plus or minus something squared,
+what actually goes in the squared is actually just b over 2. So this number is
+still important. We're going to see that soon, but what goes in here is like 15
+over 2, and actually should have been minus yes, right? So this should be a
+minus and a minus and a minus. This is purple. Why do I know it's minus? Well, two
+negatives multiplied to a positive, but two negatives attract and become more negative, and then
+this one again is a negative. So what's negative 2 thirds over 2? Well, 2 thirds over 2 is
+like 2 thirds over 2 over 1. 2 thirds times the reciprocal, so keep change flip. Those
+2s cancel, so 1 third, 1 third squared is 1 ninth. So that's what goes here. That's
+your b over 2 squared, but what goes in here is just your b over 2. So you turn your 2 thirds
+over 2, and that up being 1 third, and it's minus. So these are both minus, especially
+these together. There we go. So now we're going to talk about solving by completing the
+squared. So here, we just added in a number that was our b over 2 squared. We're going
+to do that here, but we have this 39 to deal with. So first, let's push the 39 over.
+X squared minus 10X plus blank equals 39. Well, what's our b over 2 squared? 10 over 2 is
+5 squared. So we're going to add in this 25. Now this is a perfect square trinomial, but
+look at this. We added 25 over here. So we have to add 25 over here. Whatever due to one
+side, you got to do it together because it's like a scale. So imagine we added 25 to both
+sides. Well, this factors 39 plus 25 is 64. This meshes together. Now we square root
+both sides, and we get X minus 5 equals the square root of 8. Well, something I have forgotten
+to tell you over the imaginary numbers, the high side is when you square root both sides,
+you always get plus or minus because what squared is 64? Well, 8 squared is 64, but so
+is negative 8. So you always get a plus or minus. So then you just say X minus 5 is equal
+to 8. X minus 5 is equal to negative 8. Solve both. You get 13 and negative 3. You
+could also check this by graphing. You see that these are the x intercepts. We solved.
+This one, let's add the 9 over. So now I just want to do b over 2 squared, 12 over 2 squared
+is 36. So you added 36 to this side, add 36 to this side. And I really, really recommend
+doing these on your own, like from start to finish. Like, you should watch the video,
+but these are hard problems. So you need to know how to do these. So 36 on both sides,
+9 plus 36 is 45. This factors the x plus 6 squared equals squared 45. 45 is 9 times 5, so
+that's 3 root 5. So x plus 6 equals always get a plus or minus, very, very important
+for now on. And what we can do is just minus the 6. So we could say, minus the 6, it
+goes in here. X equals minus 6 plus or minus 3 root 5. I also like, wrote it separately
+if you want, but it's either of these two or both part of the same answer, or this by itself
+is just those two things combined. Sometimes we're going to have to work with fractions,
+right? So let's minus 22 to put it over here. And then we have x squared plus 5x, we
+minus the 22. And then we've got, what do we do, b over 2 squared? So 5 over 2 squared
+is 25 fourths. So you add 25 fourths to one side, you got to add 25 fourths to the other.
+That's negative 22 is the same thing as, well, what if that's, that's over 1, right? And
+I want to make it into fourths. So this times 4 is this. We add these two together, we get
+negative 63 fourths. This smushes down into b over 2, right? So x plus 5 halves squared
+equals negative 63 over 4 squared root both sides. You always get a plus or minus x plus 5
+over 2 squared. We square rooted it. So it's the square root in the squared cancel. When
+you do this, well, the square root goes over both. So that's just two. 63 is 9 times 7 and
+it's a negative. So this becomes 3. This becomes i and this is root 7. So plus or minus 3i root 7
+over 2. So we end up getting, so I'll write it up here. This is where we were at. We were at x plus 5
+halves equals plus or minus 3i root 7 over 2. We want us minus 5 halves from both sides. That minus
+5 halves can go into this zone. So minus 5 halves plus or minus 3i root 7 over 2. Because they're
+both over 2, we can just say it's negative 5 plus or minus 3i root 7 all over 2. And that actually
+you would get the same answer by doing the quadratic formula, but I want you to solve by completing
+the square. That's why this looks like the quadratic formula. Sometimes we want to find vertex form
+and then we'll find the vertex. So here, this is like the same process, but it's going to look a
+little different because there's no 0 here. We're not like moving the 88 over. You could do it the
+same way, but watch this. What's our b over 2? 18 over 2, square is 9, square is 81. So the thing that
+makes this a perfect square, trinomial that factors down and smashes together, is that this is 81
+because it's x minus 9, x minus 9. But we have this 88 over here. Well, I added 81. So let's subtract
+81 to keep it balanced. This factors 88 minus 81 is 7. These smushed together. So I get x minus 9
+square plus 7. Well, hey, that's vertex form. What's the vertex? 9, 7. We could check by doing the
+original way, which is like b over 2, b negative b over 2a. I get 9, I plug 9 into the function,
+I get 7. So yeah, the vertex works. Look at this one. This, I'm going to say a little trickier
+than normal. I use the music decimals on this because this is just like very hard to do without
+with fractions. It's very hard to do. So I want to make this a perfect square trinomial. Well, what
+b over 2? 13 over 2 is 6.5, square that. It's like a very, I mean, this is not the best fraction.
+So square, I get 42.25. So I add 42.25. This smushes down. But if I add something, I have to subtract
+because it's all on the same side of the equal sign. So if I add in some track, it's like a
+net zero, right? So b over 2 is what goes here. So 13 over 2 or 6.5 squared. These come out to
+negative 12. So our vertex is at negative 6.5, negative 12. And we can check by negative b over
+2a. And plug that in, you get negative 12. All right. This could be even trickier if the leading
+coefficient, for example, is not just one. All of these are the leading coefficient of one. And
+we'll see that later in the unit, but just a couple things to cover. We did negative b over 2a is how you
+find the x coordinate of the vertex. Then you plug whatever you got in for x. And that will give you
+the vertex. We did complete. This is another one where we solved by completing the square. So you move
+there'll be a zero here. So you move the number over, add in the b over 2 squared, whatever you
+need to one side of due to the other. Square root both sides. Don't forget plus and minus. And then
+we did vertex form. So the 88, like there's no zero here. So we ended up adding b over 2 squared
+and subtracting it on the same side for a factor. And then everything works. So this is a big
+lesson, but try your best.

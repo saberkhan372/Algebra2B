@@ -1,0 +1,101 @@
+Alright, so here's the video for unit 8, day 1, unit 8 is all about rational functions
+and rational functions are something that has an x in the top and the bottom or most
+say it just matters that there's an x in the bottom because that makes the bottom could
+be zero, right?
+We have to restrictions for what we could plug in for x, but in general rational functions
+are some polynomial on top and some polynomial on the bottom.
+So if you have a fraction like 5 over 6, that's fine, right?
+Zero over 6 is still fine because I could have zero out of 6 apples and that would be fine,
+but I can't have 6 out of zero things, right?
+So that's when we get undefined.
+So fractions of a numerator is a denominator and sometimes the top and bottom will factor
+and we're going to see what happens when you can do that.
+So the biggest part of this day is about excluded values which will abbreviate with
+EV on the homework and then the notes.
+If you want to find an excluded value, basically set the denominator not equal to zero,
+so you want to find out we're kind of finding the factors or the zeros, the solutions
+to the denominator and those values are the excluded values.
+So whatever x value you get is what you can't plug into the fraction.
+So for example, this fraction breaks up into x minus 3x minus 2.
+So x equals 3 and x equals 2 are the excluded values and we can see so 3 squared is 9
+minus 15 plus 9 plus 15 minus 15 minus 6 minus 15 would be zero and so would 4 plus 6 minus
+10.
+So this is just a list of two excluded values.
+The next few examples are all really similar.
+You can factor this, there's no GCF so we have to do factoring by parts 4 and 9 make 36,
+2x plus 9, x plus 2, x cannot be negative 9 halves from this one or negative 2 from this
+one, those are the excluded values.
+What about the domain?
+So the domain is everything you can plug in.
+These are the only numbers you can't plug in.
+So what if we wanted to find the domain?
+Well, we find the excluded values and then use the number line to list out the excluded values
+and then everything else will be in the domain.
+So don't worry about the numerator yet because you can plug in whatever you want.
+It could be zero up top but it just can't be zero down there.
+So this factors into x can't be zero and x can't be negative 9.
+So in a number line you just have to go an order of negatives to positives.
+Open circles are at the excluded values but everything else is fair game.
+That's what you could plug in for x.
+The negative infinity to negative 9, negative 9 is zero and then from zero to infinity.
+We want to interval notation about this one.
+Four terms factor by grouping becomes x plus 3, x minus 3 and x minus 5, well these negative
+3, positive 3 and 5, it's from negative infinity to negative 3, skipping over negative
+3, that's why there's parentheses and then all of the other excluded values.
+So basically there's always a union and parentheses at the excluded values because that's
+where you're skipping over.
+This one, well yeah you can take an x out and a 2 and then 3 times negative 10 is negative
+30.
+It would add multiplies the negative 30 but adds to negative 1 is negative 6 and 5 factor
+by grouping, you get 2x, that's our zero, you get negative 5 thirds here and 2 excluded
+values.
+So negative 5 thirds zero and 2 and then everything else is fair game.
+This is what our domain will look like.
+So the steps, right, negative infinity to some excluded value and then start again, do
+another excluded value and then so there could be probably up to like 3 in this chapter
+but 3 excluded values.
+What about simplifying, right?
+This is when we actually do work with the numerator.
+Simplifying means cancel stuff when you can.
+So completely factor the numerator, completely factor the denominator, the top and bottom.
+And cancel out any terms that appear in both the numerator and denominator and just
+to be clear, if you have x plus 3 over x minus 2, you cannot cancel these x's.
+But if you have x plus 3 times x minus 2, you can cancel them and you're just left with
+x plus 3 and there's one on the bottom so you could show that one but you don't really
+need to.
+So just want to be clear, you can only cancel whole factors that are being multiplied
+to each other because even though it doesn't have parentheses, we could add them.
+So this is x, I guess it was x minus 2 on top and bottom and then leave your answer
+in factored form.
+So we can factor this a 6 out of the top and a 3 out of the bottom and then that becomes
+x plus 2x minus 2.
+Once we get to this point where the bottom is factored, that's when we find the excluded
+values because we want to use the original function because once we cancel stuff, we fundamentally
+change what the question is asking.
+This is the function, right?
+So you can't plug in two or negative two and then you can go ahead and cancel.
+This one's interesting because x plus 2 cancels but so does 6 and 3 just becomes 2 over
+1 and then you just have x minus 2 on the bottom.
+Here top factors, bottom will factor by parts.
+So on top you have x plus 4, x plus 1 and on bottom you have 2, that's a GCF, 2x minus
+5x plus 4.
+Before you cancel stuff, that's when you find your excluded values.
+So the excluded values are positive 5 halves and negative 4.
+So finding excluded values and then we can cancel the x plus 4s and we just left with
+x plus 1 on top and 2x minus 5.
+This one's a little bit more simple, you can take a 4x out of the top and the bottom
+that's a squared minus b squared.
+So 2x plus 1, 2x minus 1, before you cancel these, remember negative a half and positive
+of half our excluded values, then we can simplify so you just up with 4x over 2x minus
+1.
+You cannot do the 4 and the 2.
+It has to be identical or it has to be a factor being multiplied.
+So if you had 2 times 4x over 2 times 2x minus 1, we could put these 2 at parentheses
+and then those could be gone, but you cannot do the 4 and the 2 like this.
+This is the last one I believe.
+So take out a GCF of 5, factor the bottom by parts.
+So negative 6, negative 4, positive 24, you get 3x minus 4x minus 2 on the bottom, your
+excluded values will be positive 4 thirds and positive 2 and the top factors, the x minus
+2s are gone and then you just have x minus 1 over 3x minus 4 and the 5 is still there
+can't cancel with anything else.
+So that's Unit 8, Day 1.

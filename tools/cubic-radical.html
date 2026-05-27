@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cubic &amp; Radical Grapher — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; }
+
+    .mode-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+
+    .ctrl-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+    .ctrl-group { display:flex; align-items:center; gap:6px; }
+    .ctrl-lbl { font-family:'JetBrains Mono',monospace; font-size:13px; }
+    .ctrl-lbl em { font-style:italic; font-weight:700; font-size:15px; }
+    .ctrl-val { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:700; color:var(--accent); min-width:30px; }
+
+    .eq-strip {
+      margin-top:8px; padding:7px 14px;
+      background:var(--paper-2); border:1.5px solid var(--ink-2); border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:16px;
+    }
+
+    .annot {
+      margin-top:6px; padding:8px 12px;
+      border-left:4px solid var(--accent); border-radius:3px;
+      font-family:'Patrick Hand',cursive; font-size:14px; line-height:1.5;
+      background:var(--highlight);
+    }
+
+    .compare-row { display:flex; align-items:center; gap:8px; margin-top:6px;
+      font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-2); }
+
+    /* anchored info below graph */
+    .info-chips { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+    .info-chip {
+      padding:4px 10px; border-radius:4px;
+      font-family:'Patrick Hand',cursive; font-size:13px;
+      border:1.5px solid var(--ink-2); background:var(--paper-2);
+    }
+    .info-chip.dom { background:#d4edda; border-color:#2a8a4a; }
+    .info-chip.pt  { background:var(--highlight); }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u4.html">← U4</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u4.html">← U4 · Radical &amp; Rational Exponents</a> &nbsp;·&nbsp; D3</div>
+      <div class="tool-title f-display">Cubic &amp; Radical Grapher</div>
+      <div class="tool-tagline f-hand">Drag the anchor point. See what makes these different from a parabola.</div>
+
+      <div class="widget-container" style="flex:1; min-height:180px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <!-- equation -->
+      <div class="eq-strip" id="eq-strip">y = (x)³</div>
+
+      <!-- annotation -->
+      <div class="annot" id="annot"></div>
+
+      <!-- info chips -->
+      <div class="info-chips" id="info-chips"></div>
+
+      <!-- mode selector -->
+      <div class="mode-row">
+        <span class="f-marker" style="font-size:11px;">FUNCTION:</span>
+        <button class="sk-pill active" id="btn-cubic" onclick="setMode('cubic')">x³ (cubic)</button>
+        <button class="sk-pill" id="btn-sqrt" onclick="setMode('sqrt')">√x (square root)</button>
+      </div>
+
+      <!-- controls -->
+      <div class="ctrl-row">
+        <div class="ctrl-group">
+          <span class="ctrl-lbl"><em>a</em> =</span>
+          <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" oninput="onA()">
+          <span class="ctrl-val" id="val-a">1</span>
+        </div>
+        <button class="btn small" onclick="resetAll()">↺ reset</button>
+      </div>
+
+      <!-- compare toggle -->
+      <div class="compare-row">
+        <input type="checkbox" id="show-parab" onchange="draw()">
+        <label for="show-parab">overlay parabola y = a(x−h)² + k (same vertex) for comparison</label>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Drag the <strong>colored dot</strong> to move the anchor.</li>
+          <li>Slide <em>a</em> to stretch or flip.</li>
+          <li>Toggle the compare checkbox to see the parabola.</li>
+          <li>Switch between cubic and square root modes.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">CUBIC vs PARABOLA</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          <strong>Parabola vertex</strong>: the graph <em>bounces</em>. It's the minimum or maximum — the graph never crosses below/above it.<br><br>
+          <strong>Cubic inflection</strong>: the graph <em>passes straight through</em>. It's where bending switches direction (concave up → concave down). Not a max or min.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">√x DOMAIN</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          You can't square-root a negative number (in the reals). So <strong>y = a√(x−h) + k</strong> only exists for x ≥ h.<br><br>
+          The graph has a hard <strong>start point</strong> at (h, k) — unlike a parabola which is smooth on both sides.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">On the cubic, check "overlay parabola." What's different near the anchor point?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Set a = −1 on the cubic. Does it flip? Which direction is "up" now?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">On square root, drag h to 3. What is the domain? Write it in interval notation.</span>
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.4deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Screenshot the cubic with the parabola overlay and mark the inflection point. Explain why it's NOT a max or min.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+        <a class="related-link f-hand" href="rational-exponents.html">→ Rational Exponents Tower</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('graph-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    let mode = 'cubic'; // 'cubic' | 'sqrt'
+    let h = 0, k = 0, a = 1;
+    let dragging = false;
+
+    const CUBIC_COLOR = '#8b4513';
+    const SQRT_COLOR  = '#2a8a4a';
+    const PARAB_COLOR = '#2a6fb4';
+
+    function color() { return mode === 'cubic' ? CUBIC_COLOR : SQRT_COLOR; }
+
+    // ---- canvas helpers ----
+    function resize() {
+      const r = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = r.width  * devicePixelRatio;
+      canvas.height = r.height * devicePixelRatio;
+      canvas.style.width  = r.width  + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+    function dims() {
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      return { W, H, ox: W/2, oy: H/2, sc: W/20 };
+    }
+    function toCanvas(xG, yG, d) { return [d.ox + xG*d.sc, d.oy - yG*d.sc]; }
+    function toGraph(px, py, d)  { return [(px - d.ox)/d.sc, -(py - d.oy)/d.sc]; }
+
+    // ---- evaluation ----
+    function evalCubic(x) { return a * Math.pow(x - h, 3) + k; }
+    function evalSqrt(x)  { return x >= h ? a * Math.sqrt(x - h) + k : null; }
+    function evalParab(x) { return a * (x-h)*(x-h) + k; }
+    function evalFn(x)    { return mode === 'cubic' ? evalCubic(x) : evalSqrt(x); }
+
+    // ---- format helpers ----
+    function fmt(v) {
+      const r = Math.round(v * 10) / 10;
+      return r === Math.round(r) ? String(Math.round(r)) : String(r);
+    }
+    function fmtA(v) {
+      if (v === 1)  return '';
+      if (v === -1) return '−';
+      return v < 0 ? `−${Math.abs(v)}` : String(v);
+    }
+    function fmtH(v) {
+      if (v === 0) return 'x';
+      return v > 0 ? `(x − ${fmt(v)})` : `(x + ${fmt(Math.abs(v))})`;
+    }
+    function fmtK(v) {
+      if (v === 0) return '';
+      return v > 0 ? ` + ${fmt(v)}` : ` − ${fmt(Math.abs(v))}`;
+    }
+
+    function buildEq() {
+      if (mode === 'cubic') {
+        const inner = fmtH(h);
+        return `y = ${fmtA(a)}${inner}³${fmtK(k)}`;
+      } else {
+        const inner = h === 0 ? 'x' : h > 0 ? `(x − ${fmt(h)})` : `(x + ${fmt(Math.abs(h))})`;
+        return `y = ${fmtA(a)}√${inner}${fmtK(k)}`;
+      }
+    }
+
+    // ---- draw ----
+    function drawCurve(evalF, col, lw, dashed) {
+      const {W, H, ox, oy, sc} = dims();
+      ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.setLineDash(dashed ? [6,4] : []);
+      let started = false; ctx.beginPath();
+      for (let px = 0; px <= W; px += 0.7) {
+        const x = (px - ox) / sc;
+        const y = evalF(x);
+        if (y === null || !isFinite(y)) { started = false; continue; }
+        const py = oy - y * sc;
+        if (py < -H || py > 2*H) { started = false; continue; }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    function draw() {
+      resize();
+      const {W, H, ox, oy, sc} = dims();
+      const col = color();
+
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      // grid
+      ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+      for (let i=-10;i<=10;i++) {
+        ctx.beginPath(); ctx.moveTo(ox+i*sc,0); ctx.lineTo(ox+i*sc,H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,oy+i*sc); ctx.lineTo(W,oy+i*sc); ctx.stroke();
+      }
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+      // labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)'; ctx.font = "10px 'Special Elite',monospace";
+      for (let i=-8;i<=8;i++) {
+        if (i===0||i%2!==0) continue;
+        ctx.textAlign='center'; ctx.fillText(i, ox+i*sc, oy+13);
+        ctx.textAlign='right';  ctx.fillText(-i, ox-4, oy+i*sc+4);
+      }
+
+      // comparison parabola (dashed blue)
+      if (document.getElementById('show-parab').checked) {
+        drawCurve(evalParab, PARAB_COLOR, 1.5, true);
+      }
+
+      // square root: domain boundary
+      if (mode === 'sqrt') {
+        const bx = ox + h*sc;
+        ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(bx,0); ctx.lineTo(bx,H); ctx.stroke();
+        ctx.setLineDash([]);
+        // shade excluded region (left of h)
+        ctx.fillStyle = 'rgba(139,74,20,0.06)';
+        ctx.fillRect(0, 0, Math.max(0, bx), H);
+        // domain label
+        ctx.fillStyle = col; ctx.font = "11px 'Patrick Hand',cursive"; ctx.textAlign='left';
+        ctx.fillText(`x ≥ ${fmt(h)}`, bx+5, 16);
+      }
+
+      // cubic: horizontal tangent line at inflection
+      if (mode === 'cubic' && Math.abs(k) <= 9) {
+        const [ax_, ay_] = toCanvas(h, k, dims());
+        if (ax_ >= 0 && ax_ <= W) {
+          ctx.strokeStyle = 'rgba(139,69,19,0.3)'; ctx.lineWidth = 1.5; ctx.setLineDash([3,4]);
+          ctx.beginPath(); ctx.moveTo(Math.max(0,ax_-60), ay_); ctx.lineTo(Math.min(W,ax_+60), ay_); ctx.stroke();
+          ctx.setLineDash([]);
+        }
+      }
+
+      // main curve
+      drawCurve(evalFn, col, 2.5, false);
+
+      // anchor dot (draggable)
+      const [dotX, dotY] = toCanvas(h, k, dims());
+      if (dotX >= 0 && dotX <= W && dotY >= 0 && dotY <= H) {
+        ctx.fillStyle = col; ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(dotX, dotY, 8, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        const lbl = mode === 'cubic' ? `inflection (${fmt(h)}, ${fmt(k)})` : `start (${fmt(h)}, ${fmt(k)})`;
+        const right = dotX < W * 0.7;
+        ctx.fillStyle = col; ctx.font = "12px 'Patrick Hand',cursive";
+        ctx.textAlign = right ? 'left' : 'right';
+        ctx.fillText(lbl, dotX + (right ? 12 : -12), dotY - 10);
+      }
+
+      // ---- update text ----
+      document.getElementById('eq-strip').textContent = buildEq();
+      updateAnnot();
+      updateChips();
+    }
+
+    function updateAnnot() {
+      const el = document.getElementById('annot');
+      if (mode === 'cubic') {
+        el.innerHTML =
+          `The <strong>inflection point (${fmt(h)}, ${fmt(k)})</strong> is where the cubic changes from curving one way to the other. ` +
+          `Unlike a parabola vertex, the graph <em>passes right through</em> — it's not a max or min. ` +
+          `${a > 0 ? 'Rises left to right (a > 0).' : a < 0 ? 'Falls left to right (a < 0).' : ''}`;
+      } else {
+        const dom = `x ≥ ${fmt(h)}`;
+        el.innerHTML =
+          `<strong>Start point (${fmt(h)}, ${fmt(k)})</strong>. Domain: <strong>${dom}</strong> — the graph only exists to the right. ` +
+          `${a < 0 ? 'a is negative, so the curve goes down instead of up.' : 'a > 0, so the curve rises from the start point.'}`;
+      }
+    }
+
+    function updateChips() {
+      const el = document.getElementById('info-chips');
+      el.innerHTML = '';
+      const add = (t, c) => { const s=document.createElement('span'); s.className=`info-chip ${c}`; s.textContent=t; el.appendChild(s); };
+      add(`${mode==='cubic'?'inflection':'start'}: (${fmt(h)}, ${fmt(k)})`, 'pt');
+      if (mode === 'sqrt') {
+        add(`domain: x ≥ ${fmt(h)}`, 'dom');
+        add(`range: ${a>0?'y ≥':'y ≤'} ${fmt(k)}`, 'dom');
+      } else {
+        add(`domain: all reals`, '');
+        add(`a ${a>0?'> 0 (rises →)':'< 0 (falls →)'}`, '');
+      }
+    }
+
+    // ---- drag ----
+    function hitAnchor(px, py) {
+      const d = dims();
+      const [ax_, ay_] = toCanvas(h, k, d);
+      return Math.hypot(px - ax_, py - ay_) < 18;
+    }
+
+    function moveTo(px, py) {
+      const d = dims();
+      const [gx, gy] = toGraph(px, py, d);
+      h = Math.round(Math.max(-8, Math.min(8, gx)) * 2) / 2;
+      k = Math.round(Math.max(-8, Math.min(8, gy)) * 2) / 2;
+      draw();
+    }
+
+    function evtPt(e) {
+      const r = canvas.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      return [src.clientX - r.left, src.clientY - r.top];
+    }
+
+    canvas.addEventListener('mousedown',  e => { if (hitAnchor(...evtPt(e))) dragging=true; });
+    canvas.addEventListener('mousemove',  e => { if (dragging) moveTo(...evtPt(e)); });
+    canvas.addEventListener('mouseup',    () => dragging=false);
+    canvas.addEventListener('mouseleave', () => dragging=false);
+    canvas.addEventListener('touchstart', e => { e.preventDefault(); if (hitAnchor(...evtPt(e))) dragging=true; }, {passive:false});
+    canvas.addEventListener('touchmove',  e => { e.preventDefault(); if (dragging) moveTo(...evtPt(e)); }, {passive:false});
+    canvas.addEventListener('touchend',   () => dragging=false);
+
+    // ---- controls ----
+    function onA() {
+      let v = +document.getElementById('sl-a').value;
+      if (v === 0) { v = 0.5; document.getElementById('sl-a').value = 0.5; }
+      a = v;
+      document.getElementById('val-a').textContent = v;
+      draw();
+    }
+
+    function setMode(m) {
+      mode = m;
+      document.getElementById('btn-cubic').classList.toggle('active', m==='cubic');
+      document.getElementById('btn-sqrt').classList.toggle('active', m==='sqrt');
+      draw();
+    }
+
+    function resetAll() {
+      h = 0; k = 0; a = 1;
+      document.getElementById('sl-a').value = 1;
+      document.getElementById('val-a').textContent = '1';
+      draw();
+    }
+
+    window.addEventListener('resize', draw);
+    draw();
+  </script>
+</body>
+</html>

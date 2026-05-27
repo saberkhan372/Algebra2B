@@ -1,0 +1,102 @@
+All right, here's a video for unit nine, day five, which is on logs, but we're not
+graphic anymore. We're going to be using the properties of logs. So this is kind of
+review. You need to be able to go back and forth. You need to know how to do this
+from exponential form to log form. Remember, this says B to the x equals y.
+This says log of base to the answer equals the exponent. Log bay. Circle shortcut just means
+read it like this. B to the x equals y. So if you can want to convert these, I'm going to write it
+like this. I write the word log, then the base, and I leave some room nine to the two
+equals 81. Same with this. Well, actually, this is the other way around. This is easier.
+Eight to the third equals five, 12. Okay. So to convert these, it's actually harder. I mean,
+it takes a little bit more work and thought to go from exponential form to log form,
+but try it out. Seven to the x equals 20. Y to the third equals 1728. Three to the negative four
+equals C. And I put parentheses around here because this is saying n to the third power. So n to the
+third equals r minus five. That's the whole answer. This is a little bit easier. Three to the
+x equals y. ln is log base e. So this is using the property of ln, or like what ln is.
+So this is saying e to the x equals 15. When we see ln, and you need to convert it to exponential
+form, change it to log base e. Two to the negative six equals p. And three to the x minus seven,
+three to all of this equals y. So this is the real, and that was a little bit of a view,
+but this is the real lesson for today. So there are three rules for logs. And as long as they
+all have the same base, this can go backwards and forwards. All of these can go either way.
+So b log base b of x times y. Well, if you multiply two things after the base,
+that can be split up. This is called expanding into log base b of x, log base b of y.
+If you go this way, it's called condensing. So log base b and log base b of x and y becomes x times y.
+Conversely, if you have x, let's go, that's condensed. So log base b log base b of x and y.
+But if there's a minus sign, it kind of looks like division, right? So x minus y becomes x over y.
+All is one thing. The power rule, otherwise known, I call it the blog rule because if there's a
+number in front of the log, it can pop up into the exponent and also it goes backwards. So this
+exponent can go in front of the log. So let's try it out. Expand log base four of six times y.
+And also in order to do this condensing, if I want to make x and y, x times y, this has to have the
+same base, same with this. So expand means make this log base four of six plus log base four of y.
+This doesn't have a 10 here, but if it just says log, this is 100 times x. So it's a log base 10
+of 100 log base 10 of x. But remember, if you can simplify, you have to. This right here says
+log base 10 of 100 means 10 to the second power equals 100. So this in itself is two.
+So truly, it wouldn't be done unless you get this as your final answer. This is like an intermediate
+step that you need to, you need to keep simplifying. What if it's 13 times r times c? Let's log
+base eight of 13 plus log base eight of r plus log base eight of c. ln to split it up, five e and
+b is ln of five plus ln of e plus ln of b. But ln and e are inverses of each other. This
+means e to the what equals e to one. So it's not done until you get this as your final answer.
+Condensing, I don't know if one's easier than the other, but I would think did mean well,
+it's actually kind of easier to expand. But if you want to condense,
+log base four, log base four, they match. So that's good. And p and nine. And it's a plus.
+It's more kind of, it's better to have the coefficient in front of the variable. So log base four
+of nine p. These are all added. So it's five times x times y. There's no base. So it's
+log base 10. So you just do five x one. This one is adding the basis match. So it's four and two.
+you get eight. And ln, ln, ln, it's all adding. You get c, a, b.
+What about expanding when it's like this? Well, this is 14 over x. So that means it's a minus sign.
+And you get four log base seven to 14. This can't be simplified because just, we don't know
+it's like, if it was 49, that would be good. But 14 doesn't work. And then it's a minus sign.
+Same here because it's one over three.
+It's log base eight of one minus log base eight of three. Not done because if you have a one here,
+that means eight to the zero power is one. So this is zero. So really the answer is just this part.
+What about here? Well, anytime there's something on the bottom, those all get minus signs.
+And anytime it's on the top, it gets a plus sign. So this is positive ln of 13.
+Minus ln of x minus ln of y is both in the denominator. If it's positive, it's a plus sign
+from the top. It gets a minus sign. If it's in the denominator. This is a minus sign,
+they basis match. So it's nine over y. These are all minuses. So this is a plus. So it goes
+x on top and three and r on the bottom. Six has a positive. So it goes on the top. D has a
+positive. So it goes on top. But five is a negative. So it goes to the denominator.
+And finally, the power or blog rule, this one's a little bit easier. So ln of x squared,
+just expand it. Expanding means drop the exponent down. But condensing means bring the exponent
+up. So notice this, then I can go in front. Square root means to the one half. So you bring it out.
+This one condensing. So bring the x up. This is the one third. So bring it up. I'm okay with
+you writing it as p to the one third. But it's also just as correct to do the cube root of p.
+So remember, positive logs go to the numerator. Negative logs go to the denominator. So this is positive.
+So it goes up top. This is negative. So it goes down below. That would be condensing.
+So k to do x to the one fourth or fourth root of x. Remember, you have to, if you can simplify,
+you must. So that's what happened here and here. So if you, if you can simplify, you have to,
+any log, when there's a one as the answer, that's the exponent sp0. If it's base and the answer is
+the base, then it's just with the one. So expand fully. 10 and x to the fourth are up top. So first,
+what I want to do is because this is a division sign, I'm going to make it log of the numerator
+minus log of the denominator. Because these are both the denominator, these get split up with
+negatives. This is multiplying. So you get log base 10 of 10 plus log base 10, or just log of x to
+the fourth minus log of three minus log of y squared. In order to fully expand, you have to put
+these exponents out front. Whenever you can simplify, you must, because so this says log base 10
+of 10, that's the rule where it's one. Fully expand. So y to the fourth and square root of x
+or up top. What do we do? ln of the whole numerator minus ln of the denominator.
+These are being multiplied. So four goes out front. One half goes out front. And then this is
+the final product. Expand again. Well, you could put this two out front, but then you'd have a
+bunch of two logs. And what you want to do is do this exponent rule first. So the two exponent
+distributes everything. So it becomes x squared y to the fourth z to the a. These are in the numerator.
+So log base three of the numerator minus log base three of the denominator. These are being
+multiplied. So it's log base three of x squared plus log base three of y to the fourth minus log
+base three of y to the eight. You can't simplify these at all just because it's letters. If this
+was like log base three of three, then maybe we could do something, but we can't with these. So
+just bring the two, the four, and the eight out front. And then you're done. In order to condense,
+first what you want to do is do the blog rule, the reverse blog rule and put those exponents at top.
+And because it's a minus, the m squared goes on top and end to the fourth in the bottom.
+So this is actually the most condensed. I don't know why I did. This is like expanding. So
+I guess I'm just showing that you can go backwards too, but this would be the final answer to condense.
+To condense this, one half, always put these exponents up front. And this is kind of tricky. This is
+saying what this is saying is one half log base four of z. So that's why the log, the z, the one half
+goes up front, which is mean square root of z. And this means square root of three. So log base four
+of seven minus log base four of root three minus log base four of root square root of z. So these
+both have minuses. So they go to the bottom. And this says a positive so it goes to the top. But square
+roots, and we're cubed root of three square root of three square root of z can just be the whole
+square root house can go over both numbers. I think this is the last one. Okay. Do the blob rule, put
+the four up top, put the two up top, put the seven up top. And then this says one third. So put
+the one third up top. This is a positive. So C goes up top. This is a positive. So three squared
+goes up top. This should not. Oh, three squared is nine. And then this is a positive. So it's cubed
+root of x goes up top. And then B to the fourth goes at the bottom. Why to the seventh goes to the
+bottom? And anything else? Well, I just put the nine in front of the C. And then everything else
+doesn't simplify anymore. So that's as far as you can go. All right. So that's expanding
+and condensing logs.

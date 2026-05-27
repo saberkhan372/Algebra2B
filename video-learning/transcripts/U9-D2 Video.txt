@@ -1,0 +1,267 @@
+Okay, here's the video for unit 9, day 2, part 1.
+Again, we had a beginning of class and we gave everyone some dice and they played a game.
+So, in the game, we had, you know, one person is going to be odds.
+Another person is going to be events, and they each rolled the dice.
+One person rolled the dice.
+Let's say they got a one, one person rolled the dice.
+They say they got a three.
+You multiply those two numbers.
+One times three is three.
+So, the odds win.
+Okay?
+Well, you played that game and each group did that 20 times.
+And we got a list of how many times we can group with the events one or how many times
+the odds won.
+One group 13 times the events one and seven times the odds one.
+Another group, the events one 17 times and odds three and so on.
+Well, within one small group, I played this with someone.
+The odds one three times and that means the events one 17 times.
+So, what was the percentage?
+How many times did the odds win?
+Because it's a fraction of 20 and turning into percentage.
+Three hundred twenty is fifteen percent.
+So, the odds one fifteen percent of the time.
+Well, maybe the odds just have a bad luck.
+Because it seems like the odds weigh worse.
+They didn't win as many times.
+Let's see how you can do this.
+So, out of this, out of all of these combined.
+So, one hundred twenty six plus thirty four is a hundred and sixty trials.
+The odds one thirty four out of a hundred and sixty times.
+That's point two one two or twenty one point two percent.
+Well, percent of odds was, it should say, as a class, the percentage of events was way higher.
+It is a twenty one percent of the time odds one.
+That means about eighty percent or seventy nine percent of the time events one.
+Why is that possible?
+Well, we did.
+We made this multiplication chart.
+So, one times one is one.
+For example, four times four is sixteen five times four is twenty.
+We filled out this chart.
+How many items in this chart are actually odd?
+It was only one two three four five six seven eight and there's only five times that there's odds.
+And there are six by six there's thirty six numbers.
+There's nine odds out of thirty six.
+If I said five nine out of thirty six are odds of twenty five percent of the results are odd.
+And we did this a hundred and sixty times of twenty one percent of the time odds one.
+And if we had played a lot more many, many more times.
+If we had rolled this game, let's just say thousands of times.
+We'd probably get closer and closer to the theoretical probability, which is twenty five percent.
+Well, which was closer to your group data or your classroom data.
+When I played with some month, it was only the odds one fifteen percent of the time.
+When we combined the class data, they won twenty one point two percent of the time.
+So the class data was closer because there was more trials.
+What is the probability of rolling odds mean?
+If you roll many, many times by twenty five for this and at a time,
+the roll is all multiplied to a product.
+That's what the probability of rolling odds mean is twenty five percent.
+When we use a probability, we always use it decibel.
+The probability of odd, that's what I'm writing equals point two five.
+So that means the probability of even is point seven five because there's only two possible results.
+They have to add it.
+So this is, you could think of this as twenty five percent, seven five percent adding to a hundred percent or when we're doing the math,
+we want to do twenty five or point two five and point seven five.
+Now, we're going to talk about probability is the number of desired outcomes out of the total number of outcomes.
+We wanted odds.
+We got nine odds.
+There's thirty six total outcomes.
+So that's how you do a probability.
+It's a fraction.
+The law of large numbers says the real probability comes from many, many, many tracks.
+You're not going to get the true example of testing the probability unless you do many, many trials.
+So you have a little story here about a New Jersey train claims that it's on time.
+It shows up at 8 a.m.
+0.9 percent of it's not 0.9 percent of the time is 0.9.
+This is going to be a rephrase that.
+New Jersey trains it claims that it's 8 a.m. train from Princeton, New York as a probability is 0.9 and arriving on time.
+Assume for now that's true.
+What does that mean?
+Well, 0.9 means there's a 90 percent chance that it's going to be on time.
+Well, the 8 a.m. train is arrived on time five days in a row.
+What's the probability that it will arrive on time tomorrow?
+It's still 90 percent because the fact that it is on time today doesn't affect the time if it's going to be on time tomorrow.
+And that brings up a key term.
+Mutually exclusive.
+Mutually exclusive means the event today or the event right now has no effect on the next event.
+So the fact that the train was on time today will not affect whether the train is on time tomorrow.
+So now we get into a little bit tricky or scenario.
+This is man takes 8 a.m. train to work 20 days a month.
+He surprised him the train raised late three out of the 20 days, right?
+It's 3 out of 20.
+The train was like 15 percent of the time when it should have been late only.
+Let's think about this.
+The probability of being late is 0.1 minus 0.9.
+So it should have been late only 10 percent of the time, but it was late 15 percent of the time.
+Well, see what happens.
+If we, you can use a random number generator.
+It's just on Google the search random number generator.
+I'll show you what that looks like.
+Let me see if I still have it open.
+From 1 to 10, generate a number gives me 6.
+1, 7, 1, right?
+10.
+So every, let's just say if this random number generator gives me a 10, the train will be late.
+So we did that 20 times and we'll see when the train, how many times it was late.
+This is a graphic of how many times it was late in 20 trials.
+Each dot represents a trial of 20 trials.
+So there was a time where I did the random number generator 20 times and I never got a 10.
+There were times or did the random number generator.
+Then I got three tens. I got this many.
+Well, how many dots are there?
+There's a hundred dots.
+How many times is it late three or more times?
+We add up all these dots. That's 30 dots out of 100.
+Every time, so there's a hundred trials.
+It was late three or more times 30% of the time.
+So this question says, what is a resulting estimate of probability?
+It's 30%.
+Should the business fan be surprised that his train was late three out of 20 days?
+Look at this data.
+There's a lot of times where the train was late three or more times.
+30% of the time is actually fine.
+Let me ask you this. If you wanted to take a roller coaster and he said,
+there's 30% chance that the roller coaster will break and you'll fall off and die.
+Something like crazy, right? 30% is super high.
+So the fact that the train was late three or more times 30% of the time
+means that the business fan shouldn't be surprised.
+Okay. That's part one.
+Here's part two.
+We did classroom data and this is,
+we're just, you know,
+we used the 18 students we had in class.
+So we randomly select 18 students.
+So everybody, we just had everyone saying that seeds.
+We're going to use the students.
+In any given class, there's males and females.
+And I understand this is an outdated type of worksheet,
+but that's just because we are trying to, you know,
+simplify that data here.
+Your males and females,
+so either have blue, brown or green eyes.
+Create a table, a true diagram that shows all the possible combinations.
+So we have males with blue eyes, males with brown eyes, males with green eyes.
+We have females with blue eyes, females with brown eyes,
+and females with green eyes.
+Well, using their class data,
+it's kind of crazy, but there was actually nine males and nine females in the class.
+So the probability of there being a male is nine out of 18,
+which is 0.5 or 50%.
+Same with female 50%.
+There were five students with blue eyes.
+So 5 out 18 is 0.27 or 27.7%.
+There was 61% brown eyes and 11% green eyes.
+Because there was 11 people had brown eyes and 2 people had green eyes.
+Now, this is what a testable thing is.
+So all of this basically, like we're going to give you a scenario,
+give you data, find the probability of things.
+And then we start to ramp it up,
+but we actually want to find the probability of two things.
+What if I randomly chose someone from the class,
+the probability of them being male or female,
+or means add, and it means multiply.
+So 4 is 0.5 out of 0.5 out of 0.5.
+Because there's 100% chance of choosing a male or a female.
+The chance of choosing someone with blue eyes or brown eyes.
+Well, there's 5 and 11 people.
+So there's 16 out of 18,
+or just add up their decibels,
+0.277, 0.611, 0.8888.
+There's an 88, 0.8% chance that you're going to find someone with blue or brown eyes.
+Find that each of the probabilities explain where it makes sense.
+What about male or blue eyes?
+So the thing is, you can be a male with blue eyes.
+But I don't want people who have male and have blue eyes.
+So here's the probability of having something,
+and something else.
+That's how we write it.
+This symbol means, and it's the probability of having a,
+the probability of having the minus,
+the probability of having both.
+That's where we do the multiply.
+So here we go.
+The probability of being male is 50%.
+The probability that I blue eyes is 0.277.
+But we're going to subtract that probability of being a male with blue eyes.
+What is that?
+That's these two numbers multiple.
+How did I get 0.13?
+I multiplied 0.5 over 10, 0.27.
+So this plus this minus this multiplication is,
+there's a 64% chance of choosing a male
+or choosing someone's blue eyes,
+but without people who are males with blue eyes.
+Same here.
+Female or blue eye,
+female or brown eye,
+50% chance,
+61% chance of having brown eyes.
+So you take away the probability of being female with brown eyes,
+the multiplying it.
+So there's an 80% chance of choosing a female or someone with brown eyes.
+What about probability of not something?
+So the complement is something like this.
+The probability of a is what we want.
+The probability of the opposite of that is written like that.
+But a little seed.
+Well, if I know the probability of having green eyes is 11.1%
+then the rest of the class does not have green eyes.
+So not green eyes is 100% minus the probability of having green eyes.
+So one minus 0.11 is 88.9.
+There's probably a not male.
+Let's, the rest of the class is 50% of the class is 1 minus 0.5.
+So 50% of the class is not male.
+So one thing I want to say is remember probability of having A and B.
+Whoops, I'm just.
+I need to get rid of that symbol because I messed it up.
+This is right.
+Or is like a union.
+The probability of A or B having one or the other means.
+It takes probably having a added to the probability of having B
+but take away the probability of having a vote.
+I'm going to be.
+So we're going to, this is always true if you have an or with two things.
+So you're always going to take away the probability of having a vote.
+So there you go.
+There's choosing an American dollar random.
+There's two events.
+The event A is a person has cholesterol between.
+It has cholesterol 240 or above, which is high cholesterol.
+Or event B, the person has cholesterol 240, which is borderline high cholesterol.
+Well, according to the AHA.
+To have a high cholesterol, it's about 16% of the population.
+And borderline high cholesterol is about 29% of the population.
+Why are they mutually exclusive?
+Remember, mutually exclusive means they can't happen at the same time.
+You can't have high cholesterol over 240.
+And borderline high cholesterol between 240 at the same time.
+So mutually exclusive events.
+What about having high or borderline high cholesterol?
+That, remember, is the probability of A plus the probability of B, minus the probability of A.
+And you can't have that.
+So we can't even.
+We'll see.
+Find the probability.
+16%.
+0.16 plus 0.29.
+So these two, plus, actually we just add the two to their.
+Because mutually exclusive events.
+You can't have that.
+We're here.
+You can be a male with blue eye.
+You can't have there is no vote there.
+So this is actually excluding.
+So we have 16% people or 20% of people.
+That's 45% of the population is either high or borderline high cholesterol.
+What about the probability that they have normal cholesterol?
+So below 200.
+So that's neither of these events.
+So it's all the rest.
+So it's 1 minus this of having 1 minus the probability of having A or B is 1 minus 0.45, which is 55%.
+So 55% of the population has not had high or borderline high cholesterol.
+But the rest of the population does.
+And this is about.
+So well, worry too much.
+But actually, we can help you in your glass of water.
+Get some exercise.
+All right.
+That's unify me too.
