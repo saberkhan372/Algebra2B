@@ -46,6 +46,10 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **1 tool still missing (coming soon on unit page):**
 - Exponential Model Builder (U5, D3)
 
+**Archived/orphan prototype files not in student navigation:**
+- `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
+- `tools/sincos-grapher.html` - alternate sine/cosine grapher prototype; canonical student link is `tools/sine-cosine-builder.html`.
+
 ---
 
 ## Work completed so far
@@ -502,7 +506,7 @@ What to build:
 
 ## What's done vs. remaining
 
-### All completed (25 of 28 tools + all site structure)
+### All completed (29 tools + all site structure)
 
 | Tool | Unit | Who built |
 |---|---|---|
@@ -521,16 +525,16 @@ What to build:
 | Rational Expression Simplifier | U6 | Claude |
 | Adding Rational Expressions | U6 | Claude |
 | Polynomial Sketch Pad | U6 | Codex |
+| Polynomial Division Stepper | U6 | Claude |
 | SOH CAH TOA Solver | U7 | Codex |
 | Unit Circle Walker | U7 | Claude |
 | Sine/Cosine Graph Builder | U7 | Codex |
 
-### Remaining (2 tools)
+### Remaining (1 tool)
 
 | # | Tool | Unit | Who | Complexity | Notes |
 |---|---|---|---|---|---|
 | 1 | Exponential Model Builder | U5, D3 | **Claude** | Medium | Story problems need keyword classification, percent-to-decimal checks, compounding frequency, and unrounded expression display. |
-| 2 | Polynomial Division Stepper | U6, D4 | **Claude** | Medium-High | Long division and synthetic division both need correct placeholder-zero handling and remainder display. Math edge cases throughout. |
 
 **After each tool ships, run ChatGPT audit:** verify the unit page lesson row, homepage TOOLS array card, and PLAN.md are all updated before calling it done.
 

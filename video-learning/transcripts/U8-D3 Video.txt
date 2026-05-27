@@ -1,0 +1,97 @@
+Alright, here's the video for unit 8-day 3, which is similar to what we did in day 2,
+but right now we're adding and subtracting rational expressions, and what does that mean?
+The add and subtract is you're going to need a common denominator, so, what are the steps?
+First, completely factor the denominator is only, okay, and the little star that will
+be faster, is saying that you're going to be one of the ones that are factorable.
+So factor the denominator only, and then get a common denominator on the left and on the
+right.
+Look, if there's two terms, you need a common denominator between the two, and then whatever
+you need something on the right, you know, let's say there's an x plus 3 that you need
+to add to the denominator on the right.
+You have to multiply that same x plus 3 at the top and the bottom, because that's like
+multiplying by one, right?
+You can't just multiply the denominator, because that would fundamentally change what the
+fraction is.
+Then multiply out the numerators, because, so you can keep the denominator factored, but
+multiply the numerators, and most of the time that's going to be foiling, and then combine
+like terms in the numerator, because once you have a common denominator, basically the
+whole top line can be combined, and then see if the new fraction simplifies.
+That's something that's going to happen near the end.
+So this denominator is x, and this is 3x plus 1, but what I want you to realize is you
+can't just say, okay, times 3 at 1, no.
+3x plus 1 is a factor, x is a factor.
+So this needs a 3x plus 1, and this needs an x.
+Keep the bottom just multiplied the two factors, but the top needs an x, so it's 5x squared,
+and this becomes 3x times 2, so 6x plus 2.
+So what happens is, it's all over, and honestly, I should have just kept the bottom as
+3x plus 1 times x, 3x plus 1 times x, and the top, this became 6x plus 2 plus 5x, and
+let's put it in standard form, because it's just practice, and you're supposed to have
+all polynomials in standard form, so the top does not factor anymore, and the bottom
+stays as that, but this is the condensed down, we put two terms, basically two rational
+terms, and added them together.
+Here when we're adding, this has a 5x plus 4, this has a 2x plus 3, so this needs a 2x
+plus 3, and this side needs a 5x plus 4, same thing, the top and bottom, leave the bottom
+factored, but this becomes 4x squared plus 6x, and this becomes 30x squared plus 24x, all
+of that can be combined, like terms, it's 34x squared plus 30x, let's see, the bottom
+keep factored, the top, you can take out a 2x just to see if anything cancels, so this
+is your final answer, because nothing does cancel.
+Another one, this is x plus 1x minus 1, and this is x minus 1x plus 4, so this doesn't
+have an x plus 1, and this doesn't have an x plus 4, so this side gets x plus 1, this
+side gets x plus 4, you're going to foil this, you get x squared plus 6x plus 8, and then
+foil this, you get x squared plus 6x plus 5, combine all like terms, you get 2x squared
+plus 12x plus 13, this does not factor, because there's nothing that multiplies to positive
+13, but adds to 12, so you can leave that, and remember leave the bottom factored out,
+you don't need to triple foil anything, the denominator should always just be the common
+denominator in factored form.
+When you're subtracting, it's basically the same thing, however a good option is if you're
+taking this rational expression, subtracting this, well take this negative and distribute
+it to everything, so this becomes negative 2x squared plus 3, and then this just becomes
+an addition problem, and it's the same thing, this would be x plus 3x minus 3, and this
+would become x minus x plus 6x minus 5, right, so subtract, let's say this becomes negative
+x plus 1, and it's an addition problem now, this is x plus 2, this is x plus 2x minus 2,
+so sometimes like here, the common denominator, you don't have to do anything to the right,
+but the left needs an x minus 2, so that becomes 5x squared minus 10x minus x plus 1, this
+becomes negative 11x, so 5x squared minus 11x plus 1, and the bottom is just factored
+out common denominator, here we can make this minus x plus 7, and I want to see, I suggest
+this, this method, because adding is a lot easier than, you know, subtracting later, so
+x minus 2x minus 3, this factors to x minus 2x minus 1, so they both have x minus 2s,
+but this needs an x minus 1, and this needs an x minus 3, you're going to foil this,
+and foil this, that's how you get this stuff, and the x squareds actually cancel each other
+out, this becomes plus 5x, and this becomes minus 17, this doesn't factor anymore, so
+just nothing cancels, so there's your answer, alright, minus, so this becomes a minus 8,
+and it's an addition problem, this factors into x plus 2x plus 1, this factors into x
+plus 6x plus 2, so if this left side needs the x plus 6, this right side needs the x
+plus 1, it's really similar to the previous problem, multiply it, x squared plus 6x, negative
+8x minus 8, combine some like terms, so we've got x squared stays, minus 2x minus 8, well,
+remember, we have to always check, does this factor, yes, it factors into x minus 4x
+plus 2, and that x plus 2 cancels with that x plus 2, so the final version would be right
+here, alright, so what if there is more than one thing, what if there's addition, subtraction,
+and division, all in one problem, well we just remember, we use our order of operations,
+so we'll find divide before you add and subtract, and then parenthesis always comes first,
+so this is subtraction, addition subtraction, but remember, we can make this an addition problem,
+so 2 over this stuff, plus 2 over this stuff, minus 4 over this, there's a plus, a negative
+4 over this stuff, this factors into x minus 3x minus 2, this is x minus 2, so it needs
+an x minus 3, and this is an x minus 3, so it needs an x minus 2, multiply this out, you get
+2x minus 6, and you get negative 4x minus 2, so 2 plus 2x minus 6, minus 4x plus 8, and then all
+of this condenses down into negative 2x plus 4, all over x minus 3x minus 2, we can take out a
+negative 2 here, and you're left with x minus 2, and that's what cancels, so here we go,
+if we wanted to do what is like the domain restrictions, we'd actually use,
+see you remember the stuff before we cancel, so because the common denominator x can't be 3
+and x can't be 2, even though that x minus 2 cancels, because remember you check the domain
+before you cancel, here I'm going to put parentheses here and here, because it really doesn't work
+without the parentheses, you know, do you divide, you're supposed to divide first, right, but
+is it dividing this over this first, well with parentheses we're going to add this stuff first,
+so when you add this this becomes take out an x, so let's just do the top first, we're going to add
+these two, you take out an x, you have x plus 1, and this doesn't have that x, so it becomes
+9 plus 9x over x plus 1, the bottom they are a common denominator and we're subtracting,
+so we're going to turn this into an addition problem with x squared minus 3x minus 6,
+all over x plus 1, and it's the top condensed, so that's the top condensed is right here, and the
+bottom condensed is right here, it's a division problem, so we're going to keep this, that's right
+here, we're going to change it to multiplication and we're going to flip this, and remember
+multiplication we look up into top to bottom more diagonally to see if anything cancels with
+the x plus 1's cancel, and you can take out this, these cancel, the 9 plus 9x technically we
+could take it at 9 and we're left with 1 plus x, but this doesn't factor anymore, because there's
+nothing that multiplies to 6 and adds to 3, so this is the last problem, and if you notice
+it's kind of the hardest one, we had to combine the top, combine the bottom, and it's a division
+problem, top divided by bottom, so keep change flip, and then everything finishes out to that,
+there you go, so there's a unit 8-day 3,

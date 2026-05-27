@@ -1,0 +1,77 @@
+Okay, so here's the video for unit 8, day 2, multiplying and dividing rational expression.
+So the same rules apply for multiplying and dividing fractions as they do with multiplying
+and dividing rational expressions.
+So remember rational expressions look like these.
+So let's look at just a couple fractions, right?
+So 5, 3rds times 4, 5, you don't need a common denominator when you multiply.
+So you could do 3 times 5 and then 5 times 4, but then you'd have to simplify the fraction.
+So remember you can cancel diagonally and you can also cancel, so 8 times 5 and 12 times 3.
+You can also cancel top to bottom because you'd be able to simplify the fraction at the end,
+but you should simplify before you multiply.
+So another rhyme on the spot there.
+What about dividing fractions?
+Remember keep, change and flip.
+So 5, 3rds times 4, 5ths, the 5s cancel diagonally and you just have 4, 3rds left.
+So the homework for this is going to be after spring break.
+So how do you do this?
+Filly factor.
+Remember all our rules, A squared minus B squared, product sum rule, a grouping.
+Filly factor at the top and the bottom and they cancel out any terms, top to bottom and diagonal.
+And then write the final expression with remaining terms, but you don't have to like re-foils
+which leave it in fact recall.
+Okay, so this for some of these, I'm just doing it by guessing check.
+I'm going to do the whole process of what multiplies.
+Well, if there's a one out front, the product sum is just like you don't have to do the second step of grouping.
+Because if this is a one to one, whatever this number is, what you're looking to multiply to and add to that.
+So negative 5 and negative 5, this stays.
+And this is negative, let's see, positive 3, negative 2.
+And this is negative 5 and positive 3.
+So once you write it all out like that, look, the negative 5, X minus 5s cancel only one of them, this one stays.
+X plus 3s cancel and X minus 2s cancel.
+And I think these are very satisfying because you really just get down to one expression.
+But if you're asked for the domain of this, remember, you got to start with the original function.
+This one, a squared minus b squared, so 7x plus 1, 7x minus 1, x minus 9x plus 8, there's nothing you can do with this.
+But I have to do product sum with this because I can't just guess and check what these will be.
+So multiply to 7d2, I'll write you that.
+Oh, well, that was probably some for this, but this comes out to 7x plus 1 and x plus 2.
+And then the 7x plus 1 here in 7x minus 1, don't be worried if you get multiple things on top and bottom.
+But some factors will cancel to leave it in factors form.
+When you're dividing, remember, keep change flip and then do the same as before.
+But factor top and bottom after you keep change flip.
+Cancel out anything diagonally or top the bottom and then leave your answer in factored form.
+All right, so if you want to divide, we're going to flip this.
+So the x squared plus 11x plus 24 goes on top.
+What multiplies to 24 will 8 and 3 adds to 11.
+What multiplies to 40, 5 and 8 adds to 13, and this is negative 10 positive 4.
+So what's left?
+X plus 8's are gone, X plus 3's are gone.
+This is what we have on top, so we have on bottom.
+3x, so dividing, remember, keep change flip before you do any or factored because you might forget to flip.
+So now it's multiplying, this is on top, this is plus 2, or actually they're both minus 2.
+3x plus 1, 3x minus 1.
+This, I had to do product sub because you have to get negative 6 first.
+That comes out to 3x plus 1x minus 2, and I did product sub with this one too.
+So 3x minus 1, 3x minus 1, 3x minus 1s are gone, x minus 2s are gone, 3x plus 1s are gone.
+I like this one because I like it when it gets down to just one factor, and it doesn't always happen, but the way we set this up, sometimes it does.
+What if it's written like this?
+This is like saying what is 2 thirds over 4 fifths?
+That's saying what's 2 thirds divided by 4 fifths, which is saying 2 thirds times 5 fourths, and then the 2 and the 4 will just become 5 over 6, right?
+Okay, so this becomes this times this flipped.
+I almost didn't get this one because I tried to 60, but remember you could take out a GCF here, which I didn't.
+So this work showing is without the GCF.
+So I got 6x plus 10 and x plus 1, x plus 2x minus 1 for this, and then I took out 2x here.
+But nothing canceled, so I was, you know, the x minus 1s canceled, but there was like this, when you see 2 even numbers, you'd say, oh,
+I probably needed a GCF, so you could take a 2 out of here, and then you have 3x plus 5 here and here, and those are gone.
+So what you left with is x plus 1, x plus 2, and then the 2 that came out of here cancels with that 2.
+So remember, it's not always just things in parentheses, solo numbers, or solo x's can cancel 2.
+What if you have multiplication and division?
+Well, just take it one step at a time when you're doing pentas, just go left to right.
+So this is, I would multiply first, and then times by the reciprocal of this.
+So x squared plus 11x, you can take out an x, this is x plus 2x minus 2, and then this is x plus 11, that's gone with that one.
+This x plus 2 actually can be gone, so we could actually, I took out a 3x here, so I have x plus 2.
+So this x and this x, this x minus 2x minus 2, and actually, would be left with 1 over 3, and I think this is the last one, divide, divide, divide.
+We have to flip this and flip this, and technically, you could do it in all in one step, but I think it helps to do it one step at a time, so I divided these.
+So flip this, this is minus 4 plus 3, to go to 2x squared here, so the 2x squared and the 8x squared here, the 2 goes in itself once, and 2 goes into that 4 times, and then either this x squared, well, I canceled this x squared, but it doesn't really matter, but, you know, if you cancel this x squared, you're not canceling this one too.
+x plus 3 is gone, so what do we left with x minus 4, 4x minus 1 over 4x squared, and then I flipped this, and put it here, so we have 4, we have x plus 2 on top, 4x minus 1 on bottom, those are gone, and then this is all that's left, okay.
+So, you know, we're building up to a more and more difficult problem, but it's all the same principles.
+Factor, cancel, and then write your answer, it's factored form.

@@ -1,0 +1,65 @@
+So here's the video for, in a day, day four, not a huge jump in difficulty or what we're doing,
+but as an example, what if I told you, I was doing five eighths plus three fourths,
+equals some number of eight. Well, right, we want a common denominator,
+so this could become six over eight. So now that everything's over eight,
+it's not that we're dropping the denominator, but if we are saying that five plus six
+equals something. So what are we saying? Well, we're saying five plus six
+is eleven over eight equals x over eight, but that just means the tops are equal. So eleven
+was x. Well, that's what we're doing with just on a bigger scale with rational expressions,
+and we're solving, which means we have an equal sign now. So the same rules apply where you need to
+change subtraction, just change the signs that it becomes an addition problem, and then factor
+denominators, find common denominators, multiply the top and bottom, so everything is a common
+denominator. And then once all the denominators are the same, we basically don't need them
+anymore, or just figuring out how to make the top equal. And then a special note here is that
+there are excluded values, because we're solving for x, but there's values that x can't be,
+for example, here, our excluded values are, well, looking here, this is the common denominator's
+x and x plus three. So x cannot equal zero, and x cannot equal negative three. So when we're
+looking at this, x plus three, and this is x times x plus three, and this is x. So this one
+has x plus three, so it needs an x on top and bottom. This one needs x plus three on top and bottom,
+and we'll say this is five times x. This is four x plus one, and then this is seven x plus 21.
+So the five x and the four x plus one, I'll get combined, and then this right side of the
+equals sign is seven x plus 21. Look, the five and the four x makes nine x plus one and seven
+x plus 21, move it all around, you get x equals 10, and that's not one of the excluded values.
+So I like to sometimes put a check mark next to it and say, okay, yes, that's the correct answer,
+and it's not excluded until it'll work. Alright, the rest of the notes are just similar examples
+like this. This denominator is x times x plus two, this one is x plus two, so it needs an x,
+this one has x plus two, so it needs an x. So we're going to multiply this out x squared
+minus four x equals this stuff minus three x. Once you have a common denominator,
+we just look at the tops. So x squared minus four x and x squared minus eight equals four
+these x squared, you can subtract it from both sides of their gamma, and we have negative four
+x and y equals minus eight x plus four, move the four x over, and then so x equals one,
+and we'll look back at the beginning of x can equals zero or negative two, but that's not one of
+the excluded values, so that one's good. We'll about this one in class, I want you to try it on your
+own, but in the video, right off the bat, when we factor this, I get plus three and plus two,
+so x cannot equal negative two and cannot equal negative three, because those would make the
+denominator zero, so they're exclusive values. This one needs an x plus three, top and bottom,
+and this one needs an x plus two and top and bottom, so when we get x squared plus three x
+plus two equals five x plus ten, move everything to one side, and now how do you solve the
+quadratic? You have to factor some minus four and plus two, so x equals four and x equals negative,
+but it can't be negative two, because that's an excluded value, so the only one that I've circled
+twice here is x equals four, and then it looks like a couple more examples, so right off the bat,
+I'm going to factor this, it's a plus five and minus four, so this one has the minus four,
+this one has plus five, but because of excluded values, x cannot be negative five, and it can't be
+positive four. This one on the left doesn't have the plus five, so it needs it, this one doesn't
+have the minus four, so it needs that, and this one has both, so leave it, so x squared plus five x
+minus four x plus sixteen equals thirty six, move everything to one side,
+this factors into x plus five x minus four, this is what multiplies to positive one, sorry,
+what multiplies to negative twenty, but adds positive one is positive five or negative four,
+but that means that x equals negative five and x equals four are the solutions,
+but their excluded value is meaning it would, if I used negative five and four, that would make
+the denominator zero, so I cross put it out, and when you have both solutions crossed out,
+you basically get no solution. This one is like a one on the bottom, and it was a minus,
+so make it a plus, so a minus one, this factors into x times x plus one, so the excluded values
+are zero and negative one, this has x plus one, so it needs an x, this just has one, so it actually
+needs everything, and I kept it as x squared plus x, and we're going to factor this in, so two
+x squared plus two x minus one equals three x, move the three x over, this factors into two x
+plus one and x minus one, so this could be x equals negative a half, and x equals one,
+neither of those are excluded values, so we're all good, and the last one here, when I factor this,
+I get minus six minus two, because what multiplies the positive 12, but that's the negative eight,
+and then minus two and minus six, so that means this one needs the minus six, this one needs a
+minus two, distributed in, get negative, so four minus x squared plus six x equals x minus two,
+and I don't like having a negative x squared, so it is, I moved the negative x squared to the right,
+that's how I got this, I'm going to get x minus six x, so I got negative five x, and negative two
+minus four, this factor is into this, which gives you x equals six, and x equals negative one,
+what ends up happening, x can't be six, so that's an excluded value, this one's all good,
+there you go, unit eight, day four.
