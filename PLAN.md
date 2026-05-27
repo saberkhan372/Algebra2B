@@ -7,12 +7,12 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 29 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
+**Site:** 7 unit pages (u1–u7), 30 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
-**Unit pages:** U1–U7 fully wired. Only genuinely missing tools remain marked coming soon.  
-**Video-learning:** complete through batch 8 — 49 transcripts, extracted PDF text, 29 contact sheets, 8 synthesis notes.
+**Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
+**Video-learning:** complete through batch 8 — 50 transcripts (including U3-D1 25-26), extracted PDF text, 29 contact sheets, 8 synthesis notes.
 
-**29 tools built/integrated:**
+**30 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -35,6 +35,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Exponential Function Explorer (U5)
 - Log Properties Sandbox (U5)
 - Exponential Equation Solver (U5)
+- Exponential Model Builder (U5)
 - Rational Simplifier (U6)
 - Adding Rational Expressions (U6)
 - Polynomial Sketch Pad (U6)
@@ -43,8 +44,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Unit Circle Walker (U7)
 - Sine/Cosine Graph Builder (U7)
 
-**1 tool still missing (coming soon on unit page):**
-- Exponential Model Builder (U5, D3)
+**No tools missing** — all 30 tools are live and wired into student navigation.
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
@@ -96,7 +96,8 @@ Transcribed lessons so far:
 - U2-D6 - difference of squares and cubes.
 - U2-D7 - quadratic graphing and vertex form patterns.
 - U2-D8 - Unit 2 test review: functions, transformations, exponents, factoring, quadratics, piecewise evaluation, and cumulative skills.
-- U3-D1 - imaginary numbers and quadratic formula bridge.
+- U3-D1 - imaginary numbers and quadratic formula bridge. (24-25)
+- U3-D1 - imaginary numbers, quadratic formula, and "no x-intercepts when solutions contain i" connection. (25-26)
 - U3-D3 - completing the square.
 - U3-D5 - intro to rational expressions.
 - U4-D1 - radical functions and square-root graph patterns.
@@ -524,7 +525,7 @@ What to build:
 
 ## What's done vs. remaining
 
-### All completed (29 tools + all site structure)
+### All completed (30 tools + all site structure)
 
 | Tool | Unit | Who built |
 |---|---|---|
@@ -540,6 +541,7 @@ What to build:
 | Inverse Function Revealer | U4 | Claude |
 | Log Properties Sandbox | U5 | Codex |
 | Exponential Equation Solver | U5 | Codex |
+| Exponential Model Builder | U5 | Codex |
 | Rational Expression Simplifier | U6 | Claude |
 | Adding Rational Expressions | U6 | Claude |
 | Polynomial Sketch Pad | U6 | Codex |
@@ -548,11 +550,19 @@ What to build:
 | Unit Circle Walker | U7 | Claude |
 | Sine/Cosine Graph Builder | U7 | Codex |
 
-### Remaining (1 tool)
+### Remaining tools
 
-| # | Tool | Unit | Who | Complexity | Notes |
-|---|---|---|---|---|---|
-| 1 | Exponential Model Builder | U5, D3 | **Claude** | Medium | Story problems need keyword classification, percent-to-decimal checks, compounding frequency, and unrounded expression display. |
+All 30 planned tools are now live. Future additions will be driven by video-learning insights and teacher requests.
+
+**Upgrade candidates from video insights (not new tools — improvements to existing ones):**
+- `adding-rationals.html`: add Subtract tab with negative-distribution as Step 1; add "does numerator factor?" final-simplification check.
+- `rational-expressions.html`: add interval-notation domain/range readout; add three-case horizontal asymptote rule chip; add slant asymptote indicator.
+- `imaginary-sandbox.html`: add explicit callout — "if discriminant < 0, the parabola has no x-intercepts" — connecting imaginary solutions to the graph.
+- Transformations Explorer: separate chips for "stretch by 2" vs "reflect over x-axis" when a = −2; add "write g(x) from verbal list" practice mode.
+
+**New tool candidates from video insights (gaps identified — no existing tool covers these):**
+- Rational Multiplication/Division Stepper (U8-D2): keep-change-flip before factoring, factor/cancel with original-domain restrictions.
+- Solving Rational Equations Stepper (U8-D4): common-denominator approach, excluded-value pre-check, extraneous-solution detection.
 
 **After each tool ships, run ChatGPT audit:** verify the unit page lesson row, homepage TOOLS array card, and PLAN.md are all updated before calling it done.
 
