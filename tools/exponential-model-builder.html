@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exponential Model Builder — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; }
+    .tool-page { height: calc(100vh - 52px); overflow-y: auto; }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* color language */
+    .cbase { color: #2a6fb4; font-weight: 600; }
+    .cexp  { color: #d94f2a; font-weight: 700; }
+    .carg  { color: #2a8a4a; font-weight: 600; }
+    .cpct  { color: #8b4513; font-weight: 600; }
+
+    /* ── formula type decision cards ── */
+    .formula-tabs { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+    .formula-tab {
+      flex: 1; min-width: 150px;
+      border: 2.5px solid var(--ink-soft); border-radius: 8px;
+      padding: 10px 13px; background: var(--paper-2);
+      cursor: default; transition: all 0.2s;
+    }
+    .formula-tab.detected {
+      border-color: var(--ink); background: var(--highlight);
+      box-shadow: 3px 3px 0 rgba(29,26,20,0.18);
+    }
+    .ftab-name { font-family: 'Permanent Marker', cursive; font-size: 12px; margin-bottom: 3px; }
+    .ftab-formula {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-soft);
+    }
+    .formula-tab.detected .ftab-formula { color: var(--ink); }
+    .ftab-kw { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+
+    /* keyword highlights in story */
+    .kw-formula    { background: var(--highlight); border-radius: 3px; padding: 0 3px; font-weight: 600; }
+    .kw-sign-plus  { background: #d4edda; border-radius: 3px; padding: 0 3px; color: #2a8a4a; font-weight: 600; }
+    .kw-sign-minus { background: #f8d7da; border-radius: 3px; padding: 0 3px; color: #d94f2a; font-weight: 600; }
+
+    /* ── problem picker ── */
+    .problem-picker { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+    .prob-btn {
+      padding: 5px 13px; border: 2px solid var(--ink); border-radius: 20px;
+      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 14px;
+      cursor: pointer; transition: background .12s, color .12s;
+    }
+    .prob-btn.active { background: var(--ink); color: var(--paper); }
+    .prob-btn:hover:not(.active) { background: var(--paper-2); }
+
+    /* ── story box ── */
+    .story-box {
+      border: 2.5px solid var(--ink); border-radius: 8px;
+      padding: 13px 16px; background: var(--paper);
+      font-family: 'Patrick Hand', cursive; font-size: 16px; line-height: 1.9;
+      margin-bottom: 12px;
+    }
+    .story-label {
+      font-family: 'Permanent Marker', cursive; font-size: 11px;
+      color: var(--accent); margin-bottom: 5px;
+    }
+    .story-chip-inline {
+      display: inline; font-family: 'JetBrains Mono', monospace;
+      border-bottom: 2.5px solid var(--ink); font-weight: 600; padding: 0 2px;
+    }
+
+    /* ── chip tray ── */
+    .chip-tray {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      padding: 10px 12px; border: 2px dashed var(--ink-soft); border-radius: 8px;
+      margin-bottom: 14px; min-height: 52px;
+    }
+    .chip-tray-label {
+      font-family: 'Permanent Marker', cursive; font-size: 10px;
+      color: var(--ink-soft); flex-basis: 100%; margin-bottom: 2px;
+    }
+    .chip {
+      padding: 7px 16px; border: 2.5px solid var(--ink); border-radius: 20px;
+      background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      cursor: grab; user-select: none; transition: all 0.12s;
+      box-shadow: 2px 2px 0 rgba(29,26,20,0.13);
+    }
+    .chip:hover:not(.used) { transform: translateY(-2px); box-shadow: 3px 4px 0 rgba(29,26,20,0.18); }
+    .chip.dragging { opacity: 0.45; transform: scale(0.95); }
+    .chip.selected { background: var(--highlight); border-color: var(--ink); box-shadow: 3px 4px 0 rgba(29,26,20,0.2); }
+    .chip.used { opacity: 0.35; cursor: default; text-decoration: line-through; text-decoration-color: var(--ink-soft); }
+    .chip[data-var="P"] { border-color: #2a6fb4; color: #2a6fb4; }
+    .chip[data-var="r"] { border-color: #8b4513; color: #8b4513; }
+    .chip[data-var="t"] { border-color: #2a8a4a; color: #2a8a4a; }
+
+    /* ── formula builder ── */
+    .formula-builder {
+      border: 3px solid var(--ink); border-radius: 8px 4px 9px 5px / 5px 9px 4px 8px;
+      padding: 14px 18px; background: var(--paper);
+      margin-bottom: 12px; box-shadow: 3px 3px 0 rgba(29,26,20,0.14);
+    }
+    .formula-builder-label {
+      font-family: 'Permanent Marker', cursive; font-size: 11px;
+      color: var(--accent); margin-bottom: 9px;
+    }
+    .formula-line {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 3px;
+      font-family: 'JetBrains Mono', monospace; font-size: 19px; line-height: 1.5;
+    }
+    .ftext { white-space: nowrap; }
+
+    /* ── slots ── */
+    .slot {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 58px; height: 38px; padding: 0 8px;
+      border: 2.5px dashed var(--ink-soft); border-radius: 7px;
+      background: var(--paper-2); font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; cursor: pointer; transition: all 0.15s; vertical-align: middle;
+    }
+    .slot .slot-hint {
+      font-family: 'Permanent Marker', cursive; font-size: 12px;
+      color: var(--ink-soft);
+    }
+    .slot.drag-over  { background: var(--highlight); border-color: var(--ink); border-style: solid; }
+    .slot.filled     { border-style: solid; }
+    .slot.filled[data-accepts="P"] { border-color: #2a6fb4; background: #e8f0fb; }
+    .slot.filled[data-accepts="r"] { border-color: #8b4513; background: #fdf0e0; }
+    .slot.filled[data-accepts="t"] { border-color: #2a8a4a; background: #e4f4ec; }
+    .slot-val { font-weight: 600; font-size: 14px; }
+    .slot[data-accepts="P"] .slot-val { color: #2a6fb4; }
+    .slot[data-accepts="r"] .slot-val { color: #8b4513; }
+    .slot[data-accepts="t"] .slot-val { color: #2a8a4a; }
+    .slot.exp-slot { height: 28px; min-width: 40px; font-size: 12px; padding: 0 6px; }
+    .slot.exp-slot .slot-hint { font-size: 10px; }
+    .slot.exp-slot .slot-val  { font-size: 12px; }
+
+    /* ── sign toggle ── */
+    .sign-toggle {
+      display: inline-flex; border: 2.5px solid var(--ink); border-radius: 7px;
+      overflow: hidden; vertical-align: middle; margin: 0 3px;
+    }
+    .sign-btn {
+      padding: 4px 13px; border: none; background: var(--paper-2);
+      font-family: 'Permanent Marker', cursive; font-size: 17px; cursor: pointer;
+      transition: all 0.12s; line-height: 1;
+    }
+    .sign-btn.active-plus  { background: #d4edda; color: #2a8a4a; }
+    .sign-btn.active-minus { background: #f8d7da; color: #d94f2a; }
+
+    /* ── n selector ── */
+    .n-selector {
+      display: none; gap: 8px; flex-wrap: wrap; align-items: center;
+      margin-bottom: 12px; padding: 10px 13px;
+      border: 2px solid var(--ink-soft); border-radius: 8px; background: var(--paper-2);
+    }
+    .n-selector.visible { display: flex; }
+    .n-sel-label { font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink-soft); }
+    .n-btn {
+      padding: 5px 14px; border: 2px solid var(--ink-soft); border-radius: 16px;
+      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 13px;
+      cursor: pointer; transition: all 0.12s;
+    }
+    .n-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .n-btn:hover:not(.active) { background: var(--paper-3); }
+    .n-in-formula {
+      font-family: 'JetBrains Mono', monospace; font-size: 16px;
+      color: #555; transition: color 0.2s;
+    }
+    .n-in-formula.set { color: var(--ink); font-weight: 700; }
+
+    /* ── e circle for continuous ── */
+    .e-circle {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 50%;
+      background: #2a8a4a; color: white;
+      font-family: 'Permanent Marker', cursive; font-size: 19px;
+      border: 2.5px solid var(--ink); box-shadow: 2px 2px 0 rgba(29,26,20,0.18);
+      vertical-align: middle; margin: 0 2px; flex-shrink: 0;
+    }
+
+    /* ── percent → decimal box ── */
+    .pct-convert {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 10px 14px; border: 2px solid #8b4513; border-radius: 8px;
+      background: #fdf0e0; margin-bottom: 12px;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease; pointer-events: none;
+    }
+    .pct-convert.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .pct-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: #8b4513; }
+    .pct-arrow { font-size: 18px; color: #8b4513; }
+    .pct-val { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #8b4513; }
+    .pct-val.result { font-weight: 700; }
+
+    /* ── exact + answer panel ── */
+    .exact-panel {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px;
+      opacity: 0; transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease; pointer-events: none;
+    }
+    .exact-panel.visible { opacity: 1; transform: none; pointer-events: auto; }
+    .exact-box {
+      flex: 2; min-width: 200px;
+      border: 3px dashed #8b4513; border-radius: 8px;
+      padding: 11px 15px; background: #fdf0e0;
+    }
+    .exact-box-label {
+      font-family: 'Permanent Marker', cursive; font-size: 11px; color: #8b4513; margin-bottom: 5px;
+    }
+    .exact-row {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      color: #8b4513; margin-bottom: 3px; line-height: 1.5;
+    }
+    .exact-row.simplified { font-size: 16px; font-weight: 700; }
+    .answer-box {
+      flex: 1; min-width: 130px;
+      border: 3px solid #2a8a4a; border-radius: 8px;
+      padding: 11px 15px; background: #e4f4ec; text-align: center;
+    }
+    .answer-box-label {
+      font-family: 'Permanent Marker', cursive; font-size: 11px; color: #2a8a4a; margin-bottom: 4px;
+    }
+    .answer-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 24px;
+      font-weight: 700; color: #2a8a4a;
+    }
+
+    /* ── controls ── */
+    .controls-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+    .btn-primary {
+      padding: 8px 22px; border: 2.5px solid var(--ink); border-radius: 6px;
+      background: var(--accent); color: #fff; font-family: 'Permanent Marker', cursive;
+      font-size: 13px; cursor: pointer; transition: opacity .15s;
+    }
+    .btn-primary:hover:not(:disabled) { opacity: 0.85; }
+    .btn-primary:disabled { background: var(--paper-2); color: var(--ink-soft); border-color: var(--ink-soft); cursor: default; }
+    .btn-ghost {
+      padding: 6px 15px; border: 2px solid var(--ink-soft); border-radius: 6px;
+      background: transparent; color: var(--ink-soft); font-family: 'Permanent Marker', cursive;
+      font-size: 12px; cursor: pointer;
+    }
+    .btn-ghost:hover { background: var(--paper-2); }
+    .hint-text {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft);
+    }
+
+    /* ── shake ── */
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-5px); }
+      40%,80%  { transform: translateX(5px); }
+    }
+    .shake { animation: shake 0.35s ease; }
+
+    /* ── mfr fraction ── */
+    .mfr {
+      display: inline-flex; flex-direction: column; align-items: center;
+      font-size: 0.72em; vertical-align: middle; margin: 0 2px; line-height: 1.1;
+    }
+    .mfr .mn { border-bottom: 1.5px solid currentColor; padding: 0 4px 1px; }
+    .mfr .md { padding: 1px 4px 0; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u5.html">← U5</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main" style="border-right:none; max-width:820px;">
+      <div class="tool-breadcrumb">
+        <a href="../u5.html">← U5 · Logs &amp; Exponentials</a> &nbsp;·&nbsp; D3
+      </div>
+      <div class="tool-title f-display">Exponential Model Builder</div>
+      <div class="tool-tagline f-hand">Find the keywords → pick the formula → drag the numbers in → keep exact form before rounding.</div>
+
+      <!-- ── FORMULA TYPE DECISION CARDS ── -->
+      <div class="formula-tabs" id="formula-tabs">
+        <div class="formula-tab" data-type="simple">
+          <div class="ftab-name">Simple Growth / Decay</div>
+          <div class="ftab-formula">A = P(1 ± r)<sup style="font-size:0.75em;">t</sup></div>
+          <div class="ftab-kw">Keywords: grows by, depreciates — no "compounded"</div>
+        </div>
+        <div class="formula-tab" data-type="compound">
+          <div class="ftab-name">Compound Interest</div>
+          <div class="ftab-formula">A = P(1 + r/n)<sup style="font-size:0.75em;">nt</sup></div>
+          <div class="ftab-kw">Keywords: compounded quarterly / monthly / weekly / daily</div>
+        </div>
+        <div class="formula-tab" data-type="continuous">
+          <div class="ftab-name">Continuous Compounding</div>
+          <div class="ftab-formula">A = Pe<sup style="font-size:0.75em;">rt</sup></div>
+          <div class="ftab-kw">Keywords: continuously, continuous growth/compounding</div>
+        </div>
+      </div>
+
+      <!-- ── PROBLEM PICKER ── -->
+      <div class="problem-picker" id="prob-picker"></div>
+
+      <!-- ── STORY BOX ── -->
+      <div class="story-box">
+        <div class="story-label">PROBLEM</div>
+        <div id="story-text"></div>
+      </div>
+
+      <!-- ── CHIP TRAY ── -->
+      <div class="chip-tray" id="chip-tray">
+        <div class="chip-tray-label">DRAG (or click) THESE NUMBERS INTO THE FORMULA SLOTS BELOW</div>
+      </div>
+
+      <!-- ── N SELECTOR ── -->
+      <div class="n-selector" id="n-selector">
+        <span class="n-sel-label">n = compounding frequency:</span>
+        <button class="n-btn" data-n="1">annually (1)</button>
+        <button class="n-btn" data-n="4">quarterly (4)</button>
+        <button class="n-btn" data-n="12">monthly (12)</button>
+        <button class="n-btn" data-n="52">weekly (52)</button>
+        <button class="n-btn" data-n="365">daily (365)</button>
+      </div>
+
+      <!-- ── FORMULA BUILDER ── -->
+      <div class="formula-builder">
+        <div class="formula-builder-label">FILL IN THE FORMULA — drag chips into the dashed boxes</div>
+        <div class="formula-line" id="formula-line"></div>
+      </div>
+
+      <!-- ── PERCENT → DECIMAL ── -->
+      <div class="pct-convert" id="pct-convert">
+        <span class="pct-label">% → DECIMAL</span>
+        <span class="pct-val" id="pct-from"></span>
+        <span class="pct-arrow">÷ 100 =</span>
+        <span class="pct-val result" id="pct-to"></span>
+        <span style="font-family:'Patrick Hand',cursive; font-size:13px; color:#8b4513; margin-left:4px;">← always convert before plugging in!</span>
+      </div>
+
+      <!-- ── EXACT + ANSWER ── -->
+      <div class="exact-panel" id="exact-panel">
+        <div class="exact-box">
+          <div class="exact-box-label">UNROUNDED EXPRESSION — write this before reaching for the calculator</div>
+          <div class="exact-row" id="exact-plug"></div>
+          <div class="exact-row simplified" id="exact-simp"></div>
+        </div>
+        <div class="answer-box">
+          <div class="answer-box-label">A ≈</div>
+          <div class="answer-val" id="answer-val"></div>
+        </div>
+      </div>
+
+      <!-- ── CONTROLS ── -->
+      <div class="controls-row">
+        <button class="btn-primary" id="calc-btn" disabled>Calculate →</button>
+        <button class="btn-ghost" id="reset-btn">Reset</button>
+        <span class="hint-text" id="hint-text"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  /* ===== PROBLEM DATA ===== */
+  const PROBLEMS = [
+    // ── simple growth/decay ──
+    {
+      id:'sg-car', label:'Car Depreciation', formulaType:'simple', sign:'-',
+      story:[
+        {t:'text', s:'A car worth '},
+        {t:'chip', id:'P', display:'$25,000', value:25000},
+        {t:'text', s:' '},
+        {t:'kw', s:'depreciates', cls:'kw-sign-minus'},
+        {t:'text', s:' at '},
+        {t:'chip', id:'r', display:'15%', value:15, isPct:true},
+        {t:'text', s:' per year. What is the car worth after '},
+        {t:'chip', id:'t', display:'4 years', value:4},
+        {t:'text', s:'?'},
+      ],
+    },
+    {
+      id:'sg-pop', label:'Population Growth', formulaType:'simple', sign:'+',
+      story:[
+        {t:'text', s:'A city of '},
+        {t:'chip', id:'P', display:'80,000', value:80000},
+        {t:'text', s:' people '},
+        {t:'kw', s:'grows', cls:'kw-sign-plus'},
+        {t:'text', s:' at '},
+        {t:'chip', id:'r', display:'3%', value:3, isPct:true},
+        {t:'text', s:' per year. What is the population after '},
+        {t:'chip', id:'t', display:'5 years', value:5},
+        {t:'text', s:'?'},
+      ],
+    },
+    // ── compound ──
+    {
+      id:'ci-qtr', label:'Quarterly Interest', formulaType:'compound', sign:'+', nValue:4, nKeyword:'quarterly',
+      story:[
+        {t:'text', s:'You invest '},
+        {t:'chip', id:'P', display:'$1,000', value:1000},
+        {t:'text', s:' at '},
+        {t:'chip', id:'r', display:'8%', value:8, isPct:true},
+        {t:'text', s:' interest '},
+        {t:'kw', s:'compounded', cls:'kw-formula'},
+        {t:'text', s:' '},
+        {t:'kw', s:'quarterly', cls:'kw-formula'},
+        {t:'text', s:' for '},
+        {t:'chip', id:'t', display:'6 years', value:6},
+        {t:'text', s:'. What is the account balance?'},
+      ],
+    },
+    {
+      id:'ci-mo', label:'Monthly Savings', formulaType:'compound', sign:'+', nValue:12, nKeyword:'monthly',
+      story:[
+        {t:'text', s:'A '},
+        {t:'chip', id:'P', display:'$5,000', value:5000},
+        {t:'text', s:' savings account '},
+        {t:'kw', s:'earns', cls:'kw-sign-plus'},
+        {t:'text', s:' '},
+        {t:'chip', id:'r', display:'3.5%', value:3.5, isPct:true},
+        {t:'text', s:' interest '},
+        {t:'kw', s:'compounded', cls:'kw-formula'},
+        {t:'text', s:' '},
+        {t:'kw', s:'monthly', cls:'kw-formula'},
+        {t:'text', s:' for '},
+        {t:'chip', id:'t', display:'2 years', value:2},
+        {t:'text', s:'. Find the final amount.'},
+      ],
+    },
+    // ── continuous ──
+    {
+      id:'ct-bact', label:'Bacteria Growth', formulaType:'continuous', sign:'+',
+      story:[
+        {t:'text', s:'A culture starts with '},
+        {t:'chip', id:'P', display:'200', value:200},
+        {t:'text', s:' bacteria and '},
+        {t:'kw', s:'grows continuously', cls:'kw-formula'},
+        {t:'text', s:' at '},
+        {t:'chip', id:'r', display:'12%', value:12, isPct:true},
+        {t:'text', s:' per hour. How many bacteria after '},
+        {t:'chip', id:'t', display:'5 hours', value:5},
+        {t:'text', s:'?'},
+      ],
+    },
+    {
+      id:'ct-inv', label:'Continuous Investment', formulaType:'continuous', sign:'+',
+      story:[
+        {t:'chip', id:'P', display:'$2,500', value:2500},
+        {t:'text', s:' is invested at '},
+        {t:'chip', id:'r', display:'5%', value:5, isPct:true},
+        {t:'text', s:' '},
+        {t:'kw', s:'continuously compounded', cls:'kw-formula'},
+        {t:'text', s:' for '},
+        {t:'chip', id:'t', display:'10 years', value:10},
+        {t:'text', s:'. What is the final value?'},
+      ],
+    },
+  ];
+
+  /* ===== STATE ===== */
+  let prob = PROBLEMS[0];
+  let slots = { P: null, r: null, t: null };
+  let currentSign = '+';
+  let currentN = null;
+  let draggedChip = null;
+  let selectedChip = null;
+
+  /* ===== INIT ===== */
+  buildPicker();
+  loadProblem(0);
+
+  /* ===== PICKER ===== */
+  function buildPicker() {
+    const el = document.getElementById('prob-picker');
+    PROBLEMS.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'prob-btn' + (i === 0 ? ' active' : '');
+      btn.textContent = p.label;
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.prob-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        loadProblem(i);
+      });
+      el.appendChild(btn);
+    });
+  }
+
+  /* ===== LOAD PROBLEM ===== */
+  function loadProblem(idx) {
+    prob = PROBLEMS[idx];
+    slots = { P: null, r: null, t: null };
+    currentSign = prob.sign;
+    currentN = prob.nValue || null;
+    draggedChip = null;
+    selectedChip = null;
+
+    detectFormula();
+    renderStory();
+    renderChipTray();
+    renderNSelector();
+    renderFormula();
+    hidePctConvert();
+    hideExactPanel();
+    updateCalcBtn();
+  }
+
+  /* ===== FORMULA TAB HIGHLIGHT ===== */
+  function detectFormula() {
+    document.querySelectorAll('.formula-tab').forEach(tab => {
+      tab.classList.toggle('detected', tab.dataset.type === prob.formulaType);
+    });
+  }
+
+  /* ===== STORY ===== */
+  function renderStory() {
+    const el = document.getElementById('story-text');
+    el.innerHTML = '';
+    prob.story.forEach(seg => {
+      if (seg.t === 'text') {
+        el.appendChild(document.createTextNode(seg.s));
+      } else if (seg.t === 'chip') {
+        const sp = document.createElement('span');
+        sp.className = 'story-chip-inline';
+        sp.textContent = seg.display;
+        el.appendChild(sp);
+      } else if (seg.t === 'kw') {
+        const sp = document.createElement('span');
+        sp.className = seg.cls;
+        sp.textContent = seg.s;
+        el.appendChild(sp);
+      }
+    });
+  }
+
+  /* ===== CHIP TRAY ===== */
+  function renderChipTray() {
+    const tray = document.getElementById('chip-tray');
+    tray.querySelectorAll('.chip').forEach(c => c.remove());
+    prob.story.filter(s => s.t === 'chip').forEach(seg => {
+      const chip = document.createElement('div');
+      chip.className = 'chip';
+      chip.dataset.var = seg.id;
+      chip.dataset.value = seg.value;
+      chip.dataset.display = seg.display;
+      chip.dataset.isPct = seg.isPct ? 'true' : 'false';
+      chip.draggable = true;
+      chip.textContent = seg.display;
+      chip.addEventListener('dragstart', e => {
+        draggedChip = chip;
+        chip.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        clearChipSelection();
+      });
+      chip.addEventListener('dragend', () => {
+        draggedChip = null;
+        chip.classList.remove('dragging');
+      });
+      chip.addEventListener('click', () => {
+        if (chip.classList.contains('used')) return;
+        if (selectedChip === chip) {
+          clearChipSelection();
+        } else {
+          clearChipSelection();
+          selectedChip = chip;
+          chip.classList.add('selected');
+          document.getElementById('hint-text').textContent = 'Now click a formula slot to place ' + seg.display;
+        }
+      });
+      tray.appendChild(chip);
+    });
+  }
+
+  function clearChipSelection() {
+    if (selectedChip) { selectedChip.classList.remove('selected'); selectedChip = null; }
+    document.getElementById('hint-text').textContent = '';
+  }
+
+  /* ===== N SELECTOR ===== */
+  function renderNSelector() {
+    const sel = document.getElementById('n-selector');
+    if (prob.formulaType !== 'compound') { sel.classList.remove('visible'); return; }
+    sel.classList.add('visible');
+    sel.querySelectorAll('.n-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.n) === currentN);
+      btn.onclick = () => {
+        currentN = parseInt(btn.dataset.n);
+        sel.querySelectorAll('.n-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateNInFormula();
+        updateCalcBtn();
+      };
+    });
+  }
+
+  function updateNInFormula() {
+    document.querySelectorAll('.n-in-formula').forEach(el => {
+      el.textContent = currentN !== null ? currentN : 'n';
+      el.classList.toggle('set', currentN !== null);
+    });
+    updateCalcBtn();
+  }
+
+  /* ===== FORMULA RENDER ===== */
+  function renderFormula() {
+    const line = document.getElementById('formula-line');
+    line.innerHTML = '';
+
+    const ft = prob.formulaType;
+    const add = el => line.appendChild(el);
+    const txt = s => { const sp = document.createElement('span'); sp.className = 'ftext'; sp.innerHTML = s; return sp; };
+
+    const sup = (children) => {
+      const el = document.createElement('sup');
+      el.style.cssText = 'vertical-align:super; font-size:0.72em; line-height:1;';
+      children.forEach(c => {
+        if (typeof c === 'string') el.appendChild(document.createTextNode(c));
+        else el.appendChild(c);
+      });
+      return el;
+    };
+
+    if (ft === 'simple') {
+      const tSlot = makeSlot('t'); tSlot.classList.add('exp-slot');
+      add(txt('<span class="carg">A</span> = '));
+      add(makeSlot('P'));
+      add(txt(' · (1 '));
+      add(makeSignToggle());
+      add(makeSlot('r'));
+      add(txt(')'));
+      add(sup([tSlot]));
+    } else if (ft === 'compound') {
+      const tSlot = makeSlot('t'); tSlot.classList.add('exp-slot');
+      const nd1 = document.createElement('span');
+      nd1.className = 'n-in-formula' + (currentN !== null ? ' set' : '');
+      nd1.textContent = currentN !== null ? String(currentN) : 'n';
+      const nd2 = document.createElement('span');
+      nd2.className = 'n-in-formula' + (currentN !== null ? ' set' : '');
+      nd2.textContent = currentN !== null ? String(currentN) : 'n';
+      add(txt('<span class="carg">A</span> = '));
+      add(makeSlot('P'));
+      add(txt(' · (1 + '));
+      add(makeSlot('r'));
+      add(txt(' / '));
+      add(nd1);
+      add(txt(')'));
+      add(sup(['(', nd2, '·', tSlot, ')']));
+    } else { // continuous
+      const rSlot = makeSlot('r'); rSlot.classList.add('exp-slot');
+      const tSlot = makeSlot('t'); tSlot.classList.add('exp-slot');
+      const eCircle = document.createElement('span');
+      eCircle.className = 'e-circle';
+      eCircle.title = 'Euler\'s number ≈ 2.71828';
+      eCircle.textContent = 'e';
+      add(txt('<span class="carg">A</span> = '));
+      add(makeSlot('P'));
+      add(txt(' · '));
+      add(eCircle);
+      add(sup(['(', rSlot, '·', tSlot, ')']));
+    }
+  }
+
+  function makeSlot(accepts) {
+    const slot = document.createElement('span');
+    slot.className = 'slot';
+    slot.dataset.accepts = accepts;
+    slot.innerHTML = `<span class="slot-hint">${accepts}</span>`;
+
+    slot.addEventListener('dragover', e => {
+      if (draggedChip && draggedChip.dataset.var === accepts && !slot.classList.contains('filled')) {
+        e.preventDefault();
+        slot.classList.add('drag-over');
+      }
+    });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      if (draggedChip && draggedChip.dataset.var === accepts && !slot.classList.contains('filled')) {
+        fillSlot(slot, draggedChip);
+      }
+    });
+    slot.addEventListener('click', () => {
+      if (slot.classList.contains('filled')) return;
+      if (selectedChip && selectedChip.dataset.var === accepts) {
+        fillSlot(slot, selectedChip);
+        clearChipSelection();
+      } else if (selectedChip) {
+        slot.classList.add('shake');
+        setTimeout(() => slot.classList.remove('shake'), 400);
+      }
+    });
+    return slot;
+  }
+
+  function makeSignToggle() {
+    const wrap = document.createElement('span');
+    wrap.className = 'sign-toggle';
+    const plus = document.createElement('button');
+    plus.className = 'sign-btn' + (currentSign === '+' ? ' active-plus' : '');
+    plus.textContent = '+';
+    const minus = document.createElement('button');
+    minus.className = 'sign-btn' + (currentSign === '-' ? ' active-minus' : '');
+    minus.textContent = '−';
+    plus.addEventListener('click', () => {
+      currentSign = '+';
+      plus.className = 'sign-btn active-plus';
+      minus.className = 'sign-btn';
+    });
+    minus.addEventListener('click', () => {
+      currentSign = '-';
+      plus.className = 'sign-btn';
+      minus.className = 'sign-btn active-minus';
+    });
+    wrap.appendChild(plus);
+    wrap.appendChild(minus);
+    return wrap;
+  }
+
+  /* ===== FILL SLOT ===== */
+  function fillSlot(slot, chip) {
+    const varId = chip.dataset.var;
+    const value = parseFloat(chip.dataset.value);
+    const display = chip.dataset.display;
+    const isPct = chip.dataset.isPct === 'true';
+
+    slots[varId] = value;
+    slot.classList.add('filled');
+    slot.innerHTML = `<span class="slot-val">${display}</span>`;
+
+    chip.classList.add('used');
+    chip.draggable = false;
+
+    if (varId === 'r' && isPct) showPctConvert(value);
+    updateCalcBtn();
+  }
+
+  /* ===== PCT CONVERT ===== */
+  function showPctConvert(pct) {
+    document.getElementById('pct-from').textContent = pct + '%';
+    document.getElementById('pct-to').textContent = (pct / 100);
+    const box = document.getElementById('pct-convert');
+    requestAnimationFrame(() => requestAnimationFrame(() => box.classList.add('visible')));
+  }
+
+  function hidePctConvert() {
+    document.getElementById('pct-convert').classList.remove('visible');
+  }
+
+  /* ===== CALC BTN GATE ===== */
+  function updateCalcBtn() {
+    const ft = prob.formulaType;
+    const allFilled = slots.P !== null && slots.r !== null && slots.t !== null;
+    const nReady = ft !== 'compound' || currentN !== null;
+    const ready = allFilled && nReady;
+    document.getElementById('calc-btn').disabled = !ready;
+    if (!ready && allFilled && !nReady) {
+      document.getElementById('hint-text').textContent = 'Select a compounding frequency (n) above.';
+    } else if (!ready) {
+      const missing = ['P','r','t'].filter(k => slots[k] === null);
+      if (missing.length && !selectedChip) {
+        document.getElementById('hint-text').textContent = 'Still need: ' + missing.join(', ');
+      }
+    } else {
+      document.getElementById('hint-text').textContent = 'All values placed — ready to calculate!';
+    }
+  }
+
+  /* ===== CALCULATE ===== */
+  document.getElementById('calc-btn').addEventListener('click', () => {
+    const P = slots.P;
+    const r = slots.r / 100;
+    const t = slots.t;
+    const n = currentN;
+    const ft = prob.formulaType;
+    const sign = currentSign;
+
+    let A, plugLine, simpLine;
+
+    if (ft === 'simple') {
+      const base = sign === '+' ? (1 + r) : (1 - r);
+      A = P * Math.pow(base, t);
+      const signStr = sign === '+' ? '+' : '−';
+      plugLine = `${fmtN(P)} · (1 ${signStr} ${r})^${t}`;
+      simpLine = `${fmtN(P)} · (${base})^${t}`;
+    } else if (ft === 'compound') {
+      const base = 1 + r / n;
+      const exp = n * t;
+      A = P * Math.pow(base, exp);
+      plugLine = `${fmtN(P)} · (1 + ${r}/${n})^(${n}·${t})`;
+      simpLine = `${fmtN(P)} · (${+base.toFixed(6)})^${exp}`;
+    } else {
+      const exponent = r * t;
+      A = P * Math.exp(exponent);
+      plugLine = `${fmtN(P)} · e^(${r}·${t})`;
+      simpLine = `${fmtN(P)} · e^${+exponent.toFixed(6)}`;
+    }
+
+    document.getElementById('exact-plug').textContent = plugLine;
+    document.getElementById('exact-simp').textContent = simpLine;
+    document.getElementById('answer-val').textContent = fmtA(A);
+
+    const panel = document.getElementById('exact-panel');
+    requestAnimationFrame(() => requestAnimationFrame(() => panel.classList.add('visible')));
+  });
+
+  /* ===== RESET ===== */
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    const idx = [...document.querySelectorAll('.prob-btn')].findIndex(b => b.classList.contains('active'));
+    loadProblem(idx >= 0 ? idx : 0);
+  });
+
+  /* ===== HIDE EXACT ===== */
+  function hideExactPanel() {
+    document.getElementById('exact-panel').classList.remove('visible');
+    document.getElementById('exact-plug').textContent = '';
+    document.getElementById('exact-simp').textContent = '';
+    document.getElementById('answer-val').textContent = '';
+  }
+
+  /* ===== FORMAT HELPERS ===== */
+  function fmtN(n) {
+    return n.toLocaleString('en-US');
+  }
+  function fmtA(n) {
+    const pChip = prob.story.find(s => s.t === 'chip' && s.id === 'P');
+    const isMoney = pChip && pChip.display.startsWith('$');
+    const num = n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    return isMoney ? '$' + num : num;
+  }
+  </script>
+</body>
+</html>
