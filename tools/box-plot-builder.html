@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Box Plot Builder — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* data input */
+    .data-input-row {
+      display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap;
+    }
+    #data-entry {
+      flex: 1; min-width: 200px; font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; padding: 8px 10px; border: 2px solid var(--ink-2);
+      border-radius: 6px; background: var(--paper); color: var(--ink);
+      resize: none; height: 42px; line-height: 1.4;
+    }
+    #data-entry:focus { border-color: var(--accent); outline: none; }
+    .preset-row {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;
+    }
+    .preset-btn {
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      padding: 4px 10px; border: 1.5px solid var(--ink-2);
+      border-radius: 12px; background: var(--paper-2);
+      cursor: pointer; transition: all 0.15s; color: var(--ink);
+    }
+    .preset-btn:hover { background: var(--highlight); border-color: var(--accent); }
+    .preset-btn.active { background: var(--highlight); border-color: var(--accent); color: var(--accent); font-weight: bold; }
+
+    /* view toggle */
+    .view-toggle { display: flex; gap: 6px; align-items: center; }
+    .view-btn {
+      padding: 5px 14px; border: 2px solid var(--ink-2); border-radius: 6px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px; cursor: pointer;
+      background: var(--paper-2); color: var(--ink); transition: all 0.15s;
+    }
+    .view-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+    /* canvas wrapper */
+    .canvas-wrapper {
+      position: relative; background: #1d1a14; border-radius: 8px;
+      overflow: hidden; margin: 8px 0;
+    }
+    #plot-canvas { display: block; width: 100%; }
+
+    /* stats grid */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 6px; margin-top: 6px;
+    }
+    .stat-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 6px 10px;
+      background: var(--paper); text-align: center;
+    }
+    .stat-card.q-min  { border-color: #888; }
+    .stat-card.q-one  { border-color: #2a6fb4; background: #dde9f6; }
+    .stat-card.q-med  { border-color: #c8a000; background: var(--highlight); }
+    .stat-card.q-thr  { border-color: #2a8a4a; background: #d4f0dc; }
+    .stat-card.q-max  { border-color: #888; }
+    .stat-card.q-iqr  { border-color: var(--accent); background: #fdecea; }
+    .stat-card.q-mean { border-color: #7a2a8a; background: #f0e4fa; }
+    .stat-card.q-out  { border-color: #c8a000; background: #fffbe6; }
+
+    .stat-lbl {
+      font-family: 'Permanent Marker', cursive; font-size: 10px;
+      color: var(--ink-soft); margin-bottom: 2px;
+    }
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 16px;
+      font-weight: bold; color: var(--ink);
+    }
+    .stat-val.big { font-size: 14px; }
+
+    /* fence display */
+    .fence-row {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      color: var(--ink-soft); margin-top: 4px;
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .fence-val { color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+
+    /* skew chip */
+    .skew-chip {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      border: 1.5px solid var(--ink-2); background: var(--paper-2);
+      margin-left: 6px;
+    }
+    .skew-right { border-color: #d94f2a; color: #d94f2a; background: #fdecea; }
+    .skew-left  { border-color: #2a6fb4; color: #2a6fb4; background: #dde9f6; }
+    .skew-sym   { border-color: #2a8a4a; color: #2a8a4a; background: #d4f0dc; }
+
+    /* error message */
+    .data-error {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      color: var(--redline); margin-top: 4px; display: none;
+    }
+
+    /* sorted data strip */
+    .sorted-strip {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2);
+      border-radius: 6px; padding: 6px 10px; margin-top: 6px;
+      word-break: break-all; line-height: 1.7; color: var(--ink-soft);
+      max-height: 80px; overflow-y: auto;
+    }
+    .sorted-strip .d-min, .sorted-strip .d-max { color: #888; font-weight: bold; }
+    .sorted-strip .d-q1  { color: #2a6fb4; font-weight: bold; }
+    .sorted-strip .d-med { color: #c8a000; font-weight: bold; }
+    .sorted-strip .d-q3  { color: #2a8a4a; font-weight: bold; }
+    .sorted-strip .d-out { color: var(--redline); font-weight: bold; text-decoration: underline; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../index.html">← all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../index.html">← all tools</a> &nbsp;·&nbsp; U9 · Statistics</div>
+      <div class="tool-title f-display">Box Plot Builder</div>
+      <div class="tool-tagline f-hand">Enter data — see the 5-number summary, IQR, and outlier fences appear.</div>
+
+      <!-- Data input -->
+      <div style="margin-top:10px;">
+        <div class="data-input-row">
+          <textarea id="data-entry" placeholder="type numbers separated by commas…" oninput="parseAndDraw()">12, 15, 14, 10, 18, 16, 20, 14, 13, 19, 17, 15, 11, 22, 9</textarea>
+          <button class="btn" onclick="parseAndDraw()" style="align-self:stretch;">draw ▸</button>
+        </div>
+        <div class="data-error" id="data-error">⚠ Enter at least 4 numbers separated by commas.</div>
+        <div class="preset-row">
+          <span class="f-marker" style="font-size:11px; align-self:center;">PRESETS →</span>
+          <button class="preset-btn active" id="pre-0" onclick="loadPreset(0)">class scores</button>
+          <button class="preset-btn" id="pre-1" onclick="loadPreset(1)">salary data</button>
+          <button class="preset-btn" id="pre-2" onclick="loadPreset(2)">right skew</button>
+          <button class="preset-btn" id="pre-3" onclick="loadPreset(3)">with outlier</button>
+          <button class="preset-btn" id="pre-4" onclick="loadPreset(4)">symmetric</button>
+        </div>
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper" style="height:160px;" id="canvas-wrap">
+        <canvas id="plot-canvas"></canvas>
+      </div>
+
+      <!-- View toggle -->
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div class="view-toggle">
+          <button class="view-btn active" id="vbtn-box" onclick="setView('box')">☰ box plot</button>
+          <button class="view-btn" id="vbtn-dot" onclick="setView('dot')">• dot plot</button>
+        </div>
+        <div id="skew-display" style="font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft);"></div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="stats-grid" id="stats-grid"></div>
+
+      <!-- Fence display -->
+      <div class="fence-row" id="fence-row"></div>
+
+      <!-- Sorted strip -->
+      <div class="sorted-strip" id="sorted-strip"></div>
+
+      <!-- How to use -->
+      <div class="sk-box" style="margin-top:10px; border-style:dashed;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">HOW TO USE</div>
+        <div class="f-hand" style="font-size:12px; line-height:1.7; color:var(--ink-2);">
+          1. Type numbers separated by commas — or pick a preset.<br>
+          2. The box plot updates instantly. Colored labels = quartile markers.<br>
+          3. Red dashed lines = outlier fences. Red dots = outliers.<br>
+          4. Switch to dot plot to see every individual value.
+        </div>
+      </div>
+
+      <!-- Try This -->
+      <div style="margin-top:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">·· TRY THIS</div>
+        <div class="sk-box try-this-item" style="margin-bottom:6px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;"> Load "salary data." The median and mean are different — why? Which one better represents a typical worker?</span>
+        </div>
+        <div class="sk-box try-this-item" style="margin-bottom:6px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;"> Load "with outlier." What are the fence values? Is 100 an outlier by the rule?</span>
+        </div>
+        <div class="sk-box try-this-item" style="margin-bottom:6px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;"> Type your own dataset. Can you make a dataset with no outliers but a strong right skew?</span>
+        </div>
+        <div class="sk-box try-this-item">
+          <span class="q-num f-display" style="color:var(--accent);">Q4.</span>
+          <span class="f-hand" style="font-size:13px;"> Compare box plot and dot plot view for "right skew." Which one makes the shape easier to see?</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="margin-bottom:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE 5-NUMBER SUMMARY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.9; color:var(--ink-2);">
+          <span style="color:#888; font-weight:bold;">Min</span> → smallest value<br>
+          <span style="color:#2a6fb4; font-weight:bold;">Q1</span> → median of lower half<br>
+          <span style="color:#c8a000; font-weight:bold;">Median</span> → middle of all data<br>
+          <span style="color:#2a8a4a; font-weight:bold;">Q3</span> → median of upper half<br>
+          <span style="color:#888; font-weight:bold;">Max</span> → largest value
+        </div>
+      </div>
+
+      <div class="sk-box" style="margin-bottom:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">IQR &amp; OUTLIER FENCES</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2; color:var(--ink);">
+          IQR = Q3 − Q1<br>
+          <span style="color:var(--redline);">low fence = Q1 − 1.5·IQR</span><br>
+          <span style="color:var(--redline);">high fence = Q3 + 1.5·IQR</span>
+        </div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:6px;">
+          Any value outside the fences is an <em>outlier</em> — plotted as a separate dot, not connected to the whisker.
+        </div>
+      </div>
+
+      <div class="sk-box" style="margin-bottom:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">MEAN vs MEDIAN</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <strong>Median</strong> is resistant to outliers — one extreme value barely moves it.<br><br>
+          <strong>Mean</strong> gets pulled toward the tail.<br><br>
+          If mean &gt; median → <span style="color:#d94f2a;">skewed right</span> (tail pulls right).<br>
+          If mean &lt; median → <span style="color:#2a6fb4;">skewed left</span>.
+        </div>
+      </div>
+
+      <div class="sk-box">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">HOW TO READ THE PLOT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          The <strong>box</strong> spans Q1 → Q3 (the middle 50%).<br>
+          The <strong>line</strong> inside is the median.<br>
+          <strong>Whiskers</strong> reach to the most extreme non-outlier.<br>
+          <span style="color:var(--redline);">Red dots</span> = outliers (beyond the fences).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRESETS = [
+      { label: 'class scores',  data: '12, 15, 14, 10, 18, 16, 20, 14, 13, 19, 17, 15, 11, 22, 9' },
+      { label: 'salary data',   data: '42, 45, 47, 43, 46, 44, 48, 50, 44, 43, 45, 95, 46' },
+      { label: 'right skew',    data: '1, 2, 2, 3, 3, 3, 4, 4, 5, 6, 8, 12, 18, 24' },
+      { label: 'with outlier',  data: '55, 60, 62, 63, 65, 66, 67, 68, 70, 72, 74, 75, 100' },
+      { label: 'symmetric',     data: '10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30' },
+    ];
+
+    let currentView = 'box';
+    let currentPreset = 0;
+
+    function loadPreset(i) {
+      currentPreset = i;
+      document.querySelectorAll('.preset-btn').forEach((b, j) => b.classList.toggle('active', j === i));
+      document.getElementById('data-entry').value = PRESETS[i].data;
+      parseAndDraw();
+    }
+
+    function setView(v) {
+      currentView = v;
+      document.getElementById('vbtn-box').classList.toggle('active', v === 'box');
+      document.getElementById('vbtn-dot').classList.toggle('active', v === 'dot');
+      parseAndDraw();
+    }
+
+    // --- Statistics ---
+    function median(arr) {
+      const n = arr.length;
+      if (n % 2 === 1) return arr[Math.floor(n / 2)];
+      return (arr[n/2 - 1] + arr[n/2]) / 2;
+    }
+
+    function computeStats(sorted) {
+      const n = sorted.length;
+      const med = median(sorted);
+      const half = Math.floor(n / 2);
+      const lower = sorted.slice(0, half);
+      const upper = n % 2 === 0 ? sorted.slice(half) : sorted.slice(half + 1);
+      const q1 = median(lower);
+      const q3 = median(upper);
+      const iqr = q3 - q1;
+      const lowFence = q1 - 1.5 * iqr;
+      const highFence = q3 + 1.5 * iqr;
+      const outliers = sorted.filter(v => v < lowFence || v > highFence);
+      const nonOut = sorted.filter(v => v >= lowFence && v <= highFence);
+      const whiskerLow = nonOut.length ? Math.min(...nonOut) : sorted[0];
+      const whiskerHigh = nonOut.length ? Math.max(...nonOut) : sorted[n-1];
+      const mean = sorted.reduce((a, b) => a + b, 0) / n;
+      // mode
+      const freq = {};
+      sorted.forEach(v => freq[v] = (freq[v] || 0) + 1);
+      const maxF = Math.max(...Object.values(freq));
+      const modes = maxF > 1 ? Object.keys(freq).filter(k => freq[k] === maxF).map(Number) : [];
+      return { med, q1, q3, iqr, lowFence, highFence, outliers, whiskerLow, whiskerHigh,
+               min: sorted[0], max: sorted[n-1], mean, modes };
+    }
+
+    function fmt(n) {
+      return Number.isInteger(n) ? String(n) : n.toFixed(1);
+    }
+
+    // --- Parse & draw ---
+    function parseAndDraw() {
+      const raw = document.getElementById('data-entry').value;
+      const nums = raw.split(/[\s,]+/).map(s => parseFloat(s)).filter(v => !isNaN(v));
+      const errEl = document.getElementById('data-error');
+      if (nums.length < 4) {
+        errEl.style.display = 'block';
+        return;
+      }
+      errEl.style.display = 'none';
+      const sorted = [...nums].sort((a, b) => a - b);
+      const s = computeStats(sorted);
+      renderStats(s, nums.length);
+      renderSortedStrip(sorted, s);
+      drawPlot(sorted, s);
+    }
+
+    function renderStats(s, n) {
+      const grid = document.getElementById('stats-grid');
+      const cards = [
+        { lbl: 'MIN',    val: fmt(s.min),    cls: 'q-min' },
+        { lbl: 'Q1',     val: fmt(s.q1),     cls: 'q-one' },
+        { lbl: 'MEDIAN', val: fmt(s.med),    cls: 'q-med' },
+        { lbl: 'Q3',     val: fmt(s.q3),     cls: 'q-thr' },
+        { lbl: 'MAX',    val: fmt(s.max),    cls: 'q-max' },
+        { lbl: 'IQR',    val: fmt(s.iqr),    cls: 'q-iqr' },
+        { lbl: 'MEAN',   val: fmt(s.mean),   cls: 'q-mean' },
+        { lbl: 'N',      val: String(n),     cls: 'stat-card' },
+      ];
+      grid.innerHTML = cards.map(c =>
+        `<div class="stat-card ${c.cls}">
+           <div class="stat-lbl">${c.lbl}</div>
+           <div class="stat-val">${c.val}</div>
+         </div>`
+      ).join('');
+
+      // Fences
+      const fr = document.getElementById('fence-row');
+      const outTxt = s.outliers.length
+        ? `outliers: <span class="fence-val" style="color:var(--redline);">${s.outliers.map(fmt).join(', ')}</span>`
+        : `<span class="fence-val" style="color:#2a8a4a;">no outliers</span>`;
+      fr.innerHTML = `
+        <span>low fence: <span class="fence-val">${fmt(s.lowFence)}</span></span>
+        <span>high fence: <span class="fence-val">${fmt(s.highFence)}</span></span>
+        <span>${outTxt}</span>
+      `;
+
+      // Skew
+      const diff = s.mean - s.med;
+      const thresh = s.iqr * 0.1;
+      let skewCls = 'skew-sym', skewTxt = 'roughly symmetric';
+      if (diff > thresh)      { skewCls = 'skew-right'; skewTxt = 'skewed right ▶ (mean > median)'; }
+      else if (diff < -thresh){ skewCls = 'skew-left';  skewTxt = '◀ skewed left (mean < median)'; }
+      document.getElementById('skew-display').innerHTML =
+        `shape: <span class="skew-chip ${skewCls}">${skewTxt}</span>`;
+    }
+
+    function renderSortedStrip(sorted, s) {
+      const isOut = v => v < s.lowFence || v > s.highFence;
+      const html = sorted.map(v => {
+        if (isOut(v))      return `<span class="d-out">${fmt(v)}</span>`;
+        if (v === s.min)   return `<span class="d-min">${fmt(v)}</span>`;
+        if (v === s.max)   return `<span class="d-max">${fmt(v)}</span>`;
+        if (v === s.q1)    return `<span class="d-q1">${fmt(v)}</span>`;
+        if (v === s.med)   return `<span class="d-med">${fmt(v)}</span>`;
+        if (v === s.q3)    return `<span class="d-q3">${fmt(v)}</span>`;
+        return fmt(v);
+      }).join('  ');
+      document.getElementById('sorted-strip').innerHTML =
+        `<span style="font-family:'Permanent Marker',cursive;font-size:10px;color:var(--ink-soft);margin-right:8px;">SORTED →</span>${html}`;
+    }
+
+    // --- Canvas ---
+    const canvas = document.getElementById('plot-canvas');
+    const ctx = canvas.getContext('2d');
+    let dpr = 1;
+
+    function resizeCanvas() {
+      const wrap = document.getElementById('canvas-wrap');
+      dpr = window.devicePixelRatio || 1;
+      const w = wrap.clientWidth, h = wrap.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+      ctx.scale(dpr, dpr);
+    }
+
+    function drawPlot(sorted, s) {
+      resizeCanvas();
+      const W = canvas.width / dpr, H = canvas.height / dpr;
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#1d1a14';
+      ctx.fillRect(0, 0, W, H);
+
+      const pad = { l: 30, r: 30, t: 20, b: 36 };
+      const plotW = W - pad.l - pad.r;
+
+      // Data range (extend slightly beyond fences for breathing room)
+      const dataMin = Math.min(sorted[0], s.lowFence);
+      const dataMax = Math.max(sorted[sorted.length-1], s.highFence);
+      const span = dataMax - dataMin || 1;
+      const ext = span * 0.08;
+      const viewMin = dataMin - ext, viewMax = dataMax + ext;
+      const viewSpan = viewMax - viewMin;
+
+      function toX(v) { return pad.l + (v - viewMin) / viewSpan * plotW; }
+
+      if (currentView === 'box') {
+        drawBoxPlot(sorted, s, toX, pad, H, W);
+      } else {
+        drawDotPlot(sorted, s, toX, pad, H, W);
+      }
+      drawAxis(s, toX, pad, H, W, viewMin, viewMax, viewSpan, plotW);
+    }
+
+    function drawBoxPlot(sorted, s, toX, pad, H, W) {
+      const cy = (H - pad.t - pad.b) / 2 + pad.t;
+      const bh = Math.min(40, (H - pad.t - pad.b) * 0.45); // box half-height
+      const bTop = cy - bh, bBot = cy + bh;
+
+      const xQ1  = toX(s.q1);
+      const xMed = toX(s.med);
+      const xQ3  = toX(s.q3);
+      const xWL  = toX(s.whiskerLow);
+      const xWH  = toX(s.whiskerHigh);
+
+      // Low fence / high fence dashed lines
+      ctx.save();
+      ctx.strokeStyle = 'rgba(217,79,42,0.35)';
+      ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      [s.lowFence, s.highFence].forEach(f => {
+        const xf = toX(f);
+        ctx.beginPath(); ctx.moveTo(xf, pad.t); ctx.lineTo(xf, H - pad.b); ctx.stroke();
+      });
+      ctx.restore();
+
+      // Whiskers
+      ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2; ctx.setLineDash([]);
+      // left whisker
+      ctx.beginPath(); ctx.moveTo(xWL, cy); ctx.lineTo(xQ1, cy); ctx.stroke();
+      // right whisker
+      ctx.beginPath(); ctx.moveTo(xQ3, cy); ctx.lineTo(xWH, cy); ctx.stroke();
+      // whisker caps
+      ctx.lineWidth = 2;
+      [xWL, xWH].forEach(x => {
+        ctx.beginPath(); ctx.moveTo(x, cy - bh * 0.5); ctx.lineTo(x, cy + bh * 0.5); ctx.stroke();
+      });
+
+      // Box Q1→Q3
+      ctx.fillStyle = 'rgba(42,111,180,0.25)';
+      ctx.fillRect(xQ1, bTop, xQ3 - xQ1, bh * 2);
+      ctx.strokeStyle = '#4a9fd4'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+      ctx.strokeRect(xQ1, bTop, xQ3 - xQ1, bh * 2);
+
+      // Median line
+      ctx.strokeStyle = '#f0c040'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(xMed, bTop); ctx.lineTo(xMed, bBot); ctx.stroke();
+
+      // Outlier dots
+      s.outliers.forEach(v => {
+        const xo = toX(v);
+        ctx.fillStyle = '#d94f2a'; ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.arc(xo, cy, 6, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      });
+
+      // Labels on key lines
+      ctx.font = "11px 'Patrick Hand',cursive"; ctx.fillStyle = '#aaa'; ctx.textAlign = 'center';
+      const lblY = bTop - 6;
+      [[xQ1, 'Q1', '#4a9fd4'], [xMed, 'Med', '#f0c040'], [xQ3, 'Q3', '#5dba7a']].forEach(([x, lbl, c]) => {
+        ctx.fillStyle = c; ctx.fillText(lbl, x, lblY);
+      });
+    }
+
+    function drawDotPlot(sorted, s, toX, pad, H, W) {
+      const isOut = v => v < s.lowFence || v > s.highFence;
+      const DOT_R = 6;
+      const baseY = H - pad.b - 2;
+
+      // Count stacking
+      const stacks = {};
+      sorted.forEach(v => {
+        const bin = Math.round(v * 2) / 2; // stack by 0.5 increments
+        stacks[bin] = (stacks[bin] || 0) + 1;
+      });
+
+      // Draw dots
+      const counted = {};
+      sorted.forEach(v => {
+        const bin = Math.round(v * 2) / 2;
+        counted[bin] = (counted[bin] || 0) + 1;
+        const stack = counted[bin] - 1;
+        const x = toX(v);
+        const y = baseY - stack * (DOT_R * 2 + 1) - DOT_R;
+        const out = isOut(v);
+        ctx.fillStyle = out ? '#d94f2a' : (v === s.med ? '#f0c040' : '#4a9fd4');
+        ctx.strokeStyle = out ? '#f6f1e4' : 'rgba(255,255,255,0.3)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.arc(x, y, DOT_R, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+      });
+
+      // Median line
+      const xMed = toX(s.med);
+      ctx.strokeStyle = '#f0c040'; ctx.lineWidth = 2; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(xMed, pad.t); ctx.lineTo(xMed, H - pad.b); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.font = "11px 'Patrick Hand',cursive"; ctx.fillStyle = '#f0c040'; ctx.textAlign = 'center';
+      ctx.fillText('Med', xMed, pad.t + 12);
+    }
+
+    function drawAxis(s, toX, pad, H, W, viewMin, viewMax, viewSpan, plotW) {
+      const axisY = H - pad.b;
+
+      // Axis line
+      ctx.strokeStyle = '#555'; ctx.lineWidth = 1; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(pad.l, axisY); ctx.lineTo(W - pad.r, axisY); ctx.stroke();
+
+      // Ticks — aim for ~7 nice ticks
+      const rawStep = viewSpan / 7;
+      const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+      const niceStep = [1, 2, 2.5, 5, 10].map(f => f * mag).find(s => s >= rawStep) || mag * 10;
+      const tickStart = Math.ceil(viewMin / niceStep) * niceStep;
+
+      ctx.font = "11px 'JetBrains Mono',monospace"; ctx.fillStyle = '#888';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      for (let t = tickStart; t <= viewMax + 1e-9; t += niceStep) {
+        const x = toX(t);
+        if (x < pad.l - 2 || x > W - pad.r + 2) continue;
+        ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x, axisY); ctx.lineTo(x, axisY + 5); ctx.stroke();
+        ctx.fillText(fmt(t), x, axisY + 7);
+      }
+
+      // Fence labels — drawn inside canvas near top to avoid colliding with axis ticks
+      ctx.font = "10px 'Patrick Hand',cursive"; ctx.fillStyle = 'rgba(217,79,42,0.7)';
+      [['↓ low fence', s.lowFence], ['↓ high fence', s.highFence]].forEach(([lbl, fv]) => {
+        if (fv < viewMin || fv > viewMax) return;
+        const xf = toX(fv);
+        const isLeft = fv < (viewMin + viewMax) / 2;
+        ctx.textAlign = isLeft ? 'left' : 'right';
+        ctx.fillText(lbl, xf + (isLeft ? 3 : -3), pad.t + 6);
+      });
+    }
+
+    // --- Init ---
+    window.addEventListener('resize', parseAndDraw);
+    parseAndDraw();
+  </script>
+</body>
+</html>
