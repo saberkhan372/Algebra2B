@@ -841,3 +841,42 @@ a:hover { text-decoration: underline; }
 
 /* ── Search highlight ── */
 .search-match { background: var(--highlight); border-radius: 2px; }
+
+/* ── Save PNG button (injected by save-png.js) ── */
+.save-png-btn {
+  font-family: 'Patrick Hand', sans-serif;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  line-height: 1.5;
+  transition: all 0.15s;
+}
+/* Overlay variant: dark ghost pinned inside the canvas wrapper, shown on hover */
+.save-png-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 20;
+  background: rgba(29,26,20,0.60);
+  color: rgba(245,241,228,0.85);
+  border: 1.5px solid rgba(181,173,156,0.35);
+  opacity: 0;
+  transition: opacity 0.2s, background 0.15s;
+}
+.widget-container:hover    .save-png-overlay,
+.canvas-wrapper:hover      .save-png-overlay,
+.canvas-wrap:hover         .save-png-overlay,
+.canvas-panel:hover        .save-png-overlay { opacity: 0.75; }
+.save-png-overlay:hover    { opacity: 1 !important; background: rgba(29,26,20,0.92); border-color: rgba(181,173,156,0.7); }
+/* Inline variant: pill button below an unwrapped canvas */
+.save-png-inline {
+  display: block;
+  width: fit-content;
+  margin-top: 4px;
+  margin-left: auto;
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  border: 1.5px solid var(--ghost);
+}
+.save-png-inline:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
