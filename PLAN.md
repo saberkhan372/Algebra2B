@@ -12,7 +12,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
 **Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**38 tools built/integrated:**
+**39 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -51,8 +51,17 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Quadratic Word Problems Trainer (U3)
 - Rationalizing Denominators (U3)
 - Parent Function Atlas (U2) — Phase 1: 5 families (x², |x|, √x, 2ˣ, 1/x), a/h/k sliders, live domain/range/zeros/asymptote feature chips, asymptote canvas lines, intercept dots
+- Quadratic Forms Explorer (U3) — same parabola in all 3 forms simultaneously; discriminant banner changes state live; color-coded standard/vertex/factored strips; intercept dots + axis of symmetry on canvas
 
-**No planned tools missing** — all 38 tools are live. Phases 2–5 of Parent Function Atlas are additive enhancements, not blocking gaps.
+**No planned tools missing** — all 39 tools are live.
+
+**Explorer roadmap (in priority order):**
+1. ✓ Parent Function Atlas — built
+2. ✓ Quadratic Forms Explorer — built
+3. Log↔Exponential Mirror Explorer (U5) — y=bˣ and y=log_b(x) on one canvas with y=x line + base slider
+4. Rational Function Behavior Explorer (U6) — degree, factors, asymptote rules as discoverable chips
+5. Trig Explorer / Atlas Phase 3 (U7) — sin/cos families with b slider for period
+6. Inequality Region Explorer (cross-unit) — linear/quadratic inequalities with live shading
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
