@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quadratic Word Problems Trainer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-wrap { max-width: 920px; margin: 0 auto; padding: 16px 20px 48px; }
+    .tool-bc { font-family:'Special Elite',monospace; font-size:12px; color:var(--ink-soft); margin-bottom:4px; }
+    .tool-h1 { font-family:'Caveat',cursive; font-weight:700; font-size:2.4rem; line-height:1; margin:0 0 4px; }
+    .tool-sub { font-size:14px; color:var(--ink-soft); margin-bottom:18px; }
+
+    /* problem selector */
+    .prob-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .prob-tab {
+      font-family:'Caveat',cursive; font-size:15px;
+      padding:5px 16px; border:2px solid var(--ink-soft);
+      border-radius:20px; cursor:pointer; background:var(--paper-2);
+      color:var(--ink-soft); transition:all 0.12s;
+    }
+    .prob-tab:hover { border-color:var(--ink); color:var(--ink); }
+    .prob-tab.active {
+      background:var(--ink); color:var(--paper);
+      border-color:var(--ink); box-shadow:2px 2px 0 rgba(29,26,20,0.25);
+    }
+
+    /* main grid */
+    .main-grid {
+      display:grid; grid-template-columns:1fr 320px; gap:18px; align-items:start;
+    }
+    @media(max-width:720px){ .main-grid{ grid-template-columns:1fr; } }
+
+    /* left column */
+    .left-col { display:flex; flex-direction:column; gap:12px; }
+
+    /* scenario card */
+    .scenario-card {
+      border:2px solid var(--ink);
+      border-radius:6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow:3px 4px 0 rgba(29,26,20,0.18);
+      background:var(--paper);
+      padding:14px 16px;
+    }
+    .scenario-label {
+      font-family:'Permanent Marker',cursive; font-size:11px;
+      color:var(--ink-soft); letter-spacing:0.08em; margin-bottom:6px;
+    }
+    .scenario-text {
+      font-family:'Patrick Hand',sans-serif; font-size:15px;
+      color:var(--ink-2); line-height:1.6; margin-bottom:10px;
+    }
+    .fn-box {
+      background:var(--ink); color:var(--paper);
+      border-radius:6px; padding:8px 14px;
+      font-family:'JetBrains Mono',monospace; font-size:17px;
+      letter-spacing:0.02em; display:inline-block;
+    }
+
+    /* canvas */
+    .canvas-wrap {
+      border:2px solid var(--ink);
+      border-radius:6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow:3px 4px 0 rgba(29,26,20,0.18);
+      background:#1d1a14; overflow:hidden;
+    }
+    .canvas-wrap canvas { display:block; width:100%; }
+
+    /* right column: step panel */
+    .step-panel {
+      border:2px solid var(--ink);
+      border-radius:6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow:3px 4px 0 rgba(29,26,20,0.18);
+      background:var(--paper);
+      padding:16px;
+      position:sticky; top:16px;
+    }
+    .step-progress {
+      font-family:'Special Elite',monospace; font-size:11px;
+      color:var(--ink-soft); letter-spacing:0.06em; margin-bottom:10px;
+    }
+    .step-dots {
+      display:flex; gap:5px; margin-bottom:14px;
+    }
+    .step-dot {
+      width:10px; height:10px; border-radius:50%;
+      border:2px solid var(--ink-soft); background:transparent; transition:all 0.2s;
+    }
+    .step-dot.done { background:var(--green); border-color:var(--green); }
+    .step-dot.current { background:var(--accent); border-color:var(--accent); transform:scale(1.2); }
+
+    .step-content {
+      min-height:200px;
+    }
+    .step-heading {
+      font-family:'Caveat',cursive; font-weight:700; font-size:20px;
+      color:var(--ink); margin-bottom:10px;
+    }
+    .step-body {
+      font-family:'JetBrains Mono',monospace; font-size:13px;
+      color:var(--ink-2); line-height:1.8;
+      background:rgba(29,26,20,0.05); border-radius:6px;
+      padding:10px 14px; white-space:pre; margin-bottom:10px;
+    }
+    .step-note {
+      font-family:'Patrick Hand',sans-serif; font-size:13px;
+      color:var(--ink-soft); line-height:1.5; font-style:italic;
+    }
+
+    .step-nav {
+      display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;
+    }
+    .step-btn {
+      flex:1; font-family:'Caveat',cursive; font-size:16px;
+      padding:8px 10px; border:2px solid var(--ink); border-radius:6px;
+      background:var(--paper); box-shadow:2px 2px 0 var(--ink);
+      cursor:pointer; transition:all 0.1s; color:var(--ink);
+    }
+    .step-btn:hover { background:var(--accent); color:white; transform:translate(-1px,-1px); box-shadow:3px 3px 0 var(--ink); }
+    .step-btn:active { transform:translate(1px,1px); box-shadow:1px 1px 0 var(--ink); }
+    .step-btn:disabled { opacity:0.3; cursor:not-allowed; }
+    .step-btn:disabled:hover { background:var(--paper); color:var(--ink); transform:none; box-shadow:2px 2px 0 var(--ink); }
+    .step-btn.show-all { border-color:var(--ghost); color:var(--ink-soft); box-shadow:2px 2px 0 var(--ghost); background:var(--paper-2); flex:none; width:100%; }
+
+    /* answer reveal */
+    .answer-banner {
+      display:none; background:var(--green); color:white;
+      border-radius:6px; padding:10px 14px; margin-top:10px;
+      font-family:'Caveat',cursive; font-size:18px; text-align:center;
+    }
+    .answer-banner.show { display:block; }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../u3.html">← U3</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-wrap">
+    <div class="tool-bc">← U3 · Rationals &amp; Imaginary · D3</div>
+    <div class="tool-h1">Quadratic Word Problems Trainer</div>
+    <div class="tool-sub">Projectile motion — step through the setup, vertex, and landing time</div>
+
+    <!-- problem tabs -->
+    <div class="prob-tabs" id="prob-tabs"></div>
+
+    <!-- main content -->
+    <div class="main-grid">
+      <div class="left-col">
+        <!-- scenario card -->
+        <div class="scenario-card">
+          <div class="scenario-label">THE SCENARIO</div>
+          <div class="scenario-text" id="scenario-text">Loading…</div>
+          <div class="fn-box" id="fn-box">h(t) = …</div>
+        </div>
+        <!-- trajectory canvas -->
+        <div class="canvas-wrap">
+          <canvas id="traj-canvas" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- step panel -->
+      <div class="step-panel">
+        <div class="step-progress" id="step-progress">STEP 1 OF 5</div>
+        <div class="step-dots" id="step-dots"></div>
+        <div class="step-content">
+          <div class="step-heading" id="step-heading">—</div>
+          <div class="step-body" id="step-body">—</div>
+          <div class="step-note" id="step-note"></div>
+        </div>
+        <div class="answer-banner" id="answer-banner">✓ Done!</div>
+        <div class="step-nav">
+          <button class="step-btn" id="btn-prev" onclick="prevStep()">← Prev</button>
+          <button class="step-btn" id="btn-next" onclick="nextStep()">Next Step →</button>
+          <button class="step-btn show-all" onclick="showAll()">Show all steps</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── PROBLEM DATA ──
+  const PROBLEMS = [
+    {
+      title: "Ball from Ground",
+      scenario: "A ball is thrown straight up from the ground with an initial velocity of 64 ft/sec.",
+      fnDisplay: "h(t) = −16t² + 64t",
+      a: -16, b: 64, c: 0,
+      tVert: 2, hMax: 64, tLand: 4,
+      steps: [
+        {
+          heading: "Identify the function",
+          body:
+`h(t) = −16t² + 64t
+
+  a = −16   (gravity constant)
+  b = 64    (initial velocity, ft/sec)
+  c = 0     (starting height = ground)`,
+          note: "The −16 comes from gravity: −½ · 32 ft/sec²"
+        },
+        {
+          heading: "Time to reach maximum height",
+          body:
+`Vertex formula:
+  t = −b / (2a)
+  t = −64 / (2 · (−16))
+  t = −64 / (−32)
+  t = 2 sec`,
+          note: "The vertex t is always halfway through the flight."
+        },
+        {
+          heading: "Maximum height",
+          body:
+`Plug t = 2 into h(t):
+  h(2) = −16(2²) + 64(2)
+       = −16(4) + 128
+       = −64 + 128
+       = 64 ft`,
+          note: "The vertex (t, h) = (2, 64) is the highest point."
+        },
+        {
+          heading: "When does it land?",
+          body:
+`Solve h(t) = 0:
+  −16t² + 64t = 0
+  −16t(t − 4) = 0
+
+  t = 0  (launch)
+  t = 4 sec  (landing)`,
+          note: "Factor out −16t first — no quadratic formula needed!"
+        },
+        {
+          heading: "Final answer",
+          body:
+`Max height:  64 ft
+Time to max: 2 sec
+Total flight: 4 sec
+
+Sanity check:
+  Up = 2 sec · Down = 2 sec ✓
+  Symmetric about the vertex ✓`,
+          note: "For any projectile from the ground: landing time = 2 × vertex time."
+        }
+      ]
+    },
+    {
+      title: "Ball from Building",
+      scenario: "A ball is thrown upward from the top of a 48 ft building with an initial velocity of 32 ft/sec.",
+      fnDisplay: "h(t) = −16t² + 32t + 48",
+      a: -16, b: 32, c: 48,
+      tVert: 1, hMax: 64, tLand: 3,
+      steps: [
+        {
+          heading: "Identify the function",
+          body:
+`h(t) = −16t² + 32t + 48
+
+  a = −16   (gravity)
+  b = 32    (initial velocity, ft/sec)
+  c = 48    (starting height = 48 ft)`,
+          note: "c is the height at t = 0, i.e., the starting height."
+        },
+        {
+          heading: "Time to reach maximum height",
+          body:
+`Vertex formula:
+  t = −b / (2a)
+  t = −32 / (2 · (−16))
+  t = −32 / (−32)
+  t = 1 sec`,
+          note: "Starting high means less time to climb before gravity wins."
+        },
+        {
+          heading: "Maximum height",
+          body:
+`Plug t = 1:
+  h(1) = −16(1²) + 32(1) + 48
+       = −16 + 32 + 48
+       = 64 ft`,
+          note: "Only 16 ft above the building — the velocity was slow."
+        },
+        {
+          heading: "When does it land?",
+          body:
+`Solve h(t) = 0:
+  −16t² + 32t + 48 = 0
+  ÷(−16): t² − 2t − 3 = 0
+  Factor: (t − 3)(t + 1) = 0
+
+  t = 3 sec  (landing)
+  t = −1 sec (reject — before launch)`,
+          note: "Always reject the negative time solution."
+        },
+        {
+          heading: "Final answer",
+          body:
+`Max height:  64 ft at t = 1 sec
+Landing:     t = 3 sec
+
+Path: launched at 48 ft, rose to 64 ft,
+then fell to the ground (0 ft).`,
+          note: "Check: h(3) = −16(9)+32(3)+48 = −144+96+48 = 0 ✓"
+        }
+      ]
+    },
+    {
+      title: "Model Rocket",
+      scenario: "A model rocket launches from the ground with an initial velocity of 96 ft/sec.",
+      fnDisplay: "h(t) = −16t² + 96t",
+      a: -16, b: 96, c: 0,
+      tVert: 3, hMax: 144, tLand: 6,
+      steps: [
+        {
+          heading: "Identify the function",
+          body:
+`h(t) = −16t² + 96t
+
+  a = −16   (gravity)
+  b = 96    (initial velocity, ft/sec)
+  c = 0     (ground level)`,
+          note: "Same form as Problem 1, but faster initial velocity."
+        },
+        {
+          heading: "Time to reach maximum height",
+          body:
+`Vertex formula:
+  t = −b / (2a)
+  t = −96 / (2 · (−16))
+  t = −96 / (−32)
+  t = 3 sec`,
+          note: "3× the velocity → 3× the time to peak vs. Problem 1."
+        },
+        {
+          heading: "Maximum height",
+          body:
+`Plug t = 3:
+  h(3) = −16(3²) + 96(3)
+       = −16(9) + 288
+       = −144 + 288
+       = 144 ft`,
+          note: "3× the velocity → 9× the height? No — 4.5×! (64 ft → 144 ft)"
+        },
+        {
+          heading: "When does it land?",
+          body:
+`Solve h(t) = 0:
+  −16t² + 96t = 0
+  −16t(t − 6) = 0
+
+  t = 0 sec  (launch)
+  t = 6 sec  (landing)`,
+          note: "Time of flight = 2 × vertex time (symmetry from ground)."
+        },
+        {
+          heading: "Final answer",
+          body:
+`Max height:   144 ft at t = 3 sec
+Total flight: 6 sec
+
+Compare to Problem 1 (96 vs 64 ft/sec):
+  Time to peak: 3 vs 2 sec (ratio 1.5)
+  Max height: 144 vs 64 ft (ratio 2.25)`,
+          note: "Doubling velocity × 4× the height — that's the v² in the formula."
+        }
+      ]
+    },
+    {
+      title: "Diving Platform",
+      scenario: "A diver jumps from a 20 ft platform. Her upward velocity at launch is 8 ft/sec.",
+      fnDisplay: "h(t) = −16t² + 8t + 20",
+      a: -16, b: 8, c: 20,
+      tVert: 0.25, hMax: 21, tLand: 1.4,
+      steps: [
+        {
+          heading: "Identify the function",
+          body:
+`h(t) = −16t² + 8t + 20
+
+  a = −16   (gravity)
+  b = 8     (initial velocity, ft/sec)
+  c = 20    (platform height = 20 ft)`,
+          note: "Small velocity + high starting point → different trajectory shape."
+        },
+        {
+          heading: "Time to reach maximum height",
+          body:
+`Vertex formula:
+  t = −b / (2a)
+  t = −8 / (2 · (−16))
+  t = −8 / (−32)
+  t = 0.25 sec`,
+          note: "Barely any upward travel — gravity wins quickly."
+        },
+        {
+          heading: "Maximum height",
+          body:
+`Plug t = 0.25:
+  h(0.25) = −16(0.0625) + 8(0.25) + 20
+          = −1 + 2 + 20
+          = 21 ft`,
+          note: "Only 1 foot above the platform at the peak!"
+        },
+        {
+          heading: "When does she hit the water?",
+          body:
+`Solve h(t) = 0:
+  −16t² + 8t + 20 = 0
+  ÷(−4): 4t² − 2t − 5 = 0
+
+  Quadratic formula:
+  t = (2 ± √(4 + 80)) / 8
+  t = (2 ± √84) / 8
+  t = (2 ± 9.17) / 8
+
+  t ≈ 11.17/8 ≈ 1.40 sec`,
+          note: "Reject t ≈ −0.90 sec (negative time, before launch)."
+        },
+        {
+          heading: "Final answer",
+          body:
+`Max height:  21 ft at t = 0.25 sec
+Hits water:  t ≈ 1.40 sec
+
+This one doesn't factor cleanly — need
+the quadratic formula. That's normal!`,
+          note: "Check: h(1.4) ≈ −16(1.96)+8(1.4)+20 ≈ −31.4+11.2+20 ≈ −0.2 ≈ 0 ✓"
+        }
+      ]
+    }
+  ];
+
+  // ── STATE ──
+  let probIdx = 0;
+  let stepIdx = 0;
+  let prob, steps;
+
+  // ── CANVAS ──
+  const canvas = document.getElementById('traj-canvas');
+  const ctx = canvas.getContext('2d');
+  const DPR = window.devicePixelRatio || 1;
+
+  function resizeCanvas() {
+    const W = canvas.parentElement.clientWidth;
+    const H = 220;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(DPR, DPR);
+    drawCanvas();
+  }
+
+  function drawCanvas() {
+    const W = canvas.width / DPR;
+    const H = canvas.height / DPR;
+    const { a, b, c, tVert, hMax, tLand } = prob;
+
+    const PAD = { l:44, r:16, t:18, b:36 };
+    const plotW = W - PAD.l - PAD.r;
+    const plotH = H - PAD.t - PAD.b;
+
+    const tMax = tLand * 1.05;
+    const yMax = hMax * 1.15;
+
+    function tx(t) { return PAD.l + (t / tMax) * plotW; }
+    function ty(h) { return PAD.t + plotH - (h / yMax) * plotH; }
+
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#1d1a14';
+    ctx.fillRect(0,0,W,H);
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(181,173,156,0.12)';
+    ctx.lineWidth = 1;
+    for (let h=0; h<=yMax; h += Math.ceil(yMax/4/10)*10) {
+      ctx.beginPath(); ctx.moveTo(PAD.l, ty(h)); ctx.lineTo(W-PAD.r, ty(h)); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = '#b5ad9c';
+    ctx.lineWidth = 1.5;
+    // x-axis
+    ctx.beginPath(); ctx.moveTo(PAD.l, ty(0)); ctx.lineTo(W-PAD.r, ty(0)); ctx.stroke();
+    // y-axis
+    ctx.beginPath(); ctx.moveTo(PAD.l, PAD.t); ctx.lineTo(PAD.l, ty(0)); ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = '#b5ad9c';
+    ctx.font = "10px 'JetBrains Mono',monospace";
+    ctx.textAlign = 'center';
+    // x ticks
+    for (let t=0; t<=Math.floor(tLand); t++) {
+      const x = tx(t);
+      ctx.beginPath(); ctx.moveTo(x, ty(0)); ctx.lineTo(x, ty(0)+4); ctx.stroke();
+      ctx.fillText(t, x, ty(0)+14);
+    }
+    ctx.fillText('t (sec)', PAD.l + plotW/2, H - 2);
+
+    // y ticks
+    ctx.textAlign = 'right';
+    const yStep = Math.ceil(yMax/4/10)*10;
+    for (let h=0; h<=yMax; h+=yStep) {
+      const y = ty(h);
+      ctx.beginPath(); ctx.moveTo(PAD.l, y); ctx.lineTo(PAD.l-4, y); ctx.stroke();
+      if (h > 0) ctx.fillText(h, PAD.l-7, y+3);
+    }
+    ctx.save(); ctx.translate(12, ty(yMax/2));
+    ctx.rotate(-Math.PI/2); ctx.textAlign='center'; ctx.fillText('h (ft)', 0, 0); ctx.restore();
+
+    // ── PARABOLA ──
+    ctx.beginPath();
+    ctx.strokeStyle = '#f5d34c';
+    ctx.lineWidth = 2.5;
+    const steps2 = 80;
+    for (let i=0; i<=steps2; i++) {
+      const t = (i/steps2) * tLand;
+      const ht = a*t*t + b*t + c;
+      if (ht < 0) break;
+      i === 0 ? ctx.moveTo(tx(t), ty(ht)) : ctx.lineTo(tx(t), ty(ht));
+    }
+    ctx.stroke();
+
+    // ── PROGRESSIVE ANNOTATIONS ──
+    // Step 1+: launch dot
+    if (stepIdx >= 0) {
+      ctx.beginPath();
+      ctx.arc(tx(0), ty(c), 6, 0, Math.PI*2);
+      ctx.fillStyle = '#f5d34c';
+      ctx.fill();
+      ctx.fillStyle = '#b5ad9c';
+      ctx.font = "10px 'Patrick Hand',sans-serif";
+      ctx.textAlign = 'left';
+      ctx.fillText(`(0, ${c})`, tx(0)+8, ty(c)+4);
+    }
+
+    // Step 2+: vertex time dashed line
+    if (stepIdx >= 1) {
+      ctx.strokeStyle = '#3f8a5a';
+      ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(tx(tVert), ty(0)); ctx.lineTo(tx(tVert), ty(hMax)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#3f8a5a';
+      ctx.font = "10px 'Patrick Hand',sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText(`t=${tVert}`, tx(tVert), ty(0)+14);
+    }
+
+    // Step 3+: vertex dot and height annotation
+    if (stepIdx >= 2) {
+      ctx.beginPath();
+      ctx.arc(tx(tVert), ty(hMax), 7, 0, Math.PI*2);
+      ctx.fillStyle = '#3f8a5a';
+      ctx.fill();
+      ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1.5; ctx.stroke();
+      // height label
+      ctx.fillStyle = '#3f8a5a';
+      ctx.font = "bold 11px 'Patrick Hand',sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText(`${hMax} ft`, tx(tVert), ty(hMax)-12);
+    }
+
+    // Step 4+: landing dot
+    if (stepIdx >= 3) {
+      ctx.beginPath();
+      ctx.arc(tx(tLand), ty(0), 6, 0, Math.PI*2);
+      ctx.fillStyle = '#d94f2a';
+      ctx.fill();
+      ctx.fillStyle = '#d94f2a';
+      ctx.font = "10px 'Patrick Hand',sans-serif";
+      ctx.textAlign = 'center';
+      ctx.fillText(`t=${tLand}`, tx(tLand), ty(0)+14);
+    }
+
+    // Step 5: full summary line
+    if (stepIdx >= 4) {
+      // horizontal dashed line at max height
+      ctx.strokeStyle = 'rgba(63,138,90,0.4)';
+      ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(PAD.l, ty(hMax)); ctx.lineTo(tx(tVert), ty(hMax)); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
+  // ── UI BUILDERS ──
+  function buildTabs() {
+    const container = document.getElementById('prob-tabs');
+    container.innerHTML = '';
+    PROBLEMS.forEach((p, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'prob-tab' + (i === probIdx ? ' active' : '');
+      btn.textContent = `${i+1}. ${p.title}`;
+      btn.onclick = () => loadProblem(i);
+      container.appendChild(btn);
+    });
+  }
+
+  function buildStepDots() {
+    const container = document.getElementById('step-dots');
+    container.innerHTML = '';
+    steps.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'step-dot' + (i < stepIdx ? ' done' : i === stepIdx ? ' current' : '');
+      container.appendChild(d);
+    });
+  }
+
+  function loadProblem(idx) {
+    probIdx = idx;
+    stepIdx = 0;
+    prob = PROBLEMS[probIdx];
+    steps = prob.steps;
+    buildTabs();
+    document.getElementById('scenario-text').textContent = prob.scenario;
+    document.getElementById('fn-box').textContent = prob.fnDisplay;
+    document.getElementById('answer-banner').classList.remove('show');
+    renderStep();
+    drawCanvas();
+  }
+
+  function renderStep() {
+    const s = steps[stepIdx];
+    document.getElementById('step-progress').textContent = `STEP ${stepIdx+1} OF ${steps.length}`;
+    document.getElementById('step-heading').textContent = s.heading;
+    document.getElementById('step-body').textContent = s.body;
+    document.getElementById('step-note').textContent = s.note || '';
+    buildStepDots();
+
+    document.getElementById('btn-prev').disabled = stepIdx === 0;
+    document.getElementById('btn-next').disabled = stepIdx === steps.length - 1;
+    document.getElementById('btn-next').textContent = stepIdx === steps.length - 2 ? 'Final Step →' : 'Next Step →';
+
+    if (stepIdx === steps.length - 1) {
+      document.getElementById('answer-banner').classList.add('show');
+      document.getElementById('answer-banner').textContent = `✓ ${prob.title} — complete!`;
+    } else {
+      document.getElementById('answer-banner').classList.remove('show');
+    }
+    drawCanvas();
+  }
+
+  function nextStep() {
+    if (stepIdx < steps.length - 1) { stepIdx++; renderStep(); }
+  }
+  function prevStep() {
+    if (stepIdx > 0) { stepIdx--; renderStep(); }
+  }
+  function showAll() {
+    stepIdx = steps.length - 1;
+    renderStep();
+  }
+
+  // ── INIT ──
+  buildTabs();
+  loadProblem(0);
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
