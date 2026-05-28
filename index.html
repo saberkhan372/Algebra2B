@@ -77,6 +77,35 @@
       color: var(--ink-soft);
       font-weight: 400;
     }
+
+    /* ── Tool hover preview popup ── */
+    #tool-preview-popup {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.14s ease, transform 0.14s ease;
+      background: var(--paper);
+      border: 1.5px solid var(--ink-2);
+      border-radius: 6px;
+      box-shadow: 3px 4px 0 rgba(29,26,20,0.14);
+      overflow: hidden;
+      width: 200px;
+    }
+    #tool-preview-popup.visible { opacity: 1; transform: translateY(0); }
+    #tool-preview-canvas { display: block; width: 200px; height: 120px; }
+    .preview-footer {
+      padding: 4px 8px;
+      font-family: 'Patrick Hand', cursive;
+      font-size: 11px;
+      color: var(--ink-soft);
+      border-top: 1px dashed var(--ink-2);
+      background: var(--paper-2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   </style>
 </head>
 <body class="paper-lined">
@@ -245,43 +274,43 @@
 
   <script>
     const TOOLS = [
-      { id: 'quad',  name: 'Quadratic Slider Studio',      unit: 'U1', topic: 'Quadratics',      kind: 'visualizer', diff: 1, code: 'Qs', desc: 'Slide a, h, k and watch the parabola move. Vertex form made visual.',           href: 'tools/quadratic-slider.html' },
-      { id: 'subs',  name: 'Substitution Stepper',          unit: 'U1', topic: 'Systems',          kind: 'practice',   diff: 1, code: 'Sb', desc: 'Walk through substitution step by step. No jumping ahead.',                      href: 'tools/substitution-stepper.html' },
-      { id: 'elim',  name: 'Elimination Race',               unit: 'U1', topic: 'Systems',          kind: 'game',       diff: 2, code: 'El', desc: 'Solve systems by elimination — race against yourself.',                          href: 'tools/elimination-race.html' },
-      { id: 'fact',  name: 'Factoring Quadratics Lab',      unit: 'U1', topic: 'Factoring',        kind: 'practice',   diff: 2, code: 'Fq', desc: 'See what happens when you change the factors. Area model included.',             href: 'tools/factoring-lab.html' },
-      { id: 'piece', name: 'Piecewise Function Grapher',    unit: 'U1', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Pw', desc: 'Build piecewise rules and watch open and closed endpoints behave.',            href: 'tools/piecewise-grapher.html' },
-      { id: 'absv',  name: 'Absolute Value Grapher',        unit: 'U2', topic: 'Graphs',           kind: 'visualizer', diff: 1, code: 'Av', desc: 'Drag the V. Watch y = a|x − h| + k update in real time.',                       href: 'tools/abs-value-grapher.html' },
-      { id: 'trans', name: 'Transformations Explorer',      unit: 'U2', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Tx', desc: 'Move a, b, h, and k across parent functions and see what changes.',          href: 'tools/transformations.html' },
-      { id: 'negx',  name: 'Negative Exponent Flipper',     unit: 'U2', topic: 'Exponents',        kind: 'visualizer', diff: 1, code: 'Nx', desc: 'See x⁻² flip into 1/x². No tricks, just the definition.',                       href: 'tools/neg-exponent-flipper.html' },
-      { id: 'dos',   name: 'Difference of Squares',         unit: 'U2', topic: 'Factoring',        kind: 'game',       diff: 2, code: 'DS', desc: 'Spot and factor a²−b² before the timer runs out. Quick drill.',                  href: 'tools/diff-of-squares.html' },
-      { id: 'doc',   name: 'Difference of Cubes',           unit: 'U2', topic: 'Factoring',        kind: 'reference',  diff: 3, code: 'DC', desc: 'The formulas for a³±b³, with visual proof and worked examples.',                 href: 'tools/diff-of-cubes.html' },
-      { id: 'imag',  name: 'Imaginary Number Sandbox',      unit: 'U3', topic: 'Imaginary',        kind: 'visualizer', diff: 1, code: 'Im', desc: 'Plot complex numbers. See what multiplying by i actually does.',                  href: 'tools/imaginary-sandbox.html' },
-      { id: 'qstd',  name: 'Quadratic Standard Form',       unit: 'U3', topic: 'Quadratics',       kind: 'visualizer', diff: 2, code: 'Qf', desc: 'Slide a, b, c and connect vertex, discriminant, and roots.',              href: 'tools/quadratic-standard.html' },
-      { id: 'rex',   name: 'Rational Expression Builder',   unit: 'U3', topic: 'Rationals',        kind: 'visualizer', diff: 2, code: 'Rx', desc: 'Build a rational expression and see its graph, domain, and holes.',               href: 'tools/rational-expressions.html' },
-      { id: 'comp',  name: 'Complete the Square Trainer',   unit: 'U3', topic: 'Quadratics',       kind: 'practice',   diff: 2, code: 'Cs', desc: 'Step through completing the square at your own pace. Each step explained.',      href: 'tools/complete-square.html' },
-      { id: 'ratx',  name: 'Rational Exponents Tower',      unit: 'U4', topic: 'Exponents',        kind: 'game',       diff: 3, code: 'Re', desc: 'Match x^(m/n) to its radical form. Stack your correct answers.',                  href: 'tools/rational-exponents.html' },
-      { id: 'cubic', name: 'Cubic & Radical Grapher',       unit: 'U4', topic: 'Radicals',         kind: 'visualizer', diff: 3, code: 'Cr', desc: 'Compare cubic inflection points with square-root starting points.',           href: 'tools/cubic-radical.html' },
-      { id: 'fcomp', name: 'Composition Machine',           unit: 'U4', topic: 'Functions',        kind: 'visualizer', diff: 2, code: 'Cm', desc: 'Send x through f and g in order. Swap the order and compare.',             href: 'tools/composition.html' },
-      { id: 'inv',   name: 'Inverse Function Revealer',     unit: 'U4', topic: 'Functions',        kind: 'visualizer', diff: 3, code: 'Iv', desc: 'Reflect f and f⁻¹ over y = x and test one-to-one functions.',             href: 'tools/inverse-function.html' },
-      { id: 'logcv', name: 'Log ↔ Exponential Converter',   unit: 'U5', topic: 'Logs',             kind: 'practice',   diff: 2, code: 'Lg', desc: 'Translate bˣ = y into log form and back until it clicks.',                  href: 'tools/log-converter.html' },
-      { id: 'expo',  name: 'Exponential Function Explorer', unit: 'U5', topic: 'Exponentials',     kind: 'visualizer', diff: 2, code: 'Ef', desc: 'Draw the asymptote first, then anchor two points. Growth vs decay made visual.', href: 'tools/exponential-explorer.html' },
-      { id: 'logp',  name: 'Log Properties Sandbox',        unit: 'U5', topic: 'Logs',             kind: 'practice',   diff: 2, code: 'Lp', desc: 'Expand, condense, and simplify logs using the blog rule — step by step.',     href: 'tools/log-properties.html' },
-      { id: 'expeq', name: 'Exponential Equation Solver',   unit: 'U5', topic: 'Exponentials',     kind: 'practice',   diff: 2, code: 'Ee', desc: 'Choose same-base, log-both-sides, or ln, then solve step by step.',         href: 'tools/exponential-equation-solver.html' },
-      { id: 'emb',   name: 'Exponential Model Builder',     unit: 'U5', topic: 'Exponentials',     kind: 'practice',   diff: 3, code: 'Em', desc: 'Drag P, r, t, n into the right formula. Keep exact form before rounding.',    href: 'tools/exponential-model-builder.html' },
-      { id: 'rsimp', name: 'Rational Simplifier',           unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 2, code: 'Rs', desc: 'Factor first, cancel matching factors, and keep excluded values.',             href: 'tools/rational-simplifier.html' },
-      { id: 'addr',  name: 'Adding Rational Expressions',   unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 3, code: 'Ar', desc: 'Build the LCD from factor chips, rewrite, combine, and simplify.',             href: 'tools/adding-rationals.html' },
-      { id: 'rmul',  name: 'Rational Mult/Div Stepper',    unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 3, code: 'Md', desc: 'KCF first, factor everything, cancel matching pairs, then lock domain restrictions.', href: 'tools/rational-multdiv.html' },
-      { id: 'req',   name: 'Solving Rational Equations',   unit: 'U6', topic: 'Rationals',        kind: 'practice',   diff: 3, code: 'Re', desc: 'LCD · multiply · solve · check for extraneous solutions step by step.',      href: 'tools/rational-equations.html' },
-      { id: 'poly',  name: 'Polynomial Sketch Pad',         unit: 'U6', topic: 'Polynomials',      kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Set roots and multiplicities, then sketch cross, bounce, and end behavior.', href: 'tools/polynomial-sketch.html' },
-      { id: 'pdiv',  name: 'Polynomial Division Stepper',  unit: 'U6', topic: 'Polynomials',      kind: 'practice',   diff: 3, code: 'Pd', desc: 'Long division and synthetic — step through divide, multiply, subtract, bring down. Factor verdict at the end.', href: 'tools/polynomial-division-stepper.html' },
-      { id: 'soht',  name: 'SOH CAH TOA Triangle Solver',   unit: 'U7', topic: 'Trigonometry',     kind: 'practice',   diff: 2, code: 'St', desc: 'Click a reference angle, watch opp/adj labels update, and solve the triangle.', href: 'tools/soh-cah-toa.html' },
-      { id: 'unitc', name: 'Unit Circle Walker',            unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 3, code: 'Uc', desc: 'Drag around the unit circle and watch sine or cosine trace a wave.',          href: 'tools/unit-circle.html' },
-      { id: 'trigb', name: 'Sine/Cosine Graph Builder',     unit: 'U7', topic: 'Trigonometry',     kind: 'visualizer', diff: 2, code: 'Sc', desc: 'Build amplitude, period, phase shift, and midline from one trig equation.', href: 'tools/sine-cosine-builder.html' },
-      { id: 'bxplt', name: 'Box Plot Builder',              unit: 'U9', topic: 'Statistics',       kind: 'visualizer', diff: 2, code: 'Bp', desc: 'Enter any dataset — see the 5-number summary, IQR, outlier fences, and skew shape.', href: 'tools/box-plot-builder.html' },
-      { id: 'probx', name: 'Probability Rules Sandbox',    unit: 'U9', topic: 'Statistics',       kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Roll two dice — watch experimental probability converge to theoretical. Complement, OR, AND rules live.', href: 'tools/probability-sandbox.html' },
-      { id: 'smpbx', name: 'Sampling Bias Lab',            unit: 'U9', topic: 'Statistics',       kind: 'visualizer', diff: 3, code: 'Sb', desc: 'Compare random vs biased sampling — watch sample means converge (or drift) toward the true population mean.', href: 'tools/sampling-bias-lab.html' },
-      { id: 'qwpx',  name: 'Quadratic Word Problems Trainer', unit: 'U3', topic: 'Quadratics',    kind: 'practice',   diff: 2, code: 'Qw', desc: '4 projectile motion problems — step through vertex, max height, and landing time with a live trajectory canvas.', href: 'tools/quadratic-word-problems.html' },
-      { id: 'ratd',  name: 'Rationalizing Denominators',   unit: 'U3', topic: 'Radicals',        kind: 'practice',   diff: 2, code: 'Rd', desc: 'Step through 4 types: monomial radical, binomial radical, imaginary denominator, and complex conjugate.', href: 'tools/rationalizing-denominators.html' },
+      { id: 'quad',  prev: 'parabola',     name: 'Quadratic Slider Studio',         unit: 'U1', topic: 'Quadratics',  kind: 'visualizer', diff: 1, code: 'Qs', desc: 'Slide a, h, k and watch the parabola move. Vertex form made visual.',           href: 'tools/quadratic-slider.html' },
+      { id: 'subs',  prev: 'systems',      name: 'Substitution Stepper',            unit: 'U1', topic: 'Systems',     kind: 'practice',   diff: 1, code: 'Sb', desc: 'Walk through substitution step by step. No jumping ahead.',                      href: 'tools/substitution-stepper.html' },
+      { id: 'elim',  prev: 'systems',      name: 'Elimination Race',                unit: 'U1', topic: 'Systems',     kind: 'game',       diff: 2, code: 'El', desc: 'Solve systems by elimination — race against yourself.',                          href: 'tools/elimination-race.html' },
+      { id: 'fact',  prev: 'factoring',    name: 'Factoring Quadratics Lab',        unit: 'U1', topic: 'Factoring',   kind: 'practice',   diff: 2, code: 'Fq', desc: 'See what happens when you change the factors. Area model included.',             href: 'tools/factoring-lab.html' },
+      { id: 'piece', prev: 'piecewise',    name: 'Piecewise Function Grapher',      unit: 'U1', topic: 'Functions',   kind: 'visualizer', diff: 3, code: 'Pw', desc: 'Build piecewise rules and watch open and closed endpoints behave.',            href: 'tools/piecewise-grapher.html' },
+      { id: 'absv',  prev: 'vshape',       name: 'Absolute Value Grapher',          unit: 'U2', topic: 'Graphs',      kind: 'visualizer', diff: 1, code: 'Av', desc: 'Drag the V. Watch y = a|x − h| + k update in real time.',                       href: 'tools/abs-value-grapher.html' },
+      { id: 'trans', prev: 'transforms',   name: 'Transformations Explorer',        unit: 'U2', topic: 'Functions',   kind: 'visualizer', diff: 3, code: 'Tx', desc: 'Move a, b, h, and k across parent functions and see what changes.',          href: 'tools/transformations.html' },
+      { id: 'negx',  prev: 'exponent',     name: 'Negative Exponent Flipper',       unit: 'U2', topic: 'Exponents',   kind: 'visualizer', diff: 1, code: 'Nx', desc: 'See x⁻² flip into 1/x². No tricks, just the definition.',                       href: 'tools/neg-exponent-flipper.html' },
+      { id: 'dos',   prev: 'factoring',    name: 'Difference of Squares',           unit: 'U2', topic: 'Factoring',   kind: 'game',       diff: 2, code: 'DS', desc: 'Spot and factor a²−b² before the timer runs out. Quick drill.',                  href: 'tools/diff-of-squares.html' },
+      { id: 'doc',   prev: 'factoring',    name: 'Difference of Cubes',             unit: 'U2', topic: 'Factoring',   kind: 'reference',  diff: 3, code: 'DC', desc: 'The formulas for a³±b³, with visual proof and worked examples.',                 href: 'tools/diff-of-cubes.html' },
+      { id: 'imag',  prev: 'complex',      name: 'Imaginary Number Sandbox',        unit: 'U3', topic: 'Imaginary',   kind: 'visualizer', diff: 1, code: 'Im', desc: 'Plot complex numbers. See what multiplying by i actually does.',                  href: 'tools/imaginary-sandbox.html' },
+      { id: 'qstd',  prev: 'parabola',     name: 'Quadratic Standard Form',         unit: 'U3', topic: 'Quadratics',  kind: 'visualizer', diff: 2, code: 'Qf', desc: 'Slide a, b, c and connect vertex, discriminant, and roots.',              href: 'tools/quadratic-standard.html' },
+      { id: 'rex',   prev: 'rational',     name: 'Rational Expression Builder',     unit: 'U3', topic: 'Rationals',   kind: 'visualizer', diff: 2, code: 'Rx', desc: 'Build a rational expression and see its graph, domain, and holes.',               href: 'tools/rational-expressions.html' },
+      { id: 'comp',  prev: 'parabola',     name: 'Complete the Square Trainer',     unit: 'U3', topic: 'Quadratics',  kind: 'practice',   diff: 2, code: 'Cs', desc: 'Step through completing the square at your own pace. Each step explained.',      href: 'tools/complete-square.html' },
+      { id: 'ratx',  prev: 'exponent',     name: 'Rational Exponents Tower',        unit: 'U4', topic: 'Exponents',   kind: 'game',       diff: 3, code: 'Re', desc: 'Match x^(m/n) to its radical form. Stack your correct answers.',                  href: 'tools/rational-exponents.html' },
+      { id: 'cubic', prev: 'cubic',        name: 'Cubic & Radical Grapher',         unit: 'U4', topic: 'Radicals',    kind: 'visualizer', diff: 3, code: 'Cr', desc: 'Compare cubic inflection points with square-root starting points.',           href: 'tools/cubic-radical.html' },
+      { id: 'fcomp', prev: 'composition',  name: 'Composition Machine',             unit: 'U4', topic: 'Functions',   kind: 'visualizer', diff: 2, code: 'Cm', desc: 'Send x through f and g in order. Swap the order and compare.',             href: 'tools/composition.html' },
+      { id: 'inv',   prev: 'inverse',      name: 'Inverse Function Revealer',       unit: 'U4', topic: 'Functions',   kind: 'visualizer', diff: 3, code: 'Iv', desc: 'Reflect f and f⁻¹ over y = x and test one-to-one functions.',             href: 'tools/inverse-function.html' },
+      { id: 'logcv', prev: 'log',          name: 'Log ↔ Exponential Converter',     unit: 'U5', topic: 'Logs',        kind: 'practice',   diff: 2, code: 'Lg', desc: 'Translate bˣ = y into log form and back until it clicks.',                  href: 'tools/log-converter.html' },
+      { id: 'expo',  prev: 'exponential',  name: 'Exponential Function Explorer',   unit: 'U5', topic: 'Exponentials',kind: 'visualizer', diff: 2, code: 'Ef', desc: 'Draw the asymptote first, then anchor two points. Growth vs decay made visual.', href: 'tools/exponential-explorer.html' },
+      { id: 'logp',  prev: 'log',          name: 'Log Properties Sandbox',          unit: 'U5', topic: 'Logs',        kind: 'practice',   diff: 2, code: 'Lp', desc: 'Expand, condense, and simplify logs using the blog rule — step by step.',     href: 'tools/log-properties.html' },
+      { id: 'expeq', prev: 'exponential',  name: 'Exponential Equation Solver',     unit: 'U5', topic: 'Exponentials',kind: 'practice',   diff: 2, code: 'Ee', desc: 'Choose same-base, log-both-sides, or ln, then solve step by step.',         href: 'tools/exponential-equation-solver.html' },
+      { id: 'emb',   prev: 'exponential',  name: 'Exponential Model Builder',       unit: 'U5', topic: 'Exponentials',kind: 'practice',   diff: 3, code: 'Em', desc: 'Drag P, r, t, n into the right formula. Keep exact form before rounding.',    href: 'tools/exponential-model-builder.html' },
+      { id: 'rsimp', prev: 'rational',     name: 'Rational Simplifier',             unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 2, code: 'Rs', desc: 'Factor first, cancel matching factors, and keep excluded values.',             href: 'tools/rational-simplifier.html' },
+      { id: 'addr',  prev: 'rational',     name: 'Adding Rational Expressions',     unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Ar', desc: 'Build the LCD from factor chips, rewrite, combine, and simplify.',             href: 'tools/adding-rationals.html' },
+      { id: 'rmul',  prev: 'rational',     name: 'Rational Mult/Div Stepper',       unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Md', desc: 'KCF first, factor everything, cancel matching pairs, then lock domain restrictions.', href: 'tools/rational-multdiv.html' },
+      { id: 'req',   prev: 'rational',     name: 'Solving Rational Equations',      unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Re', desc: 'LCD · multiply · solve · check for extraneous solutions step by step.',      href: 'tools/rational-equations.html' },
+      { id: 'poly',  prev: 'polynomial',   name: 'Polynomial Sketch Pad',           unit: 'U6', topic: 'Polynomials', kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Set roots and multiplicities, then sketch cross, bounce, and end behavior.', href: 'tools/polynomial-sketch.html' },
+      { id: 'pdiv',  prev: 'polynomial',   name: 'Polynomial Division Stepper',     unit: 'U6', topic: 'Polynomials', kind: 'practice',   diff: 3, code: 'Pd', desc: 'Long division and synthetic — step through divide, multiply, subtract, bring down. Factor verdict at the end.', href: 'tools/polynomial-division-stepper.html' },
+      { id: 'soht',  prev: 'triangle',     name: 'SOH CAH TOA Triangle Solver',     unit: 'U7', topic: 'Trigonometry',kind: 'practice',   diff: 2, code: 'St', desc: 'Click a reference angle, watch opp/adj labels update, and solve the triangle.', href: 'tools/soh-cah-toa.html' },
+      { id: 'unitc', prev: 'unitcircle',   name: 'Unit Circle Walker',              unit: 'U7', topic: 'Trigonometry',kind: 'visualizer', diff: 3, code: 'Uc', desc: 'Drag around the unit circle and watch sine or cosine trace a wave.',          href: 'tools/unit-circle.html' },
+      { id: 'trigb', prev: 'sine',         name: 'Sine/Cosine Graph Builder',       unit: 'U7', topic: 'Trigonometry',kind: 'visualizer', diff: 2, code: 'Sc', desc: 'Build amplitude, period, phase shift, and midline from one trig equation.', href: 'tools/sine-cosine-builder.html' },
+      { id: 'bxplt', prev: 'boxplot',      name: 'Box Plot Builder',                unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Bp', desc: 'Enter any dataset — see the 5-number summary, IQR, outlier fences, and skew shape.', href: 'tools/box-plot-builder.html' },
+      { id: 'probx', prev: 'probability',  name: 'Probability Rules Sandbox',       unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Roll two dice — watch experimental probability converge to theoretical. Complement, OR, AND rules live.', href: 'tools/probability-sandbox.html' },
+      { id: 'smpbx', prev: 'probability',  name: 'Sampling Bias Lab',               unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 3, code: 'Sb', desc: 'Compare random vs biased sampling — watch sample means converge (or drift) toward the true population mean.', href: 'tools/sampling-bias-lab.html' },
+      { id: 'qwpx',  prev: 'projectile',   name: 'Quadratic Word Problems Trainer', unit: 'U3', topic: 'Quadratics',  kind: 'practice',   diff: 2, code: 'Qw', desc: '4 projectile motion problems — step through vertex, max height, and landing time with a live trajectory canvas.', href: 'tools/quadratic-word-problems.html' },
+      { id: 'ratd',  prev: 'rational',     name: 'Rationalizing Denominators',      unit: 'U3', topic: 'Radicals',    kind: 'practice',   diff: 2, code: 'Rd', desc: 'Step through 4 types: monomial radical, binomial radical, imaginary denominator, and complex conjugate.', href: 'tools/rationalizing-denominators.html' },
     ];
 
     const UNIT_COLORS = { U1: '#dde8cf', U2: '#cfe3f1', U3: '#f1e1cf', U4: '#e8cfe9', U5: '#f4dfbd', U6: '#d8e6df', U7: '#d6dcf4', U9: '#f4d4e8' };
@@ -295,6 +324,7 @@
         card.className = `tool-card sk-box ${i % 2 === 0 ? 'odd' : 'even'}`;
         card.dataset.kind = t.kind;
         card.dataset.name = t.name.toLowerCase() + ' ' + t.topic.toLowerCase() + ' ' + t.unit.toLowerCase();
+        card.dataset.toolId = t.id;
         card.style.background = UNIT_COLORS[t.unit] || 'var(--paper)';
         card.innerHTML = `
           <div class="tool-card-icon">${t.code}</div>
@@ -306,6 +336,10 @@
             <span class="sk-tag" style="font-size:10px;">${'●'.repeat(t.diff)}</span>
           </div>
         `;
+        card.addEventListener('mouseenter', () => {
+          showPreview(t.id, t.name, card.getBoundingClientRect());
+        });
+        card.addEventListener('mouseleave', hidePreview);
         grid.appendChild(card);
       });
     }
@@ -342,6 +376,519 @@
 
     document.getElementById('search-input').addEventListener('input', applyFilter);
     applyFilter(); // initialise count on first load
+
+    // ── Hover Preview System ─────────────────────────────────────────────
+    (function() {
+      const DPR = window.devicePixelRatio || 1;
+      const PW = 200, PH = 120;
+      const previewCanvas = document.getElementById('tool-preview-canvas');
+      previewCanvas.width  = PW * DPR;
+      previewCanvas.height = PH * DPR;
+      const pCtx = previewCanvas.getContext('2d');
+      pCtx.scale(DPR, DPR);
+
+      const popup  = document.getElementById('tool-preview-popup');
+      const footer = document.getElementById('preview-footer-text');
+
+      let previewRAF = null;
+      let previewT   = 0;
+      let activeRenderer = null;
+
+      // ── Shared drawing helpers ──
+      function bg(ctx, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#f6f1e4';
+        ctx.fillRect(0, 0, w, h);
+      }
+      function axes(ctx, ox, oy, w, h) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.35)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(w, oy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, h); ctx.stroke();
+      }
+      function grid(ctx, ox, oy, sc, w, h, n) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.07)';
+        ctx.lineWidth = 1;
+        for (let g = -n; g <= n; g++) {
+          ctx.beginPath(); ctx.moveTo(ox + g*sc, 0); ctx.lineTo(ox + g*sc, h); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, oy + g*sc); ctx.lineTo(w, oy + g*sc); ctx.stroke();
+        }
+      }
+      function plotFn(ctx, fn, ox, oy, sc, w, h, color, lw) {
+        ctx.strokeStyle = color; ctx.lineWidth = lw || 2.5; ctx.lineJoin = 'round';
+        ctx.beginPath();
+        let first = true;
+        for (let px = 0; px < w; px++) {
+          const x = (px - ox) / sc;
+          const y = fn(x);
+          const py = oy - y * sc;
+          if (isFinite(py) && py > -20 && py < h + 20) {
+            first ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+            first = false;
+          } else { first = true; }
+        }
+        ctx.stroke();
+      }
+
+      // ── 21 Renderers ──
+      const R = {
+
+        parabola(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2 + 8, sc = W/14;
+          grid(ctx, ox, oy, sc, W, H, 7);
+          axes(ctx, ox, oy, W, H);
+          const a = 0.65 + 0.35 * Math.sin(t * 0.7);
+          const h = 2.2  * Math.sin(t * 0.4);
+          const k = 1.4  * Math.sin(t * 0.5);
+          plotFn(ctx, x => a*(x-h)*(x-h)+k, ox, oy, sc, W, H, '#d94f2a');
+          ctx.fillStyle = '#d94f2a';
+          ctx.beginPath(); ctx.arc(ox + h*sc, oy - k*sc, 4, 0, Math.PI*2); ctx.fill();
+        },
+
+        vshape(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2 + 8, sc = W/14;
+          grid(ctx, ox, oy, sc, W, H, 7);
+          axes(ctx, ox, oy, W, H);
+          const a = 0.7 + 0.4 * Math.sin(t * 0.6);
+          const h = 2    * Math.sin(t * 0.4);
+          const k = 1.4  * Math.sin(t * 0.5);
+          plotFn(ctx, x => a*Math.abs(x-h)+k, ox, oy, sc, W, H, '#2a6fb4');
+          ctx.fillStyle = '#2a6fb4';
+          ctx.beginPath(); ctx.arc(ox + h*sc, oy - k*sc, 4, 0, Math.PI*2); ctx.fill();
+        },
+
+        sine(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const oy = H/2, sc = H * 0.38;
+          axes(ctx, -10, oy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+          [1, -1].forEach(s => {
+            ctx.beginPath(); ctx.moveTo(0, oy - s*sc); ctx.lineTo(W, oy - s*sc); ctx.stroke();
+          });
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let px = 0; px < W; px++) {
+            const py = oy - Math.sin((px / W) * 4 * Math.PI - t * 2) * sc;
+            px === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+        },
+
+        unitcircle(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const cx = W * 0.34, cy = H/2, r = Math.min(W, H) * 0.35;
+          axes(ctx, cx, cy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.2)'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+          const angle = t * 0.8;
+          const px = cx + r * Math.cos(angle), py = cy - r * Math.sin(angle);
+          ctx.strokeStyle = 'rgba(29,26,20,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, cy); ctx.stroke();
+          ctx.setLineDash([]);
+          // Sine wave on right
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          const wstart = W * 0.5;
+          for (let i = 0; i < W - wstart; i++) {
+            const a2 = (i / (W - wstart)) * 4 * Math.PI;
+            const wy = cy - r * Math.sin(a2 - angle);
+            i === 0 ? ctx.moveTo(wstart + i, wy) : ctx.lineTo(wstart + i, wy);
+          }
+          ctx.stroke();
+          ctx.fillStyle = '#d94f2a'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
+          // dot on wave
+          ctx.fillStyle = 'rgba(29,26,20,0.7)';
+          ctx.beginPath(); ctx.arc(wstart, cy - r*Math.sin(angle), 4, 0, Math.PI*2); ctx.fill();
+        },
+
+        triangle(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const theta = Math.PI/6 + (Math.PI/4) * ((Math.sin(t*0.5)+1)/2);
+          const bx = 28, by = H - 22, blen = W - 52;
+          const vlen = blen * Math.tan(theta);
+          const ax = bx, ay = Math.max(10, by - vlen);
+          const actualV = by - ay;
+          const cx2 = bx + blen;
+          // right angle box
+          ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1;
+          ctx.strokeRect(cx2 - 10, by - 10, 10, 10);
+          // triangle
+          ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax, by); ctx.lineTo(cx2, by); ctx.closePath(); ctx.stroke();
+          // labels
+          ctx.font = 'bold 11px Patrick Hand, cursive'; ctx.textAlign = 'center';
+          ctx.fillStyle = '#d94f2a'; ctx.fillText('opp', ax - 14, (ay+by)/2);
+          ctx.fillStyle = '#2a6fb4'; ctx.fillText('adj', (ax+cx2)/2, by + 14);
+          const hx = ax + blen*0.45, hy = ay + actualV*0.45;
+          ctx.fillStyle = '#2a8a4a'; ctx.fillText('hyp', hx + 10, hy);
+          // angle arc
+          ctx.strokeStyle = '#8b4513'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(ax, by, 22, -theta, 0); ctx.stroke();
+          ctx.fillStyle = '#8b4513'; ctx.textAlign = 'left';
+          ctx.fillText('θ', ax + 14, by - 6);
+          ctx.textAlign = 'left';
+        },
+
+        exponential(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = 18, oy = H - 18, sc = W * 0.044;
+          axes(ctx, ox, oy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+          ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+          ctx.setLineDash([]);
+          const base = 1.6 + 0.5 * Math.sin(t * 0.4);
+          plotFn(ctx, x => Math.pow(base, x), ox, oy, sc, W, H, '#d94f2a');
+        },
+
+        log(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = 18, oy = H/2, sc = W * 0.044;
+          axes(ctx, ox, oy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+          ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+          ctx.setLineDash([]);
+          const base = 2.2 + 0.8 * Math.sin(t * 0.4);
+          ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+          ctx.beginPath();
+          let first = true;
+          for (let px = ox + 1; px < W; px++) {
+            const x = (px - ox) / sc;
+            if (x <= 0) continue;
+            const y = Math.log(x) / Math.log(base);
+            const py = oy - y * sc;
+            if (isFinite(py) && py > -10 && py < H + 10) {
+              first ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+              first = false;
+            }
+          }
+          ctx.stroke();
+        },
+
+        rational(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.2)'; ctx.lineWidth = 1; ctx.setLineDash([4,4]);
+          ctx.beginPath(); ctx.moveTo(ox + sc, 0); ctx.lineTo(ox + sc, H); ctx.stroke();
+          ctx.setLineDash([]);
+          plotFn(ctx, x => {
+            if (Math.abs(x - 1) < 0.12) return NaN;
+            return 1 / (x - 1);
+          }, ox, oy, sc, W, H, '#7a2a8a');
+        },
+
+        polynomial(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          const s = 0.4 * Math.sin(t * 0.3);
+          plotFn(ctx, x => 0.1*(x+2+s)*(x-0.5)*(x-2.5+s), ox, oy, sc, W, H, '#2a6fb4');
+        },
+
+        cubic(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          const a = 0.14 + 0.04 * Math.sin(t * 0.5);
+          plotFn(ctx, x => a * x * x * x, ox, oy, sc, W, H, '#8b4513');
+          ctx.setLineDash([5, 4]);
+          plotFn(ctx, x => x >= 0 ? a * 18 * Math.cbrt(x) : NaN, ox, oy, sc, W, H, '#2a6fb4', 2);
+          ctx.setLineDash([]);
+        },
+
+        piecewise(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let px = 0; px < ox; px++) {
+            const x = (px - ox) / sc;
+            const py = oy - (x + 2) * sc;
+            if (py > -5 && py < H+5) px === 0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+          }
+          ctx.stroke();
+          ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          for (let px = Math.floor(ox); px < W; px++) {
+            const x = (px - ox) / sc;
+            const py = oy - (-0.35 * x * x + 2.8) * sc;
+            if (py > -5 && py < H+5) px === Math.floor(ox) ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+          }
+          ctx.stroke();
+          ctx.fillStyle = '#d94f2a';
+          ctx.beginPath(); ctx.arc(ox, oy - 2*sc, 5, 0, Math.PI*2); ctx.fill();
+          ctx.fillStyle = '#fff'; ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(ox, oy - 2.8*sc, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        },
+
+        transforms(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/14;
+          axes(ctx, ox, oy, W, H);
+          ctx.setLineDash([4, 4]);
+          plotFn(ctx, x => Math.abs(x), ox, oy, sc, W, H, 'rgba(29,26,20,0.2)', 1.5);
+          ctx.setLineDash([]);
+          const a = 0.7 + 0.6 * Math.abs(Math.sin(t * 0.4));
+          const h = 2.5 * Math.sin(t * 0.35);
+          const k = 1.5 * Math.sin(t * 0.45);
+          plotFn(ctx, x => a * Math.abs(x - h) + k, ox, oy, sc, W, H, '#d94f2a');
+        },
+
+        inverse(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          ctx.setLineDash([5, 5]);
+          plotFn(ctx, x => -x, ox, oy, sc, W, H, 'rgba(29,26,20,0.15)', 1);
+          ctx.setLineDash([]);
+          plotFn(ctx, x => 0.55*(0.1*x*x*x + x), ox, oy, sc, W, H, '#2a6fb4');
+          // f-inverse by plotting x=f(y)
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+          ctx.beginPath();
+          let first = true;
+          for (let py2 = 0; py2 < H; py2++) {
+            const y = -(py2 - oy) / sc;
+            const x = 0.55*(0.1*y*y*y + y);
+            const px2 = ox + x * sc;
+            if (px2 > -5 && px2 < W+5) { first ? ctx.moveTo(px2,py2) : ctx.lineTo(px2,py2); first=false; }
+            else { first = true; }
+          }
+          ctx.stroke();
+        },
+
+        complex(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const cx = W/2, cy = H/2, r = Math.min(W, H) * 0.34;
+          axes(ctx, cx, cy, W, H);
+          ctx.strokeStyle = 'rgba(29,26,20,0.15)'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+          const angle = t * 0.7;
+          const px = cx + r * Math.cos(angle), py = cy - r * Math.sin(angle);
+          ctx.strokeStyle = 'rgba(217,79,42,0.4)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, py); ctx.stroke();
+          ctx.strokeStyle = 'rgba(217,79,42,0.3)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, cy); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(px, cy); ctx.stroke();
+          ctx.fillStyle = '#d94f2a'; ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI*2); ctx.fill();
+          ctx.font = '10px Patrick Hand,cursive'; ctx.textAlign = 'right';
+          ctx.fillStyle = 'rgba(29,26,20,0.5)';
+          ctx.fillText('Re', W - 4, cy - 3);
+          ctx.fillText('Im', cx + 14, 12);
+          ctx.fillStyle = '#d94f2a'; ctx.font = 'bold 10px Patrick Hand,cursive'; ctx.textAlign = 'left';
+          const re = (Math.cos(angle)*1.4).toFixed(1), im = (Math.sin(angle)*1.4).toFixed(1);
+          ctx.fillText(`${re}+${im}i`, 6, 14);
+          ctx.textAlign = 'left';
+        },
+
+        factoring(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H*0.62, sc = W/12;
+          axes(ctx, ox, oy, W, H);
+          const s = 0.6 * Math.sin(t * 0.5);
+          const r1 = -2 + s, r2 = 2 - s;
+          plotFn(ctx, x => 0.35*(x-r1)*(x-r2), ox, oy, sc, W, H, '#d94f2a');
+          ctx.fillStyle = '#2a6fb4';
+          ctx.beginPath(); ctx.arc(ox+r1*sc, oy, 5, 0, Math.PI*2); ctx.fill();
+          ctx.beginPath(); ctx.arc(ox+r2*sc, oy, 5, 0, Math.PI*2); ctx.fill();
+          ctx.fillStyle = 'rgba(29,26,20,0.65)'; ctx.font = '11px Patrick Hand,cursive'; ctx.textAlign = 'center';
+          ctx.fillText('r₁', ox+r1*sc, oy+14);
+          ctx.fillText('r₂', ox+r2*sc, oy+14);
+          ctx.textAlign = 'left';
+        },
+
+        systems(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/12;
+          axes(ctx, ox, oy, W, H);
+          const m1 =  0.9 + 0.3 * Math.sin(t * 0.4);
+          const m2 = -0.7 + 0.2 * Math.sin(t * 0.5 + 1);
+          const b1 = 1, b2 = -1;
+          const ix = (b2 - b1) / (m1 - m2), iy = m1 * ix + b1;
+          ctx.lineWidth = 2.5;
+          ctx.strokeStyle = '#d94f2a';
+          ctx.beginPath();
+          ctx.moveTo(0, oy - (m1*(-ox/sc) + b1)*sc);
+          ctx.lineTo(W, oy - (m1*((W-ox)/sc) + b1)*sc);
+          ctx.stroke();
+          ctx.strokeStyle = '#2a6fb4';
+          ctx.beginPath();
+          ctx.moveTo(0, oy - (m2*(-ox/sc) + b2)*sc);
+          ctx.lineTo(W, oy - (m2*((W-ox)/sc) + b2)*sc);
+          ctx.stroke();
+          const ipx = ox + ix*sc, ipy = oy - iy*sc;
+          if (ipx > 4 && ipx < W-4 && ipy > 4 && ipy < H-4) {
+            ctx.fillStyle = '#2a8a4a'; ctx.beginPath(); ctx.arc(ipx, ipy, 5, 0, Math.PI*2); ctx.fill();
+          }
+        },
+
+        boxplot(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const spread = 0.5 + 0.5 * Math.abs(Math.sin(t * 0.4));
+          const cx = W/2, cy = H/2;
+          const Q1 = cx - 42*spread, Q3 = cx + 42*spread;
+          const med = cx + 12*Math.sin(t * 0.3);
+          const mn = cx - 72*spread, mx = cx + 72*spread;
+          ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(mn, cy); ctx.lineTo(Q1, cy); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(Q3, cy); ctx.lineTo(mx, cy); ctx.stroke();
+          ctx.strokeRect(Q1, cy-18, Q3-Q1, 36);
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2.5;
+          ctx.beginPath(); ctx.moveTo(med, cy-18); ctx.lineTo(med, cy+18); ctx.stroke();
+          ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1.5;
+          ctx.beginPath(); ctx.moveTo(mn, cy-8); ctx.lineTo(mn, cy+8); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(mx, cy-8); ctx.lineTo(mx, cy+8); ctx.stroke();
+          ctx.fillStyle = 'rgba(29,26,20,0.5)'; ctx.font = '10px Patrick Hand,cursive'; ctx.textAlign = 'center';
+          ctx.fillText('Q1', Q1, cy + 30); ctx.fillText('med', med, cy - 22); ctx.fillText('Q3', Q3, cy + 30);
+          ctx.textAlign = 'left';
+        },
+
+        probability(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const probs = [1,2,3,4,5,6].map(n => n/36);
+          const bw = 22, gap = 4, startX = 14;
+          const maxBarH = H - 36;
+          probs.forEach((p, i) => {
+            const bh = p * maxBarH * 6 * (0.88 + 0.12*Math.sin(t*0.5 + i));
+            const bx = startX + i*(bw+gap);
+            const by = H - 20 - bh;
+            ctx.fillStyle = i === 5 ? '#d94f2a' : 'rgba(42,111,180,0.7)';
+            ctx.fillRect(bx, by, bw, bh);
+            ctx.strokeStyle = '#1d1a14'; ctx.lineWidth = 1;
+            ctx.strokeRect(bx, by, bw, bh);
+            ctx.fillStyle = 'rgba(29,26,20,0.6)'; ctx.font = '10px Patrick Hand,cursive'; ctx.textAlign = 'center';
+            ctx.fillText(i+2, bx + bw/2, H - 6);
+          });
+          ctx.textAlign = 'left';
+        },
+
+        exponent(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const cx = W/2, cy = H/2;
+          const phase = (Math.sin(t * 0.5) + 1) / 2; // 0→1→0
+          ctx.fillStyle = '#1d1a14'; ctx.font = 'bold 20px Patrick Hand,cursive'; ctx.textAlign = 'center';
+          ctx.globalAlpha = 1 - phase * 0.4;
+          ctx.fillText('x⁻²', cx, cy - 10);
+          ctx.globalAlpha = 1;
+          // arrow
+          ctx.strokeStyle = '#d94f2a'; ctx.lineWidth = 2.5;
+          const arrowW = 28 * phase;
+          ctx.beginPath();
+          ctx.moveTo(cx - arrowW, cy + 4);
+          ctx.lineTo(cx + arrowW, cy + 4);
+          ctx.stroke();
+          if (arrowW > 4) {
+            ctx.fillStyle = '#d94f2a';
+            ctx.beginPath();
+            ctx.moveTo(cx + arrowW - 5, cy); ctx.lineTo(cx + arrowW, cy + 4); ctx.lineTo(cx + arrowW - 5, cy + 8);
+            ctx.fill();
+          }
+          ctx.globalAlpha = phase;
+          ctx.fillStyle = '#d94f2a'; ctx.font = 'bold 20px Patrick Hand,cursive';
+          ctx.fillText('1 / x²', cx, cy + 30);
+          ctx.globalAlpha = 1;
+          ctx.textAlign = 'left';
+        },
+
+        composition(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const BW = 38, GAP = 18, total = 3*BW + 2*GAP;
+          const startX = (PW - total) / 2, cy = H/2;
+          const labels = ['f', 'g', 'g∘f'];
+          const colors = ['#2a6fb4', '#d94f2a', '#2a8a4a'];
+          labels.forEach((lbl, i) => {
+            const bx = startX + i*(BW+GAP);
+            ctx.strokeStyle = colors[i]; ctx.lineWidth = 1.8;
+            ctx.strokeRect(bx, cy-16, BW, 32);
+            ctx.fillStyle = colors[i]; ctx.font = 'bold 13px Patrick Hand,cursive'; ctx.textAlign = 'center';
+            ctx.fillText(lbl, bx + BW/2, cy + 5);
+            if (i < 2) {
+              const ax = bx + BW, ay = cy;
+              ctx.strokeStyle = 'rgba(29,26,20,0.35)'; ctx.lineWidth = 1.5;
+              ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(ax+GAP-2, ay); ctx.stroke();
+              ctx.fillStyle = 'rgba(29,26,20,0.35)';
+              ctx.beginPath(); ctx.moveTo(ax+GAP-6,ay-4); ctx.lineTo(ax+GAP,ay); ctx.lineTo(ax+GAP-6,ay+4); ctx.fill();
+            }
+          });
+          // animated dot tracking x through the chain
+          const frac = ((t * 0.5) % (Math.PI * 2)) / (Math.PI * 2);
+          const dotX = startX - 16 + frac * (total + 32);
+          ctx.fillStyle = '#d94f2a';
+          ctx.beginPath(); ctx.arc(dotX, cy, 5, 0, Math.PI*2); ctx.fill();
+          ctx.textAlign = 'left';
+        },
+
+        projectile(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const g = 9.8, v0 = 18, angle = Math.PI/4;
+          const vx = v0*Math.cos(angle), vy = v0*Math.sin(angle);
+          const tMax = 2*vy/g, xMax = vx*tMax;
+          const scX = (W - 16) / xMax, scY = (H - 28) / (vy*vy/(2*g));
+          const oy = H - 14;
+          ctx.strokeStyle = 'rgba(29,26,20,0.3)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(8, oy); ctx.lineTo(W-4, oy); ctx.stroke();
+          // path
+          ctx.setLineDash([4, 4]);
+          ctx.strokeStyle = 'rgba(29,26,20,0.18)'; ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          for (let i = 0; i <= 80; i++) {
+            const tt = (i/80)*tMax, x = vx*tt, y = vy*tt - 0.5*g*tt*tt;
+            const px = 8 + x*scX, py = oy - y*scY;
+            i === 0 ? ctx.moveTo(px,py) : ctx.lineTo(px,py);
+          }
+          ctx.stroke(); ctx.setLineDash([]);
+          // ball
+          const ballT = (t * 0.55) % tMax;
+          const bx = 8 + vx*ballT*scX, by2 = oy - (vy*ballT - 0.5*g*ballT*ballT)*scY;
+          ctx.fillStyle = '#d94f2a'; ctx.beginPath(); ctx.arc(bx, by2, 6, 0, Math.PI*2); ctx.fill();
+        },
+
+      }; // end PREVIEW_RENDERERS
+
+      // ── Show / hide ──
+      function positionPopup(cardRect) {
+        let left = cardRect.right + 10;
+        let top  = cardRect.top;
+        if (left + PW + 8 > window.innerWidth)  left = cardRect.left - PW - 10;
+        if (left < 8)                            left = 8;
+        if (top + PH + 40 > window.innerHeight)  top  = window.innerHeight - PH - 48;
+        if (top < 8)                             top  = 8;
+        popup.style.left = left + 'px';
+        popup.style.top  = top  + 'px';
+      }
+
+      window.showPreview = function(toolId, toolName, cardRect) {
+        const tool = TOOLS.find(tt => tt.id === toolId);
+        if (!tool || !R[tool.prev]) return;
+        activeRenderer = R[tool.prev];
+        footer.textContent = toolName;
+        positionPopup(cardRect);
+        popup.classList.add('visible');
+        if (!previewRAF) loop();
+      };
+
+      window.hidePreview = function() {
+        popup.classList.remove('visible');
+        activeRenderer = null;
+        if (previewRAF) { cancelAnimationFrame(previewRAF); previewRAF = null; }
+      };
+
+      function loop() {
+        if (!activeRenderer) { previewRAF = null; return; }
+        pCtx.clearRect(0, 0, PW, PH);
+        activeRenderer(pCtx, PW, PH, previewT);
+        previewT += 0.025;
+        previewRAF = requestAnimationFrame(loop);
+      }
+
+    })(); // end preview IIFE
 
     // TOTW mini graph preview
     (function() {
@@ -422,6 +969,12 @@
       drawPreview();
     })();
   </script>
+  <!-- Hover preview popup (pointer-events:none, never blocks clicks) -->
+  <div id="tool-preview-popup" aria-hidden="true">
+    <canvas id="tool-preview-canvas" width="400" height="240"></canvas>
+    <div class="preview-footer" id="preview-footer-text"></div>
+  </div>
+
   <script>
     // Register service worker for offline/PWA support
     if ('serviceWorker' in navigator) {
