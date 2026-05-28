@@ -44,6 +44,7 @@
     .chip.vertex-c  { background:var(--highlight); }
     .chip.roots-c   { background:#d4edda; border-color:#2a8a4a; }
     .chip.yint-c    { background:var(--paper-2); }
+    .chip.vocab-c   { background:var(--paper-2); border-color:var(--ink-soft); color:var(--ink-2); font-size:11px; letter-spacing:0.02em; }
   </style>
 </head>
 <body class="paper-dots">
@@ -332,6 +333,9 @@
       add(`vertex (${fmt(h)}, ${fmt(k)})`, 'vertex-c');
       add(`y-int (0, ${fmt(c)})`, 'yint-c');
       add(`opens ${a > 0 ? 'up ↑' : 'down ↓'}`, 'yint-c');
+
+      // vocabulary bridge — always visible
+      add('zeros = roots = solutions = x-intercepts', 'vocab-c');
     }
 
     function update() {

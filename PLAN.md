@@ -7,7 +7,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 30 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
+**Site:** 7 unit pages (u1–u7), 32 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
 **Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
@@ -580,15 +580,24 @@ What to build:
 
 All 30 planned tools are now live. Future additions will be driven by video-learning insights and teacher requests.
 
-**Upgrade candidates from video insights (not new tools — improvements to existing ones):**
-- `adding-rationals.html`: add Subtract tab with negative-distribution as Step 1; add "does numerator factor?" final-simplification check.
-- `rational-expressions.html`: add interval-notation domain/range readout; add three-case horizontal asymptote rule chip; add slant asymptote indicator.
-- `imaginary-sandbox.html`: add "parabola connection" panel — "when discriminant < 0, solutions contain i and the parabola has no x-intercepts." Show a mini floating-parabola graphic.
-- `quadratic-slider.html` (Quadratic Standard Form Explorer): when discriminant chip is negative, label it "no real zeros — parabola doesn't touch x-axis."
-- Transformations Explorer: separate chips for "stretch by 2" vs "reflect over x-axis" when a = −2; add "write g(x) from verbal list" practice mode; add "why h is opposite" tooltip explaining the "make the inside zero" rule.
-- `factoring-lab.html`: add factor-search heuristic hint — "try pairs near √(product); if sum is too small, spread further apart."
-- `negexp.html` (Negative Exponent Flipper): add "plus/minus ruin the party" error state when student tries to flip a term in a sum/difference.
-- `complete-square.html` (Complete the Square Trainer): add three-form map chip (vertex ↔ standard ↔ intercept); add pattern-discovery hint from foiling (x+b/2)²; flag imaginary results with "no x-intercepts" note.
+**Upgrade candidates from video insights — all completed as of May 2026:**
+
+Pre-batch-10 upgrades (all ✅):
+- ✅ `adding-rationals.html`: subtract warning box + final-cancellation check via `tryCancel()`.
+- ✅ `rational-expressions.html`: interval-notation domain, three-case HA rule chips, slant asymptote line + label.
+- ✅ `imaginary-sandbox.html`: parabola connection panel (discriminant < 0 → imaginary solutions → no x-intercepts); powers-of-i practice strip (6 questions, two-step remainder mechanic).
+- ✅ `quadratic-slider.html`: discriminant chip — green "2 real zeros", yellow "1 zero — vertex on x-axis", red "no real zeros — parabola doesn't touch x-axis".
+- ✅ `transformations.html`: chips already separated stretch vs reflect; "why h is opposite" ❓ reveal box added to h slider.
+- ✅ `factoring-lab.html`: √(|ac|) heuristic hint shown when pair found and when none exist.
+- ✅ `negexp.html`: "Flip or No Flip?" quiz (6 questions) added; plus/minus distinction built into quiz feedback.
+- ✅ `complete-square.html`: three-form map sidebar; pattern-chip injection at step 3; imaginary-result note; quadratic formula derivation collapsible reveal.
+
+Batch-10 upgrades (all ✅):
+- ✅ `imaginary-sandbox.html`: powers-of-i practice strip (see above).
+- ✅ `rational-simplifier.html`: original-denominator 🔒 panel after cancellation — cancelled factors flagged "still excluded!".
+- ✅ `complete-square.html`: quadratic formula derivation reveal (see above).
+- ✅ `piecewise-grapher.html`: parabola-piece mode (≡/⌒ toggle per piece, a/h/k inputs, curve drawing, vertex dot); vertex-outside-interval ⚠ warning; ⌒ example preset.
+- ✅ `quadratic-standard.html`: vocabulary bridge chip — "zeros = roots = solutions = x-intercepts" always visible.
 
 **New tools from video insights (now built):**
 - ✅ Rational Multiplication/Division Stepper (U6-D7): KCF before factoring, factor/cancel with original-domain restrictions, 4 problems with reveal mechanic.

@@ -68,6 +68,18 @@
     }
 
     .count-row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+
+    /* type toggle (linear ↔ parabola) */
+    .type-btn {
+      border: 1.5px solid var(--ink-2); border-radius: 3px; background: var(--paper);
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1;
+      padding: 2px 6px; cursor: pointer; transition: background .1s;
+    }
+    .type-btn.is-quad { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .vert-warn {
+      font-family: 'Patrick Hand', cursive; font-size: 12px; color: #c8a000;
+      padding: 2px 12px 4px; margin-top: -3px;
+    }
   </style>
 </head>
 <body class="paper-grid">
@@ -106,6 +118,7 @@
         <button class="sk-pill active" id="btn2" onclick="setCount(2)">2</button>
         <button class="sk-pill" id="btn3" onclick="setCount(3)">3</button>
         <button class="btn small" onclick="reset()">↺ reset</button>
+        <button class="btn small" onclick="quadExample()">⌒ example</button>
       </div>
 
       <!-- piece controls -->
@@ -117,9 +130,9 @@
         <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
         <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
           <li>Each row is one piece of the function.</li>
-          <li>Set the slope <strong>m</strong> and y-intercept <strong>b</strong>.</li>
-          <li>Set the domain interval bounds.</li>
-          <li><strong>( )</strong> = open (that x excluded). <strong>[ ]</strong> = closed (included).</li>
+          <li>Click <strong>≡ / ⌒</strong> to switch a piece between linear and parabola.</li>
+          <li>Linear: set slope <strong>m</strong> and intercept <strong>b</strong>. Parabola: set <strong>a, h, k</strong> (vertex form).</li>
+          <li><strong>( )</strong> = open · <strong>[ ]</strong> = closed endpoint.</li>
           <li>Drag the x slider — the active piece lights up.</li>
         </ol>
       </div>
@@ -147,7 +160,8 @@
           <strong>Closed [ ]</strong>: endpoint included (filled dot)<br>
           <strong>Continuous</strong>: pieces connect with no gap or jump<br>
           <strong>Undefined</strong>: x falls in no piece's domain<br>
-          <strong>Domain</strong>: all x where at least one piece applies
+          <strong>Domain</strong>: all x where at least one piece applies<br>
+          <strong>⚠ Vertex outside interval</strong>: only part of the parabola shows — plug in the boundary x-values to find the endpoints
         </div>
       </div>
 
@@ -176,33 +190,46 @@
     // --- default piece sets ---
     function defaults(n) {
       if (n === 2) return [
-        { m:2,  b:1,  lInf:true,  lBnd:-10, lOpen:true,  rInf:false, rBnd:0,  rOpen:true  },
-        { m:-1, b:3,  lInf:false, lBnd:0,   lOpen:false, rInf:true,  rBnd:10, rOpen:true  },
+        { type:'linear', m:2,  b:1,  lInf:true,  lBnd:-10, lOpen:true,  rInf:false, rBnd:0,  rOpen:true  },
+        { type:'linear', m:-1, b:3,  lInf:false, lBnd:0,   lOpen:false, rInf:true,  rBnd:10, rOpen:true  },
       ];
       return [
-        { m:1,  b:3,  lInf:true,  lBnd:-10, lOpen:true,  rInf:false, rBnd:-2, rOpen:true  },
-        { m:0,  b:1,  lInf:false, lBnd:-2,  lOpen:false, rInf:false, rBnd:2,  rOpen:false },
-        { m:-2, b:-1, lInf:false, lBnd:2,   lOpen:true,  rInf:true,  rBnd:10, rOpen:true  },
+        { type:'linear', m:1,  b:3,  lInf:true,  lBnd:-10, lOpen:true,  rInf:false, rBnd:-2, rOpen:true  },
+        { type:'linear', m:0,  b:1,  lInf:false, lBnd:-2,  lOpen:false, rInf:false, rBnd:2,  rOpen:false },
+        { type:'linear', m:-2, b:-1, lInf:false, lBnd:2,   lOpen:true,  rInf:true,  rBnd:10, rOpen:true  },
       ];
     }
 
-    // --- evaluate f(x) ---
+    // --- evaluate y for a piece at x ---
+    function yAt(p, x) {
+      return p.type === 'quad'
+        ? p.a * (x - p.h) * (x - p.h) + p.k
+        : p.m * x + p.b;
+    }
+
+    // --- evaluate f(x) across all pieces ---
     function evalAt(x) {
       for (let i = 0; i < pieces.length; i++) {
         const p = pieces[i];
         const lok = p.lInf || (p.lOpen ? x >  p.lBnd : x >= p.lBnd);
         const rok = p.rInf || (p.rOpen ? x <  p.rBnd : x <= p.rBnd);
-        if (lok && rok) return { y: p.m * x + p.b, idx: i };
+        if (lok && rok) return { y: yAt(p, x), idx: i };
       }
       return { y: null, idx: -1 };
     }
 
     // --- format helpers ---
-    function fmtExpr(m, b) {
-      if (m === 0) return `${b}`;
-      let s = m === 1 ? 'x' : m === -1 ? '−x' : m < 0 ? `−${Math.abs(m)}x` : `${m}x`;
-      if (b > 0) s += ` + ${b}`;
-      else if (b < 0) s += ` − ${Math.abs(b)}`;
+    function fmtExpr(p) {
+      if (p.type === 'quad') {
+        const aStr = p.a === 1 ? '' : p.a === -1 ? '−' : p.a < 0 ? `−${Math.abs(p.a)}` : `${p.a}`;
+        const hPart = p.h === 0 ? 'x' : p.h > 0 ? `(x − ${p.h})` : `(x + ${Math.abs(p.h)})`;
+        const kStr  = p.k === 0 ? '' : p.k > 0 ? ` + ${p.k}` : ` − ${Math.abs(p.k)}`;
+        return `${aStr}${hPart}²${kStr}`;
+      }
+      if (p.m === 0) return `${p.b}`;
+      let s = p.m === 1 ? 'x' : p.m === -1 ? '−x' : p.m < 0 ? `−${Math.abs(p.m)}x` : `${p.m}x`;
+      if (p.b > 0) s += ` + ${p.b}`;
+      else if (p.b < 0) s += ` − ${Math.abs(p.b)}`;
       return s;
     }
 
@@ -210,6 +237,14 @@
       const l = p.lInf ? '−∞' : p.lBnd;
       const r = p.rInf ? '+∞' : p.rBnd;
       return `${p.lOpen || p.lInf ? '(' : '['}${l}, ${r}${p.rOpen || p.rInf ? ')' : ']'}`;
+    }
+
+    // --- check if the vertex of a quad piece is inside its active interval ---
+    function vertexInInterval(p) {
+      if (p.type !== 'quad') return true;
+      const lok = p.lInf || (p.lOpen ? p.h > p.lBnd : p.h >= p.lBnd);
+      const rok = p.rInf || (p.rOpen ? p.h < p.rBnd : p.h <= p.rBnd);
+      return lok && rok;
     }
 
     // --- render piece control rows ---
@@ -221,14 +256,31 @@
       pieces.forEach((p, i) => {
         const row = document.createElement('div');
         row.className = `piece-row c${i}${active === i ? ' lit' : ''}`;
+        const isQuad = p.type === 'quad';
 
-        row.innerHTML = `
-          <span style="font-family:'Permanent Marker',cursive; font-size:11px; color:${COLORS[i]}; min-width:18px;">P${i+1}</span>
+        const exprPart = isQuad ? `
+          <span class="pl" style="font-size:11px; color:${COLORS[i]}; font-weight:700; min-width:12px;">a</span>
+          <input class="coeff-box" type="number" value="${p.a}" min="-4" max="4" step="1"
+                 data-i="${i}" data-f="a" style="border-color:${COLORS[i]}; width:38px;" title="a (stretch)" />
+          <span class="pl" style="font-size:11px; color:${COLORS[i]}; font-weight:700; min-width:12px;">h</span>
+          <input class="coeff-box" type="number" value="${p.h}" min="-8" max="8" step="1"
+                 data-i="${i}" data-f="h" style="border-color:${COLORS[i]}; width:38px;" title="vertex x" />
+          <span class="pl" style="font-size:11px; color:${COLORS[i]}; font-weight:700; min-width:12px;">k</span>
+          <input class="coeff-box" type="number" value="${p.k}" min="-8" max="8" step="1"
+                 data-i="${i}" data-f="k" style="border-color:${COLORS[i]}; width:38px;" title="vertex y" />
+        ` : `
           <input class="coeff-box" type="number" value="${p.m}" min="-9" max="9" step="1"
                  data-i="${i}" data-f="m" style="border-color:${COLORS[i]};" title="slope" />
           <span class="pl">x +</span>
           <input class="coeff-box" type="number" value="${p.b}" min="-9" max="9" step="1"
                  data-i="${i}" data-f="b" style="border-color:${COLORS[i]};" title="y-intercept" />
+        `;
+
+        row.innerHTML = `
+          <span style="font-family:'Permanent Marker',cursive; font-size:11px; color:${COLORS[i]}; min-width:18px;">P${i+1}</span>
+          <button class="type-btn${isQuad ? ' is-quad' : ''}" data-i="${i}" data-f="type"
+                  title="toggle linear ↔ parabola">${isQuad ? '⌒' : '≡'}</button>
+          ${exprPart}
           <span class="pl" style="margin-left:4px; color:var(--ink-2); font-size:12px;">for x∈</span>
           <button class="ep-btn ${p.lOpen || p.lInf ? '' : 'closed'}" data-i="${i}" data-f="lOpen"
                   title="toggle left endpoint">${p.lOpen || p.lInf ? '(' : '['}</button>
@@ -246,8 +298,15 @@
           <button class="ep-btn ${p.rOpen || p.rInf ? '' : 'closed'}" data-i="${i}" data-f="rOpen"
                   title="toggle right endpoint">${p.rOpen || p.rInf ? ')' : ']'}</button>
         `;
-
         el.appendChild(row);
+
+        // Vertex-outside-interval warning
+        if (isQuad && !vertexInInterval(p)) {
+          const warn = document.createElement('div');
+          warn.className = 'vert-warn';
+          warn.textContent = `⚠ vertex at x = ${p.h} is outside ${fmtInterval(p)} — only part of the parabola is shown. Plug in boundary values to find the endpoints.`;
+          el.appendChild(warn);
+        }
       });
 
       // wire up all inputs
@@ -256,9 +315,22 @@
                  : inp.type === 'checkbox'  ? 'change' : 'input';
         inp.addEventListener(ev, () => {
           const i = +inp.dataset.i, f = inp.dataset.f;
-          if (inp.tagName === 'BUTTON') pieces[i][f] = !pieces[i][f];
-          else if (inp.type === 'checkbox') pieces[i][f] = inp.checked;
-          else pieces[i][f] = Number(inp.value) || 0;
+          if (inp.tagName === 'BUTTON' && f === 'type') {
+            // toggle linear ↔ quad, preserving interval
+            const { lInf, lBnd, lOpen, rInf, rBnd, rOpen } = pieces[i];
+            if (pieces[i].type === 'linear') {
+              const midH = lInf && rInf ? 0 : lInf ? rBnd - 2 : rInf ? lBnd + 2 : Math.round((lBnd + rBnd) / 2);
+              pieces[i] = { type:'quad', a:1, h:midH, k:0, lInf, lBnd, lOpen, rInf, rBnd, rOpen };
+            } else {
+              pieces[i] = { type:'linear', m:1, b:0, lInf, lBnd, lOpen, rInf, rBnd, rOpen };
+            }
+          } else if (inp.tagName === 'BUTTON') {
+            pieces[i][f] = !pieces[i][f];
+          } else if (inp.type === 'checkbox') {
+            pieces[i][f] = inp.checked;
+          } else {
+            pieces[i][f] = Number(inp.value) || 0;
+          }
           renderControls();
           draw();
         });
@@ -276,7 +348,7 @@
         line.className = `pw-line${i === active ? ' lit' : ''}`;
         line.style.color = COLORS[i];
         line.innerHTML =
-          `<span>${fmtExpr(p.m, p.b)}</span>` +
+          `<span>${fmtExpr(p)}</span>` +
           `<span style="color:var(--ink-2); font-size:12px;">&nbsp;, x ∈ ${fmtInterval(p)}</span>`;
         el.appendChild(line);
       });
@@ -348,21 +420,33 @@
         const xR = p.rInf ? xMax : Math.min(xMax, p.rBnd);
         if (xL >= xR) return;
 
-        // line
         ctx.strokeStyle = col;
         ctx.lineWidth = isActive ? 3.5 : 2;
         ctx.setLineDash([]);
         ctx.lineJoin = 'round';
         ctx.beginPath();
-        ctx.moveTo(ox + xL * sc, oy - (p.m * xL + p.b) * sc);
-        ctx.lineTo(ox + xR * sc, oy - (p.m * xR + p.b) * sc);
+
+        if (p.type === 'quad') {
+          // draw parabola segment pixel-by-pixel
+          let started = false;
+          for (let px = ox + xL * sc; px <= ox + xR * sc + 0.5; px += 0.7) {
+            const x = Math.min((px - ox) / sc, xR);
+            const y = p.a * (x - p.h) * (x - p.h) + p.k;
+            const py = oy - y * sc;
+            if (py < -H || py > 2 * H) { started = false; continue; }
+            if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+          }
+        } else {
+          ctx.moveTo(ox + xL * sc, oy - yAt(p, xL) * sc);
+          ctx.lineTo(ox + xR * sc, oy - yAt(p, xR) * sc);
+        }
         ctx.stroke();
 
         // endpoints
         const drawDot = (xVal, open) => {
           if (xVal < xMin - 0.01 || xVal > xMax + 0.01) return;
           const ex = ox + xVal * sc;
-          const ey = oy - (p.m * xVal + p.b) * sc;
+          const ey = oy - yAt(p, xVal) * sc;
           ctx.strokeStyle = col; ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(ex, ey, 5, 0, Math.PI * 2);
           ctx.fillStyle = open ? '#f6f1e4' : col;
@@ -370,6 +454,23 @@
         };
         if (!p.lInf) drawDot(p.lBnd, p.lOpen);
         if (!p.rInf) drawDot(p.rBnd, p.rOpen);
+
+        // vertex dot for quad pieces
+        if (p.type === 'quad') {
+          const vx = ox + p.h * sc;
+          const vy = oy - p.k * sc;
+          if (vx >= 0 && vx <= W && vy >= -20 && vy <= H + 20) {
+            const inInt = vertexInInterval(p);
+            ctx.fillStyle  = inInt ? col : '#c8a000';
+            ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(vx, vy, 4, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+            ctx.fillStyle = inInt ? col : '#c8a000';
+            ctx.font = "10px 'Patrick Hand',cursive";
+            ctx.textAlign = vx > W * 0.72 ? 'right' : 'left';
+            const lx = vx > W * 0.72 ? vx - 7 : vx + 7;
+            ctx.fillText(`vtx (${p.h},${p.k})${inInt ? '' : ' ← outside'}`, lx, vy - 6);
+          }
+        }
       });
 
       // x-tracker line
@@ -438,6 +539,18 @@
       document.getElementById('btn3').classList.toggle('active', n === 3);
       renderControls();
       draw();
+    }
+
+    // quad example: downward parabola + linear, continuous at x = 2
+    function quadExample() {
+      numPieces = 2;
+      pieces = [
+        { type:'quad',   a:-1, h:0, k:4, lInf:false, lBnd:-2, lOpen:false, rInf:false, rBnd:2, rOpen:false },
+        { type:'linear', m:1,  b:-2,     lInf:false, lBnd:2,  lOpen:true,  rInf:true,  rBnd:10, rOpen:true  },
+      ];
+      document.getElementById('btn2').classList.add('active');
+      document.getElementById('btn3').classList.remove('active');
+      renderControls(); draw();
     }
 
     function reset() {
