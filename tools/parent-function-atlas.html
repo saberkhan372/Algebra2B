@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent Function Atlas — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .family-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
+
+    /* sliders */
+    .slider-grid {
+      display: grid;
+      grid-template-columns: 90px 1fr 58px;
+      gap: 5px 10px; align-items: center; margin-top: 8px;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .param-lbl .letter { font-size: 17px; font-style: italic; font-weight: 700; }
+
+    /* equation display */
+    .eq-strip {
+      margin-top: 8px; padding: 7px 14px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 17px; letter-spacing: 0.03em;
+    }
+
+    /* feature chips */
+    .chips-row {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; min-height: 30px;
+    }
+    .feat-chip {
+      padding: 3px 9px; border-radius: 4px; border: 1.5px solid var(--ink-2);
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      display: inline-flex; align-items: baseline; gap: 5px;
+    }
+    .chip-label {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .chip-value { font-weight: 600; color: var(--ink); }
+    .chip-domain  { background: #cfe3f1; border-color: #2a6fb4; }
+    .chip-range   { background: #dde8cf; border-color: var(--green); }
+    .chip-zeros   { background: #f1e1cf; border-color: var(--accent); }
+    .chip-yint    { background: #e8cfe9; border-color: #7c3aed; }
+    .chip-asymp   { background: #fef3c7; border-color: #8b6914; }
+    .chip-special { background: var(--paper-3); border-color: var(--ink-2); }
+
+    /* number inputs */
+    .dyn-val[type=number] {
+      width: 54px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield; transition: border-color 0.15s;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus {
+      outline: none; border-bottom-color: var(--accent); background: var(--paper-2);
+    }
+
+    .bottom-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap;
+    }
+    .tog-chk {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2);
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+    }
+
+    /* sidebar cards */
+    .formula-card {
+      text-align: center; padding: 10px 14px;
+      border: 1.5px dashed var(--ink-2); border-radius: 4px;
+    }
+    .formula-card .f-big {
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 2.2;
+    }
+
+    /* chip legend in sidebar */
+    .legend-row {
+      display: flex; align-items: center; gap: 7px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2);
+      margin-bottom: 2px;
+    }
+    .leg-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb">
+        <a href="../index.html">← all tools</a> &nbsp;·&nbsp; Parent Function Atlas
+      </div>
+      <div class="tool-title f-display">
+        Parent Function <span style="color:var(--accent);">Atlas</span>
+      </div>
+      <div class="tool-tagline f-hand">
+        Five function families. Domain, range, zeros, asymptotes — all update live.
+      </div>
+
+      <!-- canvas -->
+      <div class="widget-container" style="flex:1; min-height:180px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <!-- equation strip -->
+      <div class="eq-strip" id="eq-display">y = x²</div>
+
+      <!-- live feature chips -->
+      <div class="chips-row" id="chips-row"></div>
+
+      <!-- family picker -->
+      <div class="family-row">
+        <span class="f-marker" style="font-size:11px;">FAMILY:</span>
+        <button class="sk-pill active" data-fn="quad" onclick="setFn('quad')">x²</button>
+        <button class="sk-pill"        data-fn="abs"  onclick="setFn('abs')">|x|</button>
+        <button class="sk-pill"        data-fn="sqrt" onclick="setFn('sqrt')">√x</button>
+        <button class="sk-pill"        data-fn="exp"  onclick="setFn('exp')">2ˣ</button>
+        <button class="sk-pill"        data-fn="rat"  onclick="setFn('rat')">1/x</button>
+      </div>
+
+      <!-- sliders: a, h, k (no b in Phase 1) -->
+      <div class="slider-grid">
+        <label class="param-lbl" for="sl-a">
+          <span class="letter" style="color:var(--accent);">a</span>
+          <span style="color:var(--ink-2); font-size:11px;">stretch</span>
+        </label>
+        <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1"
+               oninput="slide('a')">
+        <input type="number" class="dyn-val" id="val-a" step="0.5" value="1"
+               style="color:var(--accent);">
+
+        <label class="param-lbl" for="sl-h">
+          <span class="letter" style="color:#2a8a4a;">h</span>
+          <span style="color:var(--ink-2); font-size:11px;">← →</span>
+        </label>
+        <input type="range" id="sl-h" min="-6" max="6" step="0.5" value="0"
+               oninput="slide('h')">
+        <input type="number" class="dyn-val" id="val-h" step="0.5" value="0"
+               style="color:#2a8a4a;">
+
+        <label class="param-lbl" for="sl-k">
+          <span class="letter" style="color:#8b4513;">k</span>
+          <span style="color:var(--ink-2); font-size:11px;">↑ ↓</span>
+        </label>
+        <input type="range" id="sl-k" min="-6" max="6" step="0.5" value="0"
+               oninput="slide('k')">
+        <input type="number" class="dyn-val" id="val-k" step="0.5" value="0"
+               style="color:#8b4513;">
+      </div>
+
+      <!-- toggles + reset -->
+      <div class="bottom-row">
+        <label class="tog-chk">
+          <input type="checkbox" id="show-parent" checked onchange="draw()">
+          parent (gray)
+        </label>
+        <label class="tog-chk">
+          <input type="checkbox" id="show-grid" checked onchange="draw()">
+          grid
+        </label>
+        <label class="tog-chk">
+          <input type="checkbox" id="show-dots" checked onchange="draw()">
+          intercept dots
+        </label>
+        <button class="btn small" style="margin-left:auto;" onclick="resetAll()">↺ reset</button>
+      </div>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="tool-sidebar">
+
+      <!-- formula card -->
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">
+          GENERAL FORM &nbsp;<span style="color:var(--ink-soft);">(Phase 1: b = 1)</span>
+        </div>
+        <div class="formula-card">
+          <div class="f-big">
+            y = <span style="color:var(--accent); font-weight:700;">a</span> · f(x &minus;
+            <span style="color:#2a8a4a; font-weight:700;">h</span>) +
+            <span style="color:#8b4513; font-weight:700;">k</span>
+          </div>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; line-height:1.9; color:var(--ink-2);">
+          <span style="color:var(--accent);">a</span> — vertical stretch / flip<br>
+          <span style="color:#2a8a4a;">h</span> — left/right shift <em>(subtract = right!)</em><br>
+          <span style="color:#8b4513;">k</span> — up/down shift
+        </div>
+      </div>
+
+      <!-- chip color legend -->
+      <div class="sk-box-dashed" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">WHAT THE CHIPS MEAN</div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:#2a6fb4;"></span>
+          <strong>Domain</strong> — valid x-values
+        </div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:var(--green);"></span>
+          <strong>Range</strong> — possible y-values
+        </div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:var(--accent);"></span>
+          <strong>Zeros</strong> — where y = 0 (x-intercepts)
+        </div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:#7c3aed;"></span>
+          <strong>y-int</strong> — value when x = 0
+        </div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:#8b6914;"></span>
+          <strong>Asymptote</strong> — line graph approaches ∞ or never reaches
+        </div>
+        <div class="legend-row">
+          <span class="leg-dot" style="background:var(--ink-2);"></span>
+          <strong>Special point</strong> — vertex, start pt, etc.
+        </div>
+      </div>
+
+      <!-- how to use -->
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Pick a function family.</li>
+          <li>Slide <strong>a, h, k</strong> and watch the chips update.</li>
+          <li>Compare <span style="color:var(--accent);">colored</span> curve to the gray parent.</li>
+          <li>Dashed gold lines are asymptotes.</li>
+        </ol>
+      </div>
+
+      <!-- try this -->
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">
+            On 2ˣ, set k = −4.  A zero appears — where is it? Why is the answer
+            h + log₂(4)?
+          </span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">
+            On 1/x, set h = 2, k = 1. Read both asymptote chips. Where does the zero land?
+          </span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">
+            On √x, slide h rightward. Watch the domain chip. Why can't you have
+            x-values to the <em>left</em> of h?
+          </span>
+        </div>
+      </div>
+
+      <!-- related tools -->
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="transformations.html">→ Transformations Explorer</a>
+        <a class="related-link f-hand" href="quadratic-slider.html">→ Quadratic Slider Studio</a>
+        <a class="related-link f-hand" href="abs-value-grapher.html">→ Absolute Value Grapher</a>
+        <a class="related-link f-hand" href="rational-expressions.html">→ Rational Expression Builder</a>
+      </div>
+    </div>
+  </div><!-- .tool-page -->
+
+  <script src="url-state.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const canvas = document.getElementById('graph-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    // ─── family definitions ────────────────────────────────────────────────
+    const FNDEFS = {
+      quad: {
+        label: 'x²',   color: '#2a6fb4',
+        f:      u => u * u,
+        domain: () => true,
+      },
+      abs: {
+        label: '|x|',  color: '#d94f2a',
+        f:      u => Math.abs(u),
+        domain: () => true,
+      },
+      sqrt: {
+        label: '√x',   color: '#2a8a4a',
+        f:      u => Math.sqrt(u),
+        domain: u => u >= 0,
+      },
+      exp: {
+        label: '2ˣ',   color: '#8b4513',
+        f:      u => Math.pow(2, u),
+        domain: () => true,
+      },
+      rat: {
+        label: '1/x',  color: '#7c3aed',
+        f:      u => 1 / u,
+        domain: u => u !== 0,
+      },
+    };
+
+    let fn = 'quad';
+    let P  = { a: 1, h: 0, k: 0 };
+
+    // ─── number formatting ─────────────────────────────────────────────────
+    function fmt(v) {
+      // round to avoid floating-point noise, then strip trailing zeros
+      const r = Math.round(v * 1000) / 1000;
+      if (Math.abs(r - Math.round(r)) < 0.0001) return String(Math.round(r));
+      // show up to 2 decimal places
+      return String(Math.round(r * 100) / 100);
+    }
+
+    // ─── equation string ───────────────────────────────────────────────────
+    function buildEq() {
+      const { a, h, k } = P;
+
+      // inner argument: (x − h)
+      let inner;
+      if      (h === 0)  inner = 'x';
+      else if (h > 0)    inner = `(x − ${fmt(h)})`;
+      else               inner = `(x + ${fmt(Math.abs(h))})`;
+
+      // apply function notation
+      let fPart;
+      switch (fn) {
+        case 'quad': fPart = inner === 'x' ? 'x²' : `${inner}²`; break;
+        case 'abs': {
+          const inside = inner.startsWith('(') ? inner.slice(1, -1) : inner;
+          fPart = `|${inside}|`;
+          break;
+        }
+        case 'sqrt': fPart = inner === 'x' ? '√x' : `√${inner}`; break;
+        case 'exp':  fPart = inner === 'x' ? '2ˣ' : `2^${inner}`; break;
+        case 'rat':  fPart = inner === 'x' ? '1/x' : `1/${inner}`; break;
+      }
+
+      // a prefix
+      const aStr = a === 1 ? '' : a === -1 ? '−' : `${fmt(a)}`;
+
+      // k suffix
+      const kStr = k === 0 ? '' : k > 0 ? ` + ${fmt(k)}` : ` − ${fmt(Math.abs(k))}`;
+
+      return `y = ${aStr}${fPart}${kStr}`;
+    }
+
+    // ─── feature chip math ─────────────────────────────────────────────────
+    function getChips() {
+      const { a, h, k } = P;
+      const chips = [];
+
+      // helper: format domain/range endpoints
+      const hStr = fmt(h);
+      const kStr = fmt(k);
+
+      if (fn === 'quad') {
+        chips.push({ cls: 'chip-domain', label: 'Domain', value: '(−∞, ∞)' });
+        if (a === 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `{${kStr}}` });
+        else if (a > 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `[${kStr}, ∞)` });
+        else
+          chips.push({ cls: 'chip-range', label: 'Range', value: `(−∞, ${kStr}]` });
+
+        chips.push({ cls: 'chip-special', label: 'Vertex', value: `(${hStr}, ${kStr})` });
+
+        if (a !== 0) {
+          const disc = -k / a;   // zeros at h ± √disc
+          if (disc < 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zeros', value: 'none' });
+          } else if (disc === 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: `x = ${hStr}` });
+          } else {
+            const r  = Math.sqrt(disc);
+            chips.push({
+              cls: 'chip-zeros', label: 'Zeros',
+              value: `x = ${fmt(h - r)}, ${fmt(h + r)}`,
+            });
+          }
+        }
+        // y-intercept: a·h²+k
+        chips.push({ cls: 'chip-yint', label: 'y-int', value: `(0, ${fmt(a * h * h + k)})` });
+
+      } else if (fn === 'abs') {
+        chips.push({ cls: 'chip-domain', label: 'Domain', value: '(−∞, ∞)' });
+        if (a === 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `{${kStr}}` });
+        else if (a > 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `[${kStr}, ∞)` });
+        else
+          chips.push({ cls: 'chip-range', label: 'Range', value: `(−∞, ${kStr}]` });
+
+        chips.push({ cls: 'chip-special', label: 'Vertex', value: `(${hStr}, ${kStr})` });
+
+        if (a !== 0) {
+          const val = -k / a;   // |x−h| = val
+          if (val < 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zeros', value: 'none' });
+          } else if (val === 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: `x = ${hStr}` });
+          } else {
+            chips.push({
+              cls: 'chip-zeros', label: 'Zeros',
+              value: `x = ${fmt(h - val)}, ${fmt(h + val)}`,
+            });
+          }
+        }
+        // y-intercept: a·|h|+k
+        chips.push({ cls: 'chip-yint', label: 'y-int', value: `(0, ${fmt(a * Math.abs(h) + k)})` });
+
+      } else if (fn === 'sqrt') {
+        chips.push({
+          cls: 'chip-domain', label: 'Domain',
+          value: h === 0 ? '[0, ∞)' : `[${hStr}, ∞)`,
+        });
+        if (a === 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `{${kStr}}` });
+        else if (a > 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `[${kStr}, ∞)` });
+        else
+          chips.push({ cls: 'chip-range', label: 'Range', value: `(−∞, ${kStr}]` });
+
+        chips.push({ cls: 'chip-special', label: 'Start pt', value: `(${hStr}, ${kStr})` });
+
+        if (a !== 0) {
+          const val = -k / a;   // √(x−h) = val; valid only when val ≥ 0
+          if (val < 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: 'none' });
+          } else {
+            // square both sides: x − h = val² = k²/a²
+            const xz = h + (k * k) / (a * a);
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: `x = ${fmt(xz)}` });
+          }
+        }
+        // y-intercept only when 0 is in domain (h ≤ 0)
+        if (h <= 0 && a !== 0) {
+          const yint = a * Math.sqrt(-h) + k;
+          chips.push({ cls: 'chip-yint', label: 'y-int', value: `(0, ${fmt(yint)})` });
+        } else if (h > 0) {
+          chips.push({ cls: 'chip-yint', label: 'y-int', value: 'none' });
+        }
+
+      } else if (fn === 'exp') {
+        chips.push({ cls: 'chip-domain', label: 'Domain', value: '(−∞, ∞)' });
+        if (a === 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `{${kStr}}` });
+        else if (a > 0)
+          chips.push({ cls: 'chip-range', label: 'Range', value: `(${kStr}, ∞)` });
+        else
+          chips.push({ cls: 'chip-range', label: 'Range', value: `(−∞, ${kStr})` });
+
+        chips.push({ cls: 'chip-asymp', label: 'Horiz. Asymp.', value: `y = ${kStr}` });
+
+        if (a !== 0) {
+          const val = -k / a;   // 2^(x−h) = val; valid when val > 0
+          if (val <= 0) {
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: 'none' });
+          } else {
+            const xz = h + Math.log2(val);
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: `x = ${fmt(xz)}` });
+          }
+        }
+        // y-intercept: a·2^(−h)+k
+        if (a !== 0) {
+          const yint = a * Math.pow(2, -h) + k;
+          chips.push({ cls: 'chip-yint', label: 'y-int', value: `(0, ${fmt(yint)})` });
+        }
+
+      } else if (fn === 'rat') {
+        chips.push({
+          cls: 'chip-domain', label: 'Domain',
+          value: h === 0 ? 'x ≠ 0' : `x ≠ ${hStr}`,
+        });
+        chips.push({
+          cls: 'chip-range',  label: 'Range',
+          value: k === 0 ? 'y ≠ 0' : `y ≠ ${kStr}`,
+        });
+        chips.push({ cls: 'chip-asymp', label: 'Vert. Asymp.',  value: `x = ${hStr}` });
+        chips.push({ cls: 'chip-asymp', label: 'Horiz. Asymp.', value: `y = ${kStr}` });
+
+        if (a !== 0) {
+          if (k === 0) {
+            // a/(x−h)+0 = 0 → a/(x−h) = 0 → no solution
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: 'none' });
+          } else {
+            // a/(x−h) = −k → x−h = −a/k → x = h − a/k
+            const xz = h - a / k;
+            chips.push({ cls: 'chip-zeros', label: 'Zero', value: `x = ${fmt(xz)}` });
+          }
+        }
+        // y-intercept at x=0 — valid only when h ≠ 0
+        if (h === 0) {
+          chips.push({ cls: 'chip-yint', label: 'y-int', value: 'none (VA at x=0)' });
+        } else {
+          const yint = a / (0 - h) + k;
+          chips.push({ cls: 'chip-yint', label: 'y-int', value: `(0, ${fmt(yint)})` });
+        }
+      }
+
+      return chips;
+    }
+
+    function renderChips() {
+      const row = document.getElementById('chips-row');
+      row.innerHTML = getChips().map(c =>
+        `<span class="feat-chip ${c.cls}">` +
+        `<span class="chip-label">${c.label}</span>` +
+        `<span class="chip-value">${c.value}</span>` +
+        `</span>`
+      ).join('');
+    }
+
+    // ─── canvas helpers ────────────────────────────────────────────────────
+    function resize() {
+      const r = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = r.width  * devicePixelRatio;
+      canvas.height = r.height * devicePixelRatio;
+      canvas.style.width  = r.width  + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+
+    function evalT(x) {
+      const { a, h, k } = P;
+      const u = x - h;
+      const def = FNDEFS[fn];
+      if (!def.domain(u)) return null;
+      const v = a * def.f(u) + k;
+      return isFinite(v) ? v : null;
+    }
+
+    function evalParent(x) {
+      const def = FNDEFS[fn];
+      if (!def.domain(x)) return null;
+      const v = def.f(x);
+      return isFinite(v) ? v : null;
+    }
+
+    function plotCurve(evalFn, color, lw, dashed) {
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      const ox = W / 2, oy = H / 2, sc = W / 18;
+
+      ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.setLineDash(dashed ? [6, 5] : []);
+      let started = false;
+      ctx.beginPath();
+
+      for (let px = 0; px <= W; px += 0.7) {
+        const x = (px - ox) / sc;
+        const y = evalFn(x);
+        if (y === null) { started = false; continue; }
+        const py = oy - y * sc;
+        if (py < -H || py > 2 * H) { started = false; continue; }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else            ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawDot(cx, cy, fillColor, r) {
+      ctx.fillStyle   = fillColor;
+      ctx.strokeStyle = '#f6f1e4';
+      ctx.lineWidth   = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+
+    function drawAsymptote(val, isVertical, color, label) {
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      const ox = W / 2, oy = H / 2, sc = W / 18;
+      ctx.strokeStyle = color;
+      ctx.lineWidth   = 1.5;
+      ctx.setLineDash([8, 5]);
+      ctx.beginPath();
+
+      if (isVertical) {
+        const px = ox + val * sc;
+        if (px < 0 || px > W) { ctx.setLineDash([]); return; }
+        ctx.moveTo(px, 0); ctx.lineTo(px, H);
+        ctx.stroke(); ctx.setLineDash([]);
+        if (label) {
+          ctx.fillStyle = color;
+          ctx.font = "11px 'Patrick Hand',cursive";
+          const right = px > W * 0.7;
+          ctx.textAlign = right ? 'right' : 'left';
+          ctx.fillText(label, px + (right ? -5 : 5), 16);
+        }
+      } else {
+        const py = oy - val * sc;
+        if (py < 0 || py > H) { ctx.setLineDash([]); return; }
+        ctx.moveTo(0, py); ctx.lineTo(W, py);
+        ctx.stroke(); ctx.setLineDash([]);
+        if (label) {
+          ctx.fillStyle = color;
+          ctx.font = "11px 'Patrick Hand',cursive";
+          ctx.textAlign = 'right';
+          ctx.fillText(label, W - 5, py - 4);
+        }
+      }
+    }
+
+    // ─── intercept computations (mirrors chip math) ────────────────────────
+    function getXZeros() {
+      const { a, h, k } = P;
+      if (a === 0) return [];
+
+      switch (fn) {
+        case 'quad': {
+          const disc = -k / a;
+          if (disc < 0)  return [];
+          if (disc === 0) return [h];
+          const r = Math.sqrt(disc);
+          return [h - r, h + r];
+        }
+        case 'abs': {
+          const val = -k / a;
+          if (val < 0)   return [];
+          if (val === 0) return [h];
+          return [h - val, h + val];
+        }
+        case 'sqrt': {
+          const val = -k / a;
+          if (val < 0) return [];
+          return [h + (k * k) / (a * a)];
+        }
+        case 'exp': {
+          const val = -k / a;
+          if (val <= 0) return [];
+          return [h + Math.log2(val)];
+        }
+        case 'rat': {
+          if (k === 0) return [];
+          return [h - a / k];
+        }
+      }
+      return [];
+    }
+
+    function getYInt() {
+      if (fn === 'rat'  && P.h === 0) return null;
+      if (fn === 'sqrt' && P.h > 0)  return null;
+      return evalT(0);
+    }
+
+    // ─── main draw ─────────────────────────────────────────────────────────
+    function draw() {
+      resize();
+      const W = canvas.width / devicePixelRatio;
+      const H = canvas.height / devicePixelRatio;
+      const ox = W / 2, oy = H / 2, sc = W / 18;
+      const { a, h, k } = P;
+      const def = FNDEFS[fn];
+      const asympColor = 'rgba(139,105,20,0.6)';
+
+      // background
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, W, H);
+
+      // grid
+      if (document.getElementById('show-grid').checked) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.07)';
+        ctx.lineWidth = 1;
+        for (let i = -9; i <= 9; i++) {
+          ctx.beginPath(); ctx.moveTo(ox + i * sc, 0); ctx.lineTo(ox + i * sc, H); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, oy + i * sc); ctx.lineTo(W, oy + i * sc); ctx.stroke();
+        }
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+      // axis tick labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)';
+      ctx.font = "10px 'Special Elite',monospace";
+      for (let i = -8; i <= 8; i++) {
+        if (i === 0 || i % 2 !== 0) continue;
+        ctx.textAlign = 'center'; ctx.fillText(i, ox + i * sc, oy + 13);
+        ctx.textAlign = 'right';  ctx.fillText(-i, ox - 4, oy + i * sc + 4);
+      }
+
+      // ── asymptotes (before curves so curves render on top) ──
+      if (fn === 'exp') {
+        drawAsymptote(k, false, asympColor, `y = ${fmt(k)}`);
+      } else if (fn === 'rat') {
+        drawAsymptote(h, true,  asympColor, `x = ${fmt(h)}`);
+        drawAsymptote(k, false, asympColor, `y = ${fmt(k)}`);
+      }
+
+      // ── parent curve (gray dashed) ──
+      if (document.getElementById('show-parent').checked) {
+        plotCurve(evalParent, 'rgba(29,26,20,0.18)', 2, true);
+      }
+
+      // ── transformed curve ──
+      plotCurve(evalT, def.color, 2.5, false);
+
+      // ── special anchor point (vertex / start point) ──
+      const anchorY = evalT(h);
+      if (anchorY !== null) {
+        const ax = ox + h * sc;
+        const ay = oy - anchorY * sc;
+        if (ax >= -5 && ax <= W + 5 && ay >= -5 && ay <= H + 5) {
+          // only label for families that have a meaningful anchor
+          const lbl =
+            fn === 'quad' ? `vertex (${fmt(h)}, ${fmt(k)})` :
+            fn === 'abs'  ? `vertex (${fmt(h)}, ${fmt(k)})` :
+            fn === 'sqrt' ? `start (${fmt(h)}, ${fmt(k)})` :
+            '';
+          drawDot(ax, ay, def.color, 5);
+          if (lbl) {
+            ctx.fillStyle  = def.color;
+            ctx.font       = "12px 'Patrick Hand',cursive";
+            ctx.textAlign  = ax > W * 0.7 ? 'right' : 'left';
+            ctx.fillText(lbl, ax + (ax > W * 0.7 ? -9 : 9), ay - 8);
+          }
+        }
+      }
+
+      // ── intercept dots ──
+      if (document.getElementById('show-dots').checked) {
+        const dotColor = '#1d1a14';
+        ctx.font = "11px 'Patrick Hand',cursive";
+
+        // x-intercepts
+        getXZeros().forEach(xz => {
+          const px = ox + xz * sc;
+          const py = oy;
+          if (px >= -4 && px <= W + 4) {
+            drawDot(px, py, dotColor, 4);
+            ctx.fillStyle  = 'rgba(29,26,20,0.75)';
+            ctx.textAlign  = 'center';
+            ctx.fillText(`(${fmt(xz)}, 0)`, px, py + 16);
+          }
+        });
+
+        // y-intercept
+        const yi = getYInt();
+        if (yi !== null) {
+          const px = ox;
+          const py = oy - yi * sc;
+          if (py >= -4 && py <= H + 4) {
+            drawDot(px, py, '#7c3aed', 4);
+            ctx.fillStyle  = 'rgba(124,58,237,0.85)';
+            ctx.textAlign  = 'left';
+            ctx.fillText(`(0, ${fmt(yi)})`, px + 7, py - 6);
+          }
+        }
+      }
+    }
+
+    // ─── slider / input glue ───────────────────────────────────────────────
+    function slide(p) {
+      P[p] = parseFloat(document.getElementById('sl-' + p).value);
+      document.getElementById('val-' + p).value = P[p];
+      update();
+    }
+
+    ['a', 'h', 'k'].forEach(p => {
+      document.getElementById('val-' + p).addEventListener('change', e => {
+        const v = parseFloat(e.target.value);
+        if (isNaN(v)) return;
+        P[p] = v;
+        const sl = document.getElementById('sl-' + p);
+        const absV = Math.abs(v);
+        if (absV > parseFloat(sl.max)) {
+          sl.min = -Math.ceil(absV * 1.5);
+          sl.max =  Math.ceil(absV * 1.5);
+        }
+        sl.value = v;
+        update();
+      });
+    });
+
+    // ─── family switch ─────────────────────────────────────────────────────
+    function setFn(name) {
+      fn = name;
+      document.querySelectorAll('.family-row .sk-pill').forEach(b => {
+        b.classList.toggle('active', b.dataset.fn === name);
+      });
+      update();
+    }
+
+    // ─── reset ─────────────────────────────────────────────────────────────
+    function resetAll() {
+      P = { a: 1, h: 0, k: 0 };
+      ['a', 'h', 'k'].forEach(p => {
+        document.getElementById('sl-' + p).value = P[p];
+        document.getElementById('val-' + p).value = P[p];
+        // restore default slider range
+        const sl = document.getElementById('sl-' + p);
+        sl.min = p === 'a' ? -3 : -6;
+        sl.max = p === 'a' ?  3 :  6;
+      });
+      update();
+    }
+
+    // ─── main update ───────────────────────────────────────────────────────
+    function update() {
+      document.getElementById('eq-display').textContent = buildEq();
+      renderChips();
+      draw();
+    }
+
+    // expose for onclick attributes
+    window.setFn    = setFn;
+    window.slide    = slide;
+    window.resetAll = resetAll;
+    window.draw     = draw;
+
+    // ─── init ──────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      // optional url-state restore
+      if (typeof UrlState !== 'undefined') {
+        const s = UrlState.load();
+        if (s.fn && FNDEFS[s.fn]) fn = s.fn;
+        if (s.a != null) P.a = +s.a;
+        if (s.h != null) P.h = +s.h;
+        if (s.k != null) P.k = +s.k;
+        ['a', 'h', 'k'].forEach(p => {
+          document.getElementById('sl-' + p).value = P[p];
+          document.getElementById('val-' + p).value = P[p];
+        });
+        document.querySelectorAll('.family-row .sk-pill').forEach(b => {
+          b.classList.toggle('active', b.dataset.fn === fn);
+        });
+      }
+      update();
+    });
+
+    window.addEventListener('resize', () => draw());
+  })();
+  </script>
+</body>
+</html>

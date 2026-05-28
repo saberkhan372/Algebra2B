@@ -1,18 +1,18 @@
 # Algebra 2B Playgrounds — Build Plan
 
-Last updated: 2026-05-27  
+Last updated: 2026-05-28  
 Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site audit, and video-learning transcripts/contact sheets.
 
 ---
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 33 tools wired into the homepage grid (U9 now has 1 tool; no u9.html unit page yet — breadcrumb links to all-tools).  
+**Site:** 7 unit pages (u1–u7), 38 tools wired into the homepage grid (U9 now has multiple tools; no u9.html unit page yet — breadcrumb links to all-tools).  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
 **Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**33 tools built/integrated:**
+**38 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -46,8 +46,13 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Unit Circle Walker (U7)
 - Sine/Cosine Graph Builder (U7)
 - Box Plot Builder (U9) — first U9 tool; 5-number summary, IQR, outlier fences, dot/box views
+- Probability Rules Sandbox (U9)
+- Sampling Bias Lab (U9)
+- Quadratic Word Problems Trainer (U3)
+- Rationalizing Denominators (U3)
+- Parent Function Atlas (U2) — Phase 1: 5 families (x², |x|, √x, 2ˣ, 1/x), a/h/k sliders, live domain/range/zeros/asymptote feature chips, asymptote canvas lines, intercept dots
 
-**No planned tools missing** — all 33 tools are live. U9 has 1 tool; a u9.html unit page is the logical next infrastructure step.
+**No planned tools missing** — all 38 tools are live. Phases 2–5 of Parent Function Atlas are additive enhancements, not blocking gaps.
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
