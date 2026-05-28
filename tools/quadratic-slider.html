@@ -28,6 +28,29 @@
       color: var(--ink-2);
     }
     .pattern-chip.strong { background: var(--highlight); border-color: var(--accent); color: var(--ink); }
+
+    /* Editable number inputs in the slider row */
+    .param-val[type=number] {
+      width: 62px;
+      border: none;
+      border-bottom: 1.5px solid var(--ink-soft);
+      border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--ink);
+      text-align: center;
+      padding: 1px 2px;
+      -moz-appearance: textfield;
+      transition: border-color 0.15s;
+    }
+    .param-val[type=number]::-webkit-outer-spin-button,
+    .param-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .param-val[type=number]:focus {
+      outline: none;
+      border-bottom-color: var(--accent);
+      background: var(--paper-2);
+    }
   </style>
 </head>
 <body class="paper-grid">
@@ -62,17 +85,17 @@
         <div class="slider-group">
           <span class="param-name f-mono">a</span>
           <input type="range" id="slider-a" min="-3" max="3" step="0.1" value="1" />
-          <span class="param-val f-mono" id="val-a">1.0</span>
+          <input type="number" class="param-val f-mono" id="val-a" step="any" value="1">
         </div>
         <div class="slider-group">
           <span class="param-name f-mono">h</span>
           <input type="range" id="slider-h" min="-6" max="6" step="0.1" value="0" />
-          <span class="param-val f-mono" id="val-h">0.0</span>
+          <input type="number" class="param-val f-mono" id="val-h" step="any" value="0">
         </div>
         <div class="slider-group">
           <span class="param-name f-mono">k</span>
           <input type="range" id="slider-k" min="-6" max="6" step="0.1" value="0" />
-          <span class="param-val f-mono" id="val-k">0.0</span>
+          <input type="number" class="param-val f-mono" id="val-k" step="any" value="0">
         </div>
         <button class="btn small" onclick="resetGraph()">↺ reset</button>
       </div>
@@ -254,6 +277,32 @@
       return v % 1 === 0 ? v.toFixed(0) : v.toFixed(1);
     }
 
+    // ── Dynamic slider range ───────────────────────────────────────
+    const DEF = { a: 3, h: 6, k: 6 };
+
+    function niceRange(v, defMax) {
+      const abs = Math.abs(v);
+      if (abs <= defMax) return defMax;
+      const steps = [10, 15, 20, 30, 50, 75, 100, 150, 200, 500, 1000, 2000, 5000];
+      return steps.find(t => t >= abs * 1.25) || Math.ceil(abs * 1.5 / 1000) * 1000;
+    }
+
+    function niceStep(range) {
+      if (range <= 20)  return 0.1;
+      if (range <= 50)  return 0.5;
+      if (range <= 200) return 1;
+      return 5;
+    }
+
+    function rescaleSlider(p, v) {
+      const sl = document.getElementById(`slider-${p}`);
+      const r  = niceRange(v, DEF[p]);
+      sl.min   = -r;
+      sl.max   =  r;
+      sl.step  = niceStep(r);
+      sl.value = v;
+    }
+
     function updateEq() {
       const aFmt = a === 1 ? '' : a === -1 ? '−' : (a < 0 ? `−${fmt(Math.abs(a))}` : fmt(a));
       const inner = h === 0 ? 'x' : (h > 0 ? `x − ${fmt(h)}` : `x + ${fmt(Math.abs(h))}`);
@@ -296,18 +345,27 @@
     function syncSliders() {
       ['a','h','k'].forEach(p => {
         const v = p === 'a' ? a : p === 'h' ? h : k;
-        document.getElementById(`slider-${p}`).value = v;
-        document.getElementById(`val-${p}`).textContent = fmt(v);
+        rescaleSlider(p, v);
+        document.getElementById(`val-${p}`).value = Math.round(v * 10) / 10;
       });
     }
 
     function resetGraph() { a = 1; h = 0; k = 0; syncSliders(); updateEq(); draw(); }
 
     ['a','h','k'].forEach(p => {
+      // Slider drag → update number input + graph
       document.getElementById(`slider-${p}`).addEventListener('input', function() {
         const v = parseFloat(this.value);
         if (p==='a') a=v; if (p==='h') h=v; if (p==='k') k=v;
-        document.getElementById(`val-${p}`).textContent = fmt(v);
+        document.getElementById(`val-${p}`).value = Math.round(v * 10) / 10;
+        updateEq(); draw();
+      });
+      // Number input → rescale slider if needed + graph
+      document.getElementById(`val-${p}`).addEventListener('input', function() {
+        const v = parseFloat(this.value);
+        if (isNaN(v)) return;
+        if (p==='a') a=v; if (p==='h') h=v; if (p==='k') k=v;
+        rescaleSlider(p, v);
         updateEq(); draw();
       });
     });
@@ -321,8 +379,10 @@
     function moveVertex(mx, my) {
       const { W, H } = logicalSize();
       const sc = W / 20;
-      h = Math.max(-8, Math.min(8, Math.round(((mx - W/2) / sc) * 10) / 10));
-      k = Math.max(-8, Math.min(8, Math.round((-(my - H/2) / sc) * 10) / 10));
+      const hMax = parseFloat(document.getElementById('slider-h').max);
+      const kMax = parseFloat(document.getElementById('slider-k').max);
+      h = Math.max(-hMax, Math.min(hMax, Math.round(((mx - W/2) / sc) * 10) / 10));
+      k = Math.max(-kMax, Math.min(kMax, Math.round((-(my - H/2) / sc) * 10) / 10));
       syncSliders(); updateEq(); draw();
     }
 
