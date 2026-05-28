@@ -7,12 +7,12 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 40 tools wired into the homepage grid (U9 now has multiple tools; no u9.html unit page yet — breadcrumb links to all-tools).  
+**Site:** 7 unit pages (u1–u7), 41 tools wired into the homepage grid (U9 now has multiple tools; no u9.html unit page yet — breadcrumb links to all-tools).  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
 **Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**40 tools built/integrated:**
+**41 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -53,14 +53,15 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Parent Function Atlas (U2) — Phase 1: 5 families (x², |x|, √x, 2ˣ, 1/x), a/h/k sliders, live domain/range/zeros/asymptote feature chips, asymptote canvas lines, intercept dots
 - Quadratic Forms Explorer (U3) — same parabola in all 3 forms simultaneously; discriminant banner changes state live; color-coded standard/vertex/factored strips; intercept dots + axis of symmetry on canvas
 - Log ↔ Exp Mirror Explorer (U5) — y=bˣ and y=log_b(x) on one canvas with y=x reflection line; base slider 0.2–8; quick-pick b=2/e/10/½; purple reflection point pairs with dashed connectors; "Everything Swaps" domain↔range table
+- Rational Function Behavior Explorer (U6) — 4 toggleable factors (N/D independently), holes/VAs/zeros emerge live; HA rule card highlights active rule; segment-split canvas drawing avoids asymptote artifacts
 
-**No planned tools missing** — all 40 tools are live.
+**No planned tools missing** — all 41 tools are live.
 
 **Explorer roadmap (in priority order):**
 1. ✓ Parent Function Atlas — built
 2. ✓ Quadratic Forms Explorer — built
 3. ✓ Log↔Exponential Mirror Explorer (U5) — built
-4. Rational Function Behavior Explorer (U6) — degree, factors, asymptote rules as discoverable chips
+4. ✓ Rational Function Behavior Explorer (U6) — built
 5. Trig Explorer / Atlas Phase 3 (U7) — sin/cos families with b slider for period
 6. Inequality Region Explorer (cross-unit) — linear/quadratic inequalities with live shading
 

@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rational Function Behavior — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #rf-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ── Factor matrix ─────────────────────────────────────────────── */
+    .factor-strip {
+      display: flex; gap: 8px; padding: 8px 12px;
+      border-bottom: 2px solid var(--ink); align-items: stretch; flex-wrap: wrap;
+    }
+    .factor-card {
+      flex: 1; min-width: 88px; max-width: 124px;
+      border: 2px solid var(--ink-soft); border-radius: 6px;
+      padding: 6px 8px; background: var(--paper);
+      display: flex; flex-direction: column; gap: 4px;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .factor-card.fc-num  { background: #dde8cf; border-color: #5a8a3a; }
+    .factor-card.fc-den  { background: #fdecea; border-color: #c94040; }
+    .factor-card.fc-hole { background: #ede4f5; border-color: #7c3aed; }
+
+    .factor-math {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 600; text-align: center; color: var(--ink);
+    }
+    .factor-toggles { display: flex; gap: 4px; }
+    .ftog {
+      flex: 1; padding: 3px 0;
+      font-family: 'Special Elite', monospace; font-size: 11px; letter-spacing: 0.05em;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      cursor: pointer; background: transparent; color: var(--ink-soft);
+      transition: all 0.1s;
+    }
+    .ftog.on-n { background: #5a8a3a; border-color: #5a8a3a; color: #fff; }
+    .ftog.on-d { background: #c94040; border-color: #c94040; color: #fff; }
+    .ftog:hover:not(.on-n):not(.on-d) { background: var(--paper-2); }
+
+    .factor-status {
+      font-family: 'Patrick Hand', cursive; font-size: 10px;
+      text-align: center; min-height: 14px; color: var(--ink-soft);
+      letter-spacing: 0.05em;
+    }
+    .factor-card.fc-num  .factor-status { color: #3a6a1a; font-weight: 700; }
+    .factor-card.fc-den  .factor-status { color: #a92020; font-weight: 700; }
+    .factor-card.fc-hole .factor-status { color: #6c2abf; font-weight: 700; }
+
+    /* leading coefficient control */
+    .a-box {
+      display: flex; flex-direction: column; gap: 4px;
+      justify-content: center; align-items: center;
+      padding: 5px 10px; border: 2px dashed var(--ink-soft);
+      border-radius: 6px; min-width: 56px;
+    }
+    .a-box .a-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      color: var(--ink-soft); letter-spacing: 0.06em; white-space: nowrap;
+    }
+    .a-select {
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+      border: none; background: transparent; cursor: pointer;
+      color: var(--ink); text-align: center; width: 40px;
+    }
+
+    /* ── feature chips ─────────────────────────────────────────────── */
+    .chips-row {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; min-height: 28px;
+    }
+    .feat-chip {
+      padding: 3px 9px; border-radius: 4px; border: 1.5px solid var(--ink-2);
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      display: inline-flex; align-items: baseline; gap: 5px;
+    }
+    .chip-label {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .chip-value { font-weight: 600; color: var(--ink); }
+    .chip-va    { background: #fdecea; border-color: #c94040; }
+    .chip-ha    { background: #dde8cf; border-color: #3a8a4a; }
+    .chip-slant { background: #fff3e0; border-color: #c07020; }
+    .chip-hole  { background: #ede4f5; border-color: #7c3aed; }
+    .chip-zero  { background: #d8e6df; border-color: #3a7a5a; }
+    .chip-yint  { background: #e4eef8; border-color: #2a5a9a; }
+    .chip-deg   { background: var(--paper-3); border-color: var(--ink-2); }
+    .chip-none  { background: var(--paper-2); border-color: var(--ink-soft); opacity: 0.75; }
+
+    /* ── equation display ──────────────────────────────────────────── */
+    .eq-strip {
+      margin-top: 8px; padding: 7px 14px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2); border-radius: 4px;
+      display: flex; align-items: center; gap: 10px; min-height: 48px;
+    }
+    .eq-lhs {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .eq-frac {
+      display: inline-flex; flex-direction: column; align-items: center;
+      gap: 1px; line-height: 1.1; vertical-align: middle;
+    }
+    .eq-top, .eq-bot {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 600;
+      color: var(--ink); padding: 0 4px;
+    }
+    .eq-top { border-bottom: 2px solid var(--ink); padding-bottom: 2px; }
+    .eq-bot { padding-top: 2px; }
+    .eq-plain {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── sidebar extras ────────────────────────────────────────────── */
+    .ha-rules-card {
+      background: var(--paper); border: 1.5px solid var(--ink-2); border-radius: 5px;
+      padding: 10px 12px; transform: rotate(0.4deg);
+    }
+    .ha-card-title {
+      font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .ha-row {
+      display: flex; gap: 8px; align-items: baseline;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      padding: 3px 4px; border-radius: 3px;
+      border-bottom: 1px dashed var(--ink-soft);
+    }
+    .ha-row:last-child { border-bottom: none; }
+    .ha-cond {
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      color: var(--ink-2); white-space: nowrap; min-width: 86px;
+    }
+    .ha-result { flex: 1; color: var(--ink); }
+    .ha-row.active {
+      background: #fff8e0; font-weight: 700;
+    }
+    .ha-row.active .ha-cond { color: #7a5a00; }
+
+    .try-card {
+      background: var(--paper-2); border: 1.5px dashed var(--ink-soft);
+      border-radius: 5px; padding: 10px 12px; transform: rotate(-0.3deg);
+    }
+    .try-title {
+      font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .try-q {
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.45;
+      padding: 4px 0; border-bottom: 1px dashed var(--ink-soft);
+    }
+    .try-q:last-child { border-bottom: none; }
+    .try-n {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      color: var(--ink-soft); margin-right: 3px;
+    }
+
+    .toggles-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap;
+    }
+    .tog-chk {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2);
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+    }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u6.html">← U6</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+
+    <!-- Left: controls + canvas -->
+    <div class="tool-main" style="padding:0; overflow:hidden;">
+
+      <!-- Factor strip (pinned to top) -->
+      <div class="factor-strip" id="factor-strip">
+        <!-- 4 factor cards injected by JS -->
+        <div class="a-box">
+          <div class="a-lbl">LEADING</div>
+          <select id="a-sel" class="a-select">
+            <option value="-3">−3</option>
+            <option value="-2">−2</option>
+            <option value="-1">−1</option>
+            <option value="1" selected>+1</option>
+            <option value="2">+2</option>
+            <option value="3">+3</option>
+          </select>
+          <div class="a-lbl">coeff</div>
+        </div>
+      </div>
+
+      <!-- Title row (compact, below factor strip) -->
+      <div style="padding:6px 14px 0; display:flex; align-items:baseline; gap:10px; flex-shrink:0;">
+        <div class="tool-breadcrumb" style="margin:0;">
+          <a href="../u6.html">← U6 · Rationals &amp; Polynomials</a>
+        </div>
+        <div class="tool-title f-display" style="font-size:24px; margin:0;">
+          Rational Function <span style="color:var(--accent);">Behavior</span>
+        </div>
+      </div>
+
+      <!-- Canvas (fills remaining height) -->
+      <div class="widget-container" style="flex:1; min-height:200px; margin:8px 14px;">
+        <canvas id="rf-canvas"></canvas>
+      </div>
+
+      <!-- Equation + chips + toggles (scroll if needed) -->
+      <div style="padding:0 14px 10px; flex-shrink:0;">
+        <div class="eq-strip">
+          <span class="eq-lhs">f(x) =</span>
+          <div id="eq-body"></div>
+        </div>
+        <div class="chips-row" id="chips-row"></div>
+        <div class="toggles-row">
+          <label class="tog-chk">
+            <input type="checkbox" id="tog-grid" checked> grid
+          </label>
+          <label class="tog-chk">
+            <input type="checkbox" id="tog-asym" checked> asymptotes
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="tool-sidebar">
+
+      <!-- HA rules reference -->
+      <div class="ha-rules-card">
+        <div class="ha-card-title">Horizontal Asymptote Rules</div>
+        <div class="ha-row" id="rule-lt">
+          <div class="ha-cond">deg N &lt; deg D</div>
+          <div class="ha-result">→&nbsp; y = 0</div>
+        </div>
+        <div class="ha-row" id="rule-eq">
+          <div class="ha-cond">deg N = deg D</div>
+          <div class="ha-result">→&nbsp; y = leading ratio</div>
+        </div>
+        <div class="ha-row" id="rule-sl">
+          <div class="ha-cond">deg N = deg D + 1</div>
+          <div class="ha-result">→&nbsp; slant asymptote</div>
+        </div>
+        <div class="ha-row" id="rule-gt">
+          <div class="ha-cond">deg N &gt; deg D + 1</div>
+          <div class="ha-result">→&nbsp; no HA (grows ∞)</div>
+        </div>
+      </div>
+
+      <!-- How to use -->
+      <div class="sk-box" style="padding:10px 12px; transform:rotate(-0.5deg);">
+        <div class="section-label f-marker" style="margin-bottom:6px;">HOW IT WORKS</div>
+        <div style="font-family:'Patrick Hand',cursive; font-size:13px; line-height:1.5; color:var(--ink-2);">
+          <b style="color:var(--ink);">N</b> → factor goes in numerator.<br>
+          <b style="color:var(--ink);">D</b> → factor goes in denominator.<br>
+          Both N &amp; D → the factor <em>cancels</em> — that's a <span style="color:#7c3aed; font-weight:700;">hole</span>!<br>
+          Only D → it's a <span style="color:#c94040; font-weight:700;">V.A.</span>
+        </div>
+      </div>
+
+      <!-- Try This -->
+      <div class="try-card">
+        <div class="try-title">Try This</div>
+        <div class="try-q">
+          <span class="try-n">1.</span> Toggle (x+2) into <b>both</b> N and D.
+          What appears — a zero or a hole?
+        </div>
+        <div class="try-q">
+          <span class="try-n">2.</span> Make deg(N) = deg(D). Where does the curve level off?
+        </div>
+        <div class="try-q">
+          <span class="try-n">3.</span> Make deg(N) = deg(D) + 1. Does the curve go up or down forever?
+        </div>
+        <div class="try-q">
+          <span class="try-n">4.</span> Change the leading coeff to −1. What moves — asymptotes or the curve?
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ── Factor definitions ─────────────────────────────────────────────────
+  const FACTORS = [
+    { root: -2, label: '(x+2)', short: 'x+2' },
+    { root:  1, label: '(x−1)', short: 'x−1' },
+    { root:  3, label: '(x−3)', short: 'x−3' },
+    { root: -1, label: '(x+1)', short: 'x+1' },
+  ];
+  const N = FACTORS.length;  // 4
+
+  // ── Canvas colors ──────────────────────────────────────────────────────
+  const C_CURVE  = '#2a5a8a';   // slate blue
+  const C_VA     = '#c94040';   // red
+  const C_HA     = '#3a8a4a';   // green
+  const C_SLANT  = '#c07020';   // amber
+  const C_HOLE   = '#7c3aed';   // purple
+  const C_ZERO   = '#3a7a5a';   // dark green
+  const C_YINT   = '#2a5a9a';   // blue
+  const C_GRID   = 'rgba(0,0,0,0.07)';
+  const C_AXIS   = 'rgba(0,0,0,0.35)';
+  const C_AXNUM  = 'rgba(0,0,0,0.30)';
+
+  // ── State ─────────────────────────────────────────────────────────────
+  const S = {
+    a:   1,
+    num: [false, true,  false, false],   // default: (x−1) in numerator
+    den: [true,  false, true,  false],   // default: (x+2)(x−3) in denominator
+  };
+
+  // ── Build factor cards ─────────────────────────────────────────────────
+  const strip  = document.getElementById('factor-strip');
+  const aBox   = strip.querySelector('.a-box');
+
+  FACTORS.forEach((f, i) => {
+    const card = document.createElement('div');
+    card.className = 'factor-card';
+    card.id = `fc${i}`;
+    card.innerHTML = `
+      <div class="factor-math">${f.label}</div>
+      <div class="factor-toggles">
+        <button class="ftog" id="nb${i}">N</button>
+        <button class="ftog" id="db${i}">D</button>
+      </div>
+      <div class="factor-status" id="fs${i}"></div>`;
+    strip.insertBefore(card, aBox);
+
+    card.querySelector(`#nb${i}`).addEventListener('click', () => { S.num[i] = !S.num[i]; redraw(); });
+    card.querySelector(`#db${i}`).addEventListener('click', () => { S.den[i] = !S.den[i]; redraw(); });
+  });
+
+  document.getElementById('a-sel').addEventListener('change', e => { S.a = +e.target.value; redraw(); });
+  document.getElementById('tog-grid').addEventListener('change', redraw);
+  document.getElementById('tog-asym').addEventListener('change', redraw);
+
+  // ── Math helpers ───────────────────────────────────────────────────────
+  function polyVal(roots, x) {
+    let v = 1;
+    for (const r of roots) v *= (x - r);
+    return v;
+  }
+  const numRoots = () => FACTORS.filter((_, i) => S.num[i]).map(f => f.root);
+  const denRoots = () => FACTORS.filter((_, i) => S.den[i]).map(f => f.root);
+
+  function evalFull(x) {
+    const d = polyVal(denRoots(), x);
+    if (Math.abs(d) < 1e-9) return null;
+    return S.a * polyVal(numRoots(), x) / d;
+  }
+
+  // ── Derive all features ────────────────────────────────────────────────
+  function derive() {
+    const shared  = FACTORS.filter((_, i) => S.num[i] && S.den[i]);
+    const onlyNum = FACTORS.filter((_, i) => S.num[i] && !S.den[i]);
+    const onlyDen = FACTORS.filter((_, i) => !S.num[i] && S.den[i]);
+
+    const degN = S.num.filter(Boolean).length;
+    const degD = S.den.filter(Boolean).length;
+    const diff = degN - degD;
+
+    // Horizontal asymptote type
+    let haType = 'none';
+    let haVal  = null;
+    if (degD === 0) {
+      haType = 'poly';   // no denominator
+    } else if (diff < 0) {
+      haType = 'zero';   haVal = 0;
+    } else if (diff === 0) {
+      haType = 'ratio';  haVal = S.a;  // all factors monic → leading coeff ratio = a/1
+    } else if (diff === 1) {
+      haType = 'slant';
+    } else {
+      haType = 'poly';
+    }
+
+    // y-intercept (if 0 is not excluded by denom)
+    let yint = null;
+    const d0 = polyVal(denRoots(), 0);
+    if (Math.abs(d0) > 1e-9) yint = S.a * polyVal(numRoots(), 0) / d0;
+
+    // Hole y-values: evaluate cancelled function at each hole
+    const holes = shared.map(f => {
+      const x    = f.root;
+      // Numerator and denominator with this factor's root removed
+      const nR   = FACTORS.filter((g, j) => S.num[j] && g.root !== f.root).map(g => g.root);
+      const dR   = FACTORS.filter((g, j) => S.den[j] && g.root !== f.root).map(g => g.root);
+      const dv   = polyVal(dR, x);
+      const hY   = Math.abs(dv) > 1e-9 ? S.a * polyVal(nR, x) / dv : null;
+      return { x, y: hY, short: f.short };
+    });
+
+    return { shared, onlyNum, onlyDen, holes, vas: onlyDen, zeros: onlyNum,
+             haType, haVal, degN, degD, diff, yint };
+  }
+
+  // ── Number formatting ──────────────────────────────────────────────────
+  function fmt(v, dp = 2) {
+    if (v === null || !isFinite(v)) return '—';
+    return String(parseFloat(v.toFixed(dp)));
+  }
+  function fmtX(r) {
+    return r >= 0 ? `x = ${r}` : `x = ${r}`;
+  }
+
+  // ── Build equation HTML ────────────────────────────────────────────────
+  function factorProd(arr) {
+    const sel = FACTORS.filter((_, i) => arr[i]);
+    return sel.length === 0 ? '1' : sel.map(f => f.label).join('');
+  }
+  function buildEqHTML(d) {
+    const aPrefix = S.a === 1 ? '' : S.a === -1 ? '−' : `${S.a}·`;
+    const numStr  = aPrefix + factorProd(S.num);
+    const denStr  = factorProd(S.den);
+    if (d.degD === 0) {
+      return `<span class="eq-plain">${aPrefix}${factorProd(S.num)}</span>`;
+    }
+    return `<div class="eq-frac">
+      <div class="eq-top">${numStr}</div>
+      <div class="eq-bot">${denStr}</div>
+    </div>`;
+  }
+
+  // ── Chip builder ───────────────────────────────────────────────────────
+  function chip(cls, label, value) {
+    return `<span class="feat-chip ${cls}"><span class="chip-label">${label}</span><span class="chip-value">${value}</span></span>`;
+  }
+
+  // ── Update all UI ──────────────────────────────────────────────────────
+  function updateUI(d) {
+    // Factor cards
+    FACTORS.forEach((f, i) => {
+      const card = document.getElementById(`fc${i}`);
+      const nb   = document.getElementById(`nb${i}`);
+      const db   = document.getElementById(`db${i}`);
+      const fs   = document.getElementById(`fs${i}`);
+
+      nb.className = 'ftog' + (S.num[i] ? ' on-n' : '');
+      db.className = 'ftog' + (S.den[i] ? ' on-d' : '');
+
+      if (S.num[i] && S.den[i]) {
+        card.className = 'factor-card fc-hole'; fs.textContent = 'HOLE';
+      } else if (S.num[i]) {
+        card.className = 'factor-card fc-num';  fs.textContent = 'ZERO';
+      } else if (S.den[i]) {
+        card.className = 'factor-card fc-den';  fs.textContent = 'V.A.';
+      } else {
+        card.className = 'factor-card';          fs.textContent = '';
+      }
+    });
+
+    // Equation
+    document.getElementById('eq-body').innerHTML = buildEqHTML(d);
+
+    // Chips
+    const parts = [];
+    parts.push(chip('chip-deg', 'DEGREE', `N = ${d.degN}&nbsp;&nbsp;D = ${d.degD}`));
+
+    if (d.vas.length > 0) {
+      parts.push(chip('chip-va', 'V.ASYMP', d.vas.map(f => fmtX(f.root)).join(', ')));
+    } else if (d.degD > 0) {
+      parts.push(chip('chip-none', 'V.ASYMP', 'none — all factors cancel'));
+    }
+
+    if (d.holes.length > 0) {
+      const pts = d.holes.map(h => `(${fmt(h.x, 0)}, ${fmt(h.y)})`).join(', ');
+      parts.push(chip('chip-hole', 'HOLE', pts));
+    }
+
+    if (d.zeros.length > 0) {
+      parts.push(chip('chip-zero', 'ZEROS', d.zeros.map(f => fmtX(f.root)).join(', ')));
+    }
+
+    if      (d.haType === 'zero')  parts.push(chip('chip-ha',    'H.ASYMP', `y = 0`));
+    else if (d.haType === 'ratio') parts.push(chip('chip-ha',    'H.ASYMP', `y = ${fmt(d.haVal)}`));
+    else if (d.haType === 'slant') parts.push(chip('chip-slant', 'SLANT',   'exists (deg N = deg D + 1)'));
+    else if (d.haType === 'poly')  parts.push(chip('chip-deg',   'END BEHAV', 'grows like xⁿ'));
+
+    if (d.yint !== null) {
+      parts.push(chip('chip-yint', 'Y-INT', `(0, ${fmt(d.yint)})`));
+    } else if (d.degD > 0) {
+      parts.push(chip('chip-none', 'Y-INT', 'undefined (0 excluded)'));
+    }
+
+    document.getElementById('chips-row').innerHTML = parts.join('');
+
+    // Highlight active HA rule
+    ['rule-lt','rule-eq','rule-sl','rule-gt'].forEach(id =>
+      document.getElementById(id).classList.remove('active'));
+    const ruleMap = { zero: 'rule-lt', ratio: 'rule-eq', slant: 'rule-sl', poly: 'rule-gt' };
+    if (d.degD > 0 && ruleMap[d.haType]) {
+      document.getElementById(ruleMap[d.haType]).classList.add('active');
+    }
+  }
+
+  // ── Canvas setup ───────────────────────────────────────────────────────
+  const canvas = document.getElementById('rf-canvas');
+  const ctx    = canvas.getContext('2d');
+  const DPR    = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+
+  const XMIN = -7, XMAX = 7, YMIN = -8, YMAX = 8;
+  function cx(x) { return (x - XMIN) / (XMAX - XMIN) * W; }
+  function cy(y) { return (1 - (y - YMIN) / (YMAX - YMIN)) * H; }
+
+  // ── Draw ────────────────────────────────────────────────────────────────
+  function drawCanvas(d) {
+    if (!W || !H) return;
+    ctx.clearRect(0, 0, W, H);
+
+    const showGrid = document.getElementById('tog-grid').checked;
+    const showAsym = document.getElementById('tog-asym').checked;
+
+    // Grid
+    if (showGrid) {
+      ctx.strokeStyle = C_GRID;
+      ctx.lineWidth   = 1;
+      for (let x = Math.ceil(XMIN); x <= XMAX; x++) {
+        ctx.beginPath(); ctx.moveTo(cx(x), 0); ctx.lineTo(cx(x), H); ctx.stroke();
+      }
+      for (let y = Math.ceil(YMIN); y <= YMAX; y++) {
+        ctx.beginPath(); ctx.moveTo(0, cy(y)); ctx.lineTo(W, cy(y)); ctx.stroke();
+      }
+    }
+
+    // Axes
+    ctx.strokeStyle = C_AXIS;
+    ctx.lineWidth   = 1.5;
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, cy(0)); ctx.lineTo(W, cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(0), 0); ctx.lineTo(cx(0), H); ctx.stroke();
+
+    // Axis tick labels
+    ctx.fillStyle  = C_AXNUM;
+    ctx.font       = `11px 'Patrick Hand', cursive`;
+    ctx.textAlign  = 'center';
+    for (let x = Math.ceil(XMIN); x <= XMAX; x++) {
+      if (x === 0) continue;
+      ctx.fillText(x, cx(x), cy(0) + 14);
+    }
+    ctx.textAlign  = 'right';
+    for (let y = Math.ceil(YMIN); y <= YMAX; y++) {
+      if (y === 0) continue;
+      ctx.fillText(y, cx(0) - 5, cy(y) + 4);
+    }
+
+    const vaXs = d.vas.map(f => f.root).sort((a, b) => a - b);
+
+    // Vertical asymptotes
+    if (showAsym) {
+      ctx.strokeStyle = C_VA;
+      ctx.lineWidth   = 1.5;
+      ctx.setLineDash([6, 4]);
+      vaXs.forEach(vx => {
+        ctx.beginPath(); ctx.moveTo(cx(vx), 0); ctx.lineTo(cx(vx), H); ctx.stroke();
+      });
+      ctx.setLineDash([]);
+
+      // VA labels
+      ctx.fillStyle  = C_VA;
+      ctx.font       = `11px 'Patrick Hand', cursive`;
+      ctx.textAlign  = 'center';
+      vaXs.forEach(vx => ctx.fillText(`x=${vx}`, cx(vx), 14));
+    }
+
+    // Horizontal asymptote
+    if (showAsym && (d.haType === 'zero' || d.haType === 'ratio')) {
+      const hy = d.haVal;
+      ctx.strokeStyle = C_HA;
+      ctx.lineWidth   = 1.5;
+      ctx.setLineDash([8, 5]);
+      ctx.beginPath(); ctx.moveTo(0, cy(hy)); ctx.lineTo(W, cy(hy)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle   = C_HA;
+      ctx.font        = `11px 'Patrick Hand', cursive`;
+      ctx.textAlign   = 'right';
+      ctx.fillText(`y=${fmt(hy, 1)}`, W - 4, cy(hy) - 5);
+    }
+
+    // ── Draw the curve in segments between VAs ─────────────────────────
+    const EPS   = 0.07;                        // VA exclusion zone (units)
+    const STEPS = Math.round(W * 2.5);         // ~1500 steps for typical W
+    const dx    = (XMAX - XMIN) / STEPS;
+    const YCLIP = YMAX * 1.8;                  // hide values way off screen
+
+    // Build segment boundaries: [-7, VA0-eps] [VA0+eps, VA1-eps] ... [VAn+eps, 7]
+    const segs = [];
+    let lo = XMIN;
+    for (const vx of vaXs) {
+      segs.push([lo, vx - EPS]);
+      lo = vx + EPS;
+    }
+    segs.push([lo, XMAX]);
+
+    ctx.strokeStyle = C_CURVE;
+    ctx.lineWidth   = 2.5;
+    ctx.setLineDash([]);
+
+    segs.forEach(([x0, x1]) => {
+      if (x1 <= x0) return;
+      const steps = Math.max(4, Math.round((x1 - x0) / dx));
+      ctx.beginPath();
+      let penDown = false, prevCY = null;
+
+      for (let i = 0; i <= steps; i++) {
+        const x = x0 + i * (x1 - x0) / steps;
+        const y = evalFull(x);
+
+        if (y === null || !isFinite(y) || Math.abs(y) > YCLIP) {
+          penDown = false; prevCY = null; continue;
+        }
+
+        const px = cx(x);
+        const py = cy(Math.max(YMIN, Math.min(YMAX, y)));
+
+        // Large vertical jump = new segment (shouldn't happen within VA-split, but guard anyway)
+        if (penDown && prevCY !== null && Math.abs(py - prevCY) > H * 0.75) {
+          penDown = false;
+        }
+
+        if (!penDown) { ctx.moveTo(px, py); penDown = true; }
+        else          { ctx.lineTo(px, py); }
+        prevCY = py;
+      }
+      ctx.stroke();
+    });
+
+    // x-intercept dots (green)
+    d.zeros.forEach(f => {
+      drawDot(cx(f.root), cy(0), 5.5, C_ZERO, '#fff');
+    });
+
+    // y-intercept dot (blue)
+    if (d.yint !== null && d.yint >= YMIN - 0.5 && d.yint <= YMAX + 0.5) {
+      drawDot(cx(0), cy(d.yint), 5.5, C_YINT, '#fff');
+    }
+
+    // Hole open circles (purple)
+    d.holes.forEach(h => {
+      if (h.y === null || h.y < YMIN - 0.5 || h.y > YMAX + 0.5) return;
+      const hx = cx(h.x), hy2 = cy(h.y);
+      ctx.fillStyle   = '#fff';
+      ctx.strokeStyle = C_HOLE;
+      ctx.lineWidth   = 2.5;
+      ctx.beginPath(); ctx.arc(hx, hy2, 7, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    });
+  }
+
+  function drawDot(px, py, r, fill, stroke) {
+    ctx.fillStyle   = fill;
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+  }
+
+  // ── Main update ────────────────────────────────────────────────────────
+  function redraw() {
+    const d = derive();
+    updateUI(d);
+    drawCanvas(d);
+  }
+
+  // ── Resize observer ────────────────────────────────────────────────────
+  const ro = new ResizeObserver(() => {
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width;
+    H = rect.height;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.scale(DPR, DPR);
+    redraw();
+  });
+  ro.observe(canvas.parentElement);
+
+  // ── Init ───────────────────────────────────────────────────────────────
+  setTimeout(() => {
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.scale(DPR, DPR);
+    redraw();
+  }, 50);
+})();
+</script>
+</body>
+</html>
