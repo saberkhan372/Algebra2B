@@ -272,6 +272,12 @@
     </div>
   </div>
 
+  <!-- Hover preview popup — must be BEFORE the main script so getElementById works -->
+  <div id="tool-preview-popup" aria-hidden="true">
+    <canvas id="tool-preview-canvas" width="400" height="240"></canvas>
+    <div class="preview-footer" id="preview-footer-text"></div>
+  </div>
+
   <script>
     const TOOLS = [
       { id: 'quad',  prev: 'parabola',     name: 'Quadratic Slider Studio',         unit: 'U1', topic: 'Quadratics',  kind: 'visualizer', diff: 1, code: 'Qs', desc: 'Slide a, h, k and watch the parabola move. Vertex form made visual.',           href: 'tools/quadratic-slider.html' },
@@ -971,12 +977,6 @@
       drawPreview();
     })();
   </script>
-  <!-- Hover preview popup (pointer-events:none, never blocks clicks) -->
-  <div id="tool-preview-popup" aria-hidden="true">
-    <canvas id="tool-preview-canvas" width="400" height="240"></canvas>
-    <div class="preview-footer" id="preview-footer-text"></div>
-  </div>
-
   <script>
     // Register service worker for offline/PWA support
     if ('serviceWorker' in navigator) {
