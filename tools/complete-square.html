@@ -191,6 +191,8 @@
     </div>
   </div>
 
+  <script src="math-fmt.js"></script>
+  <script src="math-input.js"></script>
   <script>
     const PROBS = [
       {
@@ -288,7 +290,7 @@
           ${isDone ? `<div class="step-reveal" style="display:block;">${step.reveal} ✓</div>` : ''}
           ${isActive ? `
             <div class="step-answer-row">
-              <input class="step-input" id="si${i}" type="text" placeholder="answer" onkeydown="if(event.key==='Enter')checkStep(${i})" />
+              <input class="step-input math-input" id="si${i}" type="text" placeholder="answer" onkeydown="if(event.key==='Enter')checkStep(${i})" />
               <button class="btn small accent" onclick="checkStep(${i})">check →</button>
               <button class="btn small" onclick="showHint(${i})">hint</button>
               <span class="step-fb" id="sf${i}"></span>

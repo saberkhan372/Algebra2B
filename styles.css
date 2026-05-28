@@ -888,3 +888,87 @@ a:hover { text-decoration: underline; }
   border: 1.5px solid var(--ghost);
 }
 .url-state-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ── Math formatting (math-fmt.js + math-input.js) ─────────────── */
+
+/* Stacked fraction */
+.mf-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  line-height: 1.1;
+  margin: 0 1px;
+  font-size: 0.88em;
+}
+.mf-num {
+  border-bottom: 1.5px solid currentColor;
+  padding: 0 3px 1px;
+  text-align: center;
+}
+.mf-den {
+  padding: 1px 3px 0;
+  text-align: center;
+}
+
+/* Square / cube root */
+.mf-sqrt {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+}
+.mf-rad {
+  display: inline-block;
+  font-size: 1.1em;
+  line-height: 1;
+  margin-right: 1px;
+}
+.mf-rad::before { content: '√'; }
+.mf-cbrt .mf-rad::before { content: '∛'; }
+.mf-sqrt-inner {
+  display: inline-block;
+  border-top: 1.5px solid currentColor;
+  padding: 0 3px;
+}
+
+/* Math input preview wrapper */
+.math-input-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+/* Preview panel (always present, expands when typing) */
+.math-preview {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  min-height: 28px;
+  min-width: 110px;
+  max-width: 260px;
+  padding: 3px 10px;
+  background: var(--paper);
+  border: 1.5px dashed var(--ghost);
+  border-radius: 4px;
+  color: var(--ink-soft);
+  text-align: center;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Empty state — subtle placeholder */
+.math-preview:empty::before {
+  content: 'preview';
+  font-family: 'Patrick Hand', cursive;
+  font-size: 11px;
+  opacity: 0.35;
+  letter-spacing: 0.04em;
+}
+/* Active state (user is typing) */
+.math-preview.math-preview--active {
+  border-color: var(--ink-soft);
+  color: var(--ink);
+  background: var(--paper-2);
+}
