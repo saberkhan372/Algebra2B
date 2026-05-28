@@ -605,7 +605,33 @@
     });
   });
 
+  // ── localStorage persistence ──
+  const LS_KEY = 'a2p-sampling-lab';
+  function saveState() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify({ sampleMeans, currentMethod })); } catch(e) {}
+  }
+  function restoreState() {
+    try {
+      const s = JSON.parse(localStorage.getItem(LS_KEY));
+      if (!s || !s.sampleMeans) return;
+      sampleMeans = s.sampleMeans;
+      if (s.currentMethod) {
+        currentMethod = s.currentMethod;
+        const radio = document.querySelector(`input[value="${currentMethod}"]`);
+        if (radio) {
+          radio.checked = true;
+          document.querySelectorAll('.method-opt').forEach(el => el.classList.remove('selected'));
+          radio.closest('.method-opt').classList.add('selected');
+        }
+      }
+    } catch(e) {}
+  }
+  // Wrap updateStats to auto-save after every stat update
+  const _origUpdateStats = updateStats;
+  updateStats = function() { _origUpdateStats(); saveState(); };
+
   // ── INIT ──
+  restoreState();
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
   </script>

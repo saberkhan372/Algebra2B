@@ -551,8 +551,40 @@
       });
     }
 
+    // --- localStorage persistence ---
+    const LS_KEY = 'a2p-box-plot';
+    function saveState() {
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify({
+          data: document.getElementById('data-entry').value,
+          view: currentView,
+          preset: currentPreset
+        }));
+      } catch(e) {}
+    }
+    function restoreState() {
+      try {
+        const s = JSON.parse(localStorage.getItem(LS_KEY));
+        if (!s) return;
+        if (s.data) document.getElementById('data-entry').value = s.data;
+        if (s.view) {
+          currentView = s.view;
+          document.getElementById('vbtn-box').classList.toggle('active', s.view === 'box');
+          document.getElementById('vbtn-dot').classList.toggle('active', s.view === 'dot');
+        }
+        if (typeof s.preset === 'number') {
+          currentPreset = s.preset;
+          document.querySelectorAll('.preset-btn').forEach((b,j) => b.classList.toggle('active', j === s.preset));
+        }
+      } catch(e) {}
+    }
+    // Wrap parseAndDraw to auto-save on every redraw
+    const _origParseAndDraw = parseAndDraw;
+    parseAndDraw = function() { _origParseAndDraw(); saveState(); };
+
     // --- Init ---
     window.addEventListener('resize', parseAndDraw);
+    restoreState();
     parseAndDraw();
   </script>
   <script src="save-png.js"></script>

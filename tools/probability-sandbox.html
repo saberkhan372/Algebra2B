@@ -573,8 +573,26 @@
       updateDisplay();
     }
 
+    // ── localStorage persistence ──
+    const LS_KEY = 'a2p-prob-sandbox';
+    function saveState() {
+      try { localStorage.setItem(LS_KEY, JSON.stringify({ total, counts })); } catch(e) {}
+    }
+    function restoreState() {
+      try {
+        const s = JSON.parse(localStorage.getItem(LS_KEY));
+        if (!s || typeof s.total !== 'number') return;
+        total = s.total;
+        counts = s.counts;
+      } catch(e) {}
+    }
+    // Wrap updateDisplay to auto-save after every display refresh
+    const _origUpdateDisplay = updateDisplay;
+    updateDisplay = function() { _origUpdateDisplay(); saveState(); };
+
     // ── init ──
     buildTable();
+    restoreState();
     updateDisplay();
   </script>
 </body>
