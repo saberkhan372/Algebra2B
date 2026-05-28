@@ -337,9 +337,11 @@
           </div>
         `;
         card.addEventListener('mouseenter', () => {
-          showPreview(t.id, t.name, card.getBoundingClientRect());
+          window.showPreview && window.showPreview(t.id, t.name, card.getBoundingClientRect());
         });
-        card.addEventListener('mouseleave', hidePreview);
+        card.addEventListener('mouseleave', () => {
+          window.hidePreview && window.hidePreview();
+        });
         grid.appendChild(card);
       });
     }
