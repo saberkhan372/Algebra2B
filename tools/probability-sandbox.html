@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Probability Rules Sandbox — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* ── wrapper ── */
+    .tool-wrap { max-width: 900px; margin: 0 auto; padding: 16px 20px 48px; }
+
+    /* ── nav tweak ── */
+    .top-nav-links { display:flex; gap:16px; align-items:center; }
+    .top-nav-links a { font-family:'Special Elite',monospace; font-size:12px; color:var(--ink-soft); }
+    .top-nav-links a:hover { color:var(--accent); }
+
+    /* ── header ── */
+    .tool-header { margin-bottom:20px; }
+    .tool-bc { font-family:'Special Elite',monospace; font-size:12px; color:var(--ink-soft); margin-bottom:4px; }
+    .tool-h1 { font-family:'Caveat',cursive; font-weight:700; font-size:2.4rem; line-height:1; margin:0 0 4px; }
+    .tool-sub { font-size:14px; color:var(--ink-soft); }
+
+    /* ── main grid ── */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 640px) { .main-grid { grid-template-columns: 1fr; } }
+
+    /* ── dice panel ── */
+    .dice-panel {
+      border: 2px solid var(--ink);
+      border-radius: 6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow: 3px 4px 0 rgba(29,26,20,0.18);
+      background: var(--paper);
+      padding: 16px;
+    }
+    .dice-pair {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .die-box {
+      width: 82px; height: 82px;
+      background: white;
+      border: 3px solid var(--ink);
+      border-radius: 14px 10px 16px 12px / 12px 16px 10px 14px;
+      box-shadow: 3px 3px 0 var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px; line-height: 1;
+      transition: transform 0.08s;
+      user-select: none;
+    }
+    .die-box.rolling { animation: dieShake 0.07s infinite; }
+    @keyframes dieShake {
+      0%   { transform: rotate(-4deg) scale(1.05); }
+      50%  { transform: rotate(4deg) scale(0.97); }
+      100% { transform: rotate(-4deg) scale(1.05); }
+    }
+    .die-box.flash {
+      animation: dieFlash 0.3s ease-out;
+    }
+    @keyframes dieFlash {
+      0%   { box-shadow: 3px 3px 0 var(--accent), 0 0 0 0 rgba(217,79,42,0.4); }
+      60%  { box-shadow: 3px 3px 0 var(--accent), 0 0 0 12px rgba(217,79,42,0); }
+      100% { box-shadow: 3px 3px 0 var(--ink); }
+    }
+
+    .last-roll-label {
+      font-family: 'Patrick Hand', sans-serif;
+      font-size: 13px;
+      color: var(--ink-soft);
+      text-align: center;
+      min-height: 18px;
+      margin-bottom: 12px;
+    }
+
+    .roll-btns { display: flex; flex-direction: column; gap: 7px; }
+    .roll-btn {
+      font-family: 'Caveat', cursive;
+      font-size: 16px;
+      padding: 6px 12px;
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      background: var(--paper);
+      box-shadow: 2px 2px 0 var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.1s;
+      color: var(--ink);
+    }
+    .roll-btn:hover {
+      background: var(--accent);
+      color: white;
+      transform: translate(-1px,-1px);
+      box-shadow: 3px 3px 0 var(--ink);
+    }
+    .roll-btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+    .roll-btn.reset-btn {
+      border-color: var(--ghost);
+      color: var(--ink-soft);
+      box-shadow: 2px 2px 0 var(--ghost);
+      background: var(--paper-2);
+    }
+    .roll-btn.reset-btn:hover {
+      background: var(--paper-3);
+      color: var(--ink);
+    }
+
+    .n-display {
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .n-display .n-val { color: var(--accent); }
+
+    /* ── events panel ── */
+    .events-panel {
+      border: 2px solid var(--ink);
+      border-radius: 6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow: 3px 4px 0 rgba(29,26,20,0.18);
+      background: var(--paper);
+      padding: 14px 16px;
+      overflow-x: auto;
+    }
+    .events-heading {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 12px;
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .events-table { width: 100%; border-collapse: collapse; }
+    .events-table th {
+      font-family: 'Special Elite', monospace;
+      font-size: 10px;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-align: left;
+      padding: 2px 6px 6px;
+      border-bottom: 2px solid var(--ink);
+    }
+    .events-table td {
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(29,26,20,0.12);
+      vertical-align: middle;
+    }
+    .events-table tr:last-child td { border-bottom: none; }
+    .event-row.highlight td { background: rgba(245,211,76,0.25); }
+
+    .ev-name {
+      font-family: 'Caveat', cursive;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .ev-sub {
+      font-family: 'Patrick Hand', sans-serif;
+      font-size: 11px;
+      color: var(--ink-soft);
+      display: block;
+      white-space: nowrap;
+    }
+    .ev-exp {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--ink);
+      white-space: nowrap;
+      min-width: 100px;
+    }
+    .ev-theory {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .bar-wrap { min-width: 90px; }
+    .bar-track {
+      height: 9px;
+      background: rgba(29,26,20,0.08);
+      border-radius: 3px;
+      position: relative;
+      overflow: visible;
+    }
+    .bar-theory-bg {
+      position: absolute; top: 0; left: 0;
+      height: 100%;
+      background: var(--ink-soft);
+      opacity: 0.2;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .bar-exp-fill {
+      position: absolute; top: 0; left: 0;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+    .acc-chip {
+      display: inline-block;
+      font-family: 'Patrick Hand', sans-serif;
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    .acc-chip.good  { background: rgba(63,138,90,0.15); color: var(--green); border: 1px solid rgba(63,138,90,0.3); }
+    .acc-chip.close { background: rgba(245,211,76,0.3);  color: #856404; border: 1px solid rgba(245,211,76,0.6); }
+    .acc-chip.far   { background: rgba(217,79,42,0.1);   color: var(--accent); border: 1px solid rgba(217,79,42,0.3); }
+    .acc-chip.none  { visibility: hidden; }
+
+    /* ── rules cards ── */
+    .rules-section { margin-top: 4px; }
+    .rules-heading {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .rule-card {
+      border: 2px solid var(--ink);
+      border-radius: 6px 10px 8px 12px / 10px 7px 12px 8px;
+      box-shadow: 3px 4px 0 rgba(29,26,20,0.18);
+      background: var(--paper);
+      padding: 14px 16px;
+    }
+    .rule-card-title {
+      font-family: 'Caveat', cursive;
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .rule-formula {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: rgba(29,26,20,0.06);
+      border-radius: 5px;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      line-height: 1.7;
+      white-space: pre;
+    }
+    .rule-live {
+      font-family: 'Patrick Hand', sans-serif;
+      font-size: 13px;
+      color: var(--ink-2);
+      line-height: 1.55;
+    }
+    .rule-live .hl { color: var(--accent); font-weight: bold; }
+    .rule-live .hl-blue { color: var(--accent-2); font-weight: bold; }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../u9.html">← U9</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-wrap">
+
+    <!-- header -->
+    <div class="tool-header">
+      <div class="tool-bc">← U9 · Statistics &amp; Probability · D2</div>
+      <div class="tool-h1">Probability Rules Sandbox</div>
+      <div class="tool-sub">Roll two dice · watch experimental → theoretical · see complement, OR, AND rules live</div>
+    </div>
+
+    <!-- main: dice + events table -->
+    <div class="main-grid">
+
+      <!-- dice panel -->
+      <div class="dice-panel">
+        <div class="dice-pair">
+          <div class="die-box" id="die1">⚀</div>
+          <div class="die-box" id="die2">⚀</div>
+        </div>
+        <div class="last-roll-label" id="last-label">press Roll to start</div>
+        <div class="roll-btns">
+          <button class="roll-btn" onclick="doRoll(1)">🎲 Roll Once</button>
+          <button class="roll-btn" onclick="doRoll(10)">Roll 10×</button>
+          <button class="roll-btn" onclick="doRoll(100)">Roll 100×</button>
+          <button class="roll-btn" onclick="doRoll(1000)">Roll 1 000×</button>
+          <button class="roll-btn reset-btn" onclick="doReset()">↺ Reset</button>
+        </div>
+        <div class="n-display">n = <span class="n-val" id="n-count">0</span></div>
+      </div>
+
+      <!-- events table -->
+      <div class="events-panel">
+        <div class="events-heading">EVENT TRACKER</div>
+        <table class="events-table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Experimental</th>
+              <th>Theoretical</th>
+              <th>Bar</th>
+              <th>Accuracy</th>
+            </tr>
+          </thead>
+          <tbody id="events-body"><!-- filled by JS --></tbody>
+        </table>
+      </div>
+
+    </div><!-- /main-grid -->
+
+    <!-- rules cards -->
+    <div class="rules-section">
+      <div class="rules-heading">Rules in Action</div>
+      <div class="rules-grid">
+
+        <div class="rule-card" style="transform:rotate(-0.5deg); border-left:4px solid var(--accent);">
+          <div class="rule-card-title" style="color:var(--accent);">Complement Rule</div>
+          <div class="rule-formula">P(not A) = 1 − P(A)</div>
+          <div class="rule-live" id="rule-complement">
+            <strong>A</strong> = sum ≥ 8 &nbsp;→&nbsp; P(A) = 15/36<br>
+            <strong>NOT A</strong> = sum ≤ 7<br>
+            P(NOT A) = 1 − 15/36 = <span class="hl">21/36</span>
+          </div>
+        </div>
+
+        <div class="rule-card" style="transform:rotate(0.4deg); border-left:4px solid var(--accent-2);">
+          <div class="rule-card-title" style="color:var(--accent-2);">OR Rule</div>
+          <div class="rule-formula">P(A or B) =
+  P(A) + P(B) − P(A and B)</div>
+          <div class="rule-live" id="rule-or">
+            = 15/36 + 6/36 − 3/36<br>
+            = <span class="hl-blue">18/36 = ½</span><br>
+            <span style="font-size:11px; color:var(--ink-soft);">(subtract overlap to avoid double-counting)</span>
+          </div>
+        </div>
+
+        <div class="rule-card" style="transform:rotate(-0.3deg); border-left:4px solid var(--green);">
+          <div class="rule-card-title" style="color:var(--green);">AND Rule</div>
+          <div class="rule-formula">P(A and B) ≤ min(P(A), P(B))</div>
+          <div class="rule-live" id="rule-and">
+            Doubles AND sum ≥ 8:<br>
+            only (4,4), (5,5), (6,6)<br>
+            P(A and B) = <span class="hl" style="color:var(--green);">3/36 = 1/12</span><br>
+            <span style="font-size:11px; color:var(--ink-soft);">can't exceed either P(A) or P(B)</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /tool-wrap -->
+
+  <script>
+    // ── constants ──
+    const DICE_CHARS = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+    const EVENTS = [
+      {
+        id: 'A',
+        name: 'A: sum ≥ 8',
+        sub: 'e.g. (3,5) = 8, (5,6) = 11',
+        theory: 15/36,
+        theoryStr: '15/36 ≈ 41.7%',
+        test: (d1, d2) => d1 + d2 >= 8,
+        color: 'var(--accent)'
+      },
+      {
+        id: 'B',
+        name: 'B: doubles',
+        sub: 'both dice show same value',
+        theory: 6/36,
+        theoryStr: '6/36 ≈ 16.7%',
+        test: (d1, d2) => d1 === d2,
+        color: 'var(--accent-2)'
+      },
+      {
+        id: 'notA',
+        name: 'NOT A: sum ≤ 7',
+        sub: 'complement of A (Complement Rule)',
+        theory: 21/36,
+        theoryStr: '21/36 ≈ 58.3%',
+        test: (d1, d2) => d1 + d2 <= 7,
+        color: 'var(--accent)'
+      },
+      {
+        id: 'AandB',
+        name: 'A AND B',
+        sub: 'sum ≥ 8 and doubles: (4,4),(5,5),(6,6)',
+        theory: 3/36,
+        theoryStr: '3/36 ≈ 8.3%',
+        test: (d1, d2) => d1 + d2 >= 8 && d1 === d2,
+        color: 'var(--green)'
+      },
+      {
+        id: 'AorB',
+        name: 'A OR B',
+        sub: 'sum ≥ 8 or doubles (Inclusion-Exclusion)',
+        theory: 18/36,
+        theoryStr: '18/36 = 50%',
+        test: (d1, d2) => d1 + d2 >= 8 || d1 === d2,
+        color: 'var(--accent-2)'
+      }
+    ];
+
+    // ── state ──
+    let total = 0;
+    let counts = {};
+    EVENTS.forEach(e => counts[e.id] = 0);
+
+    // ── build table ──
+    function buildTable() {
+      const tbody = document.getElementById('events-body');
+      tbody.innerHTML = '';
+      EVENTS.forEach(ev => {
+        const tr = document.createElement('tr');
+        tr.id = 'evrow-' + ev.id;
+        tr.className = 'event-row';
+        tr.innerHTML = `
+          <td>
+            <div class="ev-name">${ev.name}</div>
+            <span class="ev-sub">${ev.sub}</span>
+          </td>
+          <td class="ev-exp" id="evexp-${ev.id}">—</td>
+          <td class="ev-theory">${ev.theoryStr}</td>
+          <td class="bar-wrap">
+            <div class="bar-track">
+              <div class="bar-theory-bg" style="width:${(ev.theory*100).toFixed(1)}%"></div>
+              <div class="bar-exp-fill" id="evbar-${ev.id}" style="width:0%; background:${ev.color};"></div>
+            </div>
+          </td>
+          <td><span class="acc-chip none" id="evchip-${ev.id}">—</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ── update display ──
+    function updateDisplay() {
+      const n = total;
+      document.getElementById('n-count').textContent = n.toLocaleString();
+
+      EVENTS.forEach(ev => {
+        const c = counts[ev.id];
+        const expP = n > 0 ? c / n : 0;
+        const expPct = (expP * 100).toFixed(1);
+        const diff = Math.abs(expP - ev.theory);
+
+        document.getElementById('evexp-' + ev.id).textContent =
+          n === 0 ? '—' : `${expPct}%  (${c}/${n})`;
+
+        document.getElementById('evbar-' + ev.id).style.width =
+          n === 0 ? '0%' : `${Math.min(100, expP * 100).toFixed(1)}%`;
+
+        const chip = document.getElementById('evchip-' + ev.id);
+        if (n < 20) {
+          chip.className = 'acc-chip none';
+        } else if (diff < 0.02) {
+          chip.className = 'acc-chip good';
+          chip.textContent = '✓ converged';
+        } else if (diff < 0.05) {
+          chip.className = 'acc-chip close';
+          chip.textContent = '≈ close';
+        } else {
+          chip.className = 'acc-chip far';
+          chip.textContent = `↻ Δ ${(diff*100).toFixed(1)}%`;
+        }
+      });
+    }
+
+    // ── highlight triggered rows ──
+    function flashRows(d1, d2) {
+      EVENTS.forEach(ev => {
+        const tr = document.getElementById('evrow-' + ev.id);
+        if (ev.test(d1, d2)) {
+          tr.classList.add('highlight');
+          setTimeout(() => tr.classList.remove('highlight'), 600);
+        }
+      });
+    }
+
+    // ── dice flash ──
+    function flashDice() {
+      ['die1','die2'].forEach(id => {
+        const el = document.getElementById(id);
+        el.classList.remove('flash');
+        void el.offsetWidth; // reflow
+        el.classList.add('flash');
+        setTimeout(() => el.classList.remove('flash'), 350);
+      });
+    }
+
+    // ── roll logic ──
+    let isRolling = false;
+
+    function doRoll(times) {
+      if (isRolling) return;
+      isRolling = true;
+
+      const d1el = document.getElementById('die1');
+      const d2el = document.getElementById('die2');
+      const lbl  = document.getElementById('last-label');
+
+      if (times === 1) {
+        // animated single roll
+        d1el.classList.add('rolling');
+        d2el.classList.add('rolling');
+        let ticks = 0;
+        const ticker = setInterval(() => {
+          d1el.textContent = DICE_CHARS[Math.floor(Math.random()*6)];
+          d2el.textContent = DICE_CHARS[Math.floor(Math.random()*6)];
+          ticks++;
+          if (ticks >= 10) {
+            clearInterval(ticker);
+            d1el.classList.remove('rolling');
+            d2el.classList.remove('rolling');
+            const r1 = Math.floor(Math.random()*6) + 1;
+            const r2 = Math.floor(Math.random()*6) + 1;
+            d1el.textContent = DICE_CHARS[r1-1];
+            d2el.textContent = DICE_CHARS[r2-1];
+            recordRoll(r1, r2);
+            flashDice();
+            flashRows(r1, r2);
+            const sum = r1 + r2;
+            const doublesNote = r1 === r2 ? ' 🎯 doubles!' : '';
+            const sumNote = sum >= 8 ? ` · sum ${sum} ≥ 8 ✓` : ` · sum ${sum} < 8`;
+            lbl.textContent = `rolled ${r1} + ${r2} = ${sum}${doublesNote}${sumNote}`;
+            updateDisplay();
+            isRolling = false;
+          }
+        }, 55);
+      } else {
+        // batch roll — instant
+        let r1last = 1, r2last = 1;
+        for (let i = 0; i < times; i++) {
+          const r1 = Math.floor(Math.random()*6) + 1;
+          const r2 = Math.floor(Math.random()*6) + 1;
+          recordRoll(r1, r2);
+          r1last = r1; r2last = r2;
+        }
+        d1el.textContent = DICE_CHARS[r1last-1];
+        d2el.textContent = DICE_CHARS[r2last-1];
+        lbl.textContent = `batch of ${times.toLocaleString()} done · last roll: ${r1last}+${r2last}=${r1last+r2last}`;
+        updateDisplay();
+        isRolling = false;
+      }
+    }
+
+    function recordRoll(r1, r2) {
+      total++;
+      EVENTS.forEach(ev => { if (ev.test(r1, r2)) counts[ev.id]++; });
+    }
+
+    function doReset() {
+      total = 0;
+      EVENTS.forEach(e => counts[e.id] = 0);
+      document.getElementById('die1').textContent = '⚀';
+      document.getElementById('die2').textContent = '⚀';
+      document.getElementById('last-label').textContent = 'press Roll to start';
+      updateDisplay();
+    }
+
+    // ── init ──
+    buildTable();
+    updateDisplay();
+  </script>
+</body>
+</html>
