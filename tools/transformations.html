@@ -63,6 +63,22 @@
       background: #fff8f0; padding: 10px 12px;
     }
     .p-result { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+
+    /* h "why opposite" tooltip */
+    .h-why-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 11px; padding: 0 2px; margin-left: 3px;
+      color: #2a8a4a; opacity: 0.6; line-height: 1; vertical-align: middle;
+    }
+    .h-why-btn:hover { opacity: 1; }
+    .h-why-box {
+      grid-column: 1 / -1;
+      padding: 8px 10px;
+      background: #f0f7f0;
+      border: 1.5px solid #2a8a4a;
+      border-radius: 4px;
+      margin: 2px 0;
+    }
   </style>
 </head>
 <body class="paper-lined">
@@ -116,9 +132,20 @@
 
         <label class="param-lbl" for="sl-h">
           <span class="letter" style="color:#2a8a4a;">h</span> <span style="color:var(--ink-2); font-size:11px;">← →</span>
+          <button class="h-why-btn" onclick="toggleHWhy(event)" title="Why does h shift the opposite direction?">❓</button>
         </label>
         <input type="range" id="sl-h" min="-6" max="6" step="0.5" value="0" oninput="slide('h')">
         <span class="param-val" style="color:#2a8a4a;" id="val-h">0</span>
+        <div class="h-why-box" id="h-why-box" style="display:none;">
+          <div style="font-family:'Permanent Marker',cursive; font-size:10px; color:#2a8a4a; margin-bottom:5px;">WHY DOES h SHIFT THE "WRONG" WAY?</div>
+          <div class="f-hand" style="font-size:12px; line-height:1.7; color:var(--ink-2);">
+            The key question: <em>what x makes the inside equal zero?</em><br>
+            f(x − h) has inside = 0 when x = h. <strong>That's where the vertex lands.</strong><br>
+            <span style="color:#2a8a4a; font-weight:600;">h = 3:</span> write (x − 3) = 0 → x = 3 → shifts <strong>right</strong>.<br>
+            <span style="color:#2a8a4a; font-weight:600;">h = −2:</span> write (x + 2) = 0 → x = −2 → shifts <strong>left</strong>.<br>
+            Subtraction in the formula = shift in the positive direction. Always.
+          </div>
+        </div>
 
         <label class="param-lbl" for="sl-k">
           <span class="letter" style="color:#8b4513;">k</span> <span style="color:var(--ink-2); font-size:11px;">↑ ↓</span>
@@ -554,6 +581,12 @@
       document.getElementById('annot').textContent = `Switched to parent: f(x) = ${FNDEFS[name].name}. Move sliders to transform it.`;
       updateChips();
       draw();
+    }
+
+    function toggleHWhy(e) {
+      e.preventDefault(); e.stopPropagation();
+      const box = document.getElementById('h-why-box');
+      box.style.display = box.style.display === 'none' ? '' : 'none';
     }
 
     function resetAll() {

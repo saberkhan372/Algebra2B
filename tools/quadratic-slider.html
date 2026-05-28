@@ -265,6 +265,20 @@
       const direction = a > 0 ? 'opens up' : a < 0 ? 'opens down' : 'flat: a = 0';
       const shape = Math.abs(a) > 1 ? 'taller/narrower' : Math.abs(a) < 1 && Math.abs(a) > 0 ? 'wider' : 'parent width';
       const range = a > 0 ? `[${fmt(k)}, infinity)` : a < 0 ? `(-infinity, ${fmt(k)}]` : `{${fmt(k)}}`;
+
+      // discriminant chip: in vertex form y = a(x−h)²+k, zeros exist when a·k ≤ 0
+      let zerosChip = '';
+      if (a !== 0) {
+        if (k === 0) {
+          zerosChip = `<span class="pattern-chip" style="border-color:#c8a000; color:#7a5800; background:#fffbe6;">1 zero — vertex sits on x-axis</span>`;
+        } else if (a * k < 0) {
+          const r = Math.sqrt(Math.abs(k / a));
+          zerosChip = `<span class="pattern-chip" style="border-color:#2a6a3a; color:#2a6a3a; background:#d4f0dc;">2 real zeros: x ≈ ${fmt(h + r)}, ${fmt(h - r)}</span>`;
+        } else {
+          zerosChip = `<span class="pattern-chip" style="border-color:#8a1a2a; color:#8a1a2a; background:#fde0dc; font-weight:600;">no real zeros — parabola doesn't touch x-axis</span>`;
+        }
+      }
+
       document.getElementById('pattern-strip').innerHTML = `
         <span class="pattern-chip strong">vertex (${fmt(h)}, ${fmt(k)})</span>
         <span class="pattern-chip">right 1: ${a >= 0 ? 'up' : 'down'} ${fmt(Math.abs(a))}</span>
@@ -272,6 +286,7 @@
         <span class="pattern-chip">${direction}; ${shape}</span>
         <span class="pattern-chip">domain: all reals</span>
         <span class="pattern-chip">range: ${range}</span>
+        ${zerosChip}
       `;
     }
 
