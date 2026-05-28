@@ -120,10 +120,17 @@
 
       <div class="sk-box" style="padding:10px; background:var(--paper-2);">
         <div class="f-marker" style="font-size:11px; margin-bottom:4px;">KEY IDEAS</div>
-        <div class="f-hand" style="font-size:13px; line-height:1.5;">
-          <strong>VA</strong>: denominator = 0 (set of excluded x-values)<br>
-          <strong>Domain</strong>: all real x except where denom = 0<br>
-          <strong>Hole</strong>: factor cancels top and bottom
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          <strong>VA</strong>: denom = 0 (excluded x-values)<br>
+          <strong>Domain</strong>: all reals except VA/holes → interval notation<br>
+          <strong>Hole</strong>: factor cancels top and bottom<br><br>
+          <strong>Horizontal asymptote — 3 cases:</strong><br>
+          <span style="font-size:12px;">
+          Case 1: deg(top) &lt; deg(bottom) → y = 0<br>
+          Case 2: deg(top) = deg(bottom) → y = leading ratio<br>
+          Case 3: deg(top) &gt; deg(bottom) → no HA<br>
+          &nbsp;&nbsp;(if exactly 1 more → <em>slant asymptote</em>)
+          </span>
         </div>
       </div>
 
@@ -188,6 +195,33 @@
       if (c[0] !== 0) return c[0];
       if (c[1] !== 0) return c[1];
       return c[2];
+    }
+
+    // Build interval-notation domain string from sorted excluded x-values
+    function domainInterval(excl) {
+      const f = v => Number.isInteger(v) ? String(v) : (Math.round(v*100)/100).toFixed(2).replace(/\.?0+$/, '');
+      if (!excl.length) return '(−∞, ∞)';
+      const pts = [];
+      pts.push(`(−∞, ${f(excl[0])})`);
+      for (let i = 1; i < excl.length; i++) pts.push(`(${f(excl[i-1])}, ${f(excl[i])})`);
+      pts.push(`(${f(excl[excl.length-1])}, ∞)`);
+      return pts.join(' ∪ ');
+    }
+
+    // Slant asymptote for deg(n)=2, deg(d)=1 via polynomial long division
+    // Returns { m, b } where slant is y = mx + b
+    function calcSlant(n, d) {
+      const [na, nb] = n;
+      const da = d[1], db = d[2];
+      const m = na / da;
+      const b = (nb - m * db) / da;
+      return { m, b };
+    }
+
+    // Format a number for display (trim .00 etc.)
+    function fmtNum(v) {
+      const r = Math.round(v * 1000) / 1000;
+      return Number.isInteger(r) ? String(r) : String(r);
     }
 
     function resize() {
@@ -258,6 +292,20 @@
         ctx.fillText(`hole x=${Math.round(r*10)/10}`,hx,hy - 12);
       });
 
+      // draw slant asymptote when deg(n) = deg(d) + 1 and deg(d) >= 1
+      const dn = degree(n), dd = degree(d);
+      if (dn === 2 && dd === 1) {
+        const sl = calcSlant(n, d);
+        ctx.save(); ctx.strokeStyle = '#999'; ctx.lineWidth = 1; ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(0,   oy - (sl.m * (-ox / sc) + sl.b) * sc);
+        ctx.lineTo(W,   oy - (sl.m * ((W - ox) / sc) + sl.b) * sc);
+        ctx.stroke(); ctx.restore();
+        ctx.fillStyle = '#888'; ctx.font = "11px 'Patrick Hand',cursive"; ctx.textAlign = 'left';
+        const slBStr = sl.b >= 0 ? `+ ${fmtNum(sl.b)}` : `− ${fmtNum(Math.abs(sl.b))}`;
+        ctx.fillText(`slant: y = ${fmtNum(sl.m)}x ${slBStr}`, 4, 26);
+      }
+
       // graph — break only at VAs; holes use limit value so curve stays continuous
       ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2.5; ctx.lineJoin='round';
       const segments = [[]];
@@ -299,28 +347,35 @@
       chips.innerHTML = '';
       const addChip = (text, cls) => { const c=document.createElement('span'); c.className=`info-chip ${cls}`; c.textContent=text; chips.appendChild(c); };
 
+      const fmtR = r => { const v = Math.round(r*100)/100; return Number.isInteger(v) ? String(v) : v.toFixed(2); };
+
+      // ── Domain (interval notation) ──
+      const excludedSorted = [...new Set(dRoots.map(r => Math.round(r*1000)/1000))].sort((a,b)=>a-b);
       if (dRoots.length === 0) {
-        addChip('Domain: all reals', 'dom');
+        addChip('Domain: (−∞, ∞)  [all reals]', 'dom');
       } else {
-        if (vas.length > 0) addChip(`VA: ${vas.map(r=>`x=${Math.round(r*10)/10}`).join(', ')}`, 'va');
-        if (holes.length > 0) {
-          addChip(`Hole: ${holes.map(r=>`x=${Math.round(r*10)/10}`).join(', ')} (factor cancels — still excluded!)`, 'hole');
-        }
-        const excluded = [...new Set(dRoots.map(r=>Math.round(r*10)/10))].join(', ');
-        addChip(`Domain (original denom): x ≠ ${excluded}`, 'dom');
+        if (vas.length > 0) addChip(`VA: x = ${vas.map(fmtR).join(', ')}`, 'va');
+        if (holes.length > 0) addChip(`Hole at x = ${holes.map(fmtR).join(', ')}  (factor cancels — still excluded!)`, 'hole');
+        addChip(`Domain: ${domainInterval(excludedSorted)}`, 'dom');
       }
 
-      // horizontal asymptote — compare degrees properly
-      const dn = degree(n), dd = degree(d);
+      // ── Horizontal / Slant Asymptote — three cases ──
+      // Re-read dn/dd which were set before slant drawing
       if (dd === 0) {
-        /* d is a constant — no HA in polynomial sense */
+        /* d is a constant — rational expression is a polynomial, no asymptotes */
       } else if (dn < dd) {
-        addChip('HA: y = 0', 'ha');
+        addChip(`HA: y = 0  [Case 1: deg(top) < deg(bottom) → y → 0]`, 'ha');
       } else if (dn === dd) {
-        const ratio = leadingCoeff(n) / leadingCoeff(d);
-        addChip(`HA: y = ${Math.round(ratio*100)/100}`, 'ha');
+        const ratio = Math.round((leadingCoeff(n) / leadingCoeff(d)) * 1000) / 1000;
+        addChip(`HA: y = ${ratio}  [Case 2: deg(top) = deg(bottom) → ratio of leading coefficients]`, 'ha');
+      } else if (dn === dd + 1) {
+        const sl = calcSlant(n, d);
+        const mStr = fmtNum(sl.m), bStr = fmtNum(Math.abs(sl.b));
+        const bSign = sl.b >= 0 ? '+' : '−';
+        addChip(`No HA  [Case 3: deg(top) > deg(bottom)]`, 'ha');
+        addChip(`Slant asymptote: y = ${mStr}x ${bSign} ${bStr}  (long division quotient)`, 'ha');
       } else {
-        addChip('No HA (degree of top > degree of bottom)', 'ha');
+        addChip(`No HA  [Case 3: deg(top) > deg(bottom)]`, 'ha');
       }
     }
 

@@ -81,6 +81,7 @@
           <button class="sk-pill" id="pb1" onclick="loadProb(1)">P2</button>
           <button class="sk-pill" id="pb2" onclick="loadProb(2)">P3</button>
           <button class="sk-pill" id="pb3" onclick="loadProb(3)">P4</button>
+          <button class="sk-pill" id="pb4" onclick="loadProb(4)">P5 ★</button>
           <button class="btn small" onclick="reload()">↺ restart</button>
         </div>
 
@@ -99,7 +100,8 @@
           <div class="prob-label">VERTEX FORM</div>
           <div class="f-display" id="solved-expr"></div>
           <div style="margin-top:10px; font-family:'Patrick Hand',cursive; font-size:14px;" id="solved-note"></div>
-          <button class="btn accent" style="margin-top:10px;" onclick="nextProb()">next problem →</button>
+          <div id="solved-forms"></div>
+          <button class="btn accent" style="margin-top:12px;" onclick="nextProb()">next problem →</button>
         </div>
       </div>
     </div>
@@ -123,6 +125,17 @@
           <span style="color:var(--accent);">②</span> Add and subtract (b/2)²<br>
           <span style="color:var(--accent);">③</span> Factor the perfect square trinomial<br>
           <span style="color:var(--accent);">④</span> Simplify the constant
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THREE QUADRATIC FORMS</div>
+        <div class="f-hand" style="font-size:12px; line-height:1.9; color:var(--ink-2);">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink);">ax²+bx+c</span> ← standard<br>
+          <span style="color:var(--ink-soft); font-size:11px; padding-left:4px;">↕ complete the square</span><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--accent);">a(x−h)²+k</span> ← vertex<br>
+          <span style="color:var(--ink-soft); font-size:11px; padding-left:4px;">↕ set y=0, solve</span><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#2a8a4a;">a(x−r₁)(x−r₂)</span> ← intercept
         </div>
       </div>
 
@@ -193,6 +206,17 @@
         vertexForm: 'y = (x − 5)² − 4',
         note: 'Vertex is at (5, −4). Roots at x = 3 and x = 7.',
       },
+      {
+        expr: 'x² + 2x + 5', b:2, c:5, a:1,
+        steps: [
+          { q:'What is b/2? (b = 2)', ans:['1'], reveal:'b = 2, so b/2 = 1' },
+          { q:'What is (b/2)²?', ans:['1'], reveal:'1² = 1' },
+          { q:'Factor x² + 2x + 1. Perfect square form?', ans:['(x+1)²','(x+1)^2'], reveal:'x² + 2x + 1 = (x + 1)²' },
+          { q:'Combine constants: −1 + 5 = ?', ans:['4'], reveal:'−1 + 5 = 4' },
+        ],
+        vertexForm: 'y = (x + 1)² + 4',
+        note: 'Vertex is at (−1, 4). k = 4 > 0 → parabola sits above the x-axis — no real roots!',
+      },
     ];
 
     let curProb = 0, curStep = 0;
@@ -241,6 +265,24 @@
             <div class="step-reveal" id="sr${i}">${step.reveal}</div>` : ''}
         `;
         area.appendChild(div);
+
+        // After step 2 (index 1) is done and step 3 (index 2) is active, inject the pattern chip
+        if (i === 1 && curStep >= 2) {
+          const half = p.b / 2;
+          const sq = half * half;
+          const bSign = p.b > 0 ? '+ ' : '− ';
+          const bAbs = Math.abs(p.b);
+          const sqStr = Number.isInteger(sq) ? String(sq) : `(${half})²`;
+          const hSign = half >= 0 ? '+ ' : '− ';
+          const hAbs = Math.abs(half);
+          const hint = document.createElement('div');
+          hint.style.cssText = 'background:#fffbe6; border:1.5px solid #c8a000; border-radius:4px; padding:8px 12px; text-align:center;';
+          hint.innerHTML = `
+            <span style="font-family:'Permanent Marker',cursive; font-size:11px; color:#c8a000; display:block; margin-bottom:5px;">⭐ THE PATTERN (with your numbers)</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--ink);">x² ${bSign}${bAbs}x + ${sqStr} = (x ${hSign}${hAbs})²</span>
+          `;
+          area.appendChild(hint);
+        }
       });
     }
 
@@ -273,6 +315,54 @@
       banner.style.display = 'block';
       document.getElementById('solved-expr').textContent = p.vertexForm;
       document.getElementById('solved-note').textContent = p.note;
+
+      // Compute vertex coordinates from coefficients
+      const half = p.b / 2;
+      const hV = -half;            // x-coordinate of vertex
+      const kV = p.c - half*half;  // y-coordinate of vertex
+
+      // Build the intercept / root form string
+      let interceptHTML = '', imagNoteHTML = '';
+      if (kV > 0) {
+        // Imaginary roots: x = hV ± i√kV
+        const imagPart = Math.sqrt(kV);
+        const imagStr = Number.isInteger(imagPart) ? String(imagPart) : `√${kV}`;
+        interceptHTML = `x = ${hV} ± ${imagStr}i`;
+        const disc = p.b*p.b - 4*p.a*p.c;
+        imagNoteHTML = `<div style="margin-top:8px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:8px 10px; font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-2); line-height:1.5;">
+          ✦ Discriminant b²−4ac = <strong>${disc}</strong> &lt; 0 → <strong>no real roots → imaginary solutions!</strong><br>
+          Parabola vertex (${hV}, ${kV}) sits above the x-axis — it never crosses it.<br>
+          <a href="imaginary-sandbox.html" style="color:var(--accent); font-family:'Permanent Marker',cursive; font-size:12px;">→ Explore in Imaginary Sandbox</a>
+        </div>`;
+      } else if (kV === 0) {
+        const absH = Math.abs(hV);
+        const s = hV >= 0 ? `− ${hV}` : `+ ${absH}`;
+        interceptHTML = `(x ${s})²   double root: x = ${hV}`;
+      } else {
+        const rootDiff = Math.sqrt(-kV);
+        const r1 = hV + rootDiff, r2 = hV - rootDiff;
+        if (Number.isInteger(r1) && Number.isInteger(r2)) {
+          const fmt = r => r >= 0 ? `− ${r}` : `+ ${Math.abs(r)}`;
+          interceptHTML = `(x ${fmt(r1)})(x ${fmt(r2)})`;
+        } else {
+          const sqStr = Number.isInteger(rootDiff) ? String(rootDiff) : `√${-kV}`;
+          interceptHTML = `x = ${hV} ± ${sqStr}`;
+        }
+      }
+
+      document.getElementById('solved-forms').innerHTML = `
+        <div style="border-top:1.5px dashed var(--ink-2); padding-top:10px; margin-top:10px;">
+          <div style="font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); margin-bottom:6px;">THREE FORMS OF THIS PARABOLA:</div>
+          <div style="font-family:'Patrick Hand',cursive; font-size:13px; line-height:2;">
+            <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">${p.expr}</span><span style="color:var(--ink-soft);"> ← standard</span><br>
+            <span style="color:var(--ink-soft); font-size:12px; padding-left:8px;">↕ complete the square ↕</span><br>
+            <span style="font-family:'JetBrains Mono',monospace; color:var(--accent);">${p.vertexForm.replace('y = ','')}</span><span style="color:var(--ink-soft);"> ← vertex</span><br>
+            <span style="color:var(--ink-soft); font-size:12px; padding-left:8px;">↕ set y=0, solve ↕</span><br>
+            <span style="font-family:'JetBrains Mono',monospace; color:#2a8a4a;">${interceptHTML}</span><span style="color:var(--ink-soft);"> ← ${kV > 0 ? 'imaginary roots' : 'intercept form'}</span>
+          </div>
+          ${imagNoteHTML}
+        </div>
+      `;
     }
 
     function reload() { loadProb(curProb); }
