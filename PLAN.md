@@ -7,12 +7,12 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 32 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
+**Site:** 7 unit pages (u1–u7), 33 tools wired into the homepage grid (U9 now has 1 tool; no u9.html unit page yet — breadcrumb links to all-tools).  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
 **Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**32 tools built/integrated:**
+**33 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -45,8 +45,9 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - SOH CAH TOA Triangle Solver (U7)
 - Unit Circle Walker (U7)
 - Sine/Cosine Graph Builder (U7)
+- Box Plot Builder (U9) — first U9 tool; 5-number summary, IQR, outlier fences, dot/box views
 
-**No tools missing** — all 32 tools are live and wired into student navigation.
+**No planned tools missing** — all 33 tools are live. U9 has 1 tool; a u9.html unit page is the logical next infrastructure step.
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
@@ -602,6 +603,13 @@ Batch-10 upgrades (all ✅):
 **New tools from video insights (now built):**
 - ✅ Rational Multiplication/Division Stepper (U6-D7): KCF before factoring, factor/cancel with original-domain restrictions, 4 problems with reveal mechanic.
 - ✅ Solving Rational Equations Stepper (U6-D8): excluded-value pre-check, LCD multiply-through, extraneous-solution detection (P3 is a "No Solution" example), 4 problems.
+
+**May 2026 polish pass (committed eb2cc5d):** 5 UX fixes across existing tools —
+- `rational-equations.html`: `white-space:pre` on `.eq-big` so ASCII fraction display renders correctly
+- `log-properties.html`: "Blog Rule" → "Log Rule" typo fixed (6 occurrences)
+- `quadratic-slider.html`: equation shows `y = x²` not `y = (x)²` when h=0
+- `quadratic-standard.html`: root label suppressed when it coincides with vertex (tangent case)
+- `exponential-explorer.html`: anchor labels grow in opposite directions to prevent overlap
 
 **After each tool ships, run ChatGPT audit:** verify the unit page lesson row, homepage TOOLS array card, and PLAN.md are all updated before calling it done.
 
