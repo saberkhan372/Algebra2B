@@ -5,7 +5,7 @@
  * falling back to network and caching the response for next time.
  */
 
-const CACHE_VERSION = 'a2p-v2';
+const CACHE_VERSION = 'a2p-v3';
 
 // Everything to precache on install — covers all pages and shared assets
 const PRECACHE_URLS = [

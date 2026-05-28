@@ -117,6 +117,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     let a = 1, h = 0, k = 0;
     let dragging = false;
@@ -321,6 +322,28 @@
     window.addEventListener('resize', draw);
     draw();
     updateEq();
+
+    // ── URL state + localStorage ──────────────────────────
+    const _updateEq_us = updateEq;
+    updateEq = function () {
+      _updateEq_us();
+      const st = { a, h, k };
+      UrlState.save(st);
+      localStorage.setItem('a2p-abs-value', JSON.stringify(st));
+    };
+    (function () {
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-abs-value') || 'null');
+      const s = fromUrl || fromLS;
+      if (s) {
+        if (s.a != null) a = +s.a;
+        if (s.h != null) h = +s.h;
+        if (s.k != null) k = +s.k;
+        syncSliders(); updateEq(); draw();
+      }
+    })();
+    document.querySelector('button[onclick*="resetGraph"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

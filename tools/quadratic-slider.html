@@ -354,13 +354,18 @@
     window.addEventListener('resize', draw);
     draw(); updateEq();
 
-    // ── URL state ────────────────────────────────────────
-    // Wrap updateEq to auto-save state on every change
+    // ── URL state + localStorage ──────────────────────────
     const _updateEq_us = updateEq;
-    updateEq = function () { _updateEq_us(); UrlState.save({ a, h, k }); };
-    // Load from URL if this is a shared link
+    updateEq = function () {
+      _updateEq_us();
+      const st = { a, h, k };
+      UrlState.save(st);
+      localStorage.setItem('a2p-quad-slider', JSON.stringify(st));
+    };
     (function () {
-      const s = UrlState.load();
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-quad-slider') || 'null');
+      const s = fromUrl || fromLS;
       if (s) {
         if (s.a != null) a = +s.a;
         if (s.h != null) h = +s.h;
@@ -368,7 +373,6 @@
         syncSliders(); updateEq(); draw();
       }
     })();
-    // Add copy-link button next to the reset button
     document.querySelector('button[onclick*="resetGraph"]')
       .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>

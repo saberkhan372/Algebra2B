@@ -382,18 +382,22 @@
     window.addEventListener('resize', update);
     update();
 
-    // ── URL state ────────────────────────────────────────
+    // ── URL state + localStorage ──────────────────────────
     const _update_us = update;
     update = function () {
       _update_us();
-      UrlState.save({
+      const st = {
         a: +document.getElementById('sl-a').value,
         b: +document.getElementById('sl-b').value,
         c: +document.getElementById('sl-c').value
-      });
+      };
+      UrlState.save(st);
+      localStorage.setItem('a2p-quad-std', JSON.stringify(st));
     };
     (function () {
-      const s = UrlState.load();
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-quad-std') || 'null');
+      const s = fromUrl || fromLS;
       if (s) {
         if (s.a != null) document.getElementById('sl-a').value = s.a;
         if (s.b != null) document.getElementById('sl-b').value = s.b;

@@ -441,11 +441,18 @@
     window.addEventListener('resize', draw);
     draw(); updateInfo();
 
-    // ── URL state ────────────────────────────────────────
+    // ── URL state + localStorage ──────────────────────────
     const _updateInfo_us = updateInfo;
-    updateInfo = function () { _updateInfo_us(); UrlState.save({ a: pa, b: pb, h: ph, k: pk }); };
+    updateInfo = function () {
+      _updateInfo_us();
+      const st = { a: pa, b: pb, h: ph, k: pk };
+      UrlState.save(st);
+      localStorage.setItem('a2p-exp-explorer', JSON.stringify(st));
+    };
     (function () {
-      const s = UrlState.load();
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-exp-explorer') || 'null');
+      const s = fromUrl || fromLS;
       if (s) {
         if (s.a != null) pa = +s.a;
         if (s.b != null) pb = +s.b;

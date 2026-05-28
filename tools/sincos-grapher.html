@@ -857,14 +857,18 @@
     resizeParent(); drawParent();
     resizeTrans();  updateFormula(); drawTrans();
 
-    // ── URL state (transformations panel) ────────────────
+    // ── URL state + localStorage (transformations panel) ──
     const _drawTrans_us = drawTrans;
     drawTrans = function () {
       _drawTrans_us();
-      UrlState.save({ func: transFunc, a: tA, b: tB, h: tH, k: tK });
+      const st = { func: transFunc, a: tA, b: tB, h: tH, k: tK };
+      UrlState.save(st);
+      localStorage.setItem('a2p-sincos', JSON.stringify(st));
     };
     (function () {
-      const s = UrlState.load();
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-sincos') || 'null');
+      const s = fromUrl || fromLS;
       if (s) {
         if (s.func) {
           transFunc = s.func;
@@ -879,7 +883,6 @@
         updateFormula(); drawTrans();
       }
     })();
-    // Add copy-link button below the key-values box in the sidebar
     document.querySelector('.key-vals').insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>

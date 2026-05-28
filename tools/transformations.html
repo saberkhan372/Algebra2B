@@ -605,11 +605,18 @@
     updateChips();
     draw();
 
-    // ── URL state ────────────────────────────────────────
+    // ── URL state + localStorage ──────────────────────────
     const _draw_us = draw;
-    draw = function () { _draw_us(); UrlState.save({ fn, a: P.a, b: P.b, h: P.h, k: P.k }); };
+    draw = function () {
+      _draw_us();
+      const st = { fn, a: P.a, b: P.b, h: P.h, k: P.k };
+      UrlState.save(st);
+      localStorage.setItem('a2p-transforms', JSON.stringify(st));
+    };
     (function () {
-      const s = UrlState.load();
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-transforms') || 'null');
+      const s = fromUrl || fromLS;
       if (s) {
         if (s.fn) setFn(s.fn);
         if (s.a != null) P.a = +s.a;

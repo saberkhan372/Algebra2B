@@ -136,6 +136,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const PROBLEMS = [
       {
@@ -280,7 +281,23 @@
     function resetProblem() { loadProblem(currentProb, null); }
     function nextProblem() { loadProblem((currentProb + 1) % PROBLEMS.length, document.querySelectorAll('.prob-btn')[(currentProb + 1) % PROBLEMS.length]); }
 
-    loadProblem(0, document.querySelector('.prob-btn'));
+    // ── URL state (problem selector) ──────────────────────
+    // Wrap loadProblem to save chosen problem index in URL
+    const _loadProblem_us = loadProblem;
+    loadProblem = function (idx, btn) {
+      _loadProblem_us(idx, btn);
+      UrlState.save({ prob: idx });
+      localStorage.setItem('a2p-subst-stepper', JSON.stringify({ prob: idx }));
+    };
+    // Load: URL takes priority (shared link), then localStorage (resume)
+    const _fromUrl = UrlState.load();
+    const _fromLS  = _fromUrl ? null : JSON.parse(localStorage.getItem('a2p-subst-stepper') || 'null');
+    const _init    = _fromUrl || _fromLS;
+    const _startIdx = (_init && _init.prob != null) ? +_init.prob : 0;
+    loadProblem(_startIdx, document.querySelectorAll('.prob-btn')[_startIdx]);
+    // Add copy-link button next to the restart button
+    document.querySelector('button[onclick*="resetProblem"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
 </body>
 </html>

@@ -220,6 +220,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     let a = 1, b = 5, c = 6;
 
@@ -351,6 +352,29 @@
     });
 
     update();
+
+    // ── URL state + localStorage ──────────────────────────
+    const _update_fl = update;
+    update = function () {
+      _update_fl();
+      const st = { a, b, c };
+      UrlState.save(st);
+      localStorage.setItem('a2p-factoring', JSON.stringify(st));
+    };
+    (function () {
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-factoring') || 'null');
+      const s = fromUrl || fromLS;
+      if (s) {
+        if (s.a != null) { a = +s.a; document.getElementById('sl-a').value = a; document.getElementById('cv-a').textContent = a; }
+        if (s.b != null) { b = +s.b; document.getElementById('sl-b').value = b; document.getElementById('cv-b').textContent = b; }
+        if (s.c != null) { c = +s.c; document.getElementById('sl-c').value = c; document.getElementById('cv-c').textContent = c; }
+        update();
+      }
+    })();
+    // Add copy button after the c slider group
+    document.getElementById('sl-c').closest('.slider-group')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
 </body>
 </html>

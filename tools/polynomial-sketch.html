@@ -214,6 +214,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const canvas = document.getElementById('graph-canvas');
     const ctx = canvas.getContext('2d');
@@ -446,6 +447,34 @@
     window.addEventListener('resize', () => update());
     renderZeroList();
     update();
+
+    // ── URL state + localStorage ──────────────────────────
+    const _update_ps = update;
+    update = function () {
+      _update_ps();
+      const st = { aSign, zeros: zeros.map(z => ({ x: z.x, m: z.m })) };
+      UrlState.save(st);
+      localStorage.setItem('a2p-poly-sketch', JSON.stringify(st));
+    };
+    (function () {
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-poly-sketch') || 'null');
+      const s = fromUrl || fromLS;
+      if (s) {
+        if (s.aSign != null) {
+          aSign = s.aSign;
+          document.getElementById('btn-pos').classList.toggle('active', aSign > 0);
+          document.getElementById('btn-neg').classList.toggle('active', aSign < 0);
+        }
+        if (Array.isArray(s.zeros) && s.zeros.length) {
+          zeros = s.zeros.map(z => ({ x: +z.x, m: +z.m }));
+          nextId = zeros.length;
+        }
+        renderZeroList(); update();
+      }
+    })();
+    document.querySelector('button[onclick*="resetAll"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

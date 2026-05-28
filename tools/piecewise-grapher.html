@@ -178,6 +178,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const canvas = document.getElementById('graph-canvas');
     const ctx    = canvas.getContext('2d');
@@ -563,6 +564,29 @@
 
     // init
     setCount(2);
+
+    // ── URL state + localStorage ──────────────────────────
+    const _draw_pw = draw;
+    draw = function () {
+      _draw_pw();
+      const st = { n: numPieces, pieces };
+      UrlState.save(st);
+      localStorage.setItem('a2p-piecewise', JSON.stringify(st));
+    };
+    (function () {
+      const fromUrl = UrlState.load();
+      const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-piecewise') || 'null');
+      const s = fromUrl || fromLS;
+      if (s && Array.isArray(s.pieces) && s.pieces.length) {
+        numPieces = s.n || s.pieces.length;
+        pieces = s.pieces;
+        document.getElementById('btn2').classList.toggle('active', numPieces === 2);
+        document.getElementById('btn3').classList.toggle('active', numPieces === 3);
+        renderControls(); draw();
+      }
+    })();
+    document.querySelector('button[onclick*="reset"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>
