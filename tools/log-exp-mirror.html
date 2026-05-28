@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log ↔ Exponential Mirror — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #graph-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ── inverse pair strips ────────────────────────── */
+    .inv-pair {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 6px; align-items: center; margin-top: 8px;
+    }
+    @media (max-width: 560px) {
+      .inv-pair { grid-template-columns: 1fr; }
+    }
+    .inv-strip {
+      border: 2px solid; border-radius: 4px; padding: 7px 10px;
+    }
+    .inv-strip .inv-name {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      letter-spacing: 0.06em; margin-bottom: 3px;
+    }
+    .inv-strip .inv-eq {
+      font-family: 'JetBrains Mono', monospace; font-size: 16px;
+      font-weight: 600; min-height: 22px;
+    }
+    .inv-strip .inv-hint {
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      margin-top: 3px; opacity: 0.72;
+    }
+
+    .inv-exp { background: #faeae4; border-color: #8b4513; }
+    .inv-exp .inv-name { color: #8b4513; }
+    .inv-exp .inv-eq   { color: #5a2a0a; }
+
+    .inv-log { background: #e4eef8; border-color: #2a6fb4; }
+    .inv-log .inv-name { color: #2a6fb4; }
+    .inv-log .inv-eq   { color: #1a4a7a; }
+
+    .inv-arrow {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      color: var(--ink-soft); text-align: center;
+      white-space: nowrap; line-height: 1.4;
+    }
+
+    /* ── base controls ──────────────────────────────── */
+    .base-row {
+      display: grid; grid-template-columns: 60px 1fr 48px;
+      gap: 5px 10px; align-items: center; margin-top: 8px;
+    }
+    .base-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      font-style: italic; font-weight: 700;
+    }
+    .dyn-val[type=number] {
+      width: 44px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val::-webkit-outer-spin-button,
+    .dyn-val::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val:focus {
+      outline: none; border-bottom-color: var(--accent); background: var(--paper-2);
+    }
+
+    /* base presets */
+    .preset-row {
+      display: flex; gap: 5px; align-items: center; margin-top: 5px; flex-wrap: wrap;
+    }
+    .preset-label {
+      font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft);
+    }
+
+    /* base warning */
+    .base-warn {
+      margin-top: 4px; padding: 4px 10px;
+      background: #fce8e4; border: 1.5px solid #d94f2a; border-radius: 4px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px; color: #8a2a0a;
+      display: none;
+    }
+
+    /* ── feature chips ──────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+    .feat-chip {
+      padding: 3px 9px; border-radius: 4px; border: 1.5px solid var(--ink-2);
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      display: inline-flex; align-items: baseline; gap: 5px;
+    }
+    .chip-label {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em;
+    }
+    .chip-value { font-weight: 600; color: var(--ink); }
+    .chip-exp  { background: #faeae4; border-color: #8b4513; }
+    .chip-log  { background: #e4eef8; border-color: #2a6fb4; }
+    .chip-both { background: #ede4f5; border-color: #7c3aed; }
+    .chip-info { background: var(--paper-3); border-color: var(--ink-2); }
+
+    /* ── toggles + bottom ───────────────────────────── */
+    .bottom-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap;
+    }
+    .tog-chk {
+      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2);
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+    }
+
+    /* ── sidebar ────────────────────────────────────── */
+    .swap-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+    .swap-table td {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      padding: 3px 6px; line-height: 1.5;
+    }
+    .swap-table .col-exp { color: #5a2a0a; font-weight: 600; }
+    .swap-table .col-log { color: #1a4a7a; font-weight: 600; }
+    .swap-table .col-mid { color: var(--ink-soft); text-align: center; font-size: 11px; }
+    .swap-table tr + tr td { border-top: 1px dashed var(--ink-2); padding-top: 5px; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u5.html">← U5</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb">
+        <a href="../u5.html">← U5 · Exponential &amp; Log</a> &nbsp;·&nbsp; Log ↔ Exponential Mirror
+      </div>
+      <div class="tool-title f-display">
+        Log ↔ Exponential <span style="color:var(--accent);">Mirror</span>
+      </div>
+      <div class="tool-tagline f-hand">
+        They're the same function — one is the other reflected over y = x.
+      </div>
+
+      <!-- canvas -->
+      <div class="widget-container" style="flex:1; min-height:160px;">
+        <canvas id="graph-canvas"></canvas>
+      </div>
+
+      <!-- inverse pair equation strips -->
+      <div class="inv-pair">
+        <div class="inv-strip inv-exp">
+          <div class="inv-name">EXPONENTIAL</div>
+          <div class="inv-eq" id="eq-exp">y = 2ˣ</div>
+          <div class="inv-hint">domain: all reals</div>
+        </div>
+        <div class="inv-arrow">↔<br>inverse<br>↔</div>
+        <div class="inv-strip inv-log">
+          <div class="inv-name">LOGARITHM</div>
+          <div class="inv-eq" id="eq-log">y = log<sub>2</sub>(x)</div>
+          <div class="inv-hint">domain: x &gt; 0</div>
+        </div>
+      </div>
+
+      <!-- base warning -->
+      <div class="base-warn" id="base-warn">b must be positive and ≠ 1 (log base 1 is undefined)</div>
+
+      <!-- feature chips -->
+      <div class="chips-row" id="chips-row"></div>
+
+      <!-- base slider -->
+      <div class="base-row">
+        <span class="base-lbl" style="color:#1d1a14;">base <em>b</em></span>
+        <input type="range" id="sl-b" min="0.2" max="8" step="0.05" value="2" oninput="slideB()">
+        <input type="number" class="dyn-val" id="val-b" step="0.05" value="2" min="0.1" max="20">
+      </div>
+
+      <!-- base presets -->
+      <div class="preset-row">
+        <span class="preset-label">quick pick:</span>
+        <button class="btn small" onclick="setBase(2)">b = 2</button>
+        <button class="btn small" onclick="setBase(Math.E)">b = e</button>
+        <button class="btn small" onclick="setBase(10)">b = 10</button>
+        <button class="btn small" onclick="setBase(0.5)">b = ½</button>
+      </div>
+
+      <!-- toggles -->
+      <div class="bottom-row">
+        <label class="tog-chk">
+          <input type="checkbox" id="show-mirror" checked onchange="draw()"> y = x mirror
+        </label>
+        <label class="tog-chk">
+          <input type="checkbox" id="show-pts" checked onchange="draw()"> reflection points
+        </label>
+        <label class="tog-chk">
+          <input type="checkbox" id="show-grid" checked onchange="draw()"> grid
+        </label>
+        <button class="btn small" style="margin-left:auto;" onclick="resetTool()">↺ reset</button>
+      </div>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div class="tool-sidebar">
+
+      <!-- core insight -->
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">THE INVERSE CONNECTION</div>
+        <div class="f-hand" style="font-size:14px; line-height:1.7; color:var(--ink-2);">
+          To find the inverse of any function: <strong>swap x and y.</strong>
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:6px; line-height:1.7; color:var(--ink-2);">
+          If (a, b) is on y = bˣ, then (b, a) is on y = log<sub>b</sub>(x).<br>
+          Swapping coordinates = reflecting over <strong>y = x</strong>.
+        </div>
+        <div class="f-hand" style="font-size:13px; margin-top:8px; padding:6px 10px; background:#e4eef8; border-radius:4px; border-left:3px solid #2a6fb4;">
+          Proof with b = 2:<br>
+          (3, 8) is on y = 2ˣ because 2³ = 8.<br>
+          (8, 3) is on y = log₂(x) because log₂(8) = 3. ✓
+        </div>
+      </div>
+
+      <!-- the perfect swap table -->
+      <div class="sk-box-dashed" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">EVERYTHING SWAPS</div>
+        <table class="swap-table">
+          <tr>
+            <td class="col-exp">domain (−∞, ∞)</td>
+            <td class="col-mid">⟷</td>
+            <td class="col-log">range (−∞, ∞)</td>
+          </tr>
+          <tr>
+            <td class="col-exp">range (0, ∞)</td>
+            <td class="col-mid">⟷</td>
+            <td class="col-log">domain (0, ∞)</td>
+          </tr>
+          <tr>
+            <td class="col-exp">y-intercept (0, 1)</td>
+            <td class="col-mid">⟷</td>
+            <td class="col-log">x-intercept (1, 0)</td>
+          </tr>
+          <tr>
+            <td class="col-exp">horiz. asymp. y = 0</td>
+            <td class="col-mid">⟷</td>
+            <td class="col-log">vert. asymp. x = 0</td>
+          </tr>
+        </table>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:6px;">
+          Every property of one is the "swapped" version of the other.
+        </div>
+      </div>
+
+      <!-- how to use -->
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Drag the base slider — both curves update.</li>
+          <li>Watch the <span style="color:#7c3aed; font-weight:600;">purple dots</span> — always reflections over y = x.</li>
+          <li>Try <strong>b = e</strong> to see the natural log.</li>
+          <li>Try <strong>b = ½</strong> — both functions <em>decrease</em>.</li>
+        </ol>
+      </div>
+
+      <!-- try this -->
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">
+            Set b = 2. Find (3, 8) on the brown curve. Is (8, 3) on the blue curve? Verify: log₂(8) = ?
+          </span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">
+            Set b = e. What do the equation strips show? Why are eˣ and ln(x) the "most natural" inverse pair?
+          </span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">
+            Set b = ½. Both curves now <em>decrease</em>. Where do they cross y = x? Do they still reflect over it?
+          </span>
+        </div>
+      </div>
+
+      <!-- related -->
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="exponential-explorer.html">→ Exponential Function Explorer</a>
+        <a class="related-link f-hand" href="log-converter.html">→ Log ↔ Exponential Converter</a>
+        <a class="related-link f-hand" href="inverse-function.html">→ Inverse Function Revealer</a>
+        <a class="related-link f-hand" href="parent-function-atlas.html">→ Parent Function Atlas</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="url-state.js"></script>
+  <script>
+  (() => {
+    'use strict';
+
+    const canvas = document.getElementById('graph-canvas');
+    const ctx    = canvas.getContext('2d');
+
+    let b = 2;  // current base
+
+    const EXP_COLOR = '#8b4513';  // brown
+    const LOG_COLOR = '#2a6fb4';  // blue
+    const PT_COLOR  = '#7c3aed';  // purple — always-fixed points (0,1) & (1,0)
+    const PT2_COLOR_EXP = '#c05010'; // darker brown — movable point (1, b)
+    const PT2_COLOR_LOG = '#1a4a80'; // darker blue  — movable point (b, 1)
+
+    // ─── base validation ───────────────────────────────────────────────────
+    function validBase(v) {
+      return isFinite(v) && v > 0 && Math.abs(v - 1) > 0.04;
+    }
+
+    // ─── equation display ──────────────────────────────────────────────────
+    function fmtB(v) {
+      const r = Math.round(v * 1000) / 1000;
+      if (Math.abs(r - Math.round(r)) < 0.001) return String(Math.round(r));
+      return String(Math.round(r * 100) / 100);
+    }
+
+    function buildExpEq(v) {
+      if (Math.abs(v - Math.E) < 0.01) return 'y = e<sup>x</sup>';
+      if (Math.abs(v - 10) < 0.01)    return 'y = 10<sup>x</sup>';
+      return `y = ${fmtB(v)}<sup>x</sup>`;
+    }
+
+    function buildLogEq(v) {
+      if (Math.abs(v - Math.E) < 0.01) return 'y = ln(x)';
+      if (Math.abs(v - 10) < 0.01)    return 'y = log(x)';
+      return `y = log<sub>${fmtB(v)}</sub>(x)`;
+    }
+
+    // ─── feature chips ─────────────────────────────────────────────────────
+    function renderChips() {
+      if (!validBase(b)) {
+        document.getElementById('chips-row').innerHTML = '';
+        return;
+      }
+      const bf = fmtB(b);
+      const growthDecay = b > 1 ? `Growth — b > 1` : `Decay — 0 < b < 1`;
+      const chips = [
+        // exponential properties
+        { cls: 'chip-exp', label: 'Exp domain', value: '(−∞, ∞)' },
+        { cls: 'chip-exp', label: 'Exp range',  value: '(0, ∞)' },
+        { cls: 'chip-exp', label: 'Exp y-int',  value: '(0, 1)  always' },
+        // log properties
+        { cls: 'chip-log', label: 'Log domain', value: '(0, ∞)' },
+        { cls: 'chip-log', label: 'Log range',  value: '(−∞, ∞)' },
+        { cls: 'chip-log', label: 'Log x-int',  value: '(1, 0)  always' },
+        // shared / mirror
+        { cls: 'chip-both', label: 'Mirror pts',  value: `(1, ${bf}) ↔ (${bf}, 1)` },
+        { cls: 'chip-info', label: 'Behavior',    value: growthDecay },
+      ];
+      document.getElementById('chips-row').innerHTML = chips.map(c =>
+        `<span class="feat-chip ${c.cls}">` +
+        `<span class="chip-label">${c.label}</span>` +
+        `<span class="chip-value">${c.value}</span>` +
+        `</span>`
+      ).join('');
+    }
+
+    // ─── canvas drawing ────────────────────────────────────────────────────
+    function resize() {
+      const r = canvas.parentElement.getBoundingClientRect();
+      canvas.width  = r.width  * devicePixelRatio;
+      canvas.height = r.height * devicePixelRatio;
+      canvas.style.width  = r.width  + 'px';
+      canvas.style.height = r.height + 'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+    }
+
+    function evalExp(x) {
+      const v = Math.pow(b, x);
+      return isFinite(v) ? v : null;
+    }
+
+    function evalLog(x) {
+      if (x <= 0) return null;
+      const v = Math.log(x) / Math.log(b);
+      return isFinite(v) ? v : null;
+    }
+
+    function plotCurve(evalFn, color, lw, dashed) {
+      const W  = canvas.width / devicePixelRatio;
+      const H  = canvas.height / devicePixelRatio;
+      const ox = W / 2, oy = H / 2, sc = W / 18;
+      ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.lineJoin = 'round';
+      ctx.setLineDash(dashed ? [5, 4] : []);
+      let started = false; ctx.beginPath();
+      for (let px = 0; px <= W; px += 0.7) {
+        const x = (px - ox) / sc;
+        const y = evalFn(x);
+        if (y === null) { started = false; continue; }
+        const py = oy - y * sc;
+        if (py < -H || py > 2 * H) { started = false; continue; }
+        if (!started) { ctx.moveTo(px, py); started = true; }
+        else            ctx.lineTo(px, py);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    function dot(cx, cy, fill, r, stroke) {
+      ctx.fillStyle   = fill;
+      ctx.strokeStyle = stroke || '#f6f1e4';
+      ctx.lineWidth   = 2;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    }
+
+    // draw a faint dashed segment between two canvas points
+    function reflectLine(x1c, y1c, x2c, y2c, color) {
+      ctx.strokeStyle = color; ctx.lineWidth = 1;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath(); ctx.moveTo(x1c, y1c); ctx.lineTo(x2c, y2c);
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    function draw() {
+      resize();
+      const W  = canvas.width / devicePixelRatio;
+      const H  = canvas.height / devicePixelRatio;
+      const ox = W / 2, oy = H / 2, sc = W / 18;
+
+      // background
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0, 0, W, H);
+
+      // grid
+      if (document.getElementById('show-grid').checked) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+        for (let i = -9; i <= 9; i++) {
+          ctx.beginPath(); ctx.moveTo(ox + i*sc, 0); ctx.lineTo(ox + i*sc, H); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, oy + i*sc); ctx.lineTo(W, oy + i*sc); ctx.stroke();
+        }
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+      // axis tick labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)'; ctx.font = "10px 'Special Elite',monospace";
+      for (let i = -8; i <= 8; i++) {
+        if (i === 0 || i % 2 !== 0) continue;
+        ctx.textAlign = 'center'; ctx.fillText(i, ox + i*sc, oy + 13);
+        ctx.textAlign = 'right';  ctx.fillText(-i, ox - 4, oy + i*sc + 4);
+      }
+
+      // ── y = x mirror line ──
+      if (document.getElementById('show-mirror').checked) {
+        ctx.strokeStyle = 'rgba(29,26,20,0.28)'; ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        // draw y = x: goes from bottom-left to top-right of canvas
+        const ext = Math.max(W, H);
+        ctx.beginPath();
+        ctx.moveTo(ox - ext, oy + ext); ctx.lineTo(ox + ext, oy - ext);
+        ctx.stroke(); ctx.setLineDash([]);
+        // label
+        const lx = Math.min(W - 30, ox + 7 * sc + 4);
+        const ly = Math.max(14, oy - 7 * sc - 4);
+        ctx.fillStyle = 'rgba(29,26,20,0.45)';
+        ctx.font = "11px 'Patrick Hand',cursive";
+        ctx.textAlign = 'left';
+        ctx.fillText('y = x', lx, ly);
+      }
+
+      if (!validBase(b)) {
+        ctx.fillStyle = 'rgba(217,79,42,0.7)';
+        ctx.font = "14px 'Patrick Hand',cursive";
+        ctx.textAlign = 'center';
+        ctx.fillText('b must be positive and ≠ 1', W / 2, H / 2);
+        return;
+      }
+
+      // ── curves ──
+      plotCurve(evalExp, EXP_COLOR, 2.5, false);
+      plotCurve(evalLog, LOG_COLOR, 2.5, false);
+
+      // ── curve labels near right edge ──
+      const labelX = W - 5;
+      // exp label — find y at a safe right-side x
+      const xLbl = (W * 0.85 - ox) / sc;
+      const yExp = evalExp(Math.min(xLbl, 3));
+      if (yExp !== null) {
+        const pyExp = oy - yExp * sc;
+        if (pyExp > 10 && pyExp < H - 10) {
+          ctx.fillStyle = EXP_COLOR; ctx.font = "12px 'Patrick Hand',cursive";
+          ctx.textAlign = 'right';
+          ctx.fillText('bˣ', labelX, Math.max(12, Math.min(H - 6, pyExp)));
+        }
+      }
+      // log label — at x = 7
+      const yLog7 = evalLog(7);
+      if (yLog7 !== null) {
+        const pyLog7 = oy - yLog7 * sc;
+        const pxLog7 = ox + 7 * sc;
+        if (pxLog7 > 0 && pxLog7 < W && pyLog7 > 10 && pyLog7 < H - 10) {
+          ctx.fillStyle = LOG_COLOR; ctx.font = "12px 'Patrick Hand',cursive";
+          ctx.textAlign = 'left';
+          ctx.fillText('log(x)', pxLog7 + 3, pyLog7);
+        }
+      }
+
+      // ── reflection points ──
+      if (document.getElementById('show-pts').checked) {
+        ctx.font = "11px 'Patrick Hand',cursive";
+
+        // FIXED pair: (0, 1) on exp ↔ (1, 0) on log — always purple
+        const p01x = ox,           p01y = oy - sc;          // (0, 1) in canvas coords
+        const p10x = ox + sc,      p10y = oy;                // (1, 0) in canvas coords
+        // reflection dashed line
+        reflectLine(p01x, p01y, p10x, p10y, 'rgba(124,58,237,0.4)');
+        dot(p01x, p01y, PT_COLOR, 4);
+        dot(p10x, p10y, PT_COLOR, 4);
+        // labels for fixed pair
+        ctx.fillStyle = PT_COLOR;
+        ctx.textAlign = 'left';
+        ctx.fillText('(0, 1)', p01x + 7, p01y - 5);
+        ctx.textAlign = 'center';
+        ctx.fillText('(1, 0)', p10x, p10y + 16);
+
+        // MOVABLE pair: (1, b) on exp ↔ (b, 1) on log — orange/blue dots
+        const p1bx = ox + sc,          p1by = oy - b * sc;   // (1, b)
+        const pb1x = ox + b * sc,      pb1y = oy - sc;       // (b, 1)
+        const bf = fmtB(b);
+
+        if (p1by > -10 && p1by < H + 10) {
+          reflectLine(p1bx, p1by, pb1x, pb1y, 'rgba(139,69,19,0.3)');
+          dot(p1bx, p1by, PT2_COLOR_EXP, 5);
+          ctx.fillStyle = PT2_COLOR_EXP;
+          ctx.textAlign = p1bx > W * 0.72 ? 'right' : 'left';
+          ctx.fillText(`(1, ${bf})`, p1bx + (p1bx > W * 0.72 ? -7 : 7), p1by - 6);
+        }
+        if (pb1x >= -10 && pb1x <= W + 10) {
+          dot(pb1x, pb1y, PT2_COLOR_LOG, 5);
+          ctx.fillStyle = PT2_COLOR_LOG;
+          ctx.textAlign = pb1x > W * 0.72 ? 'right' : 'left';
+          ctx.fillText(`(${bf}, 1)`, pb1x + (pb1x > W * 0.72 ? -7 : 7), pb1y - 6);
+        }
+      }
+    }
+
+    // ─── update base ───────────────────────────────────────────────────────
+    function slideB() {
+      b = parseFloat(document.getElementById('sl-b').value);
+      document.getElementById('val-b').value = fmtB(b);
+      update();
+    }
+
+    function setBase(v) {
+      b = v;
+      const sl = document.getElementById('sl-b');
+      const vv = parseFloat(fmtB(v));
+      if (v > parseFloat(sl.max)) sl.max = Math.ceil(v * 1.2);
+      sl.value = v;
+      document.getElementById('val-b').value = fmtB(b);
+      update();
+    }
+
+    document.getElementById('val-b').addEventListener('change', e => {
+      const v = parseFloat(e.target.value);
+      if (!isNaN(v) && v > 0) {
+        b = v;
+        const sl = document.getElementById('sl-b');
+        if (v > parseFloat(sl.max)) sl.max = Math.ceil(v * 1.2);
+        sl.value = v;
+        update();
+      }
+    });
+
+    function resetTool() {
+      b = 2;
+      const sl = document.getElementById('sl-b');
+      sl.min = 0.2; sl.max = 8; sl.value = 2;
+      document.getElementById('val-b').value = 2;
+      update();
+    }
+
+    // ─── main update ───────────────────────────────────────────────────────
+    function update() {
+      const warn = document.getElementById('base-warn');
+      const ok = validBase(b);
+      warn.style.display = ok ? 'none' : 'block';
+
+      document.getElementById('eq-exp').innerHTML = buildExpEq(b);
+      document.getElementById('eq-log').innerHTML = buildLogEq(b);
+      renderChips();
+      draw();
+    }
+
+    // expose for onclick
+    window.slideB    = slideB;
+    window.setBase   = setBase;
+    window.resetTool = resetTool;
+    window.draw      = draw;
+
+    // ─── init ──────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      if (typeof UrlState !== 'undefined') {
+        const s = UrlState.load();
+        if (s.b != null && parseFloat(s.b) > 0) {
+          b = parseFloat(s.b);
+          document.getElementById('sl-b').value = b;
+          document.getElementById('val-b').value = fmtB(b);
+        }
+      }
+      update();
+    });
+
+    window.addEventListener('resize', () => draw());
+  })();
+  </script>
+</body>
+</html>
