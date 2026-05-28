@@ -5,7 +5,7 @@
  * falling back to network and caching the response for next time.
  */
 
-const CACHE_VERSION = 'a2p-v1';
+const CACHE_VERSION = 'a2p-v2';
 
 // Everything to precache on install — covers all pages and shared assets
 const PRECACHE_URLS = [
@@ -22,6 +22,7 @@ const PRECACHE_URLS = [
   '/u7.html',
   '/u9.html',
   '/tools/save-png.js',
+  '/tools/url-state.js',
   '/tools/abs-value-grapher.html',
   '/tools/adding-rationals.html',
   '/tools/box-plot-builder.html',

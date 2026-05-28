@@ -880,3 +880,11 @@ a:hover { text-decoration: underline; }
   border: 1.5px solid var(--ghost);
 }
 .save-png-inline:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* URL-state copy-link button */
+.url-state-btn {
+  background: var(--paper-2);
+  color: var(--ink-soft);
+  border: 1.5px solid var(--ghost);
+}
+.url-state-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }

@@ -204,6 +204,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const canvas = document.getElementById('exp-canvas');
     const ctx = canvas.getContext('2d');
@@ -439,6 +440,22 @@
     // ===== INIT =====
     window.addEventListener('resize', draw);
     draw(); updateInfo();
+
+    // ── URL state ────────────────────────────────────────
+    const _updateInfo_us = updateInfo;
+    updateInfo = function () { _updateInfo_us(); UrlState.save({ a: pa, b: pb, h: ph, k: pk }); };
+    (function () {
+      const s = UrlState.load();
+      if (s) {
+        if (s.a != null) pa = +s.a;
+        if (s.b != null) pb = +s.b;
+        if (s.h != null) ph = +s.h;
+        if (s.k != null) pk = +s.k;
+        syncSliders(); draw(); updateInfo();
+      }
+    })();
+    document.querySelector('button[onclick*="resetParams"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

@@ -131,6 +131,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     let a = 1, h = 0, k = 0;
     let dragging = false;
@@ -352,6 +353,24 @@
 
     window.addEventListener('resize', draw);
     draw(); updateEq();
+
+    // ── URL state ────────────────────────────────────────
+    // Wrap updateEq to auto-save state on every change
+    const _updateEq_us = updateEq;
+    updateEq = function () { _updateEq_us(); UrlState.save({ a, h, k }); };
+    // Load from URL if this is a shared link
+    (function () {
+      const s = UrlState.load();
+      if (s) {
+        if (s.a != null) a = +s.a;
+        if (s.h != null) h = +s.h;
+        if (s.k != null) k = +s.k;
+        syncSliders(); updateEq(); draw();
+      }
+    })();
+    // Add copy-link button next to the reset button
+    document.querySelector('button[onclick*="resetGraph"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

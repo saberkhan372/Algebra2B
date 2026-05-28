@@ -250,6 +250,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const canvas = document.getElementById('graph-canvas');
     const ctx    = canvas.getContext('2d');
@@ -603,6 +604,27 @@
     window.addEventListener('resize', draw);
     updateChips();
     draw();
+
+    // ── URL state ────────────────────────────────────────
+    const _draw_us = draw;
+    draw = function () { _draw_us(); UrlState.save({ fn, a: P.a, b: P.b, h: P.h, k: P.k }); };
+    (function () {
+      const s = UrlState.load();
+      if (s) {
+        if (s.fn) setFn(s.fn);
+        if (s.a != null) P.a = +s.a;
+        if (s.b != null) P.b = +s.b;
+        if (s.h != null) P.h = +s.h;
+        if (s.k != null) P.k = +s.k;
+        ['a','b','h','k'].forEach(p => {
+          document.getElementById(`sl-${p}`).value = P[p];
+          document.getElementById(`val-${p}`).textContent = fmt(P[p]);
+        });
+        updateChips(); draw();
+      }
+    })();
+    document.querySelector('button[onclick*="resetAll"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

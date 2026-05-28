@@ -246,6 +246,7 @@
     </div><!-- /tool-main -->
   </div><!-- /tool-page -->
 
+  <script src="url-state.js"></script>
   <script>
     /* ======= TAB SWITCHING ======= */
     document.querySelectorAll('.mode-tab').forEach(t => {
@@ -855,6 +856,31 @@
 
     resizeParent(); drawParent();
     resizeTrans();  updateFormula(); drawTrans();
+
+    // ── URL state (transformations panel) ────────────────
+    const _drawTrans_us = drawTrans;
+    drawTrans = function () {
+      _drawTrans_us();
+      UrlState.save({ func: transFunc, a: tA, b: tB, h: tH, k: tK });
+    };
+    (function () {
+      const s = UrlState.load();
+      if (s) {
+        if (s.func) {
+          transFunc = s.func;
+          document.querySelectorAll('#trig-toggle .tgl-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.trig === transFunc);
+          });
+        }
+        if (s.a != null) { tA = +s.a; document.getElementById('sl-a').value = tA; }
+        if (s.b != null) { tB = +s.b; document.getElementById('sl-b').value = tB; }
+        if (s.h != null) { tH = +s.h; document.getElementById('sl-h').value = tH; }
+        if (s.k != null) { tK = +s.k; document.getElementById('sl-k').value = tK; }
+        updateFormula(); drawTrans();
+      }
+    })();
+    // Add copy-link button below the key-values box in the sidebar
+    document.querySelector('.key-vals').insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>

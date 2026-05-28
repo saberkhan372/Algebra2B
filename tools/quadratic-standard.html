@@ -164,6 +164,7 @@
     </div>
   </div>
 
+  <script src="url-state.js"></script>
   <script>
     const canvas = document.getElementById('graph-canvas');
     const ctx    = canvas.getContext('2d');
@@ -380,6 +381,28 @@
 
     window.addEventListener('resize', update);
     update();
+
+    // ── URL state ────────────────────────────────────────
+    const _update_us = update;
+    update = function () {
+      _update_us();
+      UrlState.save({
+        a: +document.getElementById('sl-a').value,
+        b: +document.getElementById('sl-b').value,
+        c: +document.getElementById('sl-c').value
+      });
+    };
+    (function () {
+      const s = UrlState.load();
+      if (s) {
+        if (s.a != null) document.getElementById('sl-a').value = s.a;
+        if (s.b != null) document.getElementById('sl-b').value = s.b;
+        if (s.c != null) document.getElementById('sl-c').value = s.c;
+        update();
+      }
+    })();
+    document.querySelector('button[onclick*="resetSliders"]')
+      .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
 </body>
