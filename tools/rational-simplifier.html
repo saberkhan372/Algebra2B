@@ -82,6 +82,14 @@
 
     /* ── info text ── */
     .no-cancel { font-family:'Patrick Hand',cursive; font-size:14px; color:var(--ink-2); }
+
+    /* ── original denominator panel ── */
+    .orig-den-panel { border-color: var(--accent) !important; background: rgba(217,79,42,0.05) !important; }
+    .orig-den-rows  { display: flex; flex-direction: column; gap: 5px; margin: 6px 0; }
+    .orig-den-row   { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .excl-arrow     { font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--ink-2); }
+    .excl-val       { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:600; color:var(--ink); }
+    .cancelled-note { font-family:'Patrick Hand',cursive; font-size:11px; color:var(--accent); font-weight:700; }
   </style>
 </head>
 <body class="paper-dots">
@@ -412,6 +420,34 @@
             factorChips(numF.k, numF.factors, numF.irred, nFObjs),
             factorChips(denF.k, denF.factors, denF.irred, dFObjs)
           )}
+        </div>`);
+
+      // ── Step 3.5: Original denominator panel (cancelled ≠ forgotten) ──
+      let denRows = denF.factors.map((fac, i) => {
+        const dfo = dFObjs[i];
+        const r = root(...fac);
+        const isCancelled = dfo.cancelled;
+        return `<div class="orig-den-row">
+          <span class="fchip ${isCancelled ? 'c0' : 'neutral'}">${fmtFactor(...fac)}</span>
+          <span class="excl-arrow">→</span>
+          <span class="excl-val">x ≠ ${fmtN(r)}</span>
+          ${isCancelled ? '<span class="cancelled-note">← cancelled — but still excluded!</span>' : ''}
+        </div>`;
+      }).join('');
+      if (denF.irred) {
+        denRows += `<div class="orig-den-row">
+          <span class="fchip neutral">(${fmtIrred(denF.irred.a, denF.irred.b, denF.irred.c)})</span>
+          <span class="excl-arrow">→</span>
+          <span class="excl-val" style="color:var(--ink-2);">no real roots</span>
+        </div>`;
+      }
+      steps.insertAdjacentHTML('beforeend', `
+        <div class="step-card orig-den-panel">
+          <div class="step-lbl">🔒 original denominator — excluded values never disappear</div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-bottom:8px;">
+            Even cancelled factors restrict the domain. Always read exclusions from the <em>original</em> denominator.
+          </div>
+          <div class="orig-den-rows">${denRows}</div>
         </div>`);
 
       // ── Step 4: Simplified result ──

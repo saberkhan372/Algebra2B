@@ -37,6 +37,32 @@
       margin-top: 8px;
       min-height: 40px;
     }
+
+    /* ── Powers-of-i practice strip ── */
+    .pow-strip {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 2px solid var(--ink);
+      border-radius: 5px 3px 6px 4px / 4px 6px 3px 5px;
+      background: var(--paper-2);
+      flex-shrink: 0;
+    }
+    .pow-btn-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 6px 0; }
+    .pow-btn {
+      padding: 5px 14px;
+      border: 2px solid var(--ink);
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      background: var(--paper);
+      cursor: pointer;
+      transition: background 0.1s, transform 0.1s;
+    }
+    .pow-btn:hover:not(:disabled) { background: var(--paper-2); transform: translateY(-1px); }
+    .pow-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+    .pow-btn.p-correct { background: #c8f0d0; border-color: #2a6a3a; }
+    .pow-btn.p-wrong   { background: #fde0dc; border-color: #8a1a2a; }
+    .pow-feedback { font-family: 'Patrick Hand', cursive; font-size: 13px; min-height: 18px; text-align: center; margin: 4px 0; }
   </style>
 </head>
 <body class="paper-grid">
@@ -64,6 +90,14 @@
       <div style="margin-top:8px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <span class="f-marker" style="font-size:12px;">×i CHAIN:</span>
         <div class="multiply-result" id="multiply-chain">click a point to start</div>
+      </div>
+
+      <div class="pow-strip" id="pow-strip">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span class="f-marker" style="font-size:11px;">⚡ POWERS-OF-i PRACTICE</span>
+          <span class="f-mono" id="pow-prog" style="font-size:11px; color:var(--ink-soft);">Q 1 / 6</span>
+        </div>
+        <div id="pow-body"></div>
       </div>
     </div>
 
@@ -329,6 +363,111 @@
 
     window.addEventListener('resize', draw);
     draw();
+
+    // ─── Powers-of-i practice strip ─────────────────────────────────────────
+    const POW_QS = [
+      { n:  7,  rem: 3 },  // i⁷  → −i
+      { n: 18,  rem: 2 },  // i¹⁸ → −1
+      { n: 25,  rem: 1 },  // i²⁵ → i
+      { n: 36,  rem: 0 },  // i³⁶ → 1
+      { n: 51,  rem: 3 },  // i⁵¹ → −i
+      { n: 100, rem: 0 },  // i¹⁰⁰ → 1  (classic!)
+    ];
+    const CYCLE_LBL = ['1', 'i', '−1', '−i'];  // index = remainder mod 4
+
+    function toSup(n) {
+      const s = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+      return String(n).split('').map(c => s[+c]).join('');
+    }
+
+    let pIdx = 0, pScore = 0, pPhase = 'rem', pRemOk = false;
+
+    function powRender() {
+      const body = document.getElementById('pow-body');
+      const prog = document.getElementById('pow-prog');
+      prog.textContent = pIdx < POW_QS.length ? `Q ${pIdx + 1} / ${POW_QS.length}` : '✓ done';
+
+      if (pIdx >= POW_QS.length) {
+        const pct = Math.round(pScore / POW_QS.length * 100);
+        const msg = pct >= 83 ? '🎉 Cycle master!' : pct >= 50 ? '👍 Good — keep practicing!' : '💪 Practice the cycle again!';
+        body.innerHTML = `
+          <div style="text-align:center; padding:8px;">
+            <div class="f-display" style="font-size:22px; color:var(--accent);">${pScore} / ${POW_QS.length}</div>
+            <div class="f-hand" style="font-size:13px; color:var(--ink-2); margin-top:4px;">${msg}</div>
+            <button class="btn small" style="margin-top:8px;" onclick="powRestart()">↺ try again</button>
+          </div>`;
+        return;
+      }
+
+      const q = POW_QS[pIdx];
+
+      if (pPhase === 'rem') {
+        body.innerHTML = `
+          <div style="text-align:center; margin-bottom:6px;">
+            <span class="f-mono" style="font-size:26px; font-weight:bold;">i${toSup(q.n)} = ?</span>
+          </div>
+          <div class="f-hand" style="font-size:12px; text-align:center; color:var(--ink-2); margin-bottom:2px;">
+            Step 1 — what is ${q.n} ÷ 4 remainder?
+          </div>
+          <div class="pow-btn-row" id="prem-row">
+            ${[0,1,2,3].map(r => `<button class="pow-btn" onclick="powRem(${r})">R ${r}</button>`).join('')}
+          </div>
+          <div class="pow-feedback" id="pow-fb"></div>`;
+      } else {
+        const quot = Math.floor(q.n / 4);
+        body.innerHTML = `
+          <div style="text-align:center; margin-bottom:4px;">
+            <span class="f-mono" style="font-size:22px; font-weight:bold;">i${toSup(q.n)} = i${toSup(q.rem)} = ?</span>
+          </div>
+          <div class="f-hand" style="font-size:12px; text-align:center; color:#2a6a3a; margin-bottom:2px;">
+            ✓ ${q.n} ÷ 4 = ${quot} R ${q.rem} — Step 2: pick the value:
+          </div>
+          <div class="pow-btn-row" id="pans-row">
+            ${CYCLE_LBL.map((v, idx) => `<button class="pow-btn" onclick="powAns(${idx})">${v}</button>`).join('')}
+          </div>
+          <div class="pow-feedback" id="pow-fb"></div>`;
+      }
+    }
+
+    function powRem(r) {
+      const q = POW_QS[pIdx];
+      const btns = document.querySelectorAll('#prem-row .pow-btn');
+      const fb   = document.getElementById('pow-fb');
+      btns.forEach(b => b.disabled = true);
+      pRemOk = (r === q.rem);
+      if (pRemOk) {
+        btns[r].classList.add('p-correct');
+        fb.innerHTML = `<span style="color:#2a6a3a;">✓ ${q.n} ÷ 4 = ${Math.floor(q.n/4)} R ${q.rem}</span>`;
+      } else {
+        btns[r].classList.add('p-wrong');
+        btns[q.rem].classList.add('p-correct');
+        fb.innerHTML = `<span style="color:#8a1a2a;">✗ — it's R ${q.rem} &nbsp;(${q.n} = 4×${Math.floor(q.n/4)} + ${q.rem})</span>`;
+      }
+      setTimeout(() => { pPhase = 'ans'; powRender(); }, 900);
+    }
+
+    function powAns(idx) {
+      const q    = POW_QS[pIdx];
+      const btns = document.querySelectorAll('#pans-row .pow-btn');
+      const fb   = document.getElementById('pow-fb');
+      btns.forEach(b => b.disabled = true);
+      if (idx === q.rem) {
+        btns[idx].classList.add('p-correct');
+        if (pRemOk) { pScore++; }
+        fb.innerHTML = pRemOk
+          ? `<span style="color:#2a6a3a;">✓ i${toSup(q.n)} = ${CYCLE_LBL[q.rem]}  (+1)</span>`
+          : `<span style="color:#2a6a3a;">✓ Right value — but remainder was wrong (no point)</span>`;
+      } else {
+        btns[idx].classList.add('p-wrong');
+        btns[q.rem].classList.add('p-correct');
+        fb.innerHTML = `<span style="color:#8a1a2a;">✗ i${toSup(q.n)} = ${CYCLE_LBL[q.rem]}</span>`;
+      }
+      setTimeout(() => { pIdx++; pPhase = 'rem'; powRender(); }, 1100);
+    }
+
+    function powRestart() { pIdx = 0; pScore = 0; pPhase = 'rem'; pRemOk = false; powRender(); }
+
+    powRender();
   </script>
 </body>
 </html>

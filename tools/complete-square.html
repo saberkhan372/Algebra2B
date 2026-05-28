@@ -60,6 +60,14 @@
       color: var(--ink);
       margin-bottom: 2px;
     }
+
+    /* ── quadratic formula derivation ── */
+    details.deriv-details > summary { list-style: none; cursor: pointer; }
+    details.deriv-details > summary::-webkit-details-marker { display: none; }
+    .deriv-grid { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: baseline; margin-top: 6px; }
+    .deriv-expr { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink); word-break: break-all; line-height: 1.5; }
+    .deriv-op   { font-family: 'Patrick Hand', cursive; font-size: 10px; color: var(--ink-2); white-space: nowrap; }
+    .deriv-result { text-align: center; margin-top: 8px; padding: 7px; border: 2px solid var(--accent); border-radius: 4px; background: rgba(217,79,42,0.06); }
   </style>
 </head>
 <body class="paper-lined">
@@ -138,6 +146,29 @@
           <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#2a8a4a;">a(x−r₁)(x−r₂)</span> ← intercept
         </div>
       </div>
+
+      <details class="sk-box deriv-details" style="padding:10px; background:var(--paper-2);">
+        <summary style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="f-marker" style="font-size:11px;">📐 WHERE DID THE FORMULA COME FROM?</span>
+          <span style="font-family:'Patrick Hand',cursive; font-size:11px; color:var(--ink-2);">▸ show</span>
+        </summary>
+        <div style="margin-top:8px; border-top:1px dashed var(--ink-2); padding-top:8px;">
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-bottom:2px;">
+            Complete the square on <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink);">ax² + bx + c = 0</span>:
+          </div>
+          <div class="deriv-grid">
+            <div class="deriv-expr">ax² + bx + c = 0</div><div class="deriv-op">start</div>
+            <div class="deriv-expr">x² + (b/a)x = −c/a</div><div class="deriv-op">÷a, move c</div>
+            <div class="deriv-expr">x² + (b/a)x + b²/(4a²) = (b²−4ac)/(4a²)</div><div class="deriv-op">add (b/2a)²</div>
+            <div class="deriv-expr">(x + b/(2a))² = (b²−4ac)/(4a²)</div><div class="deriv-op">factor ←</div>
+            <div class="deriv-expr">x + b/(2a) = ±√(b²−4ac) / (2a)</div><div class="deriv-op">take √</div>
+          </div>
+          <div class="deriv-result">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:bold; color:var(--accent);">x = (−b ± √(b²−4ac)) / 2a</div>
+            <div class="f-hand" style="font-size:11px; color:var(--ink-2); margin-top:3px;">completing the square — with a, b, c!</div>
+          </div>
+        </div>
+      </details>
 
       <div class="try-this-box">
         <div class="f-marker" style="font-size:12px; margin-bottom:6px;">WHY IT WORKS</div>
