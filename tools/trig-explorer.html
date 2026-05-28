@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trig Function Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    #trig-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ── Function selector strip ───────────────────────────────────── */
+    .fn-strip {
+      display: flex; align-items: center; gap: 10px; padding: 7px 14px;
+      border-bottom: 2px solid var(--ink); flex-wrap: wrap;
+    }
+    .fn-btn {
+      padding: 4px 14px;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+      border: 2px solid var(--ink-soft); border-radius: 4px;
+      cursor: pointer; background: transparent; color: var(--ink-soft);
+      transition: all 0.1s;
+    }
+    .fn-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+    .fn-label {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      color: var(--ink-soft); letter-spacing: 0.06em;
+    }
+
+    /* ── Equation display ──────────────────────────────────────────── */
+    .eq-strip {
+      padding: 6px 14px;
+      background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 16px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+    }
+    .eq-lhs { font-size: 14px; color: var(--ink-soft); white-space: nowrap; }
+    /* Colored parameter spans */
+    .c-amp   { color: #2a8a4a; font-weight: 700; }
+    .c-freq  { color: #2a5a9a; font-weight: 700; }
+    .c-phase { color: #c07020; font-weight: 700; }
+    .c-midl  { color: #8b3a8b; font-weight: 700; }
+
+    /* ── Feature chips ─────────────────────────────────────────────── */
+    .chips-row {
+      display: flex; flex-wrap: wrap; gap: 5px;
+      padding: 5px 14px; min-height: 32px; flex-shrink: 0;
+    }
+    .feat-chip {
+      padding: 3px 9px; border-radius: 4px; border: 1.5px solid var(--ink-2);
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      display: inline-flex; align-items: baseline; gap: 5px;
+    }
+    .chip-label {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .chip-value { font-weight: 600; color: var(--ink); }
+    .chip-amp    { background: #dde8cf; border-color: #2a8a4a; }
+    .chip-period { background: #e4eef8; border-color: #2a5a9a; }
+    .chip-phase  { background: #fff3e0; border-color: #c07020; }
+    .chip-midl   { background: #f0e4f5; border-color: #8b3a8b; }
+    .chip-max    { background: #fdecea; border-color: #c94040; }
+    .chip-min    { background: var(--paper-3); border-color: var(--ink-2); }
+    .chip-info   { background: var(--paper-2); border-color: var(--ink-soft); }
+
+    /* ── Sliders ───────────────────────────────────────────────────── */
+    .slider-area { padding: 6px 14px 10px; flex-shrink: 0; }
+    .slider-grid {
+      display: grid;
+      grid-template-columns: 80px 1fr 58px;
+      gap: 5px 10px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .param-lbl .letter { font-size: 16px; font-style: italic; font-weight: 700; }
+    .dyn-val[type=number] {
+      width: 54px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus {
+      outline: none; border-bottom-color: var(--accent); background: var(--paper-2);
+    }
+    .h-disp {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      font-weight: 600; min-width: 54px; text-align: center;
+      color: #c07020;
+    }
+
+    .toggles-row {
+      display: flex; gap: 12px; flex-wrap: wrap; margin-top: 5px;
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+    }
+    .tog-chk {
+      display: flex; align-items: center; gap: 5px; cursor: pointer;
+      color: var(--ink-2);
+    }
+
+    /* ── Sidebar cards ──────────────────────────────────────────────── */
+    .anatomy-card {
+      background: var(--paper); border: 1.5px solid var(--ink-2);
+      border-radius: 5px; padding: 10px 12px; transform: rotate(0.4deg);
+    }
+    .anatomy-title {
+      font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .anatomy-row {
+      display: flex; gap: 8px; align-items: baseline;
+      padding: 3px 0; border-bottom: 1px dashed var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+    }
+    .anatomy-row:last-child { border-bottom: none; }
+    .anatomy-param {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      min-width: 22px; font-weight: 700;
+    }
+    .anatomy-desc { flex: 1; color: var(--ink-2); }
+
+    .rel-card {
+      background: var(--paper-2); border: 1.5px solid var(--ink-2);
+      border-radius: 5px; padding: 10px 12px; transform: rotate(-0.4deg);
+    }
+    .rel-title {
+      font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .rel-body {
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.55;
+      color: var(--ink-2);
+    }
+    .rel-eq {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); background: var(--paper); padding: 2px 6px;
+      border-radius: 3px; display: inline-block; margin: 3px 0;
+    }
+
+    .try-card {
+      background: var(--paper); border: 1.5px dashed var(--ink-soft);
+      border-radius: 5px; padding: 10px 12px; transform: rotate(0.3deg);
+    }
+    .try-title {
+      font-family: 'Caveat', cursive; font-size: 16px; font-weight: 700;
+      margin-bottom: 5px;
+    }
+    .try-q {
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.45;
+      padding: 4px 0; border-bottom: 1px dashed var(--ink-soft);
+    }
+    .try-q:last-child { border-bottom: none; }
+    .try-n { font-family: 'Special Elite', monospace; font-size: 10px; color: var(--ink-soft); margin-right: 3px; }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../u7.html">← U7</a>
+      <a href="../index.html">all tools</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+
+    <!-- Left: controls + canvas -->
+    <div class="tool-main" style="padding:0; overflow:hidden;">
+
+      <!-- fn toggle strip -->
+      <div class="fn-strip">
+        <span class="fn-label">FUNCTION</span>
+        <button class="fn-btn active" id="btn-sin">sin</button>
+        <button class="fn-btn"        id="btn-cos">cos</button>
+        <div style="flex:1;"></div>
+        <label class="tog-chk"><input type="checkbox" id="tog-parent" checked> parent</label>
+        <label class="tog-chk"><input type="checkbox" id="tog-annot" checked> annotations</label>
+      </div>
+
+      <!-- title (compact inline) -->
+      <div style="padding:4px 14px 0; display:flex; align-items:baseline; gap:10px; flex-shrink:0;">
+        <div class="tool-breadcrumb" style="margin:0;">
+          <a href="../u7.html">← U7 · Trigonometry</a>
+        </div>
+        <div class="tool-title f-display" style="font-size:22px; margin:0; line-height:1;">
+          Trig Function <span style="color:var(--accent);">Explorer</span>
+        </div>
+      </div>
+
+      <!-- Canvas area -->
+      <div class="widget-container" style="flex:1; min-height:180px; margin:6px 14px;">
+        <canvas id="trig-canvas"></canvas>
+      </div>
+
+      <!-- Equation display -->
+      <div class="eq-strip">
+        <span class="eq-lhs">f(x) =</span>
+        <span id="eq-body">sin(x)</span>
+      </div>
+
+      <!-- Feature chips -->
+      <div class="chips-row" id="chips-row"></div>
+
+      <!-- Sliders -->
+      <div class="slider-area">
+        <div class="slider-grid">
+
+          <!-- a (amplitude) -->
+          <div class="param-lbl">
+            <span class="letter" style="color:#2a8a4a;">a</span>
+            <span style="font-size:10px; color:#2a8a4a;">amplitude</span>
+          </div>
+          <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" oninput="syncA(+this.value)">
+          <input type="number" class="dyn-val" id="val-a" min="-3" max="3" step="0.5" value="1" oninput="syncA(+this.value)">
+
+          <!-- b (frequency) -->
+          <div class="param-lbl">
+            <span class="letter" style="color:#2a5a9a;">b</span>
+            <span style="font-size:10px; color:#2a5a9a;">frequency</span>
+          </div>
+          <input type="range" id="sl-b" min="0.25" max="4" step="0.25" value="1" oninput="syncB(+this.value)">
+          <input type="number" class="dyn-val" id="val-b" min="0.25" max="4" step="0.25" value="1" oninput="syncB(+this.value)">
+
+          <!-- h (phase shift) — display in π notation -->
+          <div class="param-lbl">
+            <span class="letter" style="color:#c07020;">h</span>
+            <span style="font-size:10px; color:#c07020;">phase shift</span>
+          </div>
+          <input type="range" id="sl-h" min="-3.1416" max="3.1416" step="0.2618" value="0" oninput="syncH(+this.value)">
+          <div class="h-disp" id="h-disp">0</div>
+
+          <!-- k (midline) -->
+          <div class="param-lbl">
+            <span class="letter" style="color:#8b3a8b;">k</span>
+            <span style="font-size:10px; color:#8b3a8b;">midline</span>
+          </div>
+          <input type="range" id="sl-k" min="-2" max="2" step="0.5" value="0" oninput="syncK(+this.value)">
+          <input type="number" class="dyn-val" id="val-k" min="-2" max="2" step="0.5" value="0" oninput="syncK(+this.value)">
+
+        </div>
+
+        <div class="toggles-row">
+          <button class="btn small" onclick="P.a=1;P.b=1;P.h=0;P.k=0;syncAll();redraw();">reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="tool-sidebar">
+
+      <!-- Anatomy card -->
+      <div class="anatomy-card">
+        <div class="anatomy-title">f(x) = a · fn(b(x − h)) + k</div>
+        <div class="anatomy-row">
+          <div class="anatomy-param" style="color:#2a8a4a;">|a|</div>
+          <div class="anatomy-desc"><b>amplitude</b> — distance from midline to peak/trough</div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-param" style="color:#2a5a9a;">b</div>
+          <div class="anatomy-desc"><b>frequency</b> — period = 2π / b</div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-param" style="color:#c07020;">h</div>
+          <div class="anatomy-desc"><b>phase shift</b> — horizontal slide; right if h > 0</div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-param" style="color:#8b3a8b;">k</div>
+          <div class="anatomy-desc"><b>midline</b> — vertical shift; y = k is the center</div>
+        </div>
+        <div class="anatomy-row">
+          <div class="anatomy-param">sign</div>
+          <div class="anatomy-desc">if a &lt; 0 — curve <b>reflects</b> over the midline</div>
+        </div>
+      </div>
+
+      <!-- sin vs cos relation -->
+      <div class="rel-card">
+        <div class="rel-title">sin ↔ cos</div>
+        <div class="rel-body">
+          Same wave shape. cos is just sin shifted left by a quarter-period:
+          <div class="rel-eq">cos(x) = sin(x + π/2)</div>
+          Try switching between sin and cos — only the phase changes.
+        </div>
+      </div>
+
+      <!-- Try This -->
+      <div class="try-card">
+        <div class="try-title">Try This</div>
+        <div class="try-q">
+          <span class="try-n">1.</span> Set <b>b = 2</b>. How does the period change? Where is it shown in the equation?
+        </div>
+        <div class="try-q">
+          <span class="try-n">2.</span> Make <b>a negative</b>. What happens to the peaks and troughs?
+        </div>
+        <div class="try-q">
+          <span class="try-n">3.</span> Set <b>h = π/2</b> and switch from sin to cos. What do you notice about the graph?
+        </div>
+        <div class="try-q">
+          <span class="try-n">4.</span> Change <b>k</b>. Does the period or amplitude change?
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  // ── Canvas setup ───────────────────────────────────────────────────────
+  const canvas = document.getElementById('trig-canvas');
+  const ctx    = canvas.getContext('2d');
+  const DPR    = window.devicePixelRatio || 1;
+  let W = 0, H = 0;
+
+  const XMIN = -3 * Math.PI, XMAX = 3 * Math.PI;  // ~−9.42 to 9.42
+  const YMIN = -6, YMAX = 6;
+  const STEPS = 1200;
+
+  function cx(x) { return (x - XMIN) / (XMAX - XMIN) * W; }
+  function cy(y) { return (1 - (y - YMIN) / (YMAX - YMIN)) * H; }
+
+  // ── Canvas colors ──────────────────────────────────────────────────────
+  const C_CURVE  = '#2a5a8a';
+  const C_PARENT = 'rgba(140,140,160,0.35)';
+  const C_MIDL   = '#8b3a8b';
+  const C_ANNOT  = '#c07020';
+  const C_PEAK   = '#c94040';
+  const C_TROUGH = '#2a5a9a';
+  const C_GRID   = 'rgba(0,0,0,0.07)';
+  const C_AXIS   = 'rgba(0,0,0,0.35)';
+  const C_AXNUM  = 'rgba(0,0,0,0.28)';
+
+  // ── State ─────────────────────────────────────────────────────────────
+  const P = { fn: 'sin', a: 1, b: 1, h: 0, k: 0 };
+
+  // ── Math helpers ───────────────────────────────────────────────────────
+  function evalFn(x) {
+    const inner = P.b * (x - P.h);
+    return P.a * (P.fn === 'sin' ? Math.sin(inner) : Math.cos(inner)) + P.k;
+  }
+  function evalParent(x) {
+    return P.fn === 'sin' ? Math.sin(x) : Math.cos(x);
+  }
+
+  function period() { return 2 * Math.PI / P.b; }
+
+  // ── π formatting ───────────────────────────────────────────────────────
+  const PI_FRACS = [
+    [Math.PI,         'π'],
+    [Math.PI / 2,     'π/2'],
+    [Math.PI / 3,     'π/3'],
+    [Math.PI / 4,     'π/4'],
+    [Math.PI / 6,     'π/6'],
+    [Math.PI / 12,    'π/12'],
+    [2 * Math.PI / 3, '2π/3'],
+    [3 * Math.PI / 4, '3π/4'],
+    [5 * Math.PI / 6, '5π/6'],
+    [5 * Math.PI / 12,'5π/12'],
+    [7 * Math.PI / 12,'7π/12'],
+    [11 * Math.PI/ 12,'11π/12'],
+  ];
+
+  function piStr(v) {
+    if (Math.abs(v) < 1e-6) return '0';
+    const pos  = Math.abs(v);
+    const sign = v < 0 ? '−' : '';
+    for (const [val, s] of PI_FRACS) {
+      if (Math.abs(pos - val) < 0.003) return sign + s;
+    }
+    return sign + pos.toFixed(2);
+  }
+
+  function periodStr(b) {
+    const vals = {
+      0.25: '8π', 0.5: '4π', 0.75: '8π/3', 1: '2π', 1.25: '8π/5',
+      1.5: '4π/3', 1.75: '8π/7', 2: 'π', 2.25: '8π/9', 2.5: '4π/5',
+      2.75: '8π/11', 3: '2π/3', 3.25: '8π/13', 3.5: '4π/7', 3.75: '8π/15', 4: 'π/2',
+    };
+    return vals[b] || piStr(2 * Math.PI / b);
+  }
+
+  // ── Equation builder ───────────────────────────────────────────────────
+  function buildEq() {
+    const { fn, a, b, h, k } = P;
+
+    // a prefix
+    let aHTML;
+    if (Math.abs(a - 1) < 1e-9)  aHTML = '';
+    else if (Math.abs(a + 1) < 1e-9) aHTML = '<span class="c-amp">−</span>';
+    else if (a > 0)  aHTML = `<span class="c-amp">${a}</span>·`;
+    else             aHTML = `<span class="c-amp">−${-a}</span>·`;
+
+    // inner argument: b(x − h) or bx or x
+    let innerArg;
+    const bHTML = Math.abs(b - 1) < 1e-9 ? '' :
+      `<span class="c-freq">${b}</span>`;
+    if (Math.abs(h) < 1e-6) {
+      innerArg = bHTML ? `${bHTML}x` : 'x';
+    } else {
+      const sign   = h > 0 ? ' − ' : ' + ';
+      const hLabel = `<span class="c-phase">${piStr(Math.abs(h))}</span>`;
+      innerArg = bHTML ? `${bHTML}(x${sign}${hLabel})` : `(x${sign}${hLabel})`;
+    }
+
+    // k suffix
+    let kHTML = '';
+    if (Math.abs(k) > 1e-9) {
+      const kSign = k > 0 ? '+' : '−';
+      kHTML = ` ${kSign} <span class="c-midl">${Math.abs(k)}</span>`;
+    }
+
+    return `${aHTML}${fn}(${innerArg})${kHTML}`;
+  }
+
+  // ── Feature chips ──────────────────────────────────────────────────────
+  function chip(cls, label, value) {
+    return `<span class="feat-chip ${cls}"><span class="chip-label">${label}</span><span class="chip-value">${value}</span></span>`;
+  }
+
+  function fmt(v, dp = 2) {
+    return String(parseFloat(v.toFixed(dp)));
+  }
+
+  function updateChips() {
+    const { fn, a, b, h, k } = P;
+    const P_val = period();
+    const ampAbs = Math.abs(a);
+    const maxY = k + ampAbs;
+    const minY = k - ampAbs;
+
+    // First maximum x (analytic)
+    let firstMaxX;
+    if (fn === 'sin') {
+      firstMaxX = a >= 0 ? h + Math.PI / (2 * b) : h - Math.PI / (2 * b);
+    } else {  // cos
+      firstMaxX = a >= 0 ? h : h + Math.PI / b;
+    }
+    // First minimum x
+    const firstMinX = firstMaxX + P_val / 2;
+
+    const parts = [
+      chip('chip-amp',    'AMPLITUDE', ampAbs === 0 ? '0' : `|a| = ${fmt(ampAbs, 1)}`),
+      chip('chip-period', 'PERIOD',    `${periodStr(b)}  ≈ ${fmt(P_val)}`),
+      chip('chip-phase',  'PHASE SHIFT', `h = ${piStr(h)}  ${h === 0 ? '(none)' : h > 0 ? '(right)' : '(left)'}`),
+      chip('chip-midl',   'MIDLINE',   `y = ${fmt(k, 1)}`),
+    ];
+
+    if (ampAbs > 1e-9) {
+      parts.push(chip('chip-max', 'FIRST MAX', `(${piStr(firstMaxX)}, ${fmt(maxY, 1)})`));
+      parts.push(chip('chip-min', 'FIRST MIN', `(${piStr(firstMinX)}, ${fmt(minY, 1)})`));
+    }
+
+    if (a < 0) {
+      parts.push(chip('chip-info', 'NOTE', 'a &lt; 0 → curve reflected over midline'));
+    }
+
+    document.getElementById('chips-row').innerHTML = parts.join('');
+  }
+
+  // ── Draw canvas ────────────────────────────────────────────────────────
+  function draw() {
+    if (!W || !H) return;
+    ctx.clearRect(0, 0, W, H);
+
+    const showParent = document.getElementById('tog-parent').checked;
+    const showAnnot  = document.getElementById('tog-annot').checked;
+    const { a, b, h, k } = P;
+
+    // Grid — mark every π on x-axis, every 1 on y-axis
+    ctx.strokeStyle = C_GRID;
+    ctx.lineWidth   = 1;
+    for (let n = -3; n <= 3; n++) {
+      const x = n * Math.PI;
+      ctx.beginPath(); ctx.moveTo(cx(x), 0); ctx.lineTo(cx(x), H); ctx.stroke();
+    }
+    for (let y = Math.ceil(YMIN); y <= YMAX; y++) {
+      ctx.beginPath(); ctx.moveTo(0, cy(y)); ctx.lineTo(W, cy(y)); ctx.stroke();
+    }
+
+    // Axes
+    ctx.strokeStyle = C_AXIS;
+    ctx.lineWidth   = 1.5;
+    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, cy(0)); ctx.lineTo(W, cy(0)); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx(0), 0); ctx.lineTo(cx(0), H); ctx.stroke();
+
+    // x-axis π labels
+    ctx.fillStyle  = C_AXNUM;
+    ctx.font       = '11px "Patrick Hand", cursive';
+    const piLabels = { '-3': '−3π', '-2': '−2π', '-1': '−π', '0': '0', '1': 'π', '2': '2π', '3': '3π' };
+    ctx.textAlign  = 'center';
+    for (let n = -3; n <= 3; n++) {
+      if (n === 0) continue;
+      ctx.fillText(piLabels[n], cx(n * Math.PI), cy(0) + 14);
+    }
+    // y-axis labels
+    ctx.textAlign = 'right';
+    for (let y = Math.ceil(YMIN); y <= YMAX; y++) {
+      if (y === 0) continue;
+      ctx.fillText(y, cx(0) - 5, cy(y) + 4);
+    }
+
+    // Midline (dashed purple)
+    if (Math.abs(k) > 1e-9) {
+      ctx.strokeStyle = C_MIDL;
+      ctx.lineWidth   = 1.5;
+      ctx.setLineDash([6, 4]);
+      ctx.beginPath(); ctx.moveTo(0, cy(k)); ctx.lineTo(W, cy(k)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle  = C_MIDL;
+      ctx.textAlign  = 'right';
+      ctx.font       = '11px "Patrick Hand", cursive';
+      ctx.fillText(`y=${fmt(k, 1)}`, W - 4, cy(k) - 5);
+    }
+
+    // ── Parent curve (light gray) ───────────────────────────────────────
+    if (showParent) {
+      ctx.strokeStyle = C_PARENT;
+      ctx.lineWidth   = 1.5;
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      let pen = false;
+      for (let i = 0; i <= STEPS; i++) {
+        const x = XMIN + (XMAX - XMIN) * i / STEPS;
+        const y = evalParent(x);
+        if (Math.abs(y) > YMAX * 1.2) { pen = false; continue; }
+        const px = cx(x), py = cy(y);
+        if (!pen) { ctx.moveTo(px, py); pen = true; } else { ctx.lineTo(px, py); }
+      }
+      ctx.stroke();
+    }
+
+    // ── Transformed curve ───────────────────────────────────────────────
+    ctx.strokeStyle = C_CURVE;
+    ctx.lineWidth   = 2.5;
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    let pen = false, prevCY = null;
+    for (let i = 0; i <= STEPS; i++) {
+      const x = XMIN + (XMAX - XMIN) * i / STEPS;
+      const y = evalFn(x);
+      if (!isFinite(y) || Math.abs(y) > YMAX * 1.5) { pen = false; prevCY = null; continue; }
+      const px = cx(x);
+      const py = cy(Math.max(YMIN, Math.min(YMAX, y)));
+      if (pen && prevCY !== null && Math.abs(py - prevCY) > H * 0.6) pen = false;
+      if (!pen) { ctx.moveTo(px, py); pen = true; } else { ctx.lineTo(px, py); }
+      prevCY = py;
+    }
+    ctx.stroke();
+
+    // ── Annotations ────────────────────────────────────────────────────
+    if (showAnnot && Math.abs(a) > 1e-9) {
+      const ampAbs = Math.abs(a);
+      const P_val  = period();
+
+      // First maximum x
+      let firstMaxX;
+      if (P.fn === 'sin') {
+        firstMaxX = a >= 0 ? h + Math.PI / (2 * b) : h - Math.PI / (2 * b);
+      } else {
+        firstMaxX = a >= 0 ? h : h + Math.PI / b;
+      }
+
+      // Bring firstMaxX into visible range (find mod P closest to visible range center)
+      while (firstMaxX < XMIN) firstMaxX += P_val;
+      while (firstMaxX > XMAX) firstMaxX -= P_val;
+
+      const nextMaxX = firstMaxX + P_val;
+      const maxY     = k + ampAbs;
+      const minY     = k - ampAbs;
+
+      // Period bracket (above curve, at y = maxY + ~0.4)
+      const bracketY = Math.min(YMAX - 0.5, maxY + 0.5);
+      if (nextMaxX <= XMAX && firstMaxX >= XMIN) {
+        const bx1 = cx(firstMaxX), bx2 = cx(nextMaxX);
+        const by  = cy(bracketY);
+
+        ctx.strokeStyle = C_ANNOT;
+        ctx.lineWidth   = 1.5;
+        ctx.setLineDash([]);
+
+        ctx.beginPath();
+        ctx.moveTo(bx1, by); ctx.lineTo(bx2, by);
+        ctx.moveTo(bx1, by - 5); ctx.lineTo(bx1, by + 5);
+        ctx.moveTo(bx2, by - 5); ctx.lineTo(bx2, by + 5);
+        ctx.stroke();
+
+        ctx.fillStyle  = C_ANNOT;
+        ctx.font       = '11px "Patrick Hand", cursive';
+        ctx.textAlign  = 'center';
+        ctx.fillText(`P = ${periodStr(b)}`, (bx1 + bx2) / 2, by - 8);
+      }
+
+      // Amplitude arrow (beside the first peak, inside canvas)
+      if (firstMaxX >= XMIN && firstMaxX <= XMAX && Math.abs(a) > 0.1) {
+        const ax  = cx(firstMaxX) + 14;
+        const ay1 = cy(k);
+        const ay2 = cy(maxY);
+
+        ctx.strokeStyle = '#2a8a4a';
+        ctx.lineWidth   = 1.5;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(ax, ay1); ctx.lineTo(ax, ay2); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Arrowhead tip
+        ctx.fillStyle = '#2a8a4a';
+        ctx.beginPath();
+        ctx.moveTo(ax, ay2);
+        ctx.lineTo(ax - 4, ay2 + 7);
+        ctx.lineTo(ax + 4, ay2 + 7);
+        ctx.closePath(); ctx.fill();
+
+        ctx.font       = '11px "Patrick Hand", cursive';
+        ctx.textAlign  = 'left';
+        ctx.fillText(`A = ${fmt(ampAbs, 1)}`, ax + 6, (ay1 + ay2) / 2 + 4);
+      }
+    }
+
+    // ── Peak and trough dots ────────────────────────────────────────────
+    const P_val  = period();
+    const ampAbs = Math.abs(a);
+    if (ampAbs > 1e-9) {
+      let firstMaxX;
+      if (P.fn === 'sin') {
+        firstMaxX = a >= 0 ? h + Math.PI / (2 * b) : h - Math.PI / (2 * b);
+      } else {
+        firstMaxX = a >= 0 ? h : h + Math.PI / b;
+      }
+
+      // Draw dots at all visible peaks and troughs
+      while (firstMaxX > XMIN) firstMaxX -= P_val;
+      firstMaxX += P_val;
+
+      const maxY_v = k + ampAbs;
+      const minY_v = k - ampAbs;
+
+      for (let xp = firstMaxX; xp <= XMAX; xp += P_val) {
+        if (xp >= XMIN && maxY_v >= YMIN && maxY_v <= YMAX) {
+          dotFill(cx(xp), cy(maxY_v), 5, C_PEAK);
+        }
+        const xm = xp + P_val / 2;
+        if (xm <= XMAX && xm >= XMIN && minY_v >= YMIN && minY_v <= YMAX) {
+          dotFill(cx(xm), cy(minY_v), 5, C_TROUGH);
+        }
+      }
+    }
+  }
+
+  function dotFill(px, py, r, fill) {
+    ctx.fillStyle   = fill;
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth   = 1.5;
+    ctx.beginPath(); ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+  }
+
+  // ── Main update ────────────────────────────────────────────────────────
+  function redraw() {
+    document.getElementById('eq-body').innerHTML = buildEq();
+    updateChips();
+    draw();
+  }
+
+  // ── Sync helpers ───────────────────────────────────────────────────────
+  function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+  function syncA(v) {
+    if (!isFinite(v) || v === 0) return;
+    P.a = clamp(v, -3, 3);
+    document.getElementById('sl-a').value  = P.a;
+    document.getElementById('val-a').value = P.a;
+    redraw();
+  }
+  function syncB(v) {
+    if (!isFinite(v) || v <= 0) return;
+    P.b = clamp(v, 0.25, 4);
+    document.getElementById('sl-b').value  = P.b;
+    document.getElementById('val-b').value = P.b;
+    redraw();
+  }
+  function syncH(v) {
+    P.h = clamp(v, -Math.PI, Math.PI);
+    document.getElementById('sl-h').value = P.h;
+    document.getElementById('h-disp').textContent = piStr(P.h);
+    redraw();
+  }
+  function syncK(v) {
+    if (!isFinite(v)) return;
+    P.k = clamp(v, -2, 2);
+    document.getElementById('sl-k').value  = P.k;
+    document.getElementById('val-k').value = P.k;
+    redraw();
+  }
+  function syncAll() {
+    document.getElementById('sl-a').value  = P.a;
+    document.getElementById('val-a').value = P.a;
+    document.getElementById('sl-b').value  = P.b;
+    document.getElementById('val-b').value = P.b;
+    document.getElementById('sl-h').value  = P.h;
+    document.getElementById('h-disp').textContent = piStr(P.h);
+    document.getElementById('sl-k').value  = P.k;
+    document.getElementById('val-k').value = P.k;
+  }
+
+  // ── Function toggle ────────────────────────────────────────────────────
+  document.getElementById('btn-sin').addEventListener('click', () => {
+    P.fn = 'sin';
+    document.getElementById('btn-sin').classList.add('active');
+    document.getElementById('btn-cos').classList.remove('active');
+    redraw();
+  });
+  document.getElementById('btn-cos').addEventListener('click', () => {
+    P.fn = 'cos';
+    document.getElementById('btn-cos').classList.add('active');
+    document.getElementById('btn-sin').classList.remove('active');
+    redraw();
+  });
+
+  document.getElementById('tog-parent').addEventListener('change', draw);
+  document.getElementById('tog-annot').addEventListener('change', draw);
+
+  // ── Resize observer ────────────────────────────────────────────────────
+  const ro = new ResizeObserver(() => {
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.scale(DPR, DPR);
+    redraw();
+  });
+  ro.observe(canvas.parentElement);
+
+  // ── Init ───────────────────────────────────────────────────────────────
+  setTimeout(() => {
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width  = Math.round(W * DPR);
+    canvas.height = Math.round(H * DPR);
+    ctx.scale(DPR, DPR);
+    redraw();
+  }, 50);
+})();
+</script>
+</body>
+</html>
