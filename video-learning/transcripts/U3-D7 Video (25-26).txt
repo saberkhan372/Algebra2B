@@ -1,0 +1,58 @@
+Alright, here is a super short video on unit 3, day 7, which is just a recap of a couple
+of things, it's probably right after the quiz that you just took.
+So this is stuff that wasn't on the quiz, but we got to talk about it.
+So if you have, it says, simplify, right?
+This means cancel stuff that you can, right?
+Whenever you see something that can be factored, this is a quadratic, right?
+Well, it multiplies the negative, what multiplies the negative 70, adds to negative 3,
+what multiplies to 10, adds to negative 11, well, these two factors are identical, so
+you can cancel them.
+And so what we're left with is just what we're left with, X plus 7, or X minus 1.
+But it also says state excluded values, what's the deal?
+So excluded values mean, again, as a reminder, you can't have the denominator be 0.
+So I have to use the equation from the original question.
+So even though these cancel, I still have to say, oh, what can't I plug into the denominator
+that makes it 0?
+So I can't plug in 10, right?
+And I can't plug in 1, because 1 minus 1 would be 0, and 0 times anything is 0.
+And 10 minus 10 would be 0.
+So the easiest thing to think of is factor the denominator and set each factor equal
+0, and then that's what X can't be.
+X can't be 10, and X can't be 1.
+And it's from the uncancelet.
+It's super important that I know it's tempting to say, look at this answer,
+and say, oh, X can't be 1, but it can't be 10 as well.
+Same here, factor, factor, these factors cancel.
+So this is simplified, but the original denominator, this is actually a factor,
+because you can set X equal to 0.
+So X can't be 0, and X can't be 7.
+And then another thing, probably there is another one,
+but you might not remember, is that you can't have a square root
+in the denominator.
+So what you do is you multiply the top and bottom by whatever is the square
+root of the denominator.
+Also, you can't have I in the denominator.
+So sometimes you have to multiply top and bottom my high.
+So look at this.
+Just a quick reminder.
+What if you had root 5, and you want to get rid of the square root?
+You could square it, right?
+Well, that's like, if I had root 5, and squaring it is like multiplying it by itself, right?
+So this root 6 can't be in the denominator, so I'm going to multiply it by itself.
+But what you can't just be fair in that, right?
+Whatever you do at the bottom, you got to do the top, because technically,
+when you're multiplying by root 6 of root 6, that's just 1.
+And you can multiply something by 1, and it won't change.
+So what it does do is makes the denominator 6, and the top 3 root 6.
+But now we've created a situation where 3 over 6 can be canceled us, simplified to 1 over
+2.
+So it just becomes root 6 over 2.
+Here, 7 over 5 I can't have I in the denominator, so multiply top and bottom by I.
+And again, I over I is just like 1.
+So 7 I over 5 I squared, but I squared is negative 1.
+So it's 7 I over 5, 10 negative 1, so 7 I over negative 5.
+And then sometimes, you have to simplify the denominator first, so 75 is 25 times 3.
+So that's 5 root 3.
+You can't have a square root in the denominator, so top and bottom might root 3.
+So root 3 over 5 times root 3 times root 3 is 3, so root 3 over 15.
+There you go.

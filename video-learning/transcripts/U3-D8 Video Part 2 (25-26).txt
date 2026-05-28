@@ -1,0 +1,67 @@
+Okay, we're negative 1 times the 1 times the i, okay, i to the 5th, so it's i to the 4th
+goes into it, there's an extra i to the 1, y to the 4th, remember this is just 1, there's
+left over i, so that like simplified version of this is just i. What about i to the 6th?
+Well, i to the 4th goes into it, and what's the remained i squared? We know i to the 4th
+is 1, i squared is negative 1, so it's just the simplified, like this simplified is negative 1.
+What about i to the 7th? i to the 4th goes in, there's a remainder of i to the 3rd, but i to the 3rd
+is negative i. We know that because we did it here, negative i, because i times i squared
+is just negative i. i to the 8th, well i to the 4th, but both of those are just 1, so this becomes 1.
+What are we getting at here? Well, this just keeps repeating, so see if you can bear with me and I'll
+try and write some out. i to the 1 is i, i squared negative 1, i to the 3rd negative i, i to the 4th
+1, and it'll keep repeating, so to the 5th, we'll go back to i. To the 6th, that's like a remainder
+of 2 is negative 1, to the 7th, negative i, to the 8th, back to 1. It would go again if we really
+wanted to keep going i to the 9th. We'd go back to the beginning here, or the 9th is i, i to the 10th
+is the 2nd one down, negative 1, and then so on, right? It's possible to do the how many times
+is i to the 4th, go into it, like this, i to the 20th. Let's i to the 4th, because into that,
+an even amount of times, so 4 times 5 is 20. i to the 4th is 1, so 1 to the 5th is 1.
+But what happens if you, we can do it if like it's a bigger number, like down here, we're going
+to, i want you to do this, right? You can't do that in your head, so here we go. i to the 30th,
+how many times does 4 go into it? Well, i know 4 goes into it. 4 times 8 is 32, but there's a remainder
+of 3, so this is your 32, i's, and 33, 34, 35. This is just 1, because i to the 4th to any power,
+it's just 1 to whatever, it's just 1, and then i to the 3rd is left over, but i to the 3rd is
+negative i. This one, 74. What am I doing on a calculator? I'm saying, what 74 divided by
+4? Well, I get 72 points something, right? It goes in 72 times, and there's a remainder.
+So i to the 4th times 8, 4 times 18 is 72, and then 73 is 74, so this is the extra remainder,
+but i squared is negative 1, so negative 1. We're also good.
+There's a kind of a shortcut, which is really nice, because whenever you look at this,
+if we do i to the 1, it's just i, i squared is negative 1, i to the 3rd is negative i, i to the 4th is 1.
+What do we divide things? What if we did this by divided by 4? 1 divided by 4 is 0.25.
+2 divided by 4 is 0.5. 3 divided by 4 is 0.75. 4 divided by 4 is 1.
+If we divide any exponent by 4, we'll always get an answer that's either n is 0.25, 0.5, 0.75, or 1.
+It's only, that's the only possible remainder. So here, I divided 109 by 4, and I got 27.25,
+but I want you to show work, not just divide by 4, and that means yes, that's what we're doing,
+but I want you to understand what's really going on. That means that i to the 4th goes into this
+27 times, but because there's a 0.25 remainder, there's an i left over, so anytime you see 0.25,
+there's an i remainder. So this is just 1 times i, it's just i. What's going on here? 12,000 and 88.
+Divide that by 4, you get a whole number. That means there's no remainder, so it goes in evenly,
+it's like this, but I want you to show work. That means 4 times 3,000 and 22 is this. So this is 1
+raised to the 3,000 and 22 power of 1 times 1 times 1, 3,000 and 22 times, it's just 1.
+Last little section here is complex conjugates. We've kind of done it before a plus b a minus b
+remember when you, this is not a complex conjugate. This is just conjugates. So 6x plus 5, 6x minus 5
+is an a plus b a minus b. That's a conjugate because when you foil it, first times first,
+the oi, the outer and the inner cancel. That makes a conjugate and it's useful when you want to cancel
+i. So here this is just a conjugate, 36x squared, the outer and the inner cancel, negative 5,
+minus 5 is so minus 25. It's also helpful with roots, right? Because this 4 plus root 3, 4 minus
+root 3, 4 times 4 is 16. Outer is minus 4 root 3 plus 4 root 3, those cancel. And then lastly,
+root 3 times negative root 3 is negative root 3 squared, which is just negative 3. So 16 minus 3 is 13.
+Let's see it with i. 64 minus i plus i. So 64 plus ai minus ai, those cancel. And then last time
+last is minus i squared, but i squared is negative 1. So minus minus. So 64 plus 1 is 65.
+It's useful. This is going to come up a lot like you can't have i in the denominator,
+but what do you, if you just saw this, right, negative 7 over 3 plus 2i, what could you do?
+You could multiply it by its conjugate. And what I'm doing here, multiplying by 3 minus 2i on top
+of bottom, technically, this thing is equal to 1, right? We're not changing the problem.
+So you're just multiplying by the same thing on top of the bottom, but what ends up happening
+is here, we'll just distribute it negative 7 times 3. So negative 21, my plus 14i,
+the bottom though, gets foiled out. And you end up getting these cancel. This becomes i squared,
+right? So negative 4i squared is positive 4. So you get a whole number on the bottom,
+and you get rid of the i in the denominator. I know I can do this one yet, but it's because
+this is technically not a conjugate. It's just in order to get rid of a square root in the denominator.
+You multiply the top and bottom by that square root. 5 root 5 and root 5 is 5. So it's 3 root 5
+over 2 times 5 is 10. Lastly, 8 minus 2 root 7 to get rid of the root in the denominator,
+you multiply by the conjugate, which is 8 plus 2 root 7. So 8 times 8 is 64.
+Outer is 16 root 7. Inner is minus 16 root 7. Those cancel. Last times last is negative 4
+times root 7 squared. So negative 4 times 7 is negative 28. The top you just distributed in.
+This one's kind of interesting because the top you can pull a 4 out,
+the bottom just becomes 36. So when you pull the 4 out, it simplifies with 36 and you get
+the 4 cancels that you can't deny. This is a very, very good one to practice because that could be
+a quizzable question. All right, there you go. That's a unit 3 day 8.

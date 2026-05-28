@@ -1,0 +1,153 @@
+All right, this is another big lesson depending on what you're watching this, but this
+is right before Thanksgiving break.
+We're probably only going to do some of this in class, but I'm going to do a video on
+all of it because it's all similar info, but we are doing weird problems.
+We're going to go there scary for a lot of people, but the biggest thing is that you're
+going to be given a function when you're going to have to interpret it, and the word
+quadratic means parabola, so no matter what, when you're talking about kicking a soccer
+ball or throwing a rock or something, right, normally you have some person who's kicking
+a ball, right, you'll reach a maximum height, that's your vertex, and it'll go down,
+it'll hit the ground, I mean imagine it's more, well it's decent, okay, well the vertex has
+a time, that's like this axis, right, and then it's also got a height.
+And let's kind of interpret it, what's the time when you take it, zero, right, what's
+the time when it hits the ground, well we have to figure that out, but how high is it when
+it hits the ground, the ground's at zero, right, this, the vertex, that's always negative
+B over 2A, and then you plug negative B over 2A into the function, you get the wide bucket,
+so all these things translated to both into the word problems, okay, so most of the time
+I want three decimal places, we're going to do that all the time on this note packet, okay,
+this is made up, it's complete nonsense, but the math is still bound, okay, so the viscosity
+of compound LW13B is modeled with a function, temperature, so basically T is temperature, right,
+depending on your temperature you get a viscosity, viscosity is like thickness, it's measured in
+past scale seconds, right, and I don't want, this isn't a science class, I don't want you to think
+you have to memorize the science behind things, but or memorize like the situations and the
+the word problems, but you need to know how to solve the math, and scientists all have a math
+background, right, because at the end of the day they need it, so what is the viscosity, what is V,
+of this compound at 14 degrees Celsius, well T is the temperature in Celsius, well let's plug in
+a 14 for T, there you go, I see it's a calculator, what is the viscosity at the freezing
+tenth of water, I know I just said it's nothing you need to memorize, but hopefully you're all in,
+well a lot of you are in chemistry, the freezing tenth of water is zero degrees Celsius,
+so plug in zero, right, zero plus zero, 72.8 past scale seconds, so don't worry about what the
+answer is mean in this particular problem because it's made up, but that's this is what you should
+get, what is the, what temperature is, we're actually smoking for time, what are the viscosities
+40, all right, well we know the viscosity is 40 equals all this, how can we solve this, well
+let's subtract 40 from both sides and you get zero equals this, you could, and what I can show
+you in that, in person right now is, how do we solve for like T or X, we use a quadratic formula,
+right, X equals negative B plus or minus the square root B squared minus 4 AC, oh the root 2A,
+well that would be negative B, so negative 13 plus or minus the square root of 13 squared minus
+4 times negative 1.6, 4A times C, I'm going to use this C, 32.8, all over 2 times negative 1.6
+and let's see if I can show you, if you wanted to do this all on a calculator you could,
+right, put in a fraction, negative 13 which is 13 plus and we'll do minus after the square root
+of 13 squared minus 4 times negative 1.6 times 32.8, all over 2 times negative 1.6,
+non-real answer, that doesn't make sense, let's see, what do I get, X equals negative, oh negative
+B, right, second enters, that's actually you can just press up, up and press enter again, so negative
+B, alright, so not X equals negative B plus or minus the square root B squared minus 4 times,
+oh okay, four times A, because remember we are here, negative B plus minus a square B squared
+minus 4 times A times C, all over 2A, alright, negative 2.02, right, I got this and then if I wanted
+to make it a negative, I just press enter again, go back to what we just plugged in, delete that
+and make it a minus, I get 10.14 and negative 2.02, that is a long-winded version of
+explaining how I got the temperatures, those are the T, the temperatures that makes the viscosity 40,
+well how do we do, we set the viscosity equal to 40, you subtract it over so you just have this
+and then you use the quadratic formula, there, I can't show you with the calculator app,
+how I could do it, another way there's this thing called apps, there's something called,
+let's see if I can do a doesn't work, I don't think, there's something called the
+polynomial simulator, which I can show you in class, that's like a, it does the quadratic formula
+40, what is the maximum viscosity, what temperature does it occur, so no matter what, all of these
+are like a parabola, this is a, this is a function with a negative a value, so it's a parabola
+that looks like this, where is the maximum viscosity is like the, the y value, it's the y value of
+the vertex, so do look negative be over 2a, because you the x value of the vertex, so at 4.0,
+625 degrees Celsius, we have our maximum viscosity, but what is it? Well, you got to plug this
+value in for t, and you get 99.206, that's the maximum viscosity. So we're, we're thinking in like a
+perfect world room, it emitting factors like errors, this is resistance and thinking of like,
+in a perfect world, if you kick the ball, it would go in this path, right? Okay, well, this is the general
+equation for kicking, like a projectile motion, right, shooting a cannon ball or throwing a rock,
+even if you just throw something straight up in the air, it would behave this way, so
+A is acceleration, and I'm not asking you to memorize all this, but the acceleration on earth,
+negative 9.8 meters per second per second, meaning every second, if you drop up something, it's going to
+get 9.8 meters per second faster every second, it's negative because it's like gravity, or it's
+falling towards earth, initial velocity, initial height. So if you plug this acceleration due to
+gravity into this equation for this A, this is what you end up getting, okay? Well, let's use this,
+so a cannon ball is launched from a two meter platform, that's your initial height,
+at an initial height of velocity at 44 meters per second, that's your V0, so it's plugging it,
+right a function to describe the height, so the height is a function of time, is negative 4.9
+t squared plus initial velocity times t plus initial height, so I'm asking you to do anything with it,
+okay, what is the height after 1.5 seconds? Plugging in 1.5 for t,
+I used the calculator got this, then when will it hit the ground? Well, when is the height 0?
+So take this equation, set the height equal to 0, so 0 equals all this, I used the calculator,
+which I, again, I could use the quadratic formula, like I did earlier, or this program,
+which I'll show you in class, and this is what you get. When it will be 25 meters off the ground,
+well, when is the height 25? So instead of setting h of t to 0, instead of setting the height to 0,
+set it equal to 25, but the only way the quadratic formula works is when you're solving for
+zeros, right, so you have to minus 25, but whatever you do one side, you do it at the other,
+plug this into your calculator, and you get two different heights. It's our two different times.
+How is that possible? Well, remember, when you have something launched in the air,
+when will it be 25 meters? Well, let's say this is 25 meters. It's going to be 25 meters off the ground
+at this time, and it's going to be 25 meters off the ground at a second time.
+As long as it's lower than the vertex, it'll get to that height twice. What about domain and range?
+Well, we said that it'll hit the ground at 9.02 five seconds. So the domain, the path of this,
+goes from 0 seconds to 9.02 five seconds. And then how high did it get? Well,
+we need to find, did it ask for the maximum height? No. Well, how high did it get?
+Is going to tell us the height of our range? Well, what's our vertex? Negative B over 2A.
+Do negative B over 2A? You get 4.48 seconds. So that's like the time when it gets there,
+but I want to know how did I get this? Well, I plugged my time in to the function. So I plugged
+4.49 for time, and I got a height of this. So the maximum height, the lowest it gets to is 0 feet
+or meters. The highest it gets to is 100.76 meters. All right. Words can be scary, but underneath
+them are regular math problems. Most of them ask for this. Plug in an X or plug in a time, you get a
+plug in an X, get a what? Easy. If it's asking for time, that's when you're going to have to do
+the quadratic formula or poly symbol, which is that program on your calculator. That's when they
+basically give you a height, you got a cell for time. And then find the vertex. That's negative
+B over 2A, plug it in, get that like Y value. Okay, this is a fun one. The very strong
+and foolish girl is attempting to throw her very brave and agile to do brother under the balcony
+of their fourth floor apartment. The railing is about 16 meters above the ground and the girl is
+capable of curling her brother upward as few of 19 meters per second. All right. So same idea,
+this girl is here's the balcony, right? She's the road. Is it going to get high enough
+to go down to the balcony? Well, they give us all the information we need because negative 4.9 is
+from gravity, initial velocity. She throws her brother at 19 meters per second. She throws it from the
+ground. Well, that's fine. The vertex of this, so this function, that's fine how high the vertex
+is and see if the vertex is higher or lower than 16 meters. Well, negative B over 2A is 1.939 seconds.
+Plug that time in for T and you get 18.418 feet. So yeah, she can throw up to 18 meters high.
+The balcony is only 16 meters. And just so you know, like, that's almost like 60 feet,
+I think 50 something to high, which is crazy. Should she throw her brother? Probably not,
+but you know, she could make it happen. Okay. Now the one, what if we start changing A? Because on the
+moon, the gravity is 1.6 meters per second. So remember like one half A T squared is how we got
+4.9 for one half of 1.6 is 0.8. So these are the two functions for the moon for the earth.
+They drop up all from 50 feet, one on earth and one on the moon. How long does it take for them to land?
+So initial height is 50. If you drop it, it's kind of hard because after a while you'll get it,
+but like first time seeing this, how do I know how what's the initial velocity? Well, if you're
+holding the bowling ball and drop it, how fast is it going when you're holding it? Zero, right?
+So dropping the ball from a height of 50 with a zero initial velocity, the zero just goes away
+to negative 0.8 plus 50, negative 4.9 plus 50 minus 50 from both sides. You get negative 0.8
+equals negative 50 divided by negative 0.8. You get this square root both sides. You get a positive
+in a negative time, but there is no negative time. So it takes 7.9 seconds for the bowling
+ball to fall in the moon, and it takes the same process, takes 2.8 seconds. So on earth, it's much
+faster because it's gravity stronger. How long after the ball lands or the ball lands in the moon?
+So if it takes 7 seconds on the moon, 2.8 seconds on earth, what's the difference? It takes
+5 more seconds on the moon, which is kind of crazy. All right, I think there's one more page.
+Okay, we're going to physics things up by adding this one, velocity. Okay, if you want to know
+how fast something is going, it's called velocity, and some things accelerate over time, right,
+because if you drop a ball from a window, it's going to drop at a certain speed, and then over time,
+it'll get faster and faster. That's this plus acceleration due to time thing. The initial
+velocity is still be zero, and you're adding acceleration due to time. Well, here's a question.
+Back on earth, two robots are debating their respective durability. After an escalating series of
+challenges and insults, one accepts the dare to step off the edge of a 266 foot clip,
+initial velocity, zero, initial height, 266. This is the normal equation due to gravity.
+Well, how long before it hits the ground? Well, when is the height zero?
+Zero, making this zero, this cancels out. You go here, minus 266 from both sides,
+right, minus 266, minus 266. That's how we get to here. Divide both sides with a negative 4.9,
+and you get t squared equals this, square root both sides. You get a plus or minus.
+Only one of them makes sense because it's positive time. 7.368 seconds is when it hits the ground.
+Well, how fast is it moving? That's when this goes. When you say how fast it's velocity. So plug that in
+for time, initial velocity is zero, time, acceleration due to gravity, initial velocity.
+So velocity after a certain amount of time, this goes away. So multiply these two things together.
+You get negative 72.205 meters per second.
+That's a negative velocity. What does that mean? A velocity going down.
+This means it's going down, right? If it's going up, it's a positive velocity.
+Okay, a rock is thrown from a 15-foot balcony, an initial upward velocity of 72 feet for second.
+When is the rock reach? It's maximum height. Solving this maximum height, find the vertex.
+When does it reach its maximum height? So fine t. There you go. What is the velocity at that moment?
+Well, now that we know t, we know it's initial velocity. That's what goes here.
+We know the acceleration due to gravity. Okay, so think about this.
+At its vertex, it took 7.34 seconds to get to the vertex.
+How fast is it going? If you throw a rock reaches its highest point, at that very moment,
+it's almost stopped, right? Because think of something throwing it up, it reaches its highest point,
+and then it comes back down. So for a split second, it's almost stopped.
+Yeah, it's stopping at its maximum height. So there you go. That is unit three day four word problems.

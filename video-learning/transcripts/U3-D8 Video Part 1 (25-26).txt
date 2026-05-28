@@ -1,0 +1,23 @@
+All right. Got a good one for you today, not too long, but really good information for helping
+you solve things in the future. And it's about complex numbers and imaginary numbers.
+So again, we've talked about I, right, which is the square root of negative one. I, this
+is a square root of negative one. So if you square that, you get negative one, right?
+And that's all we've gotten to is I squared. But what happens if we do I to the third? Well,
+remember, like, that's I times I times I. And we know I is just I. And we know I squared
+is negative one. So what does that make? Negative one, I is just negative I. All right. What
+if we go into a larger number, I to the fourth? Well, that's like saying I squared times I
+squared, but I squared is negative one. So negative one, 10, negative one is positive one. So I to
+the fourth is one. And this is a very, this is the most helpful one we're going to see right now.
+Okay. So I to the fourth could be also written as I squared, it's quick. It's the same thing.
+They're just written next to each other or a power to a power. But I squared is negative one. If
+you square that, you just get positive one. So these two are new. And that's all we really,
+really only need to go up to I to the fourth. So how can we do that? So what if I told what if I
+asked you I to the fifth, right? The idea is the only answer is we can really get is I to the one is just
+I. I squared, we just found out is negative one. I to the third is negative I. And it's really
+important one. Either the fourth is one. Yeah, you need to know these, but you could start from
+scratch, right? You could do this and find all of them. It's not like impossible to come up with
+this table on your own. Okay. I to the fifth, oops. Where's I to the fifth? I to the fifth is like
+saying I squared times I squared times one, which is negative one, times negative one, times I.
+Negative one, times negative one, times I. And that's negative one, times negative one,
+is positive one. So I, right? What about reading this in a different way? I to the fourth goes into
+this and then there will be left over I. So I'm going to take a break here and we'll do a second video.

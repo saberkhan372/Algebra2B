@@ -15,6 +15,8 @@ Generated from local files under `teacher and student work`.
 - `batch-6-trig-statistics-insights.md` - angle/radian, periodic-function, sine/cosine, probability, and statistics insights.
 - `batch-7-rational-operations-insights.md` - Unit 8 rational-expression multiplication/division, addition/subtraction, equations, and study-guide insights.
 - `batch-8-functions-transformations-unit2-insights.md` - Unit 2 functions, domain/range, calculator workflow, transformations, and test-review insights.
+- `batch-9-25-26-revisit-insights.md` - 25-26 revisit insights from U1/U2/U3 foundation lessons.
+- `batch-10-unit3-remaining-review-insights.md` - Unit 3 intercept form, word problems, powers of `i`, conjugates, literal equations, piecewise parabolas, and test-review insights.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
@@ -66,6 +68,14 @@ Generated from local files under `teacher and student work`.
 - U2-D2 - TI-style calculator workflow, graphing, intersection, fraction syntax, and rounding discipline.
 - U2-D5 - parent functions, transformation vocabulary, transformation order, and writing transformed functions.
 - U2-D8 - Unit 2 test review: functions, transformations, exponents, factoring, quadratics, piecewise evaluation, and cumulative skills.
+- U3-D2 - intercept form, zeros/roots/solutions/x-intercepts vocabulary, and vertex midpoint from intercepts.
+- U3-D4 - quadratic word problems, projectile motion, target heights, vertex interpretation, physical domain/range, and velocity.
+- U3-D7 - rational expression simplification review, original excluded values, radical denominators, and `i` denominators.
+- U3-D8 Part 1 - powers of `i` through the core cycle.
+- U3-D8 Part 2 - powers of `i`, mod-4 remainders, complex conjugates, and denominator rationalizing.
+- U3-D9 - literal equations, factoring out target variables, deriving quadratic formula, and solving for `a` in quadratic forms.
+- U3-D10 - piecewise graphs with parabolas/absolute value plus rational/complex/literal-equation review.
+- Unit 3 Test Review - cumulative systems, piecewise, quadratics, factoring, rational expressions, radicals/complex numbers, quadratic formula, completing the square, projectile problems, literal equations, and transformations.
 
 ## Summary
 

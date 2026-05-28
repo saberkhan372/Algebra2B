@@ -1,0 +1,69 @@
+Alright, here's the review for unit 3, day 10.
+The lesson today is nothing new, it's actually pretty short and after we're going to do
+a little quiz review and just so you're aware, there's a little bit less information on
+this next quiz so I'm sure you'll find it a bit easier.
+We're going to be doing piecewise again which we've done before, piecewise are the ones
+that have like a boundary, so there's two different functions, but we're going to add in
+parabolas to piecewise functions, okay, the only difference is with parabolas is will you see
+the vertex? Sometimes you will and sometimes you won't and first let's start with this example
+where the first actually both of these functions are absolute values, so this is a little review
+and perhaps the values are a B shape function, they have a vertex at hk and the slope is the a value,
+so in this case the green one has a vertex at 3, 4 and an a value up down to over 1, down to
+over 1, this one has a vertex at 2, negative 2 and a vertex of up 1 over 1, but we have to start
+with the boundary of 1, so I put my dotted line at 1 and I started with the green one,
+this is kind of interesting, right 3 up 4 is the vertex, right 3 up 4, but I can't put the
+vertex over here because this green one only exists to the left of this red line, so I put the
+vertex just to show you and technically we could go down to over 1, down to over 1 to find where
+it starts, but instead I plugged the point 1 into this function, so you see f of 1 is 0, so 1 comma 0,
+it's right here and I went down to over 1, down to over 1, it's an open circle because it's just
+less than. Here my vertex is right 2 down to and my slope is up 1 over 1, so this one actually
+shows up, you can see the vertex. If you're graphing the parabola, you don't always need 5 points,
+but we do need specific points at the boundaries, so the vertex is visible, like this one,
+you can have 3 points including the vertex, the vertex is not invisible, you can have to put
+1 point at each end of the curve, so this one is a parabola with the vertex, remember the vertex
+is hk again, this one has no k value, so it's left 3 up 0 and the a values 1, and to the left of
+negative 1, well left 3 up 0, that vertex is visible, so we can put our points, I just kept on going,
+so left 1, right 1 up 1, right 2 up 4, this is the closed circle 1, and this is actually not a
+parabola, what kind of line is this, this is slope intercept form, so y intercept is 3,
+slope of down 3 over 1, down 3 over 1, we can also go up 3 over 1, remember if it's a negative
+slope you're going to be going downhill. Last one is both parabolas, the green one I think is
+really nice to show because the green one has a vertex at 4, 6, but it has to exist to the left
+of this dotted line which is over here, so the vertex is here, I can't draw my parabola in this
+area, so I'm going to start by plugging in 2, I plugged in 2 to this function and got 2, so 2 comma 2
+is right here, to close circle, and then I plugged in another point, which was, I just happened to
+choose 1, 1, I got negative 3, and technically the vertex is here, so this would be your parabola,
+but it only starts here, and it can, the curve continues. This one has a vertex at 5, negative 4,
+and the A value is 1, so we can actually see the vertex so we can show our curve.
+All right, here, it's a little quiz review, simplifying rational expressions, we did that,
+that's this kind, where you factor, cancel common factors, and then excluded values come from
+setting the denominator not equal to 0, so x equals 5, and x equals 4 would make the denominator
+0, so those are my excluded values, and we'll go over this in a second, but powers of i, just remember,
+if you know i, 1, 2, 3, and 4, you'll know all the rest, conjugates, we can't have a square root
+in the denominator, or an i in the denominator, literal equations, where you're solving for a specific
+letter, we just did piecewise with quadratic, which are parabolas, and then quadratic functions
+in vertex or intercept form, you got to know vertex form, the intercept form, that's the one,
+remember, I either gave you hk and x and y, if you get to solve for a, or I gave you the intercepts,
+and I gave you a point which is x and y, and you solve for a, so here you can take a 2 out of this,
+this is now x plus 5, x minus 5, this factors into x minus 4, x minus 5, the x minus 5 is cancel,
+so this is the simplified function, but remember, excluded values come from before you cancel,
+this one, solve for x, what I did is I moved rx to this side, and I moved the 9 to the right,
+so I got to here, and the reason you do that is because you can factor out an x now,
+so x comes out of this, you left a 5 plus r, divide both sides by 5 plus r, and you have x 5 itself,
+simplify, well how did I get 139, I divided it by 4,
+the torque goes into that 34 times a little remainder, a remainder of 3,
+because every remainder of 0.25 is 1i, so 0.25, 0.5, and then 0.75, and a whole number, right,
+so 34 of them, that's 136, 137, 138, 139, so this adds up to 139, and you must show work,
+you can't just divide by 4 and say, you know, because it's 0.75, there's 3 left, yes, that's,
+I want you to be able to show this part, which is that there's 34 of them, and then 3 left,
+why did we use i to the 4th, because remember i to the 4th is 1, so this is like 1 times i to the 3rd,
+and i to the 3rd is negative 1, sorry, negative i.
+Here, I can't have a square root in the denominator, I could have, like, tried to simplify this square
+root first, but instead, I multiply top and bottom by root 40, it's a 3 root 40 over 40, root 40 is 4 times 10,
+so that's 3 times 2 is 6, 6 over 40 is the same as 3 over 20, and lastly,
+we multiply by the conjugate, so 5 minus 8i, the conjugate would be 5 plus 8i,
+this distribute to 30i plus 48i squared, i squared is negative 1, so it becomes,
+instead of plus 48, it's minus 48, the bottom foil, 25 plus 48 minus 40i, that's the whole
+point of the conjugate, minus 64i squared, so 30i minus 48 over 25 plus 64, which is 89,
+if you could take a number out of 30 and 48, that is the same number that goes into 89,
+you can't tell more of it, because this is the prime number, this is as far as you can go,
+there you go, that is unit 3 day 10.

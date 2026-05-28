@@ -1,0 +1,169 @@
+All right. Here's a video on the Unit 3 test review. I'm not going to go over every
+problem because this packet is 50 problems long, but I will just kind of look at some
+problems that I know are going to be very important to know. As a reminder, tests are
+cumulative, meaning we might see some problems from the first unit. And that's because
+math is kind of human. So solving the system of equations. When I see this, there's a
+couple different options. We can use elimination, which is what I did. We could do substitution,
+or we could do graphing. If you were to do graphing, you could both of these into slope intercept
+form, graph them, and then where they cross is the solution. When I first saw this, there are
+line up the x's and the y's and the numbers. And these two are the same numbers. So what I did
+is I line them up and I subtract it. So 2x minus 2x is 0, 3y minus y is 2y, 3 minus minus 3 is 6. So 2y
+is 6 gives us y equals 3. Plug that in, where did I plug it in? I plug the y equals 3 into here.
+Solve for x and I got negative 3 for x, 3 for y. Peace wise. Let's look at this one. Remember
+this is where you start. Negative 3 is my border. And all graphs, this graph is a parabola to the
+left of negative 3. And this graph is an absolute value, which is a v-shape, to the right of negative 3.
+Well, let's look at this. This is like saying negative 1x squared plus 0x plus 7. That's one way to
+write it. And you could do like negative b over 2a. Or think about this. This is basically written
+in vertex form. Negative 1x squared plus 0. Let's write it like this. X plus 0 squared plus 7.
+And that means that 0, 7 is the vertex. And we go left one, down one, left two, down four,
+left three, down nine. Well, we can't really, in this dotted part of the parabola is actually not in
+the domain. So I showed this for like help. And if you want, you can show this part. But really,
+the only part of the graph that's actually in the domain is everything to the left of negative 3.
+And it's less than or equal to. So there's a dot, a closed dot, and it keeps going.
+This is an absolute value graph. Remember absolute value graphs are like this. A
+absolute value of X minus h plus k. And hk is my vertex. So 1, 0 is my vertex.
+And then my slope is up to 3 over 2, up to 3 over 2. Until we get to this open circle,
+right? So that is a piecewise with an absolute value graph, a b shape, and a parabola. But the parabola
+is not in the, the vertex is not shown. It starts over here.
+Let's see. Find an equation in point slope form for a line that passes through this X and Y,
+but perpendicular to this line. Well, if it's perpendicular to this line, let's find the slope of it.
+So I've found it in slope intercept form. Y equals negative 6 over 7. So 6 over 7 is my slope.
+And point slope form looks like this. We're going to make a formula sheet for reference.
+You don't get it on the test, but we're going to make one in class. So Y minus Y1. This is my Y1. This is
+my X1. Y, X1, Y1. My Y1 is negative 4. So it's Y minus minus 4. So plus 4. You close my slope,
+X minus X1. So X minus 7. That's point slope form.
+Solving graph in the number line. Remember, if I want X by itself, it's right now it's being
+divided by negative 3. So it's multiplied by negative 3 on both sides. That's 39. But I'm
+multiplied by negative. So let's flip the sign. Then it minus 9. Divide by negative. Let's flip
+the sign again. I get X is less than negative 15. So open circle to the left.
+Here's an interesting one. Evaluate. It's basically saying F of X, right? F of 12.
+When X is 12, that's X is greater. 12 is greater than 7. This one. The only, like,
+there's nothing to plug in. So it's 51. And when X is less than or equal to 7,
+well, that's negative 2, 4, 3 is less than or equal to 7. So we use this one. So it's 19.
+How about this one? 4 X to the negative 3, 4 X to the negative 5 to the negative 3. Let's
+distribute this. So 4 to the negative 3. This is positive 15. And then we add the exponents. One
+and negative 3 makes 4. The negative 2. Negative 3 and 15 makes 12. Can't have a negative
+exponent. So let's put it to the bottom. And we can do 4 squared. So it's X to the 12th over 16.
+Graph using vertex form. Where's my vertex? 3, 5. And we go left one down to right one down
+two. But then I want 5 points. So right two down by, well, my A is, it would be right one down
+one, right two down four. But double that, right? So right two down eight. And here's my graph.
+Standard forms a little harder. You got to know negative B over 2A. Negative B over 2A is
+negative 8 over 2 times 2 is negative 2. Plug in my negative 2 to my function for X. I get a Y.
+So my vertex is negative 2, negative 5. And then right one up two, left one up two.
+Intercept form, good changes one. This is something I like to do. When you factor,
+I want to take out my A value. So I pull out the one half. I just, the one half comes out of
+the X squared. So it's just X squared. But when you pull a one half out of the four, it's not
+like I'm pulling a two out and this becomes two. I'm pulling a half out. So think about this one
+half times eight is four. So when you pull the one half out, it's actually these two numbers get
+bigger. So this becomes eight and 12. Now what multiplies to 12, but that's the negative eight is
+negative six times negative two. So my intercepts are six and two. Four is right in the middle.
+So I plugged in four through my original function. And they got negative two. So my vertex is at four
+negative two. Only three points are needed. So just all remember, be very careful and read all the
+directions. Let's see. These two, you got to know vertex form and intercept form. Both of that
+I gave you. So in vertex form, find an equation in vertex form, given the vertex. So it gave
+you H and K. And I gave you an X and a Y. So X goes for X, Y goes for Y, 10 and 13. Six is my H,
+negative 11 is my K. So 10 minus six is four, four squared is, this makes 16a minus 11. I solved for
+a. And there you go. Intercept form, very similar process. Solve for a. Once you find a, you write an
+intercept form. You got to know these two forms, okay? Factoring. All of these are different. This is just
+your standard product, some factoring. But remember, you can take out a GCF. I pulled out a three. So
+what multiplies to 45 and that's an 18, negative nine, negative five. This is also product, some factoring,
+but it's just a bigger number. This one, if there's only two terms, it's either this sum of
+difference of squares or difference of cubes. If there's only two terms, so X to the six minus
+125. How do you know if one it is? Well, first look if there's any GCF we can take out. Here I can
+take out X from both of them and I can take out seven. So seven X. Now I have four X to the
+32 minus nine. These are perfect squares. So I know that it's this one, right? A plus B, A minus B.
+What's my A? Well, two and two and nine. So my B is three and minus three.
+X to the 32, that's really, that's a large number for our large X one. How does that work? Well,
+X to the 16, X to the 16 makes X to the 32. So it's two X to the 16, two X to the 16 is four X to the
+32 plus three minus six. And remember, just keep your GCF out the whole time.
+Got to know this formula. So X to the second, to the third makes X to the six. And this is a perfect
+cube. Hopefully that'll like become memory is that five times five times five is 125. So
+and then we just plug it in, right? A minus B. A squared plus these are always opposite.
+A B. So five Y X squared, I just wrote five X squared Y. Same thing, just in a different order.
+Plus Y squared. So 25 Y squared. Solving my factoring. I've done this a lot.
+Excluded values. Let's look at this one. This I took an X out and then I factored it.
+Here I took a, I could take an X out and a three. So three X. When the factor the top,
+they pull the X out. This is X plus 10, X minus two. So this X on top, you pulled out and this
+X on the bottom you pulled out. You can cancel the X minus two's cancel. So what you're left with
+is X plus 10 over three. But the excluded values, remember, come from the original factor
+to equation. So this is technically a factor three X. So three X divided by three. What's a zero out
+of three? This is zero, right? So X can't be zero. And then this one X minus two can't be zero.
+So X can't be two. Those are my excluded values. And remember, don't use that answer. Use
+that uncanceled one. Simplifying, let's see. Let's do this one first. Five I root negative six.
+Well, a negative comes out of the I. There's already an I in there. So I and I makes I squared,
+which is negative one. So it's negative five root six. Here, when we foil three times nine,
+27 outer inner negative 75. I this is last time last. So negative seven times negative four is
+positive 28. But I squared is negative one. So it's positive 28 becomes negative 28. And then just
+clean up something like terms. So 27 when it's 20 is negative one minus 75. I
+know it is either the first, I did the second, I did the third, I did the fourth. So I need to know
+because either the fourth is really useful because either the fourth is one. How many fourths,
+or how many fours go into this? It goes in 11 times with the remainder of like one fourth.
+So it goes in 11 times. This is just one. I had the one, I had the fourth is one, one to the 11th
+is just one. There's one I remaining. So it's just I. Here, you can have a square root in the denominator.
+So four times five, right? So that's two root five. So root five on top and bottom,
+six root five over two times five, two times two times root five times root five is five. So
+two times five is 10, six root five over 10, but six over 10 can simplify us into three over five.
+Got to know if you have a square root in the denominator, but it's two terms with the plus or
+minus, you have to use the conjugate. So nine minus root two, the conjugate would be nine plus
+root two, but whatever you do to the bottom, you do to the top. And on the top here, you're going
+to distribute. So nine root two plus two, right? Because root two tends root two is two.
+The bottom, I'm going to foil nine to nine is 81 plus nine root two minus nine root two. Those
+cancel. And then nine root two plus two over 81 minus two. Here you go.
+Quadratic formula, if you could sing even in your head, you'll memorize it. X equals negative
+B plus or minus the square root B squared minus four. I see all over two A. All right,
+poly symbol and calculator does this for you, but it's not going to look like this. So
+actually, it would it would. So here we go. X equals negative B plus or minus a square root B squared
+minus four AC all over two A. Simplify this is negative eight. So it's I. So root eight is four times
+two. So two root two, but then there's the negatives of I comes out. And then you can only do
+a GCF if all terms on top, like we're basically cancel, simplifying the top is cuts in half, cuts
+in half, cuts in half. These 39, I didn't do 40. So I'll be completing the square. So let's do this
+one live action. This is what you got to know. B over two square. B over two squared is for
+completing the square. It's different than negative B over two A, which is for the vertex of a
+for out. So B over two squared. That's what we add to both sides. But first, let's make this
+a little bit cleaner. Because whatever you want side you got to do the other, B over two
+squared, six over two squared is nine. So when we get X squared plus six X plus nine is equal to
+negative 21. Does this factor? Yeah. What multiplies the nine adds to six? Three times three. So X
+plus three, X plus three equals negative 21. But check this out, right? We have what did it factor
+into? It just factors into B over two squared X plus or minus, right? If this is a minus,
+it'll be a minus. B over two. B over two. And then I want it to solve. So what am I doing here?
+I want to solve. So let's get X by itself. When you square, we go sides, you always get a plus
+or minus plus or minus i root 21. So minus three X equals negative three plus or minus i
+root 21, right? And then we want to convert to vertex form very similar. But I'm going to do
+everything on one side. So I kept the nine here. But B over two squared, 10 over two is five,
+five squares from five. I added in the 25 to this. So it's basically like I'm pushing nine out of
+the way. You could add 25 and minus 25 on the same side of the equal sign. It's basically like
+doing nothing, but what you're really doing is making this so I can X plus five, X plus five,
+factor it, nine minus 25, 16, or negative 16. There you go. These are pretty easy, but one thing
+I will say is when X is negative three, one, two, one, two, three, negative three. Where's my Y value?
+It's right here at one, two, three, right? But it's an open circle. So that's called undefined.
+F of two, one, two. This is not the where the graph is. This is, F of two is one. Is this a function?
+Can Huey give you two areas and Huey give you honeynatch areas? Now another with two areas,
+but like just go with me here. Those are two different outputs. So now it's not a function.
+One of these, let me give you a little picture, is a rocket. This is given to you.
+It's always the initial velocity. So it was launched at 126 meters per second.
+Don't worry about it, if it's meters or feet, unless it says in the picture, in the
+function. I just know this means meters. This is the initial height. So it's launched from 12 meters.
+So what is the initial velocity, 126 initial height, h sub zero, 12? What is the rocket's height
+after three seconds? Well, let's just plug in three for time. I'll use the calculator here.
+What is its maximum height? Well, the vertex is its maximum height. That happens at negative
+B over 2A. It gives me a time. Then I plug that time into the function to get a height.
+So at 12.9 seconds, I got up to 821.99 meters. When will it be 500 meters high? Well, set height
+equal to 500. Move it over. So you have this. This is something the quadratic formula would do,
+calculator, the polysymbol function, will give you two different times at set 500.
+Because remember, the highest it gets to is 821 meters. That means it was launched at 12 meters.
+It got to 500. It goes up to 821. It goes down 500. Back down. When is it hit the ground?
+When is the height zero? I use polysymbol and I got at 25. This should not say meters.
+This should say seconds.
+The graph is not needed, but it's a good visual. Solving for T, let's look at this one.
+There's a T and a T in here. So let's factor out the T. When you take a T out of both of these,
+you just left with a plus B. They want T by itself. So I'm going to divide those sides by a plus B.
+There you go. How do you get T here? Move this over and move the 15 over. It's a 6 minus 15.
+It's negative 9. Same process, right? Take the T out of these and you're left with 7 minus K.
+End behavior. That's pretty simple. And the last kind of problem. This is my left and right
+shift. So this is a left shift, right shift. This is my stretch or reflection and this is my
+up and down. Let's kind of change this a little bit. So I want to say my new function
+is does something to f of x. All right. So this is my left and right shift. This is this.
+f of x could have been shifted left to right. It could have been stretched or flipped and it could
+have moved up and down. So this is 13 to the left. It's also reflected. So it's a negative
+stretched by four. 13 to the left means plus 13 and 16 up. There you go. Right a function
+y that includes the given transformations of f of x. There you go. That is the unit three study

@@ -1,0 +1,104 @@
+All right, got a relatively short one today, unit three, day two, intercept form.
+So as we talked about a little bit, last class, this is a parabola and a parabola can
+hit the x-axis, you can intercept, right?
+So this is just, you don't even need to know the function yet.
+This parabola intercepts the x-axis at three and negative one, right?
+There's two intercepts, but I might be confusing everybody if I start talking about this,
+but I just feel like I should.
+Remember last class, there's a parabola that can look like that.
+That has no x-intercepts, the intercepts are, they have i in them.
+So like when we, we usually call it a quadratic formula, and then I'm getting a negative
+in the square root.
+So this has no x-intercepts, no real x-intercepts, they're imagining it.
+And then there's also a version we'll see where the vertex of the parabola is on the
+axis, so that has one x-intercepts, and we'll see what all that means in a second.
+So we learned this a while ago, hk, so right one down four, right one down four.
+And then the A values one, so right one up one, right two up four, left two up four, we
+graphed it, right?
+This is vertex form, because hk is the vertex.
+We can get standard form, which is like probably the hardest form to graph out of, but
+we can do that by making x-one squared, just, you know, expanding it out, foiling, and
+then minus four.
+This is standard form, and then we can actually factor that two, right?
+We can factor this, what multiplies the negative three, but adds the negative two, negative
+three times one.
+So we factored it, and this is the factored form, x plus one, x minus three, well, that's
+also called intercept form, because when things are written as a series of terms and
+parentheses multiplied, if this was zero, everything would cancel out, be zero times anything,
+which is canceled.
+So these are sometimes called zeros, right?
+Negative one would make this zero, and three would make this zero.
+Well, let's look, negative one and three are the solutions or the zeros or the x intercepts
+of this parabola.
+So we've, by plugging in zero for y, so y equals x plus one, x minus three, I just wrote
+this right here, x minus, so we, we, x plus one, x minus three, if I want to make it, like
+the y value equal to zero, so remember, at the x intercept, the y value is zero, we're
+at the x axis, you set each factor equal to zero, so x equals negative one, x equals
+three, and those are your x intercepts.
+Where's the vertex?
+Well, the vertex is in the middle of the two x intercepts, so negative one to three, how
+many squares is that?
+One, two, three, four.
+The vertex is one, two squares away from both sides is exactly symmetric.
+So this side and this side are identical.
+The vertex is always centered between the two intercepts, but how do I, how do I know
+that it's down at negative four?
+Why can't the, why can't the vertex be like right here, and it looks like this, right?
+Well, I know that negative one and three of the intercepts, and this is one, f of one,
+right?
+At the plug, an x value of one, into my function, so plug in one, you can plug it into
+any of the forms, and you'll get the same number, what if you plug one into here?
+One plus one is two, one two times negative two is negative four, one negative four, that's
+the vertex.
+You can always plug in an x to get a y, okay?
+So this is, this is important, right?
+So I use intercept form here, now I didn't, but if I, if I, we're going to do that right
+here.
+I'm going to graph using intercept form, so this is in standard form, but I want a factor.
+I can take an x out of both of these, take the x out, take one x out of this, take
+x out of this, we're left with x plus four, so x equals zero, and x equals negative four
+of the intercepts, zero and negative four, these are the intercepts.
+I know the vertex is directly between zero and negative four, and it's easy when you
+get my, just count the squares, right?
+There's four squares, so negative two is the vertex, but the real way of doing it is like
+to find the middle of two points, you add them up and divide by two.
+I added up zero and negative four divided by two, I got negative two, so where do I,
+how do I know that this purple dot, this vertex is down there?
+Well, you plug negative two into x, right?
+Negative two squared is four, plus four times negative two, so four minus eight, I plugged
+in negative two, I got negative four, that's the vertex.
+So if you're graphing in intercept form, all you need are the intercepts and the vertex.
+This one's kind of interesting because it really looks like it's hard to factor this,
+right?
+One of the first things I was thinking is rewriting it, like this, and saying, okay, what
+multiplies, what's half of two, what multiplies a negative one, but adds to zero, negative
+zero, and you could do all that, factoring method, or I could take a negative one half
+out of here, what happens if you take a half out of two, it gets bigger, like how many
+times does a half go into two, goes in four times, and I pulled a negative out, so you
+could always distribute the negative one half back in to test it, what's half of four,
+times two, negative and a negative, so positive two, now this is your a squared minus b squared,
+this is your a squared, this is your difference of squared, right?
+So x plus two, x minus two, this is not a factor because it's not x, so negative two
+and positive two, your intercepts, what's directly between negative two and positive two,
+is zero, so it plugged zero into the function, one negative one half times zero plus two,
+it was just two, so it plugged in zero, got two, then I have three points, sometimes
+you don't have two intercepts, because check this one out, this is factorable, I took
+a two out, what multiplies to 25 and as to 10, five times five, so I factored all of it,
+I got, I pulled the two out, that's just a GCF, it's not a point, x plus five, x plus five,
+so it has an intercept at negative five, it only has one of them, so what we have to
+end up doing, is doing the regular, like a value, right? So write one up to, write two
+up eight, same both ways, it's also possible to have no x intercepts, we talked about that
+a little bit last class, that's like when they're imaginary, and just see where we've
+been doing things with three terms, that's called a tri-nomial, that's like three x squared
+plus two x plus six, technically they're all poly-nomials, you don't have to have just three
+terms, or four terms, you can have any amount of terms, and if you have a three factors,
+which you've never really seen with numbers, right, but x plus a, what does that mean?
+We'll set each factor equal to zero, and you get negative A, positive B, negative C,
+those are all intercepts, they're also sometimes called zeros, because you set them equal
+to zero, and they're also called roots, and we don't really know why, that's probably
+like a really old term, so what are the roots, just go at it, roots is one of the terms
+for x intercepts, set each term equal to zero, and this one's kind of sneaky, right,
+because it doesn't have parentheses, but technically you could set that factor equal to
+zero, and you just get zero, this one you get seven, this one you get negative three,
+this one you got to add the one over first, and divide by two you get one-half, alright,
+that's relatively short lesson, that is intercept form.

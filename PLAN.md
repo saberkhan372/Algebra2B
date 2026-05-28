@@ -10,9 +10,9 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Site:** 7 unit pages (u1–u7), 30 tools wired into the homepage grid. All unit pages synced — lesson rows match actual tool availability.  
 **Curriculum:** 7 full units (Sept → May, year complete).  
 **Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
-**Video-learning:** complete through batch 9 — 50 transcripts, extracted PDF text, 29 contact sheets, 9 synthesis notes.
+**Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**30 tools built/integrated:**
+**32 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -38,13 +38,15 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Exponential Model Builder (U5)
 - Rational Simplifier (U6)
 - Adding Rational Expressions (U6)
+- Rational Multiplication/Division Stepper (U6)
+- Solving Rational Equations Stepper (U6)
 - Polynomial Sketch Pad (U6)
 - Polynomial Division Stepper (U6) — long division + synthetic, 4 problems each, factor verdict
 - SOH CAH TOA Triangle Solver (U7)
 - Unit Circle Walker (U7)
 - Sine/Cosine Graph Builder (U7)
 
-**No tools missing** — all 30 tools are live and wired into student navigation.
+**No tools missing** — all 32 tools are live and wired into student navigation.
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
@@ -84,6 +86,7 @@ Artifacts now include:
 - `video-learning/batch-7-rational-operations-insights.md` - insights from U8-D2 through U8-D4 and the Unit 8 Study Guide: multiply/divide rationals, add/subtract rationals, solving rational equations, asymptote rules, domain/range interval notation, rational function identification, and graphing technique.
 - `video-learning/batch-8-functions-transformations-unit2-insights.md` - insights from U2-D1, U2-D2, U2-D5, and U2-D8: functions, domain/range/end behavior, calculator workflow, transformations, and cumulative Unit 2 review.
 - `video-learning/batch-9-25-26-revisit-insights.md` - insights from 25-26 versions of U1-D2/D3, U2-D3/D4/D6/D7, U3-D1, and U3-D3: confirms patterns from earlier batches; new insights include the definitive "why h is opposite" explanation, "plus/minus ruin the party" exponent rule, imaginary-solutions/no-x-intercepts bridge, GCF-always-first principle, and three-form quadratic map (vertex ↔ standard ↔ intercept).
+- `video-learning/batch-10-unit3-remaining-review-insights.md` - insights from U3-D2, U3-D4, U3-D7, U3-D8, U3-D9, U3-D10, and Unit 3 Test Review: intercept form, quadratic word problems, rationalizing denominators, powers of `i`, conjugates, literal equations, piecewise parabolas, and cumulative review patterns.
 
 Transcribed lessons so far:
 
@@ -105,9 +108,16 @@ Transcribed lessons so far:
 - U2-D7 (Part 1 & 2) - quadratic graphing, even function intro, right-1-up-a / right-2-up-4a pattern confirmation. (25-26)
 - U3-D1 - imaginary numbers and quadratic formula bridge. (24-25)
 - U3-D1 - imaginary numbers, quadratic formula, and "no x-intercepts when solutions contain i" connection. (25-26)
+- U3-D2 - intercept form, zeros/roots/solutions/x-intercepts vocabulary, and vertex midpoint from intercepts. (25-26)
 - U3-D3 (Part 1 & 2) - completing the square: three-form quadratic map, pattern-discovery approach, imaginary results from negative right side. (25-26)
 - U3-D3 - completing the square.
+- U3-D4 - quadratic word problems, projectile motion, target heights, vertex interpretation, physical domain/range, and velocity. (25-26)
 - U3-D5 - intro to rational expressions.
+- U3-D7 - rational expression simplification review, original excluded values, radical denominators, and `i` denominators. (25-26)
+- U3-D8 (Part 1 & 2) - powers of `i`, mod-4 cycle, complex conjugates, and radical/complex denominator rationalizing. (25-26)
+- U3-D9 - literal equations, factoring out a target variable, deriving quadratic formula by completing the square, and solving for `a` in quadratic forms. (25-26)
+- U3-D10 - piecewise graphs with parabolas/absolute value, visible vs hidden vertex, rational/complex review, and literal-equation review. (25-26)
+- Unit 3 Test Review - cumulative systems, piecewise, quadratics, factoring, rational expressions, radicals/complex numbers, quadratic formula, completing the square, projectile problems, literal equations, and transformations.
 - U4-D1 - radical functions and square-root graph patterns.
 - U4-D2 - square-root functions, inverses, and HK graphing.
 - U4-D3 - radical equations and rational exponent notation.
@@ -162,7 +172,15 @@ Contact sheets created:
 - U2-D5 parent transformations.
 - U2-D6 squares/cubes.
 - U2-D8 test review.
+- U3-D2 intercept form.
 - U3-D3 completing the square.
+- U3-D4 quadratic word problems.
+- U3-D7 rationalizing review.
+- U3-D8 powers of i part 1.
+- U3-D8 powers of i and conjugates part 2.
+- U3-D9 literal equations.
+- U3-D10 piecewise quadratic review.
+- Unit 3 test review.
 - U4-D1 radical functions.
 - U4-D2 square-root functions.
 - U5-D1 exponential functions.
@@ -572,9 +590,9 @@ All 30 planned tools are now live. Future additions will be driven by video-lear
 - `negexp.html` (Negative Exponent Flipper): add "plus/minus ruin the party" error state when student tries to flip a term in a sum/difference.
 - `complete-square.html` (Complete the Square Trainer): add three-form map chip (vertex ↔ standard ↔ intercept); add pattern-discovery hint from foiling (x+b/2)²; flag imaginary results with "no x-intercepts" note.
 
-**New tool candidates from video insights (gaps identified — no existing tool covers these):**
-- Rational Multiplication/Division Stepper (U8-D2): keep-change-flip before factoring, factor/cancel with original-domain restrictions.
-- Solving Rational Equations Stepper (U8-D4): common-denominator approach, excluded-value pre-check, extraneous-solution detection.
+**New tools from video insights (now built):**
+- ✅ Rational Multiplication/Division Stepper (U6-D7): KCF before factoring, factor/cancel with original-domain restrictions, 4 problems with reveal mechanic.
+- ✅ Solving Rational Equations Stepper (U6-D8): excluded-value pre-check, LCD multiply-through, extraneous-solution detection (P3 is a "No Solution" example), 4 problems.
 
 **After each tool ships, run ChatGPT audit:** verify the unit page lesson row, homepage TOOLS array card, and PLAN.md are all updated before calling it done.
 

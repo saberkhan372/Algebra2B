@@ -1,0 +1,83 @@
+Alright, here is a video for unit 3, date 9, literal equations, and I know it sounds funny
+but it really means is equations that have other variables than just x and I mean you
+could have numbers in it right but you could have a bunch of letters and for example if
+you're changing Celsius to Fahrenheit or kilograms to grams like if you're in chemistry
+this here you're doing a lot of literal equations there's some easy ones right if it
+just says solve for x just be aware this whole lesson in the homework you don't really need
+a foil or distribute but here if I want to solve for x right a x equals c I can divide
+both sides by a that means this whole cancel and we just get x equals c over a and that's it
+here if t is on the bottom and I want to solve for x well I can multiply both sides by t so t
+on top t and bottom cancels this becomes a t squared here a plus b is on the bottom so I can
+multiply both sides by a plus b whether or not it has parentheses around it doesn't change the
+fact that it's a plus b right so a plus b and a plus b is a binomial two terms they cancel each other
+but whatever you do to one side you got to do to the other so three a plus b I didn't even distribute
+the three because all I want to do is isolate for x it can get a little trickier so here if I want
+to solve for x if I solve for k I want to isolate this right so what I'm going to do is add the
+four over so three over k plus one is equal to eleven seven plus four is eleven and then it's
+just like we did in the previous part we multiply both sides by the denominator so k plus one
+to cancel or whatever you do to one side you do to the other I ended up distributing and I'll show
+you why because we're solving for k right those cancel three equals eleven k plus one if I distribute
+this in then I get three equals eleven k plus eleven and I can actually minus the eleven
+that's negative eight so eleven k equals negative eight divide by eleven so negative eight over
+eleven is actually what k is that's a weird one and then here if it's a proportion cross multiply
+some nine times twenty eight is two fifty two that's equal to fifteen times two k so thirty k
+divide both sides by thirty I get k is two fifty two over thirty I put in my calculator I got
+eight point four or you can press math fraction they simplify fraction is forty two over five
+it's possible that you have to be a little bit more creative right you can always do
+those there's like one more method which we're going to see right here but before that
+I want to show you a completing the square example where there's no numbers right it says
+solve for x right and solving for x you on x by itself is equal to some stuff well we can't factor
+when it's letters right because what multiplies to c but adds to b it's like product sum right
+I don't know because what multiplies to c and adds to b is just letters those aren't numbers
+well we can complete the square so remember we move this over
+and then on both sides we add b over two squared that's how you complete the square but b over
+two squared to both sides means that this is now a completed square so this is the factored form x
+minus b over two squared if you remember from the quiz is equal to negative c I just distributed
+the square it's a b squared over four and then here I got a common denominator so b squared over four
+this is negative c I just multiplied top and bottom by four because this is b squared minus four c
+all over four and I'll show you why because now when I square root both sides this is like one
+big term I can square root the square in the square root cancel so x minus b over two
+when you square root both sides you always get a plus or minus I square root at the top
+can't really square root that I find no meal with letters but I can square root four so it just
+becomes two then I subtract it b over two to this side so negative b over two plus or minus
+this stuff and there are both over two so I got negative b plus or minus b squared minus four c
+all over two is that look familiar to you and maybe this wasn't as exciting for you as it
+was for me but we just derived the quadratic formula I know there's no a in this it should say
+x equals negative b plus minus square root b squared minus four c all over two a well that's
+because a here was this one but I could have done it it makes it a little bit trickier but
+this is isolating for x and turns out the completing the square is actually how you come up
+with the quadratic formula I think that's pretty cool so what about a different method
+solve for x well three x plus five x equals 72 three and five three x's and five x's makes
+eight x divide by a x is nine that one's easy but what if I get this a x plus b x equals 12
+how many x's is this it's a x's how many b x's is this it's the amount of b we don't really
+know what that means right well you can't combine like these are kind of they're like terms
+sort of but you can't put them together so what do you do well both of these have x I want to
+factor out the gcf so I factored out an x they pulled an x out from both of these and what
+am I left it just a plus b so x pulled out a plus b equals 12 I can divide both sides by a plus
+b those cancel so x equals 12 over a plus b this is a technique that you got to use especially
+in the homework could be done here yeah we could have pulled an x out and we left with three
+plus five which is eight divide by eight is nine obviously it's easier just to combine like turns
+when you can but I'm just showing you you could take an x out solve for x move everything with
+x to one side so minus x to this side and I get x t minus x well x t minus four t minus x I move
+this away so just equals one x t minus four t minus x let's add the four t to the other side
+to four t plus one or one plus four t it doesn't matter but now look it's similar we have x in
+both of these terms so I can pull an x out of here and just love it t I pulled an x out of itself
+sum up at one so x comes out of this t minus one divide both sides by t minus one and you get x
+by itself same thing here this one's actually a little bit weirder I you got to isolate if you
+ever have a plus or minus I've never moved it over first the d plus seven t plus v t over j equals
+t plus seven multiply both sides by j these will cancel so t plus v t equals I just distributed
+d j plus seven j pull a t out one plus v equals d j plus seven j divide both sides by one plus v
+and now we got t by itself I know this answer seems like unfinished but as long as you isolate t
+you're good these answers might feel a little weird and then one last little topic there's like
+four these are the whole works so definitely don't stop the video here we're going to work
+backwards to make equations from given information pretty much it means solve for a so find the
+vertex form of a parabola with a vertex at two negative one it passes through the point one three
+do you remember vertex form or hk form hk is the vertex x is just x y is just y from any given point
+and it's x minus h square a can be found if you know x and y and you know h and k you could plug
+everything in and solve for a so then when you write your vertex form you can write here h and
+your k remember minus h so minus two and then just plus k this is your a so this is vertex form
+given this information and lastly intercept form is x minus x 1 x minus x 2 those are x 1
+x 2 are your intercepts or otherwise known as zeros but there's still an a value and that changes
+like the curvature of it so x and y come from the point three five x 1 and x 2 are the intercepts
+or the zeros same thing so you plug in everything you know solve for a in this case it's a fraction
+put that there and then x plus two because it's x minus x 1 and then x minus six there you go
