@@ -119,6 +119,7 @@ a:hover { text-decoration: underline; }
 .sk-tag.kind-practice   { background: #f1e1cf; }
 .sk-tag.kind-game       { background: #e8cfe9; }
 .sk-tag.kind-reference  { background: #dde8cf; }
+.sk-tag.kind-explorer   { background: #d0e8e4; }
 
 /* ── Decorations ── */
 .tape {
