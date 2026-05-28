@@ -207,7 +207,7 @@ Contact sheets created:
 ### Unit page sync (May 2026)
 
 ChatGPT ran a repo-wide static audit and found:
-- Homepage tool count was stuck at 23, then 26/27; current actual is 28.
+- Homepage tool count was stuck at 23, then 26/27/28; current actual is 29.
 - u4.html, u5.html, u6.html, u7.html all had `future`/coming-soon rows for tools that already existed and were wired into the homepage.
 
 Fixed: index.html counts updated, all four unit pages synced. Remaining "coming soon" rows are for tools that genuinely don't exist yet.
@@ -302,7 +302,7 @@ Codex handles anything that is:
 | Add u5.html (Exponential & Log) | **Codex** | Done |
 | Add u6.html (Rational Functions & Polynomials) | **Codex** | Done |
 | Add u7.html (Trigonometry) | **Codex** | Done |
-| Update index.html nav + unit cards | **Codex** | Done — homepage now renders 28 tools |
+| Update index.html nav + unit cards | **Codex** | Done — homepage now renders 29 tools |
 | Correct existing unit day maps | **Codex** | Done for existing tool homes; future tools remain coming soon |
 | Update all unit breadcrumb links | **Codex** | Done — full-site local-link smoke test passed |
 
@@ -567,7 +567,7 @@ What to build:
 | Function Composition Machine | U4 | Claude |
 | Inverse Function Revealer | U4 | Claude |
 | Log Properties Sandbox | U5 | Codex |
-| Exponential Equation Solver | U5 | Codex |
+| Exponential Equation Solver | U5 | ChatGPT |
 | Exponential Model Builder | U5 | Codex |
 | Rational Expression Simplifier | U6 | Claude |
 | Adding Rational Expressions | U6 | Claude |
@@ -575,7 +575,7 @@ What to build:
 | Polynomial Division Stepper | U6 | Claude |
 | SOH CAH TOA Solver | U7 | Codex |
 | Unit Circle Walker | U7 | Claude |
-| Sine/Cosine Graph Builder | U7 | Codex |
+| Sine/Cosine Graph Builder | U7 | ChatGPT |
 
 ### Remaining tools
 
