@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rational Mult/Div Stepper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex: 1; overflow-y: auto; padding: 8px 0; display: flex; flex-direction: column; gap: 12px; }
+
+    /* problem picker */
+    .prob-picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+
+    /* original expression card */
+    .expr-card { padding: 14px 18px; text-align: center; }
+    .expr-op-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
+    .expr-big { font-family: 'JetBrains Mono', monospace; font-size: 20px; line-height: 1.4; color: var(--ink); }
+
+    /* step cards */
+    .step-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 10px 14px;
+      background: var(--paper); opacity: 0.25; transition: opacity 0.35s, background 0.35s;
+      position: relative;
+    }
+    .step-card.revealed { opacity: 1; }
+    .step-card.revealed.step-1 { background: #fdecea; border-color: var(--redline); }
+    .step-card.revealed.step-2 { background: #e8f4ec; border-color: #2a8a4a; }
+    .step-card.revealed.step-3 { background: #dde9f6; border-color: #2a6fb4; }
+    .step-card.revealed.step-4 { background: var(--highlight); border-color: #c8a000; }
+
+    .step-num { font-family: 'Permanent Marker', cursive; font-size: 10px; position: absolute; top: 6px; right: 10px; opacity: 0.5; }
+    .step-lbl { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); margin-bottom: 4px; }
+    .step-lbl strong { color: var(--ink); }
+    .step-expr {
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--ink); line-height: 1.6;
+      white-space: pre-line;
+    }
+    .step-note { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+    .restriction-chip {
+      display: inline-block; background: #fdecea; border: 1.5px solid var(--redline); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 2px 8px; margin-top: 4px;
+      color: var(--redline);
+    }
+    .cancelled {
+      display: inline; text-decoration: line-through; opacity: 0.45;
+    }
+
+    .step-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u6.html">← U6</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rationals &amp; Polynomials</a> &nbsp;·&nbsp; D7</div>
+      <div class="tool-title f-display">Rational Mult/Div Stepper</div>
+      <div class="tool-tagline f-hand">KCF first. Factor everything. Cancel. Then restrict.</div>
+
+      <div class="trainer-stage">
+        <div class="prob-picker">
+          <span class="f-marker" style="font-size:12px;">PROBLEM:</span>
+          <div id="prob-nav"></div>
+          <button class="btn small" onclick="resetSteps()">↺ restart</button>
+        </div>
+
+        <div class="expr-card sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="expr-op-label" id="expr-op-label">MULTIPLY OR DIVIDE:</div>
+          <div class="expr-big" id="expr-big"></div>
+        </div>
+
+        <div id="step-seq"></div>
+
+        <div class="step-btns">
+          <button class="btn" id="next-btn" onclick="revealNext()">▶ next step</button>
+          <button class="btn small" onclick="resetSteps()">↺ restart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE 4-STEP PROCESS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <span style="color:var(--redline);">①</span> <strong>KCF</strong> — if dividing: Keep · Change · Flip<br>
+          <span style="color:#2a8a4a;">②</span> <strong>Factor</strong> every numerator and denominator<br>
+          <span style="color:#2a6fb4;">③</span> <strong>Cancel</strong> matching factors (top ↔ bottom)<br>
+          <span style="color:#c8a000;">④</span> <strong>Restrict</strong> — x values from the ORIGINAL denominators (before canceling)
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea; border-color:var(--redline);">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">⚠ DOMAIN TRAP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          Even after a factor cancels, the x value that made it zero is <strong>still excluded</strong> from the domain.<br><br>
+          Always read restrictions from the original expression — not the simplified one.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">In P2, why do we flip the second fraction before factoring?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In P4, after canceling (x+2) and one (x+1), what's left? Why does x ≠ −2 still apply?</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">KCF REMINDER</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6;">
+          A/B ÷ C/D &nbsp;= A/B · D/C<br>
+          <span style="color:var(--ink-soft);">Keep the first fraction, change ÷ to ·, flip the second.</span><br>
+          Do this BEFORE factoring — the flip changes which factors are in the denominator!
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="rational-simplifier.html">→ Rational Simplifier</a>
+        <a class="related-link f-hand" href="adding-rationals.html">→ Adding Rational Expressions</a>
+        <a class="related-link f-hand" href="rational-equations.html">→ Solving Rational Equations</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROBLEMS = [
+      {
+        label: 'P1 ×',
+        op: 'MULTIPLY:',
+        expr: '(x + 2)        (x² − 9)\n──────────  ·  ──────────\n (x − 3)        (x + 2)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Already multiplying</strong> — no KCF needed. Read domain restrictions from all original denominators NOW (before canceling):',
+            expr: 'Denominators: (x − 3) and (x + 2)',
+            restriction: 'x ≠ 3,  x ≠ −2',
+            note: 'Lock in these restrictions. They survive even after factors cancel.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>Factor</strong> all numerators and denominators before canceling anything:',
+            expr: 'x² − 9 = (x + 3)(x − 3)\n\n  (x + 2)      (x + 3)(x − 3)\n  ─────────  ·  ─────────────────\n  (x − 3)           (x + 2)',
+            note: 'Every piece factored. Now you can see what matches.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Cancel</strong> matching factors — one from top, one from bottom:',
+            expr: '  ~~(x + 2)~~       (x + 3)~~(x − 3)~~\n  ──────────  ·  ──────────────────\n  ~~(x − 3)~~         ~~(x + 2)~~\n\n= (x + 3)',
+            note: '(x + 2) and (x − 3) each appear once on top and once on bottom — cancel both.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Result</strong> with domain restrictions:',
+            expr: '= x + 3',
+            restriction: 'x ≠ 3,  x ≠ −2',
+            note: 'Even though the simplified form has no denominator, the original restrictions still hold.',
+          },
+        ],
+      },
+      {
+        label: 'P2 ÷',
+        op: 'DIVIDE:',
+        expr: '(x² − 4)         (x − 2)\n ──────────  ÷  ──────────\n  (x + 1)         (x + 1)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Division → KCF!</strong>  Keep · Change · Flip. Read domain restrictions from original denominators first:',
+            expr: 'Original denominators: (x + 1) and (x − 2)',
+            restriction: 'x ≠ −1,  x ≠ 2',
+            note: 'After KCF:\n(x² − 4)     (x + 1)\n──────────  ·  ──────────\n (x + 1)       (x − 2)',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>Factor</strong> all polynomials:',
+            expr: 'x² − 4 = (x + 2)(x − 2)\n\n  (x + 2)(x − 2)     (x + 1)\n  ─────────────────  ·  ──────────\n    (x + 1)            (x − 2)',
+            note: 'Difference of squares: x² − 4 = (x+2)(x−2)',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Cancel</strong> matching factors:',
+            expr: '  (x + 2)~~(x − 2)~~     ~~(x + 1)~~\n  ─────────────────  ·  ────────────\n    ~~(x + 1)~~            ~~(x − 2)~~\n\n= (x + 2)',
+            note: '(x − 2) cancels and (x + 1) cancels.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Result</strong> with domain restrictions:',
+            expr: '= x + 2',
+            restriction: 'x ≠ −1,  x ≠ 2',
+            note: 'Restrictions come from the original (before KCF), not the simplified form.',
+          },
+        ],
+      },
+      {
+        label: 'P3 ÷',
+        op: 'DIVIDE:',
+        expr: '   3x           6x²\n ──────────  ÷  ──────────\n  (x − 1)       (x² − 1)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Division → KCF!</strong> Original denominators: (x − 1) and 6x² (has factor x):',
+            restriction: 'x ≠ 1,  x ≠ 0',
+            expr: 'After KCF:\n   3x         (x² − 1)\n ──────────  ·  ──────────\n  (x − 1)        6x²',
+            note: '6x² = 0 when x = 0. Always check constant×variable denominators.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>Factor</strong> everything:',
+            expr: 'x² − 1 = (x + 1)(x − 1)\n6x² = 6 · x · x\n\n    3x · (x + 1)(x − 1)\n  ─────────────────────────\n      (x − 1) · 6 · x · x',
+            note: 'Break apart all composite expressions before canceling.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Cancel</strong> matching factors (3x cancels with part of 6x²):',
+            expr: '    ~~3x~~ · (x + 1)~~(x − 1)~~\n  ─────────────────────────────\n      ~~(x − 1)~~ · ~~3x~~ · 2 · x\n\n     (x + 1)\n= ──────────\n      2x',
+            note: '3x cancels one factor from 6x² (leaving 2x); (x−1) cancels.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Result</strong> with domain restrictions:',
+            expr: '   (x + 1)\n= ──────────\n      2x',
+            restriction: 'x ≠ 1,  x ≠ 0',
+            note: 'Notice x ≠ 0 is already visible in the simplified denominator 2x — but the restriction on x ≠ 1 is hidden. That\'s why we record restrictions from the original.',
+          },
+        ],
+      },
+      {
+        label: 'P4 ×',
+        op: 'MULTIPLY:',
+        expr: '(x² + 3x + 2)     (x + 1)\n ─────────────────  ·  ──────────\n    (x² − 1)            (x + 2)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Already multiplying.</strong> Read domain restrictions from original denominators:',
+            expr: 'Denominators: (x² − 1) = (x+1)(x−1) and (x + 2)',
+            restriction: 'x ≠ 1,  x ≠ −1,  x ≠ −2',
+            note: 'Factor the denominator to find ALL its roots. x² − 1 contributes two restrictions.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>Factor</strong> all polynomials:',
+            expr: 'x² + 3x + 2 = (x + 1)(x + 2)\nx² − 1 = (x + 1)(x − 1)\n\n  (x + 1)(x + 2)     (x + 1)\n  ─────────────────  ·  ──────────\n  (x + 1)(x − 1)       (x + 2)',
+            note: 'Both numerator and denominator factor — look for matching pairs.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Cancel</strong> matching factors:',
+            expr: '  ~~(x + 1)~~~~(x + 2)~~     ~~(x + 1)~~\n  ─────────────────────────────────────\n  ~~(x + 1)~~(x − 1)       ~~(x + 2)~~\n\n   (x + 1)\n= ──────────\n   (x − 1)',
+            note: '(x + 2) cancels; one (x + 1) from numerator cancels one (x + 1) from denominator. One (x + 1) remains on top.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Result</strong> with domain restrictions:',
+            expr: '   (x + 1)\n= ──────────\n   (x − 1)',
+            restriction: 'x ≠ 1,  x ≠ −1,  x ≠ −2',
+            note: 'Only x ≠ 1 and x ≠ −1 are visible in the simplified form. x ≠ −2 is hidden — it came from the original denominator (x + 2) which cancelled out.',
+          },
+        ],
+      },
+    ];
+
+    let curProb = 0, stepsRevealed = 0;
+
+    function buildProbNav() {
+      const nav = document.getElementById('prob-nav');
+      nav.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap;';
+      nav.innerHTML = '';
+      PROBLEMS.forEach((p, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'sk-pill' + (i === curProb ? ' active' : '');
+        btn.textContent = p.label;
+        btn.onclick = () => { curProb = i; stepsRevealed = 0; buildProbNav(); buildExpr(); buildSteps(); };
+        nav.appendChild(btn);
+      });
+    }
+
+    function buildExpr() {
+      const p = PROBLEMS[curProb];
+      document.getElementById('expr-op-label').textContent = p.op;
+      document.getElementById('expr-big').textContent = p.expr;
+    }
+
+    // Render ~~text~~ as strikethrough spans
+    function renderExpr(raw) {
+      return raw.replace(/~~(.*?)~~/g, '<span class="cancelled">$1</span>');
+    }
+
+    function buildSteps() {
+      const seq = document.getElementById('step-seq');
+      seq.innerHTML = '';
+      const prob = PROBLEMS[curProb];
+      prob.steps.forEach((s, i) => {
+        const card = document.createElement('div');
+        card.className = 'step-card ' + s.cls + (i < stepsRevealed ? ' revealed' : '');
+        const restrictionHTML = s.restriction
+          ? `<div style="margin-top:6px;"><span class="restriction-chip">${s.restriction}</span></div>`
+          : '';
+        const noteHTML = s.note ? `<div class="step-note">${s.note}</div>` : '';
+        card.innerHTML = `
+          <div class="step-num">STEP ${i + 1}</div>
+          <div class="step-lbl">${s.lbl}</div>
+          <div class="step-expr">${renderExpr(s.expr)}</div>
+          ${restrictionHTML}
+          ${noteHTML}
+        `;
+        seq.appendChild(card);
+      });
+      const btn = document.getElementById('next-btn');
+      btn.textContent = stepsRevealed >= prob.steps.length ? '✓ done!' : '▶ next step';
+      btn.disabled = stepsRevealed >= prob.steps.length;
+    }
+
+    function revealNext() {
+      const prob = PROBLEMS[curProb];
+      if (stepsRevealed < prob.steps.length) {
+        stepsRevealed++;
+        buildSteps();
+        // scroll the newly revealed card into view
+        const cards = document.querySelectorAll('.step-card');
+        if (cards[stepsRevealed - 1]) cards[stepsRevealed - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function resetSteps() { stepsRevealed = 0; buildSteps(); }
+
+    buildProbNav(); buildExpr(); buildSteps();
+  </script>
+</body>
+</html>

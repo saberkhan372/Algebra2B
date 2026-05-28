@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solving Rational Equations Stepper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex: 1; overflow-y: auto; padding: 8px 0; display: flex; flex-direction: column; gap: 12px; }
+
+    /* original equation card */
+    .eq-card { padding: 14px 18px; text-align: center; }
+    .eq-card-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; }
+    .eq-big { font-family: 'JetBrains Mono', monospace; font-size: 20px; line-height: 1.4; color: var(--ink); }
+
+    /* step cards */
+    .step-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 10px 14px;
+      background: var(--paper); opacity: 0.25; transition: opacity 0.35s, background 0.35s;
+      position: relative;
+    }
+    .step-card.revealed { opacity: 1; }
+    .step-card.revealed.step-1 { background: #fdecea; border-color: var(--redline); }
+    .step-card.revealed.step-2 { background: #e8f4ec; border-color: #2a8a4a; }
+    .step-card.revealed.step-3 { background: #dde9f6; border-color: #2a6fb4; }
+    .step-card.revealed.step-4 { background: #fdf0e0; border-color: #d94f2a; }
+    .step-card.revealed.step-5 { background: var(--highlight); border-color: #c8a000; }
+
+    .step-num { font-family: 'Permanent Marker', cursive; font-size: 10px; position: absolute; top: 6px; right: 10px; opacity: 0.5; }
+    .step-lbl { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); margin-bottom: 4px; }
+    .step-lbl strong { color: var(--ink); }
+    .step-expr { font-family: 'JetBrains Mono', monospace; font-size: 15px; color: var(--ink); line-height: 1.6; white-space: pre-line; }
+    .step-note { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+    .excl-chip {
+      display: inline-block; background: #fdecea; border: 1.5px solid var(--redline); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 2px 8px; margin-top: 4px;
+      color: var(--redline);
+    }
+    .check-chip {
+      display: inline-block; background: #e8f4ec; border: 1.5px solid #2a8a4a; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; padding: 2px 8px; margin: 2px 4px 2px 0;
+    }
+    .extraneous-chip {
+      display: inline-block; background: #fdecea; border: 2px solid var(--redline); border-radius: 4px;
+      font-family: 'Permanent Marker', cursive; font-size: 13px; padding: 4px 10px; margin-top: 4px;
+      color: var(--redline);
+    }
+    .valid-chip {
+      display: inline-block; background: #e8f4ec; border: 2px solid #2a8a4a; border-radius: 4px;
+      font-family: 'Permanent Marker', cursive; font-size: 13px; padding: 4px 10px; margin-top: 4px;
+      color: #2a8a4a;
+    }
+    .step-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .prob-picker { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u6.html">← U6</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rationals &amp; Polynomials</a> &nbsp;·&nbsp; D8</div>
+      <div class="tool-title f-display">Solving Rational Equations</div>
+      <div class="tool-tagline f-hand">Find the LCD, multiply it out, solve — then check for extraneous solutions.</div>
+
+      <div class="trainer-stage">
+        <div class="prob-picker">
+          <span class="f-marker" style="font-size:12px;">PROBLEM:</span>
+          <div id="prob-nav"></div>
+          <button class="btn small" onclick="resetSteps()">↺ restart</button>
+        </div>
+
+        <div class="eq-card sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="eq-card-label">SOLVE FOR x:</div>
+          <div class="eq-big" id="eq-big"></div>
+        </div>
+
+        <div id="step-seq"></div>
+
+        <div class="step-btns">
+          <button class="btn" id="next-btn" onclick="revealNext()">▶ next step</button>
+          <button class="btn small" onclick="resetSteps()">↺ restart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE 5-STEP PROCESS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <span style="color:var(--redline);">①</span> <strong>Excluded values</strong> — what makes any denominator = 0?<br>
+          <span style="color:#2a8a4a;">②</span> <strong>LCD</strong> — find the least common denominator<br>
+          <span style="color:#2a6fb4;">③</span> <strong>Multiply</strong> every term by the LCD (denominators disappear)<br>
+          <span style="color:#d94f2a;">④</span> <strong>Solve</strong> the resulting equation<br>
+          <span style="color:#c8a000;">⑤</span> <strong>Check</strong> each solution — discard extraneous ones
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea; border-color:var(--redline);">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">⚠ EXTRANEOUS SOLUTIONS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          An <strong>extraneous solution</strong> is one that appears to work algebraically but makes a denominator equal zero in the original equation.<br><br>
+          Always substitute back into the ORIGINAL equation to check.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">In P3, why does x = 2 get rejected even though it satisfies the simplified equation?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In P4, what happens when you multiply both sides by the LCD? Why do the denominators vanish?</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">NO SOLUTION CASES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5;">
+          If ALL solutions are extraneous → the equation has <strong>No Solution</strong> (∅).<br><br>
+          This isn't an error — it's a valid answer!
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="rational-multdiv.html">→ Rational Mult/Div Stepper</a>
+        <a class="related-link f-hand" href="adding-rationals.html">→ Adding Rational Expressions</a>
+        <a class="related-link f-hand" href="rational-expressions.html">→ Rational Expression Builder</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PROBLEMS = [
+      {
+        label: 'P1',
+        eq: '  x        1\n────── + ──── = 2\n(x−1)     x',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Excluded values</strong> — find all x that make any denominator zero:',
+            expr: '(x − 1) = 0  →  x = 1\n    x = 0  →  x = 0',
+            excl: 'x ≠ 1,  x ≠ 0',
+            note: 'Record these before doing anything else.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>LCD</strong> — take every unique factor from all denominators:',
+            expr: 'Denominators: (x − 1) and x\nLCD = x(x − 1)',
+            note: 'Both denominators appear in the LCD.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Multiply every term</strong> by the LCD x(x−1):',
+            expr: 'x(x−1)·[x/(x−1)] + x(x−1)·[1/x] = x(x−1)·2\n\n→  x² + (x−1) = 2x(x−1)\n→  x² + x − 1 = 2x² − 2x',
+            note: 'Each denominator cancels with a factor of the LCD. Expand carefully.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Solve</strong> — rearrange and factor:',
+            expr: 'x² + x − 1 = 2x² − 2x\n0 = x² − 3x + 1\n\nQuadratic formula:\nx = (3 ± √5) / 2\nx ≈ 2.618  or  x ≈ 0.382',
+            note: 'Both solutions are irrational — calculator approximations shown.',
+          },
+          {
+            cls: 'step-5',
+            lbl: '<strong>Check</strong> both solutions against excluded values:',
+            expr: 'x ≈ 2.618 → not 0 or 1 → ✓ valid\nx ≈ 0.382 → not 0 or 1 → ✓ valid',
+            checks: ['x = (3+√5)/2 ✓', 'x = (3−√5)/2 ✓'],
+            note: 'Neither solution hits an excluded value. Both are valid.',
+          },
+        ],
+      },
+      {
+        label: 'P2',
+        eq: '  3           2\n──────  −  ──────  = 0\n(x+2)       (x−1)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Excluded values</strong>:',
+            expr: '(x + 2) = 0  →  x = −2\n(x − 1) = 0  →  x = 1',
+            excl: 'x ≠ −2,  x ≠ 1',
+            note: 'Two denominators → two excluded values.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>LCD</strong>:',
+            expr: 'Denominators: (x+2) and (x−1)\nLCD = (x+2)(x−1)',
+            note: 'No shared factors — LCD is the product.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Multiply every term</strong> by the LCD (x+2)(x−1):',
+            expr: '(x+2)(x−1)·[3/(x+2)] − (x+2)(x−1)·[2/(x−1)] = 0\n\n→  3(x−1) − 2(x+2) = 0\n→  3x − 3 − 2x − 4 = 0',
+            note: 'Distribute the negative carefully into the 2(x+2) term!',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Solve</strong>:',
+            expr: '3x − 3 − 2x − 4 = 0\n       x − 7 = 0\n           x = 7',
+            note: 'Linear equation after clearing denominators.',
+          },
+          {
+            cls: 'step-5',
+            lbl: '<strong>Check</strong> x = 7 against excluded values:',
+            expr: 'x = 7 → not −2 or 1 → ✓',
+            checks: ['x = 7 ✓'],
+            note: 'x = 7 is valid. Check in original: 3/9 − 2/6 = 1/3 − 1/3 = 0 ✓',
+          },
+        ],
+      },
+      {
+        label: 'P3 ⚠',
+        eq: '    x             2\n──────────  =  ──────────\n (x − 2)         (x − 2)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Excluded values</strong> — both fractions share the same denominator:',
+            expr: '(x − 2) = 0  →  x = 2',
+            excl: 'x ≠ 2',
+            note: 'Only one excluded value, but it will matter a lot!',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>LCD</strong>:',
+            expr: 'Both denominators are (x − 2)\nLCD = (x − 2)',
+            note: 'Same denominator on both sides — simple LCD.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Multiply every term</strong> by LCD (x−2):',
+            expr: '(x−2)·[x/(x−2)] = (x−2)·[2/(x−2)]\n\n→  x = 2',
+            note: 'Both sides simplify immediately. The equation "solves" to x = 2.',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Solve</strong>:',
+            expr: 'x = 2',
+            note: 'This looks like a solution...',
+          },
+          {
+            cls: 'step-5',
+            lbl: '<strong>Check</strong> — x = 2 is an excluded value!',
+            expr: 'x = 2 → makes denominator (x−2) = 0\nSubstituting: 2/0 = 2/0  ✗ UNDEFINED',
+            extraneous: ['x = 2 ← EXTRANEOUS'],
+            noSolution: true,
+            note: 'x = 2 makes the original equation undefined. It is an extraneous solution. The answer is: No Solution (∅).',
+          },
+        ],
+      },
+      {
+        label: 'P4',
+        eq: '  1        1          3\n────── + ──────  =  ──────────\n  x      (x+1)       x(x+1)',
+        steps: [
+          {
+            cls: 'step-1',
+            lbl: '<strong>Excluded values</strong>:',
+            expr: 'x = 0  →  x ≠ 0\n(x + 1) = 0  →  x ≠ −1\nx(x + 1) = 0  →  x ≠ 0 or −1  (same)',
+            excl: 'x ≠ 0,  x ≠ −1',
+            note: 'The third denominator already combines the first two restrictions.',
+          },
+          {
+            cls: 'step-2',
+            lbl: '<strong>LCD</strong>:',
+            expr: 'Denominators: x, (x+1), and x(x+1)\nLCD = x(x+1)',
+            note: 'x(x+1) already contains both smaller denominators — it is the LCD.',
+          },
+          {
+            cls: 'step-3',
+            lbl: '<strong>Multiply every term</strong> by the LCD x(x+1):',
+            expr: 'x(x+1)·[1/x] + x(x+1)·[1/(x+1)] = x(x+1)·[3/x(x+1)]\n\n→  (x+1)  +  x  =  3\n→  2x + 1  =  3',
+            note: 'All three denominators cancel perfectly — the equation becomes linear!',
+          },
+          {
+            cls: 'step-4',
+            lbl: '<strong>Solve</strong>:',
+            expr: '2x + 1 = 3\n    2x = 2\n     x = 1',
+            note: 'Clean integer solution.',
+          },
+          {
+            cls: 'step-5',
+            lbl: '<strong>Check</strong> x = 1 against excluded values:',
+            expr: 'x = 1 → not 0 or −1 → ✓\n\nVerify in original:\n1/1 + 1/2 = 3/(1·2)\n1 + 0.5 = 1.5  ✓',
+            checks: ['x = 1 ✓'],
+            note: 'x = 1 is a valid solution.',
+          },
+        ],
+      },
+    ];
+
+    let curProb = 0, stepsRevealed = 0;
+
+    function buildProbNav() {
+      const nav = document.getElementById('prob-nav');
+      nav.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap;';
+      nav.innerHTML = '';
+      PROBLEMS.forEach((p, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'sk-pill' + (i === curProb ? ' active' : '');
+        btn.textContent = p.label;
+        btn.onclick = () => { curProb = i; stepsRevealed = 0; buildProbNav(); buildEq(); buildSteps(); };
+        nav.appendChild(btn);
+      });
+    }
+
+    function buildEq() {
+      document.getElementById('eq-big').textContent = PROBLEMS[curProb].eq;
+    }
+
+    function buildSteps() {
+      const seq = document.getElementById('step-seq');
+      seq.innerHTML = '';
+      const prob = PROBLEMS[curProb];
+      prob.steps.forEach((s, i) => {
+        const card = document.createElement('div');
+        card.className = 'step-card ' + s.cls + (i < stepsRevealed ? ' revealed' : '');
+        const exclHTML = s.excl ? `<div style="margin-top:6px;"><span class="excl-chip">${s.excl}</span></div>` : '';
+        const checksHTML = s.checks
+          ? s.checks.map(c => `<span class="check-chip">${c}</span>`).join('')
+          : '';
+        const extraneousHTML = (s.extraneous || [])
+          .map(e => `<span class="extraneous-chip">${e}</span>`).join('');
+        const noSolHTML = s.noSolution
+          ? `<div style="margin-top:8px;"><span class="valid-chip" style="background:#fdf0e0; border-color:#d94f2a; color:#d94f2a; font-size:15px;">∅  No Solution</span></div>`
+          : '';
+        const noteHTML = s.note ? `<div class="step-note">${s.note}</div>` : '';
+        card.innerHTML = `
+          <div class="step-num">STEP ${i + 1}</div>
+          <div class="step-lbl">${s.lbl}</div>
+          <div class="step-expr">${s.expr}</div>
+          ${exclHTML}
+          ${checksHTML ? '<div style="margin-top:6px;">' + checksHTML + '</div>' : ''}
+          ${extraneousHTML ? '<div style="margin-top:6px;">' + extraneousHTML + '</div>' : ''}
+          ${noSolHTML}
+          ${noteHTML}
+        `;
+        seq.appendChild(card);
+      });
+      const btn = document.getElementById('next-btn');
+      btn.textContent = stepsRevealed >= prob.steps.length ? '✓ done!' : '▶ next step';
+      btn.disabled = stepsRevealed >= prob.steps.length;
+    }
+
+    function revealNext() {
+      const prob = PROBLEMS[curProb];
+      if (stepsRevealed < prob.steps.length) {
+        stepsRevealed++;
+        buildSteps();
+        const cards = document.querySelectorAll('.step-card');
+        if (cards[stepsRevealed - 1]) cards[stepsRevealed - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function resetSteps() { stepsRevealed = 0; buildSteps(); }
+
+    buildProbNav(); buildEq(); buildSteps();
+  </script>
+</body>
+</html>
