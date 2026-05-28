@@ -78,34 +78,23 @@
       font-weight: 400;
     }
 
-    /* ── Tool hover preview popup ── */
-    #tool-preview-popup {
-      position: fixed;
-      z-index: 9999;
-      pointer-events: none;
+    /* ── In-card hover preview canvas ── */
+    .card-preview-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       opacity: 0;
-      transform: translateY(6px);
-      transition: opacity 0.14s ease, transform 0.14s ease;
-      background: var(--paper);
-      border: 1.5px solid var(--ink-2);
-      border-radius: 6px;
-      box-shadow: 3px 4px 0 rgba(29,26,20,0.14);
-      overflow: hidden;
-      width: 200px;
+      transition: opacity 0.14s ease;
+      pointer-events: none;
+      display: block;
+      border-radius: 2px;
     }
-    #tool-preview-popup.visible { opacity: 1; transform: translateY(0); }
-    #tool-preview-canvas { display: block; width: 200px; height: 120px; }
-    .preview-footer {
-      padding: 4px 8px;
-      font-family: 'Patrick Hand', cursive;
-      font-size: 11px;
-      color: var(--ink-soft);
-      border-top: 1px dashed var(--ink-2);
-      background: var(--paper-2);
-      white-space: nowrap;
+    .tool-card-icon {
+      position: relative;
       overflow: hidden;
-      text-overflow: ellipsis;
     }
+    .tool-card:hover .card-preview-canvas { opacity: 1; }
   </style>
 </head>
 <body class="paper-lined">
@@ -272,12 +261,6 @@
     </div>
   </div>
 
-  <!-- Hover preview popup — must be BEFORE the main script so getElementById works -->
-  <div id="tool-preview-popup" aria-hidden="true">
-    <canvas id="tool-preview-canvas" width="400" height="240"></canvas>
-    <div class="preview-footer" id="preview-footer-text"></div>
-  </div>
-
   <script>
     const TOOLS = [
       { id: 'quad',  prev: 'parabola',     name: 'Quadratic Slider Studio',         unit: 'U1', topic: 'Quadratics',  kind: 'visualizer', diff: 1, code: 'Qs', desc: 'Slide a, h, k and watch the parabola move. Vertex form made visual.',           href: 'tools/quadratic-slider.html' },
@@ -333,7 +316,10 @@
         card.dataset.toolId = t.id;
         card.style.background = UNIT_COLORS[t.unit] || 'var(--paper)';
         card.innerHTML = `
-          <div class="tool-card-icon">${t.code}</div>
+          <div class="tool-card-icon">
+            <span class="card-icon-code">${t.code}</span>
+            <canvas class="card-preview-canvas"></canvas>
+          </div>
           <div class="tool-card-name">${t.name}</div>
           <div class="tool-card-desc">${t.desc}</div>
           <div class="tool-card-tags">
@@ -342,8 +328,9 @@
             <span class="sk-tag" style="font-size:10px;">${'●'.repeat(t.diff)}</span>
           </div>
         `;
+        const cv = card.querySelector('.card-preview-canvas');
         card.addEventListener('mouseenter', () => {
-          window.showPreview && window.showPreview(t.id, t.name, card.getBoundingClientRect());
+          window.showPreview && window.showPreview(t.id, cv);
         });
         card.addEventListener('mouseleave', () => {
           window.hidePreview && window.hidePreview();
@@ -388,19 +375,14 @@
     // ── Hover Preview System ─────────────────────────────────────────────
     (function() {
       const DPR = window.devicePixelRatio || 1;
-      const PW = 200, PH = 120;
-      const previewCanvas = document.getElementById('tool-preview-canvas');
-      previewCanvas.width  = PW * DPR;
-      previewCanvas.height = PH * DPR;
-      const pCtx = previewCanvas.getContext('2d');
-      pCtx.scale(DPR, DPR);
 
-      const popup  = document.getElementById('tool-preview-popup');
-      const footer = document.getElementById('preview-footer-text');
-
-      let previewRAF = null;
-      let previewT   = 0;
+      let previewRAF     = null;
+      let previewT       = 0;
       let activeRenderer = null;
+      let activeCanvas   = null;
+      let activeCtx      = null;
+      let activePW       = 0;
+      let activePH       = 0;
 
       // ── Shared drawing helpers ──
       function bg(ctx, w, h) {
@@ -860,38 +842,40 @@
 
       }; // end PREVIEW_RENDERERS
 
-      // ── Show / hide ──
-      function positionPopup(cardRect) {
-        let left = cardRect.right + 10;
-        let top  = cardRect.top;
-        if (left + PW + 8 > window.innerWidth)  left = cardRect.left - PW - 10;
-        if (left < 8)                            left = 8;
-        if (top + PH + 40 > window.innerHeight)  top  = window.innerHeight - PH - 48;
-        if (top < 8)                             top  = 8;
-        popup.style.left = left + 'px';
-        popup.style.top  = top  + 'px';
-      }
-
-      window.showPreview = function(toolId, toolName, cardRect) {
+      // ── Show / hide / loop ──
+      window.showPreview = function(toolId, canvas) {
         const tool = TOOLS.find(tt => tt.id === toolId);
-        if (!tool || !R[tool.prev]) return;
+        if (!tool || !R[tool.prev] || !canvas) return;
+
+        // Size canvas to its actual layout dimensions (DPR-aware)
+        const rect = canvas.getBoundingClientRect();
+        const W = Math.round(rect.width)  || 200;
+        const H = Math.round(rect.height) || 60;
+        canvas.width  = W * DPR;
+        canvas.height = H * DPR;
+        const ctx = canvas.getContext('2d');
+        ctx.scale(DPR, DPR);
+
         activeRenderer = R[tool.prev];
-        footer.textContent = toolName;
-        positionPopup(cardRect);
-        popup.classList.add('visible');
+        activeCanvas   = canvas;
+        activeCtx      = ctx;
+        activePW       = W;
+        activePH       = H;
+
         if (!previewRAF) loop();
       };
 
       window.hidePreview = function() {
-        popup.classList.remove('visible');
         activeRenderer = null;
+        activeCanvas   = null;
+        activeCtx      = null;
         if (previewRAF) { cancelAnimationFrame(previewRAF); previewRAF = null; }
       };
 
       function loop() {
-        if (!activeRenderer) { previewRAF = null; return; }
-        pCtx.clearRect(0, 0, PW, PH);
-        activeRenderer(pCtx, PW, PH, previewT);
+        if (!activeRenderer || !activeCtx) { previewRAF = null; return; }
+        activeCtx.clearRect(0, 0, activePW, activePH);
+        activeRenderer(activeCtx, activePW, activePH, previewT);
         previewT += 0.025;
         previewRAF = requestAnimationFrame(loop);
       }
