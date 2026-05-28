@@ -126,6 +126,25 @@
     .trig-toggle { display: flex; gap: 0; margin-bottom: 12px; }
     .trig-toggle .tgl-btn:first-child { border-radius: 20px 0 0 20px; }
     .trig-toggle .tgl-btn:last-child  { border-radius: 0 20px 20px 0; border-left: none; }
+
+    /* Dynamic slider number inputs */
+    .dyn-val[type=number] {
+      width: 62px;
+      border: none;
+      border-bottom: 1.5px solid var(--ink-soft);
+      border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      text-align: center;
+      padding: 1px 2px;
+      -moz-appearance: textfield;
+      transition: border-color 0.15s;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); background: var(--paper-2); }
   </style>
 </head>
 <body class="paper-grid">
@@ -197,7 +216,7 @@
             <div class="slider-group">
               <div class="slider-label">
                 <span class="ca">a — amplitude</span>
-                <span class="slider-val" id="val-a">1</span>
+                <input type="number" class="slider-val dyn-val" id="val-a" step="any" value="1">
               </div>
               <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" />
             </div>
@@ -221,7 +240,7 @@
             <div class="slider-group">
               <div class="slider-label">
                 <span class="ck">k — vertical shift</span>
-                <span class="slider-val" id="val-k">0</span>
+                <input type="number" class="slider-val dyn-val" id="val-k" step="any" value="0">
               </div>
               <input type="range" id="sl-k" min="-3" max="3" step="0.5" value="0" />
             </div>
@@ -592,6 +611,28 @@
     let transFunc = 'sin';
     let tA = 1, tB = 1, tH = 0, tK = 0;
 
+    const DEF_SC = { a: 3, k: 3 };
+
+    function niceRange(v, defMax) {
+      const abs = Math.abs(v);
+      if (abs <= defMax) return defMax;
+      const steps = [10, 15, 20, 30, 50, 75, 100, 150, 200, 500, 1000, 2000, 5000];
+      return steps.find(t => t >= abs * 1.25) || Math.ceil(abs * 1.5 / 1000) * 1000;
+    }
+
+    function niceStep(range) {
+      if (range <= 20)  return 0.1;
+      if (range <= 50)  return 0.5;
+      if (range <= 200) return 1;
+      return 5;
+    }
+
+    function rescaleSlider(p, v) {
+      const sl = document.getElementById('sl-' + p);
+      const r  = niceRange(v, DEF_SC[p]);
+      sl.min = -r; sl.max = r; sl.step = niceStep(r); sl.value = v;
+    }
+
     function resizeTrans() {
       tDpr = window.devicePixelRatio || 1;
       const rect = transCanvas.getBoundingClientRect();
@@ -631,10 +672,12 @@
       document.getElementById('kv-per').textContent = fmtNum(period);
       document.getElementById('kv-mid').textContent = fmtNum(tK);
       document.getElementById('kv-sft').textContent = tH === 0 ? 'none' : fmtNum(tH) + (tH > 0 ? ' right' : ' left');
-      document.getElementById('val-a').textContent = fmtNum(tA);
+      document.getElementById('val-a').value = fmtNum(tA);
+      rescaleSlider('a', tA);
       document.getElementById('val-b').textContent = fmtNum(tB);
       document.getElementById('val-h').textContent = fmtNum(tH);
-      document.getElementById('val-k').textContent = fmtNum(tK);
+      document.getElementById('val-k').value = fmtNum(tK);
+      rescaleSlider('k', tK);
     }
 
     function drawTrans() {
@@ -847,6 +890,24 @@
     bindSlider('sl-b', v => tB = v);
     bindSlider('sl-h', v => tH = v);
     bindSlider('sl-k', v => tK = v);
+
+    document.getElementById('val-a').addEventListener('input', function() {
+      const v = parseFloat(this.value);
+      if (isNaN(v)) return;
+      tA = v;
+      rescaleSlider('a', v);
+      updateFormula();
+      drawTrans();
+    });
+
+    document.getElementById('val-k').addEventListener('input', function() {
+      const v = parseFloat(this.value);
+      if (isNaN(v)) return;
+      tK = v;
+      rescaleSlider('k', v);
+      updateFormula();
+      drawTrans();
+    });
 
     /* ======= INIT ======= */
     window.addEventListener('resize', () => {

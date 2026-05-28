@@ -64,6 +64,25 @@
     }
     .p-result { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
 
+    /* Dynamic slider number inputs */
+    .dyn-val[type=number] {
+      width: 62px;
+      border: none;
+      border-bottom: 1.5px solid var(--ink-soft);
+      border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--ink);
+      text-align: center;
+      padding: 1px 2px;
+      -moz-appearance: textfield;
+      transition: border-color 0.15s;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); background: var(--paper-2); }
+
     /* h "why opposite" tooltip */
     .h-why-btn {
       background: none; border: none; cursor: pointer;
@@ -122,20 +141,20 @@
           <span class="letter" style="color:var(--accent);">a</span> <span style="color:var(--ink-2); font-size:11px;">vertical</span>
         </label>
         <input type="range" id="sl-a" min="-3" max="3" step="0.5" value="1" oninput="slide('a')">
-        <span class="param-val" id="val-a">1</span>
+        <input type="number" class="param-val dyn-val" id="val-a" step="any" value="1">
 
         <label class="param-lbl" for="sl-b">
           <span class="letter" style="color:#2a6fb4;">b</span> <span style="color:var(--ink-2); font-size:11px;">horiz.</span>
         </label>
         <input type="range" id="sl-b" min="-3" max="3" step="0.5" value="1" oninput="slide('b')">
-        <span class="param-val" style="color:#2a6fb4;" id="val-b">1</span>
+        <input type="number" class="param-val dyn-val" style="color:#2a6fb4;" id="val-b" step="any" value="1">
 
         <label class="param-lbl" for="sl-h">
           <span class="letter" style="color:#2a8a4a;">h</span> <span style="color:var(--ink-2); font-size:11px;">← →</span>
           <button class="h-why-btn" onclick="toggleHWhy(event)" title="Why does h shift the opposite direction?">❓</button>
         </label>
         <input type="range" id="sl-h" min="-6" max="6" step="0.5" value="0" oninput="slide('h')">
-        <span class="param-val" style="color:#2a8a4a;" id="val-h">0</span>
+        <input type="number" class="param-val dyn-val" style="color:#2a8a4a;" id="val-h" step="any" value="0">
         <div class="h-why-box" id="h-why-box" style="display:none;">
           <div style="font-family:'Permanent Marker',cursive; font-size:10px; color:#2a8a4a; margin-bottom:5px;">WHY DOES h SHIFT THE "WRONG" WAY?</div>
           <div class="f-hand" style="font-size:12px; line-height:1.7; color:var(--ink-2);">
@@ -151,7 +170,7 @@
           <span class="letter" style="color:#8b4513;">k</span> <span style="color:var(--ink-2); font-size:11px;">↑ ↓</span>
         </label>
         <input type="range" id="sl-k" min="-6" max="6" step="0.5" value="0" oninput="slide('k')">
-        <span class="param-val" style="color:#8b4513;" id="val-k">0</span>
+        <input type="number" class="param-val dyn-val" style="color:#8b4513;" id="val-k" step="any" value="0">
       </div>
 
       <!-- bottom toggles -->
@@ -270,6 +289,28 @@
     let fn = 'quad';
     let P  = { a:1, b:1, h:0, k:0 };
     let lastParam = null;
+
+    const DEF = { a: 3, b: 3, h: 6, k: 6 };
+
+    function niceRange(v, defMax) {
+      const abs = Math.abs(v);
+      if (abs <= defMax) return defMax;
+      const steps = [10, 15, 20, 30, 50, 75, 100, 150, 200, 500, 1000, 2000, 5000];
+      return steps.find(t => t >= abs * 1.25) || Math.ceil(abs * 1.5 / 1000) * 1000;
+    }
+
+    function niceStep(range) {
+      if (range <= 20)  return 0.1;
+      if (range <= 50)  return 0.5;
+      if (range <= 200) return 1;
+      return 5;
+    }
+
+    function rescaleSlider(p, v) {
+      const sl = document.getElementById('sl-' + p);
+      const r  = niceRange(v, DEF[p]);
+      sl.min = -r; sl.max = r; sl.step = niceStep(r); sl.value = v;
+    }
 
     // ---- number formatting ----
     function fmt(v) { return (v === Math.round(v)) ? String(v) : String(Math.round(v*10)/10); }
@@ -570,7 +611,8 @@
         document.getElementById('sl-b').value = v;
       }
       P[param] = v;
-      document.getElementById(`val-${param}`).textContent = fmt(v);
+      rescaleSlider(param, v);
+      document.getElementById(`val-${param}`).value = fmt(v);
       document.getElementById('annot').textContent = annotText(param);
       updateChips();
       draw();
@@ -593,13 +635,26 @@
     function resetAll() {
       P = {a:1, b:1, h:0, k:0};
       ['a','b','h','k'].forEach(p => {
-        document.getElementById(`sl-${p}`).value = P[p];
-        document.getElementById(`val-${p}`).textContent = fmt(P[p]);
+        rescaleSlider(p, P[p]);
+        document.getElementById(`val-${p}`).value = fmt(P[p]);
       });
       document.getElementById('annot').textContent = 'Reset — all parameters back to 1 (or 0). Parent function restored.';
       updateChips();
       draw();
     }
+
+    ['a','b','h','k'].forEach(p => {
+      document.getElementById('val-' + p).addEventListener('input', function() {
+        let v = parseFloat(this.value);
+        if (isNaN(v)) return;
+        if (p === 'b' && v === 0) { v = 0.5; this.value = 0.5; }
+        P[p] = v;
+        rescaleSlider(p, v);
+        document.getElementById('annot').textContent = annotText(p);
+        updateChips();
+        draw();
+      });
+    });
 
     window.addEventListener('resize', draw);
     updateChips();
@@ -624,8 +679,8 @@
         if (s.h != null) P.h = +s.h;
         if (s.k != null) P.k = +s.k;
         ['a','b','h','k'].forEach(p => {
-          document.getElementById(`sl-${p}`).value = P[p];
-          document.getElementById(`val-${p}`).textContent = fmt(P[p]);
+          rescaleSlider(p, P[p]);
+          document.getElementById(`val-${p}`).value = fmt(P[p]);
         });
         updateChips(); draw();
       }

@@ -65,6 +65,25 @@
       text-align: center;
     }
 
+    /* Dynamic slider number inputs */
+    .dyn-val[type=number] {
+      width: 62px;
+      border: none;
+      border-bottom: 1.5px solid var(--ink-soft);
+      border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      color: var(--ink);
+      text-align: center;
+      padding: 1px 2px;
+      -moz-appearance: textfield;
+      transition: border-color 0.15s;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); background: var(--paper-2); }
+
     .area-model {
       display: grid;
       gap: 2px;
@@ -133,17 +152,17 @@
           <div class="coeff-group">
             <label>a (x² term)</label>
             <input type="range" id="sl-a" min="1" max="4" step="1" value="1" style="width:100%;" />
-            <div class="coeff-val" id="cv-a">1</div>
+            <input type="number" class="coeff-val dyn-val" id="cv-a" step="1" value="1">
           </div>
           <div class="coeff-group">
             <label>b (x term)</label>
             <input type="range" id="sl-b" min="-12" max="12" step="1" value="5" style="width:100%;" />
-            <div class="coeff-val" id="cv-b">5</div>
+            <input type="number" class="coeff-val dyn-val" id="cv-b" step="1" value="5">
           </div>
           <div class="coeff-group">
             <label>c (constant)</label>
             <input type="range" id="sl-c" min="-16" max="16" step="1" value="6" style="width:100%;" />
-            <div class="coeff-val" id="cv-c">6</div>
+            <input type="number" class="coeff-val dyn-val" id="cv-c" step="1" value="6">
           </div>
         </div>
 
@@ -223,6 +242,28 @@
   <script src="url-state.js"></script>
   <script>
     let a = 1, b = 5, c = 6;
+
+    const DEF_FL = { b: 12, c: 16 };
+
+    function niceRange(v, defMax) {
+      const abs = Math.abs(v);
+      if (abs <= defMax) return defMax;
+      const steps = [10, 15, 20, 30, 50, 75, 100, 150, 200, 500, 1000, 2000, 5000];
+      return steps.find(t => t >= abs * 1.25) || Math.ceil(abs * 1.5 / 1000) * 1000;
+    }
+
+    function niceStep(range) {
+      if (range <= 20)  return 0.1;
+      if (range <= 50)  return 0.5;
+      if (range <= 200) return 1;
+      return 5;
+    }
+
+    function rescaleSlider(p, v) {
+      const sl = document.getElementById('sl-' + p);
+      const r  = niceRange(v, DEF_FL[p]);
+      sl.min = -r; sl.max = r; sl.step = niceStep(r); sl.value = v;
+    }
 
     function gcd(x, y) { x = Math.abs(x); y = Math.abs(y); while (y) { [x, y] = [y, x % y]; } return x; }
 
@@ -346,9 +387,28 @@
         const v = parseInt(this.value);
         if (p==='a') a = v; if (p==='b') b = v; if (p==='c') c = v;
         if (a === 0) { a = 1; this.value = 1; }
-        document.getElementById(`cv-${p}`).textContent = v;
+        document.getElementById(`cv-${p}`).value = p === 'a' ? a : v;
         update();
       });
+    });
+
+    ['b','c'].forEach(p => {
+      document.getElementById('cv-' + p).addEventListener('input', function() {
+        const v = parseInt(this.value);
+        if (isNaN(v)) return;
+        if (p==='b') b = v; if (p==='c') c = v;
+        rescaleSlider(p, v);
+        update();
+      });
+    });
+
+    document.getElementById('cv-a').addEventListener('input', function() {
+      const v = parseInt(this.value);
+      if (isNaN(v) || v === 0) return;
+      a = Math.max(1, Math.min(4, v));
+      document.getElementById('sl-a').value = a;
+      this.value = a;
+      update();
     });
 
     update();
@@ -366,14 +426,14 @@
       const fromLS  = fromUrl ? null : JSON.parse(localStorage.getItem('a2p-factoring') || 'null');
       const s = fromUrl || fromLS;
       if (s) {
-        if (s.a != null) { a = +s.a; document.getElementById('sl-a').value = a; document.getElementById('cv-a').textContent = a; }
-        if (s.b != null) { b = +s.b; document.getElementById('sl-b').value = b; document.getElementById('cv-b').textContent = b; }
-        if (s.c != null) { c = +s.c; document.getElementById('sl-c').value = c; document.getElementById('cv-c').textContent = c; }
+        if (s.a != null) { a = +s.a; document.getElementById('sl-a').value = a; document.getElementById('cv-a').value = a; }
+        if (s.b != null) { b = +s.b; document.getElementById('sl-b').value = b; document.getElementById('cv-b').value = b; }
+        if (s.c != null) { c = +s.c; document.getElementById('sl-c').value = c; document.getElementById('cv-c').value = c; }
         update();
       }
     })();
     // Add copy button after the c slider group
-    document.getElementById('sl-c').closest('.slider-group')
+    document.getElementById('sl-c').closest('.coeff-group')
       .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
 </body>
