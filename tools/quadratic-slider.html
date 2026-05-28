@@ -257,7 +257,9 @@
       const aFmt = a === 1 ? '' : a === -1 ? '−' : (a < 0 ? `−${fmt(Math.abs(a))}` : fmt(a));
       const inner = h === 0 ? 'x' : (h > 0 ? `x − ${fmt(h)}` : `x + ${fmt(Math.abs(h))}`);
       const kStr = k === 0 ? '' : (k > 0 ? ` + ${fmt(k)}` : ` − ${fmt(Math.abs(k))}`);
-      document.getElementById('equation').textContent = `y = ${aFmt}(${inner})²${kStr}`;
+      // Only wrap in parens when h ≠ 0 (otherwise "y = x²" not "y = (x)²")
+      const xPart = h === 0 ? `${aFmt}x²` : `${aFmt}(${inner})²`;
+      document.getElementById('equation').textContent = `y = ${xPart}${kStr}`;
       updatePattern();
     }
 

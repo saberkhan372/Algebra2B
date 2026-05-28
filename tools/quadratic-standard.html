@@ -278,9 +278,13 @@
           const rx = ox + r*sc, ry = oy;
           ctx.fillStyle = '#2a8a4a'; ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2;
           ctx.beginPath(); ctx.arc(rx, ry, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-          ctx.fillStyle = '#2a8a4a'; ctx.font = "11px 'Patrick Hand',cursive";
-          ctx.textAlign = r >= 0 ? 'left' : 'right';
-          ctx.fillText(`(${fmt(r)}, 0)`, rx + (r >= 0 ? 7 : -7), ry - 8);
+          // Skip root label when it coincides with the vertex (tangent case) — vertex label already shows coords
+          const isVertexRoot = (Math.abs(r - h) < 0.05 && Math.abs(k) < 0.05);
+          if (!isVertexRoot) {
+            ctx.fillStyle = '#2a8a4a'; ctx.font = "11px 'Patrick Hand',cursive";
+            ctx.textAlign = r >= 0 ? 'left' : 'right';
+            ctx.fillText(`(${fmt(r)}, 0)`, rx + (r >= 0 ? 7 : -7), ry - 8);
+          }
         });
       }
 

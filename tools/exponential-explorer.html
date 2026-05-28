@@ -354,11 +354,23 @@
         ctx.fillStyle = i===0 ? '#d94f2a' : '#2a8a4a';
         ctx.strokeStyle='#1d1a14'; ctx.lineWidth=1.5;
         ctx.beginPath(); ctx.arc(px,py,6,0,Math.PI*2); ctx.fill(); ctx.stroke();
-        ctx.fillStyle='#1d1a14'; ctx.font="11px 'Patrick Hand',cursive";
-        ctx.textAlign=px>W/2?'right':'left';
-        ctx.fillText(lbl, px+(px>W/2?-10:10), py-8);
-        ctx.fillStyle='rgba(29,26,20,0.45)';
-        ctx.fillText(tag, px+(px>W/2?-10:10), py+16);
+        const side = px > W/2 ? -1 : 1;
+        const tx = px + side * 10;
+        ctx.textAlign = side > 0 ? 'left' : 'right';
+        ctx.font="11px 'Patrick Hand',cursive";
+        if (i === 0) {
+          // Anchor 1 label grows DOWNWARD from dot to avoid crowding anchor 2 above
+          ctx.fillStyle='#1d1a14';
+          ctx.fillText(lbl, tx, py + 16);
+          ctx.fillStyle='rgba(29,26,20,0.45)';
+          ctx.fillText(tag, tx, py + 29);
+        } else {
+          // Anchor 2 label grows UPWARD from dot
+          ctx.fillStyle='#1d1a14';
+          ctx.fillText(lbl, tx, py - 8);
+          ctx.fillStyle='rgba(29,26,20,0.45)';
+          ctx.fillText(tag, tx, py - 20);
+        }
       });
 
       // Vertical dashed lines from anchor points to asymptote (connect visually)

@@ -41,7 +41,7 @@
       padding: 10px 13px; background: var(--paper-2);
       font-family: 'JetBrains Mono', monospace; font-size: 13.5px; line-height: 1.7;
     }
-    .rule-card.blog-card { background: var(--highlight); }
+    .rule-card.log-rule-card { background: var(--highlight); }
     .rule-name {
       font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink);
       border-bottom: 1px dashed var(--ink-soft); padding-bottom: 3px; margin-bottom: 5px;
@@ -219,8 +219,8 @@
             = log<sub class="cbase">b</sub>(M) − log<sub class="cbase">b</sub>(N)
             <div class="rule-sub">top → +log, bottom → −log</div>
           </div>
-          <div class="rule-card blog-card">
-            <div class="rule-name">🎯 Blog Rule (Power)</div>
+          <div class="rule-card log-rule-card">
+            <div class="rule-name">🎯 Log Rule (Power)</div>
             log<sub class="cbase">b</sub>(M<sup class="cexp">p</sup>)<br>
             = <span class="cexp">p</span> · log<sub class="cbase">b</sub>(M)
             <div class="rule-sub">exponent drops to coefficient</div>
@@ -254,8 +254,8 @@
             = log<sub class="cbase">b</sub>(<span class="mfr"><span class="mn">M</span><span class="md">N</span></span>)
             <div class="rule-sub">+log → numerator, −log → denominator</div>
           </div>
-          <div class="rule-card blog-card">
-            <div class="rule-name">🎯 Blog Rule (Power)</div>
+          <div class="rule-card log-rule-card">
+            <div class="rule-name">🎯 Log Rule (Power)</div>
             <span class="cexp">p</span> · log<sub class="cbase">b</sub>(M)<br>
             = log<sub class="cbase">b</sub>(M<sup class="cexp">p</sup>)
             <div class="rule-sub">coefficient pops up to exponent</div>
@@ -318,11 +318,11 @@
         ]
       },
       {
-        label: '3. Blog Rule',
+        label: '3. Log Rule',
         steps: [
           { lbl: 'Start',    html: `log(<span class="carg">x</span><sup class="cexp">3</sup>)`,                                 note: '' },
           { lbl: 'Step 1',   html: `log(<span class="carg">x</span><sup class="cexp">3</sup>)`,                                 badge: 'exponent spotted: 3', note: 'The exponent <strong>3</strong> is trapped inside the log. The blog rule says it can drop down to become a coefficient.' },
-          { lbl: 'Step 2',   html: `<span class="cexp bd">3</span> · log(<span class="carg">x</span>)`,                        note: '"Blog rule": the exponent drops from superscript position to coefficient. Remember — only works on a single-argument log!', ok: true, blog: 'drop' }
+          { lbl: 'Step 2',   html: `<span class="cexp bd">3</span> · log(<span class="carg">x</span>)`,                        note: '"Log rule": the exponent drops from superscript position to coefficient. Remember — only works on a single-argument log!', ok: true, blog: 'drop' }
         ]
       },
       {
@@ -332,7 +332,7 @@
           { lbl: 'Step 1',   html: `log<sub class="cbase">2</sub>(<span class="mfr"><span class="mn">8x<sup class="cexp">4</sup></span><span class="md">y</span></span>)`,                                                                                   badge: 'base 2 ✓', note: 'All logs will use base 2.' },
           { lbl: 'Step 2',   html: `log<sub class="cbase">2</sub>(8x<sup class="cexp">4</sup>) − log<sub class="cbase">2</sub>(y)`,                                                                                                                        note: 'Quotient rule first: numerator → +log, denominator → −log.' },
           { lbl: 'Step 3',   html: `log<sub class="cbase">2</sub>(8) + log<sub class="cbase">2</sub>(x<sup class="cexp">4</sup>) − log<sub class="cbase">2</sub>(y)`,                                                                                      note: 'Product rule: 8·x⁴ inside one log splits into two logs added.' },
-          { lbl: 'Step 4',   html: `log<sub class="cbase">2</sub>(8) + <span class="cexp">4</span>·log<sub class="cbase">2</sub>(x) − log<sub class="cbase">2</sub>(y)`,                                                                                  note: 'Blog rule: the exponent 4 on x drops to a coefficient.' },
+          { lbl: 'Step 4',   html: `log<sub class="cbase">2</sub>(8) + <span class="cexp">4</span>·log<sub class="cbase">2</sub>(x) − log<sub class="cbase">2</sub>(y)`,                                                                                  note: 'Log rule: the exponent 4 on x drops to a coefficient.' },
           { lbl: 'Step 5',   html: `<span class="cexp">3</span> + <span class="cexp">4</span>·log<sub class="cbase">2</sub>(x) − log<sub class="cbase">2</sub>(y)`,                                                                                        note: 'Simplify: 2³ = 8, so log₂(8) = 3. Done!', ok: true }
         ]
       }
@@ -357,11 +357,11 @@
         ]
       },
       {
-        label: '3. Blog Rule',
+        label: '3. Log Rule',
         steps: [
           { lbl: 'Start',    html: `<span class="cexp">5</span> · log(<span class="carg">x</span>)`,                          note: '' },
           { lbl: 'Step 1',   html: `<span class="cexp">5</span> · log(<span class="carg">x</span>)`,                          badge: 'coefficient spotted: 5', note: 'The coefficient is <strong>5</strong>. The blog rule says it can pop up to become an exponent.' },
-          { lbl: 'Step 2',   html: `log(<span class="carg">x</span><sup class="cexp br">5</sup>)`,                            note: '"Blog rule" reversed: the coefficient pops up from in front of the log to an exponent on the argument.', ok: true, blog: 'rise' }
+          { lbl: 'Step 2',   html: `log(<span class="carg">x</span><sup class="cexp br">5</sup>)`,                            note: '"Log rule" reversed: the coefficient pops up from in front of the log to an exponent on the argument.', ok: true, blog: 'rise' }
         ]
       },
       {
@@ -369,7 +369,7 @@
         steps: [
           { lbl: 'Start',    html: `<span class="cexp">2</span>·log<sub class="cbase">3</sub>(<span class="carg">x</span>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                     note: '' },
           { lbl: 'Step 1',   html: `<span class="cexp">2</span>·log<sub class="cbase">3</sub>(<span class="carg">x</span>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                     badge: 'base 3 ✓', note: 'Both logs use base 3.' },
-          { lbl: 'Step 2',   html: `log<sub class="cbase">3</sub>(<span class="carg">x</span><sup class="cexp">2</sup>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                      note: 'Blog rule: coefficient 2 pops up to become the exponent on x.' },
+          { lbl: 'Step 2',   html: `log<sub class="cbase">3</sub>(<span class="carg">x</span><sup class="cexp">2</sup>) − log<sub class="cbase">3</sub>(<span class="carg">y</span>)`,                                      note: 'Log rule: coefficient 2 pops up to become the exponent on x.' },
           { lbl: 'Step 3',   html: `log<sub class="cbase">3</sub>(<span class="mfr"><span class="mn"><span class="carg">x</span><sup class="cexp">2</sup></span><span class="md carg">y</span></span>)`,                    note: 'Quotient rule: +log₃(x²) → numerator, −log₃(y) → denominator. Done!', ok: true }
         ]
       }
@@ -515,7 +515,7 @@
         html:    `ln(e<sup class="cexp">4</sup>)`,
         answer:  '4',
         choices: ['1', '4', 'e', 'e⁴'],
-        explain: `Blog rule: 4·ln(e) = 4·1 = 4.`
+        explain: `Log rule: 4·ln(e) = 4·1 = 4.`
       },
       {
         html:    `log<sub class="cbase">2</sub>(1)`,
@@ -527,7 +527,7 @@
         html:    `log<sub class="cbase">5</sub>(5<sup class="cexp">3</sup>)`,
         answer:  '3',
         choices: ['1', '3', '5', '15'],
-        explain: `Blog rule: 3·log₅(5) = 3·1 = 3.`
+        explain: `Log rule: 3·log₅(5) = 3·1 = 3.`
       }
     ];
 
