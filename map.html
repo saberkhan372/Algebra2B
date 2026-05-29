@@ -113,21 +113,21 @@
     }
     .topic-item:hover { background: var(--paper-2); }
 
-    /* Kind-colored left border + link colors */
-    .topic-item.kind-explorer  { border-left-color: #7c4db5; }
-    .topic-item.kind-visualizer{ border-left-color: #2a6fb4; }
-    .topic-item.kind-practice  { border-left-color: #2a7f4f; }
-    .topic-item.kind-game      { border-left-color: #d4820a; }
-    .topic-item.kind-reference { border-left-color: #666;    }
+    /* Kind-colored left border + link colors (canonical vars from styles.css) */
+    .topic-item.kind-explorer  { border-left-color: var(--k-explorer); }
+    .topic-item.kind-visualizer{ border-left-color: var(--k-visualizer); }
+    .topic-item.kind-practice  { border-left-color: var(--k-practice); }
+    .topic-item.kind-game      { border-left-color: var(--k-game); }
+    .topic-item.kind-reference { border-left-color: var(--k-reference); }
 
     .topic-item a {
       color: var(--ink); text-decoration: none; flex: 1;
     }
     .topic-item a:hover { text-decoration: underline; }
-    .topic-item.kind-explorer  a:hover { color: #7c4db5; }
-    .topic-item.kind-visualizer a:hover{ color: #2a6fb4; }
-    .topic-item.kind-practice  a:hover { color: #2a7f4f; }
-    .topic-item.kind-game      a:hover { color: #d4820a; }
+    .topic-item.kind-explorer  a:hover { color: var(--k-explorer); }
+    .topic-item.kind-visualizer a:hover{ color: var(--k-visualizer); }
+    .topic-item.kind-practice  a:hover { color: var(--k-practice); }
+    .topic-item.kind-game      a:hover { color: var(--k-game); }
 
     .topic-item.no-tool {
       color: var(--ink-soft); border-left-color: transparent;
@@ -143,11 +143,17 @@
       padding: 1px 5px; border-radius: 2px; flex-shrink: 0;
       white-space: nowrap;
     }
-    .kp.explorer  { background: #7c4db515; color: #7c4db5; border: 1px solid #7c4db535; }
-    .kp.visualizer{ background: #2a6fb415; color: #2a6fb4; border: 1px solid #2a6fb435; }
-    .kp.practice  { background: #2a7f4f15; color: #2a7f4f; border: 1px solid #2a7f4f35; }
-    .kp.game      { background: #d4820a15; color: #d4820a; border: 1px solid #d4820a35; }
-    .kp.reference { background: #66666615; color: #666;    border: 1px solid #66666635; }
+    .kp { --k: var(--ink-soft); }
+    .kp.explorer  { --k: var(--k-explorer); }
+    .kp.visualizer{ --k: var(--k-visualizer); }
+    .kp.practice  { --k: var(--k-practice); }
+    .kp.game      { --k: var(--k-game); }
+    .kp.reference { --k: var(--k-reference); }
+    .kp.explorer, .kp.visualizer, .kp.practice, .kp.game, .kp.reference {
+      color: var(--k);
+      background: color-mix(in srgb, var(--k) 12%, var(--paper));
+      border: 1px solid color-mix(in srgb, var(--k) 35%, transparent);
+    }
 
     /* Tiny cross-unit marker */
     .cu-tag {
@@ -418,7 +424,7 @@
     <div class="map-row">
 
       <!-- ── U5 ── -->
-      <div class="unit-card" style="--uc:#b08800;">
+      <div class="unit-card" style="--uc:#8f6c00;">
         <div class="unit-card-top"></div>
         <div class="unit-header">
           <div class="unit-badge">U5</div>

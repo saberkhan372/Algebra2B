@@ -20,6 +20,14 @@
   --redline:    #e23d2c;
   --tape:       rgba(245,211,76,0.6);
   --green:      #3f8a5a;
+
+  /* Canonical tool-KIND colors — one source of truth for homepage + map.
+     All chosen for >=4.5 contrast as text on paper. */
+  --k-explorer:   #7c4db5;  /* purple */
+  --k-visualizer: #2a6fb4;  /* blue   */
+  --k-practice:   #277343;  /* green  */
+  --k-game:       #9c5800;  /* amber  (darkened from #d4820a for legibility) */
+  --k-reference:  #5f5f5f;  /* gray   */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -119,11 +127,25 @@ a:hover { text-decoration: underline; }
   gap: 4px;
   font-family: 'Special Elite', monospace;
 }
-.sk-tag.kind-visualizer { background: #cfe3f1; }
-.sk-tag.kind-practice   { background: #f1e1cf; }
-.sk-tag.kind-game       { background: #e8cfe9; }
-.sk-tag.kind-reference  { background: #dde8cf; }
-.sk-tag.kind-explorer   { background: #d0e8e4; }
+/* Tool-kind tags: outlined chip — colored dot + dark text + tinted border.
+   Distinguishable at a distance, legible, consistent with the map. */
+.sk-tag.kind-explorer   { --k: var(--k-explorer); }
+.sk-tag.kind-visualizer { --k: var(--k-visualizer); }
+.sk-tag.kind-practice   { --k: var(--k-practice); }
+.sk-tag.kind-game       { --k: var(--k-game); }
+.sk-tag.kind-reference  { --k: var(--k-reference); }
+.sk-tag[class*="kind-"] {
+  background: var(--paper);
+  border-color: var(--k, var(--ink-2));
+  color: var(--ink);
+}
+.sk-tag[class*="kind-"]::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--k, var(--ink-soft));
+  flex-shrink: 0;
+}
 
 /* ── Decorations ── */
 .tape {
