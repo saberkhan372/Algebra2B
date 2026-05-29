@@ -306,6 +306,7 @@
       { id: 'ratd',  prev: 'rational',     name: 'Rationalizing Denominators',      unit: 'U3', topic: 'Radicals',    kind: 'practice',   diff: 2, code: 'Rd', desc: 'Step through 4 types: monomial radical, binomial radical, imaginary denominator, and complex conjugate.', href: 'tools/rationalizing-denominators.html' },
       { id: 'qfe',   prev: 'parabola',     name: 'Quadratic Forms Explorer',        unit: 'U3', topic: 'Quadratics',  kind: 'explorer',   diff: 2, code: 'Qe', desc: 'Same parabola, three forms. Slide the vertex — standard, vertex, and factored forms update in sync. Discriminant banner explains the roots.', href: 'tools/quadratic-forms-explorer.html' },
       { id: 'atlas', prev: 'functions',    name: 'Parent Function Atlas',           unit: 'U2', topic: 'Functions',   kind: 'explorer',   diff: 2, code: 'Pf', desc: 'Five families (x², |x|, √x, 2ˣ, 1/x) with a/h/k sliders. Domain, range, zeros, and asymptotes update live as chips.', href: 'tools/parent-function-atlas.html' },
+      { id: 'xray',  prev: 'xray',        name: 'Function X-Ray',                  unit: 'U1', topic: 'Functions',   kind: 'explorer',   diff: 2, code: 'Xr', desc: '9 function families — one tool. Slide the parameters and see the skeleton: asymptotes, zeros, vertices, midlines, and more.', href: 'tools/function-xray.html' },
     ];
 
     const UNIT_COLORS = { U1: '#dde8cf', U2: '#cfe3f1', U3: '#f1e1cf', U4: '#e8cfe9', U5: '#f4dfbd', U6: '#d8e6df', U7: '#d6dcf4', U9: '#f4d4e8' };
@@ -844,6 +845,43 @@
           const ballT = (t * 0.55) % tMax;
           const bx = 8 + vx*ballT*scX, by2 = oy - (vy*ballT - 0.5*g*ballT*ballT)*scY;
           ctx.fillStyle = '#d94f2a'; ctx.beginPath(); ctx.arc(bx, by2, 6, 0, Math.PI*2); ctx.fill();
+        },
+
+        // Parent Function Atlas: cycles through 3 families
+        functions(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2 + 6, sc = W/14;
+          grid(ctx, ox, oy, sc, W, H, 7);
+          axes(ctx, ox, oy, W, H);
+          const phase = Math.floor((t * 0.22) % 3);
+          if (phase === 0) {
+            plotFn(ctx, x => x*x, ox, oy, sc, W, H, '#d94f2a');
+          } else if (phase === 1) {
+            plotFn(ctx, x => Math.abs(x), ox, oy, sc, W, H, '#2a6fb4');
+          } else {
+            plotFn(ctx, x => (x > 0 ? Math.sqrt(x) : NaN), ox, oy, sc, W, H, '#2a8a4a');
+          }
+        },
+
+        // Function X-Ray: parabola with skeleton annotations
+        xray(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2 + 6, sc = W/15;
+          grid(ctx, ox, oy, sc, W, H, 7);
+          axes(ctx, ox, oy, W, H);
+          const h = 1.5 * Math.sin(t * 0.5);
+          const k = 1.0 * Math.sin(t * 0.35);
+          // axis of symmetry
+          ctx.strokeStyle = 'rgba(42,111,180,0.55)'; ctx.lineWidth = 1;
+          ctx.setLineDash([4, 4]);
+          const axX = ox + h * sc;
+          ctx.beginPath(); ctx.moveTo(axX, 4); ctx.lineTo(axX, H - 4); ctx.stroke();
+          ctx.setLineDash([]);
+          // curve
+          plotFn(ctx, x => (x-h)*(x-h)+k, ox, oy, sc, W, H, '#d94f2a');
+          // vertex dot
+          ctx.fillStyle = '#7a2a8a';
+          ctx.beginPath(); ctx.arc(ox + h*sc, oy - k*sc, 4, 0, Math.PI*2); ctx.fill();
         },
 
       }; // end PREVIEW_RENDERERS

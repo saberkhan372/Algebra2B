@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Function X-Ray — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #xray-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+    /* ── Family picker ───────────────────────────────────────── */
+    .family-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+    .fam-btn {
+      padding: 5px 3px 4px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.1;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      cursor: pointer; background: var(--paper-2); color: var(--ink-2);
+      text-align: center; transition: background 0.1s, color 0.1s;
+    }
+    .fam-btn:hover { background: var(--paper-3); }
+    .fam-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+    .fam-sub {
+      display: block; margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace; font-size: 9px;
+      opacity: 0.65; letter-spacing: -0.02em;
+    }
+
+    /* ── Equation bar ─────────────────────────────────────────── */
+    .eq-bar {
+      padding: 7px 12px;
+      background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+      flex-wrap: wrap; min-height: 34px;
+    }
+    .eq-lhs { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+
+    /* ── Sliders ──────────────────────────────────────────────── */
+    .slider-grid {
+      display: grid;
+      grid-template-columns: 76px 1fr 54px;
+      gap: 4px 8px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      display: flex; align-items: baseline; gap: 5px;
+    }
+    .param-lbl .letter { font-size: 15px; font-style: italic; font-weight: 700; }
+    .param-lbl .pdesc {
+      font-family: 'Patrick Hand', cursive; font-size: 10px;
+      color: var(--ink-soft); font-style: normal;
+    }
+    .dyn-val[type=number] {
+      width: 50px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Feature chips ────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip {
+      padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      display: inline-flex; align-items: baseline; gap: 4px;
+      background: var(--paper-2);
+    }
+    .chip-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .chip-val { font-weight: 600; color: var(--ink); font-size: 12px; }
+
+    /* ── Degree selector ──────────────────────────────────────── */
+    .deg-row { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .deg-lbl { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-2); }
+    .deg-btn {
+      width: 26px; height: 22px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+    }
+    .deg-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Insight box ──────────────────────────────────────────── */
+    .insight-box {
+      padding: 9px 11px;
+      background: var(--highlight); border: 1.5px solid var(--ink-2);
+      border-radius: 3px; position: relative;
+    }
+    .insight-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 3px;
+    }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.4; }
+
+    /* ── Anatomy legend ───────────────────────────────────────── */
+    .anatomy-legend {
+      display: flex; flex-wrap: wrap; gap: 5px 12px;
+      padding: 5px 10px; border-top: 1.5px solid var(--ink-soft);
+      background: var(--paper-2); flex-shrink: 0;
+    }
+    .leg-item { display: flex; align-items: center; gap: 5px; }
+    .leg-label { font-family: 'Patrick Hand', cursive; font-size: 11px; color: var(--ink-2); }
+
+    /* ── Section labels ───────────────────────────────────────── */
+    .sec-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px; text-transform: uppercase;
+      letter-spacing: 0.07em; color: var(--ink-soft); margin-bottom: 5px;
+    }
+
+    /* ── Reset btn ────────────────────────────────────────────── */
+    .reset-btn {
+      padding: 2px 8px; font-family: 'Patrick Hand', cursive; font-size: 11px;
+      border: 1px solid var(--ink-soft); border-radius: 3px;
+      background: transparent; color: var(--ink-soft); cursor: pointer;
+      float: right; margin-top: -1px;
+    }
+    .reset-btn:hover { background: var(--paper-3); }
+
+    /* ── Sidebar scroll ──────────────────────────────────────── */
+    .tool-sidebar { overflow-y: auto; }
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important;
+                      border-right: none; border-bottom: 1.5px solid var(--ink-soft); }
+      .canvas-wrap { min-height: 280px; }
+    }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+
+    <!-- ── Sidebar ───────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box" style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Function X-Ray</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">pick a family · move sliders · see the bones</div>
+      </div>
+
+      <!-- Family picker -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">function family</div>
+        <div class="family-grid" id="family-grid"></div>
+      </div>
+
+      <!-- Parameters -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">parameters <button class="reset-btn" id="reset-btn">↺ reset</button></div>
+        <div class="deg-row" id="deg-row" style="display:none;">
+          <span class="deg-lbl">degree:</span>
+          <button class="deg-btn active" data-deg="2">2</button>
+          <button class="deg-btn" data-deg="3">3</button>
+          <button class="deg-btn" data-deg="4">4</button>
+        </div>
+        <div class="slider-grid" id="slider-area"></div>
+      </div>
+
+      <!-- Feature chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">x-ray features</div>
+        <div class="chips-row" id="chips-area"></div>
+      </div>
+
+      <!-- Insight -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight-txt">Pick a function family above to get started.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ──────────────────────────────────────────────────── -->
+    <main class="tool-main" style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+
+      <!-- Equation bar -->
+      <div class="eq-bar">
+        <span class="eq-lhs">y =</span>
+        <span id="eq-display" style="color:var(--ink);">—</span>
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-wrap">
+        <canvas id="xray-canvas"></canvas>
+      </div>
+
+      <!-- Legend -->
+      <div class="anatomy-legend" id="anatomy-legend"></div>
+
+    </main>
+  </div>
+
+  <script>
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  const DPR = window.devicePixelRatio || 1;
+  const TAU = 2 * Math.PI;
+
+  function fmt(n) {
+    if (!isFinite(n)) return '—';
+    const r = Math.round(n * 100) / 100;
+    return r === 0 ? '0' : String(r);
+  }
+
+  // Build colored span for equation display
+  function cs(val, col) {
+    return `<span style="color:${col};font-weight:700;">${fmt(val)}</span>`;
+  }
+  function hShift(h, col) {
+    if (Math.abs(h) < 1e-9) return 'x';
+    if (h > 0) return `(x&nbsp;&minus;&nbsp;${cs(h, col)})`;
+    return `(x&nbsp;+&nbsp;${cs(-h, col)})`;
+  }
+  function vShift(k, col) {
+    if (Math.abs(k) < 1e-9) return '';
+    if (k > 0) return `&nbsp;+&nbsp;${cs(k, col)}`;
+    return `&nbsp;&minus;&nbsp;${cs(-k, col)}`;
+  }
+
+  // ── Family definitions ─────────────────────────────────────────────────────
+  const FAMILIES = [
+    {
+      id: 'quad', label: 'Quadratic', sub: 'a(x−h)²+k',
+      params: [
+        { id:'a', label:'a', desc:'stretch/flip', min:-3, max:3, step:0.1, def:1,  col:'#d94f2a' },
+        { id:'h', label:'h', desc:'horiz shift',  min:-5, max:5, step:0.5, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'vert shift',   min:-5, max:5, step:0.5, def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'The vertex lands exactly at (h, k) — the tip the parabola balances on. Try h = 3 and notice the vertex moves RIGHT even though the sign looks "minus." That\'s the vertex form trick: h is always opposite its sign.',
+    },
+    {
+      id: 'abs', label: 'Abs Value', sub: 'a|x−h|+k',
+      params: [
+        { id:'a', label:'a', desc:'stretch/flip', min:-3, max:3, step:0.1, def:1,  col:'#d94f2a' },
+        { id:'h', label:'h', desc:'horiz shift',  min:-5, max:5, step:0.5, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'vert shift',   min:-5, max:5, step:0.5, def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'Same vertex form rules as quadratic — but instead of a smooth curve, you get a sharp corner. That corner at (h, k) is the "pointiest bone." The two arms are perfect mirror images across x = h.',
+    },
+    {
+      id: 'exp', label: 'Exponential', sub: 'a·b^(x−h)+k',
+      params: [
+        { id:'a', label:'a', desc:'stretch/flip', min:-4, max:4, step:0.25, def:1,  col:'#d94f2a' },
+        { id:'b', label:'b', desc:'base (≠1)',    min:0.1, max:8, step:0.1, def:2,  col:'#7a2a8a' },
+        { id:'h', label:'h', desc:'horiz shift',  min:-4, max:4, step:0.5,  def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'asymptote',    min:-5, max:5, step:0.5,  def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'The dashed line y = k is the horizontal asymptote — a "floor" the curve approaches forever but never touches. The base b controls speed: b > 1 means growth, 0 < b < 1 means decay. Try b = 0.5 to flip it to decay.',
+    },
+    {
+      id: 'log', label: 'Logarithmic', sub: 'a·log_b(x−h)+k',
+      params: [
+        { id:'a', label:'a', desc:'stretch/flip', min:-3, max:3, step:0.1, def:1,  col:'#d94f2a' },
+        { id:'b', label:'b', desc:'base (≠1)',    min:0.1, max:8, step:0.1, def:2,  col:'#7a2a8a' },
+        { id:'h', label:'h', desc:'vert asymptote',min:-4, max:4, step:0.5, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'vert shift',   min:-4, max:4, step:0.5, def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'Log is the inverse of exponential — they\'re literal mirror images across y = x. The vertical asymptote x = h acts as a "wall": the domain only exists to the right of it. Set h = 2 and watch the wall move.',
+    },
+    {
+      id: 'rat', label: 'Rational', sub: 'a/(x−h)+k',
+      params: [
+        { id:'a', label:'a', desc:'scale',        min:-4, max:4, step:0.5, def:1,  col:'#d94f2a' },
+        { id:'h', label:'h', desc:'vert asymptote',min:-4, max:4, step:0.5, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'horiz asymptote',min:-4, max:4, step:0.5, def:0, col:'#2a8a4a' },
+      ],
+      insight: 'Two asymptotes form a cross — that\'s the entire skeleton. The curve lives in two opposite quadrants around that cross. Watch what happens to the curve as you drag a slider near x = h (the vertical wall).',
+    },
+    {
+      id: 'poly', label: 'Polynomial', sub: 'a(x−r₁)(x−r₂)…',
+      params: [
+        { id:'a',  label:'a',  desc:'leading coeff', min:-2, max:2, step:0.1,  def:1,  col:'#d94f2a' },
+        { id:'r1', label:'r₁', desc:'zero 1',         min:-5, max:5, step:0.5,  def:-2, col:'#2a6fb4' },
+        { id:'r2', label:'r₂', desc:'zero 2',         min:-5, max:5, step:0.5,  def:2,  col:'#2a8a4a' },
+        { id:'r3', label:'r₃', desc:'zero 3',         min:-5, max:5, step:0.5,  def:0,  col:'#7a2a8a', minDeg:3 },
+        { id:'r4', label:'r₄', desc:'zero 4',         min:-5, max:5, step:0.5,  def:1,  col:'#8a5a00', minDeg:4 },
+      ],
+      insight: 'Each root rᵢ is where the curve crosses (or bounces off) the x-axis. Move two roots together and watch for a "bounce." End behavior lives in the outer arrows — degree and sign of a control which way they point.',
+    },
+    {
+      id: 'rad', label: 'Radical', sub: 'a√(x−h)+k',
+      params: [
+        { id:'a', label:'a', desc:'stretch/flip', min:-3, max:3, step:0.1, def:1,  col:'#d94f2a' },
+        { id:'h', label:'h', desc:'domain start', min:-5, max:5, step:0.5, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'vert shift',   min:-5, max:5, step:0.5, def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'You can\'t take √ of a negative — so the domain starts at x = h and only goes right. The start point (h, k) is the anchor, similar to a vertex. Drag h right and watch the curve "slide" with its anchor.',
+    },
+    {
+      id: 'sin', label: 'Sine', sub: 'a·sin(b(x−h))+k',
+      params: [
+        { id:'a', label:'a', desc:'amplitude',   min:-4, max:4, step:0.5,  def:1,  col:'#d94f2a' },
+        { id:'b', label:'b', desc:'frequency',   min:0.25, max:4, step:0.25, def:1, col:'#7a2a8a' },
+        { id:'h', label:'h', desc:'phase shift', min:-3, max:3, step:0.25, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'midline',     min:-3, max:3, step:0.5,  def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'The midline y = k is the "spine" the wave oscillates around. Amplitude |a| is how far peaks and troughs reach from the spine. Shrink b toward 0 to stretch the period out — or grow b to compress it.',
+    },
+    {
+      id: 'cos', label: 'Cosine', sub: 'a·cos(b(x−h))+k',
+      params: [
+        { id:'a', label:'a', desc:'amplitude',   min:-4, max:4, step:0.5,  def:1,  col:'#d94f2a' },
+        { id:'b', label:'b', desc:'frequency',   min:0.25, max:4, step:0.25, def:1, col:'#7a2a8a' },
+        { id:'h', label:'h', desc:'phase shift', min:-3, max:3, step:0.25, def:0,  col:'#2a6fb4' },
+        { id:'k', label:'k', desc:'midline',     min:-3, max:3, step:0.5,  def:0,  col:'#2a8a4a' },
+      ],
+      insight: 'Cosine starts at a peak (when h = 0) instead of the midline like sine. They\'re the same wave — just π/2 apart. Set sin and cos to the same a/b/k and compare h to spot the shift.',
+    },
+  ];
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  let state = { family: 'quad', params: {}, polyDeg: 2 };
+
+  FAMILIES.forEach(f => {
+    state.params[f.id] = {};
+    f.params.forEach(p => { state.params[f.id][p.id] = p.def; });
+  });
+
+  // ── Canvas ─────────────────────────────────────────────────────────────────
+  const canvas  = document.getElementById('xray-canvas');
+  const ctx     = canvas.getContext('2d');
+
+  // View bounds — updated per family before draw
+  let VIEW = { xMin: -8, xMax: 8, yMin: -6, yMax: 6 };
+
+  function getView() {
+    const fam = state.family;
+    if (fam === 'poly') return { xMin:-7, xMax:7, yMin:-18, yMax:18 };
+    if (fam === 'exp')  return { xMin:-5, xMax:8, yMin:-7,  yMax:12 };
+    if (fam === 'log')  return { xMin:-4, xMax:9, yMin:-7,  yMax:7  };
+    if (fam === 'sin' || fam === 'cos') return { xMin:-8, xMax:8, yMin:-6, yMax:6 };
+    return { xMin:-8, xMax:8, yMin:-7, yMax:7 };
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    const W = wrap.clientWidth, H = wrap.clientHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    draw();
+  }
+
+  // World → canvas pixel
+  function w2c(wx, wy, W, H) {
+    const px = (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W;
+    const py = H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H;
+    return [px, py];
+  }
+
+  // ── Evaluate current family at x ───────────────────────────────────────────
+  function evalAt(x) {
+    const fam = state.family;
+    const P   = state.params[fam];
+    switch (fam) {
+      case 'quad': { const {a,h,k} = P; return a*(x-h)*(x-h)+k; }
+      case 'abs':  { const {a,h,k} = P; return a*Math.abs(x-h)+k; }
+      case 'exp':  {
+        const {a,h,k} = P;
+        const b = Math.abs(P.b-1)<0.05 ? (P.b>1?1.05:0.95) : P.b;
+        return a*Math.pow(Math.max(0.001,b), x-h)+k;
+      }
+      case 'log':  {
+        if (x <= P.h) return NaN;
+        const b = Math.abs(P.b-1)<0.05 ? (P.b>1?1.05:0.95) : P.b;
+        return P.a * Math.log(x-P.h) / Math.log(Math.max(0.001,b)) + P.k;
+      }
+      case 'rat':  {
+        if (Math.abs(x-P.h)<1e-6) return NaN;
+        return P.a/(x-P.h)+P.k;
+      }
+      case 'poly':  {
+        const {a,r1,r2,r3,r4} = P; const d = state.polyDeg;
+        let y = a*(x-r1)*(x-r2);
+        if (d>=3) y *= (x-r3);
+        if (d>=4) y *= (x-r4);
+        return y;
+      }
+      case 'rad':  { if (x < P.h) return NaN; return P.a*Math.sqrt(x-P.h)+P.k; }
+      case 'sin':  {
+        const b = Math.max(0.01,Math.abs(P.b))*(P.b<0?-1:1);
+        return P.a*Math.sin(b*(x-P.h))+P.k;
+      }
+      case 'cos':  {
+        const b = Math.max(0.01,Math.abs(P.b))*(P.b<0?-1:1);
+        return P.a*Math.cos(b*(x-P.h))+P.k;
+      }
+    }
+    return NaN;
+  }
+
+  // ── Feature computation ────────────────────────────────────────────────────
+  function computeFeatures() {
+    const fam = state.family;
+    const P   = state.params[fam];
+    const feats = {};
+
+    if (fam === 'quad') {
+      const {a,h,k} = P;
+      feats.vertex = `(${fmt(h)}, ${fmt(k)})`;
+      feats['axis sym'] = `x = ${fmt(h)}`;
+      feats.opens = a>0 ? '↑ up' : '↓ down';
+      feats.domain = '(−∞, ∞)';
+      feats.range  = a>0 ? `[${fmt(k)}, ∞)` : `(−∞, ${fmt(k)}]`;
+      if (Math.abs(a)>1e-9) {
+        const disc = -k/a;
+        if (disc>1e-9) {
+          const s=Math.sqrt(disc);
+          feats.zeros = `${fmt(h-s)}, ${fmt(h+s)}`;
+        } else if (Math.abs(disc)<1e-9) {
+          feats.zeros = fmt(h) + ' (double)';
+        } else {
+          feats.zeros = 'none (imaginary)';
+        }
+      }
+      feats['y-int'] = fmt(a*h*h+k);
+    }
+    else if (fam === 'abs') {
+      const {a,h,k} = P;
+      feats.vertex = `(${fmt(h)}, ${fmt(k)})`;
+      feats['axis sym'] = `x = ${fmt(h)}`;
+      feats.domain = '(−∞, ∞)';
+      feats.range  = a>0 ? `[${fmt(k)}, ∞)` : `(−∞, ${fmt(k)}]`;
+      if (Math.abs(a)>1e-9) {
+        const d = -k/a;
+        if (d>1e-9) feats.zeros = `${fmt(h-d)}, ${fmt(h+d)}`;
+        else if (Math.abs(d)<1e-9) feats.zeros = fmt(h);
+        else feats.zeros = 'none';
+      }
+      feats['y-int'] = fmt(a*Math.abs(-h)+k);
+    }
+    else if (fam === 'exp') {
+      const {a,h,k} = P;
+      const b = Math.abs(P.b-1)<0.05 ? (P.b>1?1.05:0.95) : P.b;
+      feats['h. asymp.'] = `y = ${fmt(k)}`;
+      feats.domain = '(−∞, ∞)';
+      feats.range  = a>0 ? `(${fmt(k)}, ∞)` : `(−∞, ${fmt(k)})`;
+      feats['y-int'] = fmt(a*Math.pow(Math.max(0.001,b),-h)+k);
+      feats.anchor  = `(${fmt(h)}, ${fmt(a+k)})`;
+      const gr = (a>0&&b>1)||(a<0&&b<1);
+      feats.behavior = gr ? 'growth ↗' : 'decay ↘';
+    }
+    else if (fam === 'log') {
+      const {a,h,k} = P;
+      const b = Math.abs(P.b-1)<0.05 ? (P.b>1?1.05:0.95) : P.b;
+      feats['v. asymp.'] = `x = ${fmt(h)}`;
+      feats.domain = `(${fmt(h)}, ∞)`;
+      feats.range  = '(−∞, ∞)';
+      if (Math.abs(a)>1e-9) {
+        const xi = h+Math.pow(Math.max(0.001,b),-k/a);
+        feats.zero = `(${fmt(xi)}, 0)`;
+      }
+      feats.anchor = `(${fmt(h+1)}, ${fmt(k)})`;
+      if (h<0) feats['y-int'] = fmt(a*Math.log(-h)/Math.log(Math.max(0.001,b))+k);
+    }
+    else if (fam === 'rat') {
+      const {a,h,k} = P;
+      feats['v. asymp.'] = `x = ${fmt(h)}`;
+      feats['h. asymp.'] = `y = ${fmt(k)}`;
+      feats.domain = `ℝ∖{${fmt(h)}}`;
+      feats.range  = `ℝ∖{${fmt(k)}}`;
+      if (Math.abs(k)>1e-9) feats.zero = `(${fmt(h-a/k)}, 0)`;
+      else feats.zero = 'none (asymp @ x-axis)';
+      if (Math.abs(h)>1e-9) feats['y-int'] = fmt(-a/h+k);
+    }
+    else if (fam === 'poly') {
+      const {a,r1,r2,r3,r4} = P; const d = state.polyDeg;
+      const roots = [r1,r2,...(d>=3?[r3]:[]),...(d>=4?[r4]:[])];
+      feats.zeros  = roots.map(fmt).join(', ');
+      feats.degree = String(d);
+      let yi=a; roots.forEach(r=>{yi*=(0-r);}); feats['y-int'] = fmt(yi);
+      feats.domain = '(−∞, ∞)';
+      if (d%2===0) feats['end behav.'] = a>0 ? '↑ both ↑' : '↓ both ↓';
+      else         feats['end behav.'] = a>0 ? '↙ ↗'     : '↗ ↙';
+    }
+    else if (fam === 'rad') {
+      const {a,h,k} = P;
+      feats.domain = `[${fmt(h)}, ∞)`;
+      feats.range  = a>0 ? `[${fmt(k)}, ∞)` : `(−∞, ${fmt(k)}]`;
+      feats['start pt'] = `(${fmt(h)}, ${fmt(k)})`;
+      if (Math.abs(a)>1e-9 && (-k/a)>=0) {
+        const xi = h+(k/a)*(k/a);
+        feats.zero = fmt(xi);
+      } else { feats.zero = 'none'; }
+      if (h<=0) feats['y-int'] = fmt(a*Math.sqrt(-h)+k);
+    }
+    else if (fam==='sin'||fam==='cos') {
+      const {a,b,h,k} = P;
+      const sb = Math.max(0.01,Math.abs(b));
+      feats.amplitude  = fmt(Math.abs(a));
+      feats.period     = fmt(TAU/sb);
+      feats['phase sh.']= fmt(h);
+      feats.midline    = `y = ${fmt(k)}`;
+      feats.max        = fmt(k+Math.abs(a));
+      feats.min        = fmt(k-Math.abs(a));
+      feats.domain     = '(−∞, ∞)';
+      feats.range      = `[${fmt(k-Math.abs(a))}, ${fmt(k+Math.abs(a))}]`;
+    }
+    return feats;
+  }
+
+  // ── Draw ───────────────────────────────────────────────────────────────────
+  function draw() {
+    VIEW = getView();
+    const W = canvas.width  / DPR;
+    const H = canvas.height / DPR;
+    ctx.save();
+    ctx.scale(DPR, DPR);
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+    drawGrid(W, H);
+    drawAxes(W, H);
+    drawXRayLayer(W, H);
+    drawCurve(W, H);
+    drawDots(W, H);
+    ctx.restore();
+  }
+
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(180,170,148,0.3)';
+    ctx.lineWidth = 0.5;
+    for (let gx=Math.ceil(VIEW.xMin); gx<=VIEW.xMax; gx++) {
+      const [px] = w2c(gx,0,W,H);
+      ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+    }
+    for (let gy=Math.ceil(VIEW.yMin); gy<=VIEW.yMax; gy++) {
+      const [,py] = w2c(0,gy,W,H);
+      ctx.beginPath(); ctx.moveTo(0,py); ctx.lineTo(W,py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox,oy] = w2c(0,0,W,H);
+    ctx.strokeStyle = '#3a342a'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0,oy);  ctx.lineTo(W,oy);  ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,0);  ctx.lineTo(ox,H);  ctx.stroke();
+
+    // Axis tick labels
+    ctx.fillStyle = '#6b6357';
+    ctx.font = `${10}px 'JetBrains Mono', monospace`;
+    const xStep = VIEW.xMax > 7 ? 2 : 1;
+    const yStep = VIEW.yMax > 7 ? 4 : 2;
+    for (let gx=Math.ceil(VIEW.xMin); gx<=VIEW.xMax; gx+=xStep) {
+      if (gx===0) continue;
+      const [px] = w2c(gx,0,W,H);
+      ctx.strokeStyle='#6b6357'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(px,oy-3); ctx.lineTo(px,oy+3); ctx.stroke();
+      ctx.textAlign='center';
+      if (Math.abs(gx)%2===0 || xStep===1) ctx.fillText(gx, px, oy+14);
+    }
+    for (let gy=Math.ceil(VIEW.yMin); gy<=VIEW.yMax; gy+=yStep) {
+      if (gy===0) continue;
+      const [,py] = w2c(0,gy,W,H);
+      ctx.strokeStyle='#6b6357'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(ox-3,py); ctx.lineTo(ox+3,py); ctx.stroke();
+      ctx.textAlign='right';
+      ctx.fillText(gy, ox-7, py+4);
+    }
+  }
+
+  function drawXRayLayer(W, H) {
+    const fam = state.family;
+    const P   = state.params[fam];
+    ctx.save();
+
+    const BROWN  = 'rgba(139,90,0,0.75)';
+    const BLUE   = 'rgba(42,111,180,0.65)';
+    const GOLD   = 'rgba(180,140,0,0.85)';
+    const RED_DIM= 'rgba(217,79,42,0.45)';
+
+    // Axis of symmetry (quad, abs)
+    if (fam==='quad'||fam==='abs') {
+      const [px] = w2c(P.h,0,W,H);
+      ctx.setLineDash([6,5]); ctx.strokeStyle=BLUE; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=BLUE; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='center'; ctx.fillText(`x = ${fmt(P.h)}`, px, 14);
+    }
+
+    // Horizontal asymptote (exp, rat)
+    if (fam==='exp'||fam==='rat') {
+      const [,py] = w2c(0,P.k,W,H);
+      ctx.setLineDash([6,5]); ctx.strokeStyle=BROWN; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(0,py); ctx.lineTo(W,py); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=BROWN; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='left'; ctx.fillText(`y = ${fmt(P.k)}`, 6, py-5);
+    }
+
+    // Vertical asymptote (log, rat)
+    if (fam==='log'||fam==='rat') {
+      const [px] = w2c(P.h,0,W,H);
+      ctx.setLineDash([6,5]); ctx.strokeStyle=BROWN; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=BROWN; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='center'; ctx.fillText(`x = ${fmt(P.h)}`, px, 14);
+    }
+
+    // Domain start (rad)
+    if (fam==='rad') {
+      const [px] = w2c(P.h,0,W,H);
+      ctx.setLineDash([5,4]); ctx.strokeStyle=BLUE; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=BLUE; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='center'; ctx.fillText(`x = ${fmt(P.h)} (start)`, px, 14);
+    }
+
+    // Trig overlays
+    if (fam==='sin'||fam==='cos') {
+      const {a,b,h,k} = P;
+      const sb = Math.max(0.01,Math.abs(b));
+      const period = TAU/sb;
+
+      // Midline
+      const [,midY] = w2c(0,k,W,H);
+      ctx.setLineDash([7,5]); ctx.strokeStyle=GOLD; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(0,midY); ctx.lineTo(W,midY); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle=GOLD; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='left'; ctx.fillText(`midline y = ${fmt(k)}`, 6, midY-5);
+
+      // Amplitude ceiling/floor
+      const [,topY] = w2c(0, k+Math.abs(a), W, H);
+      const [,botY] = w2c(0, k-Math.abs(a), W, H);
+      ctx.setLineDash([3,4]); ctx.strokeStyle=RED_DIM; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(0,topY); ctx.lineTo(W,topY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0,botY); ctx.lineTo(W,botY); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='rgba(217,79,42,0.7)'; ctx.font='10px Patrick Hand, cursive';
+      ctx.textAlign='right';
+      ctx.fillText(`+${fmt(Math.abs(a))}`, W-5, topY-4);
+      ctx.fillText(`−${fmt(Math.abs(a))}`, W-5, botY+13);
+
+      // Period bracket: one period starting from phase shift
+      const bx0 = h, bx1 = h+period;
+      const [bracL] = w2c(bx0,0,W,H), [bracR] = w2c(bx1,0,W,H);
+      if (bracL>=0 && bracR<=W) {
+        const by = H-18;
+        ctx.strokeStyle=BLUE; ctx.lineWidth=1.5; ctx.setLineDash([]);
+        ctx.beginPath(); ctx.moveTo(bracL,by); ctx.lineTo(bracR,by); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bracL,by-4); ctx.lineTo(bracL,by+4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(bracR,by-4); ctx.lineTo(bracR,by+4); ctx.stroke();
+        ctx.fillStyle=BLUE; ctx.font='10px Patrick Hand, cursive';
+        ctx.textAlign='center';
+        ctx.fillText(`T = ${(period).toFixed(2)}`, (bracL+bracR)/2, by+13);
+      }
+    }
+
+    ctx.restore();
+  }
+
+  function drawCurve(W, H) {
+    const fam = state.family;
+    const P   = state.params[fam];
+    const steps = Math.round(W * 2);
+    const dx = (VIEW.xMax-VIEW.xMin)/steps;
+    const yRange = VIEW.yMax-VIEW.yMin;
+
+    ctx.save();
+    ctx.strokeStyle = '#d94f2a';
+    ctx.lineWidth   = 2.5;
+    ctx.lineJoin    = 'round';
+    ctx.lineCap     = 'round';
+
+    // Split points (asymptotes)
+    const splits = [];
+    if (fam==='rat'||fam==='log') splits.push(P.h);
+
+    let open = false;
+    ctx.beginPath();
+
+    for (let i=0; i<=steps; i++) {
+      const wx = VIEW.xMin + i*dx;
+
+      // Near asymptote: break the path
+      const nearSplit = splits.some(s => Math.abs(wx-s) < dx*2.5);
+      if (nearSplit) {
+        if (open) { ctx.stroke(); ctx.beginPath(); open=false; }
+        continue;
+      }
+
+      const wy = evalAt(wx);
+      if (!isFinite(wy)||isNaN(wy)||Math.abs(wy)>yRange*5) {
+        if (open) { ctx.stroke(); ctx.beginPath(); open=false; }
+        continue;
+      }
+
+      const [px,py] = w2c(wx,wy,W,H);
+      if (!open) { ctx.moveTo(px,py); open=true; }
+      else        ctx.lineTo(px,py);
+    }
+    if (open) ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawDots(W, H) {
+    const fam = state.family;
+    const P   = state.params[fam];
+
+    function dot(wx, wy, stroke, fill, label, ldir) {
+      if (!isFinite(wx)||!isFinite(wy)) return;
+      if (wx<VIEW.xMin-0.3||wx>VIEW.xMax+0.3) return;
+      if (wy<VIEW.yMin-0.3||wy>VIEW.yMax+0.3) return;
+      const [px,py] = w2c(wx,wy,W,H);
+      ctx.beginPath(); ctx.arc(px,py,5,0,TAU);
+      ctx.fillStyle = fill||'#f6f1e4'; ctx.fill();
+      ctx.strokeStyle=stroke; ctx.lineWidth=2; ctx.stroke();
+      if (label) {
+        ctx.fillStyle=stroke;
+        ctx.font='bold 10px Patrick Hand, cursive';
+        ctx.textAlign = ldir==='right'?'left':'center';
+        const lx = ldir==='right'?px+8:px;
+        const ly = ldir==='above'?py-8:py+15;
+        ctx.fillText(label, lx, ly);
+      }
+    }
+
+    if (fam==='quad') {
+      const {a,h,k} = P;
+      dot(h,k,'#7a2a8a',null,`V(${fmt(h)},${fmt(k)})`,'right');
+      if (Math.abs(a)>1e-9) {
+        const disc=-k/a;
+        if (disc>1e-9) {
+          const s=Math.sqrt(disc);
+          dot(h-s,0,'#d94f2a',null,fmt(h-s),'above');
+          dot(h+s,0,'#d94f2a',null,fmt(h+s),'above');
+        } else if (Math.abs(disc)<1e-9) {
+          dot(h,0,'#d94f2a',null,fmt(h),'above');
+        }
+      }
+      dot(0,a*h*h+k,'#2a8a4a',null,null,null);
+    }
+    else if (fam==='abs') {
+      const {a,h,k} = P;
+      dot(h,k,'#7a2a8a',null,`V(${fmt(h)},${fmt(k)})`,'right');
+      if (Math.abs(a)>1e-9) {
+        const d=-k/a;
+        if (d>1e-9) {
+          dot(h-d,0,'#d94f2a',null,fmt(h-d),'above');
+          dot(h+d,0,'#d94f2a',null,fmt(h+d),'above');
+        } else if (Math.abs(d)<1e-9) {
+          dot(h,0,'#d94f2a',null,fmt(h),'above');
+        }
+      }
+      dot(0, a*Math.abs(-h)+k, '#2a8a4a',null,null,null);
+    }
+    else if (fam==='exp') {
+      const {a,h,k}=P;
+      const b=Math.abs(P.b-1)<0.05?(P.b>1?1.05:0.95):P.b;
+      dot(0, a*Math.pow(Math.max(0.001,b),-h)+k, '#2a8a4a',null,null,null);
+      dot(h, a+k, '#7a2a8a',null,`(${fmt(h)},${fmt(a+k)})`,'right');
+    }
+    else if (fam==='log') {
+      const {a,h,k}=P;
+      const b=Math.abs(P.b-1)<0.05?(P.b>1?1.05:0.95):P.b;
+      if (Math.abs(a)>1e-9) {
+        const xi=h+Math.pow(Math.max(0.001,b),-k/a);
+        dot(xi,0,'#d94f2a',null,fmt(xi),'above');
+      }
+      dot(h+1, k, '#7a2a8a',null,`(${fmt(h+1)},${fmt(k)})`,'right');
+      if (h<0) dot(0, a*Math.log(-h)/Math.log(Math.max(0.001,b))+k, '#2a8a4a',null,null,null);
+    }
+    else if (fam==='rat') {
+      const {a,h,k}=P;
+      if (Math.abs(k)>1e-9) dot(h-a/k,0,'#d94f2a',null,fmt(h-a/k),'above');
+      if (Math.abs(h)>1e-9) dot(0,-a/h+k,'#2a8a4a',null,null,null);
+    }
+    else if (fam==='poly') {
+      const {a,r1,r2,r3,r4}=P; const d=state.polyDeg;
+      const roots=[r1,r2,...(d>=3?[r3]:[]),...(d>=4?[r4]:[])];
+      roots.forEach(r=>dot(r,0,'#d94f2a',null,fmt(r),'above'));
+      let yi=a; roots.forEach(r=>{yi*=(0-r);}); dot(0,yi,'#2a8a4a',null,null,null);
+    }
+    else if (fam==='rad') {
+      const {a,h,k}=P;
+      dot(h,k,'#7a2a8a',null,`(${fmt(h)},${fmt(k)})`,'right');
+      if (Math.abs(a)>1e-9&&(-k/a)>=0) {
+        const xi=h+(k/a)*(k/a);
+        if (xi!==h) dot(xi,0,'#d94f2a',null,fmt(xi),'above');
+      }
+      if (h<=0) dot(0,a*Math.sqrt(-h)+k,'#2a8a4a',null,null,null);
+    }
+    else if (fam==='sin'||fam==='cos') {
+      const {a,b,h,k}=P;
+      const sb=Math.max(0.01,Math.abs(b));
+      const period=TAU/sb;
+      for (let n=-12; n<=12; n++) {
+        const px = fam==='sin' ? h+period/4+n*period : h+n*period;
+        const tx = h+period*0.75+n*period;
+        if (px>=VIEW.xMin&&px<=VIEW.xMax) dot(px, k+a,'#d94f2a',null,null,null);
+        if (tx>=VIEW.xMin&&tx<=VIEW.xMax) dot(tx, k-a,'#d94f2a',null,null,null);
+      }
+    }
+  }
+
+  // ── Equation display ───────────────────────────────────────────────────────
+  function buildEq() {
+    const fam = state.family;
+    const P   = state.params[fam];
+    const fd  = FAMILIES.find(f=>f.id===fam);
+    const pc  = id => fd.params.find(p=>p.id===id).col;
+
+    let html = '';
+    if (fam==='quad')
+      html = `${cs(P.a,pc('a'))}${hShift(P.h,pc('h'))}² ${vShift(P.k,pc('k'))}`;
+    else if (fam==='abs')
+      html = `${cs(P.a,pc('a'))}|${hShift(P.h,pc('h'))}| ${vShift(P.k,pc('k'))}`;
+    else if (fam==='exp') {
+      const b = Math.abs(P.b-1)<0.05?(P.b>1?1.05:0.95):P.b;
+      html = `${cs(P.a,pc('a'))} · <span style="color:${pc('b')};font-weight:700;">${fmt(b)}</span><sup>${hShift(P.h,pc('h'))}</sup> ${vShift(P.k,pc('k'))}`;
+    } else if (fam==='log') {
+      const b = Math.abs(P.b-1)<0.05?(P.b>1?1.05:0.95):P.b;
+      html = `${cs(P.a,pc('a'))}·log<sub><span style="color:${pc('b')};font-weight:700;">${fmt(b)}</span></sub>${hShift(P.h,pc('h'))} ${vShift(P.k,pc('k'))}`;
+    } else if (fam==='rat')
+      html = `${cs(P.a,pc('a'))} / ${hShift(P.h,pc('h'))} ${vShift(P.k,pc('k'))}`;
+    else if (fam==='poly') {
+      const d=state.polyDeg;
+      html  = `${cs(P.a,pc('a'))}(x&minus;${cs(P.r1,pc('r1'))})(x&minus;${cs(P.r2,pc('r2'))})`;
+      if (d>=3) html += `(x&minus;${cs(P.r3,pc('r3'))})`;
+      if (d>=4) html += `(x&minus;${cs(P.r4,pc('r4'))})`;
+    } else if (fam==='rad')
+      html = `${cs(P.a,pc('a'))}√${hShift(P.h,pc('h'))} ${vShift(P.k,pc('k'))}`;
+    else if (fam==='sin')
+      html = `${cs(P.a,pc('a'))}·sin(${cs(P.b,pc('b'))}·${hShift(P.h,pc('h'))}) ${vShift(P.k,pc('k'))}`;
+    else if (fam==='cos')
+      html = `${cs(P.a,pc('a'))}·cos(${cs(P.b,pc('b'))}·${hShift(P.h,pc('h'))}) ${vShift(P.k,pc('k'))}`;
+
+    document.getElementById('eq-display').innerHTML = html;
+  }
+
+  // ── Chips ──────────────────────────────────────────────────────────────────
+  function buildChips() {
+    const feats = computeFeatures();
+    const area  = document.getElementById('chips-area');
+    area.innerHTML = '';
+    Object.entries(feats).forEach(([k,v]) => {
+      const c = document.createElement('div');
+      c.className = 'feat-chip';
+      c.innerHTML = `<span class="chip-lbl">${k}</span><span class="chip-val">${v}</span>`;
+      area.appendChild(c);
+    });
+  }
+
+  // ── Legend ─────────────────────────────────────────────────────────────────
+  function buildLegend() {
+    const fam = state.family;
+    const leg = document.getElementById('anatomy-legend');
+    leg.innerHTML = '';
+
+    const items = [{ type:'line', col:'#d94f2a', label:'function curve' }];
+
+    if (fam==='quad'||fam==='abs') {
+      items.push({ type:'dash', col:'rgba(42,111,180,0.7)', label:'axis of symmetry' });
+      items.push({ type:'dot',  col:'#7a2a8a', label:'vertex' });
+      items.push({ type:'dot',  col:'#d94f2a', label:'zeros' });
+      items.push({ type:'dot',  col:'#2a8a4a', label:'y-intercept' });
+    } else if (fam==='exp') {
+      items.push({ type:'dash', col:'rgba(139,90,0,0.8)', label:'horizontal asymptote' });
+      items.push({ type:'dot',  col:'#7a2a8a', label:'anchor point' });
+      items.push({ type:'dot',  col:'#2a8a4a', label:'y-intercept' });
+    } else if (fam==='log') {
+      items.push({ type:'dash', col:'rgba(139,90,0,0.8)', label:'vertical asymptote' });
+      items.push({ type:'dot',  col:'#7a2a8a', label:'anchor (h+1, k)' });
+      items.push({ type:'dot',  col:'#d94f2a', label:'zero' });
+    } else if (fam==='rat') {
+      items.push({ type:'dash', col:'rgba(139,90,0,0.8)', label:'asymptotes (v + h)' });
+      items.push({ type:'dot',  col:'#d94f2a', label:'zero' });
+      items.push({ type:'dot',  col:'#2a8a4a', label:'y-intercept' });
+    } else if (fam==='poly') {
+      items.push({ type:'dot',  col:'#d94f2a', label:'zeros' });
+      items.push({ type:'dot',  col:'#2a8a4a', label:'y-intercept' });
+    } else if (fam==='rad') {
+      items.push({ type:'dash', col:'rgba(42,111,180,0.7)', label:'domain start' });
+      items.push({ type:'dot',  col:'#7a2a8a', label:'start point' });
+      items.push({ type:'dot',  col:'#d94f2a', label:'zero' });
+    } else if (fam==='sin'||fam==='cos') {
+      items.push({ type:'dash', col:'rgba(180,140,0,0.9)', label:'midline' });
+      items.push({ type:'dash', col:'rgba(217,79,42,0.5)', label:'amplitude bounds' });
+      items.push({ type:'dash', col:'rgba(42,111,180,0.7)', label:'period bracket' });
+      items.push({ type:'dot',  col:'#d94f2a', label:'peaks & troughs' });
+    }
+
+    items.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'leg-item';
+      let sw = '';
+      if (item.type==='line')
+        sw = `<div style="width:22px;height:3px;border-radius:2px;background:${item.col};"></div>`;
+      else if (item.type==='dash')
+        sw = `<div style="width:22px;height:2px;background:repeating-linear-gradient(90deg,${item.col} 0,${item.col} 4px,transparent 4px,transparent 8px);"></div>`;
+      else
+        sw = `<div style="width:10px;height:10px;border-radius:50%;border:2px solid ${item.col};"></div>`;
+      el.innerHTML = sw + `<span class="leg-label">${item.label}</span>`;
+      leg.appendChild(el);
+    });
+  }
+
+  // ── Sliders ────────────────────────────────────────────────────────────────
+  function buildSliders() {
+    const fam  = state.family;
+    const fd   = FAMILIES.find(f=>f.id===fam);
+    const area = document.getElementById('slider-area');
+    area.innerHTML = '';
+
+    document.getElementById('deg-row').style.display = fam==='poly' ? 'flex' : 'none';
+
+    fd.params.forEach(p => {
+      if (p.minDeg && state.polyDeg < p.minDeg) return;
+
+      const lbl = document.createElement('label');
+      lbl.className = 'param-lbl';
+      lbl.style.color = p.col;
+      lbl.innerHTML = `<span class="letter">${p.label}</span><span class="pdesc">${p.desc}</span>`;
+
+      const range = document.createElement('input');
+      range.type='range'; range.min=p.min; range.max=p.max;
+      range.step=p.step; range.value=state.params[fam][p.id];
+      range.className='slider';
+
+      const num = document.createElement('input');
+      num.type='number'; num.className='dyn-val';
+      num.style.color=p.col;
+      num.min=p.min; num.max=p.max; num.step=p.step;
+      num.value=state.params[fam][p.id];
+
+      range.addEventListener('input', ()=>{
+        const v=parseFloat(range.value);
+        state.params[fam][p.id]=v; num.value=v; update();
+      });
+      num.addEventListener('change', ()=>{
+        let v=parseFloat(num.value);
+        v=Math.max(p.min,Math.min(p.max,isNaN(v)?p.def:v));
+        state.params[fam][p.id]=v; range.value=v; num.value=v; update();
+      });
+
+      area.appendChild(lbl);
+      area.appendChild(range);
+      area.appendChild(num);
+    });
+  }
+
+  // ── Full update ────────────────────────────────────────────────────────────
+  function update() {
+    draw();
+    buildEq();
+    buildChips();
+  }
+
+  // ── Family picker ──────────────────────────────────────────────────────────
+  function buildFamilyPicker() {
+    const grid = document.getElementById('family-grid');
+    FAMILIES.forEach(f => {
+      const btn = document.createElement('button');
+      btn.className = 'fam-btn' + (f.id===state.family ? ' active' : '');
+      btn.innerHTML = `${f.label}<span class="fam-sub">${f.sub}</span>`;
+      btn.addEventListener('click', ()=>{
+        state.family = f.id;
+        grid.querySelectorAll('.fam-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('insight-txt').textContent = f.insight;
+        buildSliders();
+        buildLegend();
+        update();
+      });
+      grid.appendChild(btn);
+    });
+    document.getElementById('insight-txt').textContent =
+      FAMILIES.find(f=>f.id===state.family).insight;
+  }
+
+  // ── Degree buttons ─────────────────────────────────────────────────────────
+  document.getElementById('deg-row').querySelectorAll('.deg-btn').forEach(btn => {
+    btn.addEventListener('click', ()=>{
+      state.polyDeg = parseInt(btn.dataset.deg);
+      document.getElementById('deg-row').querySelectorAll('.deg-btn')
+        .forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      buildSliders();
+      update();
+    });
+  });
+
+  // ── Reset button ───────────────────────────────────────────────────────────
+  document.getElementById('reset-btn').addEventListener('click', ()=>{
+    const fam = state.family;
+    const fd  = FAMILIES.find(f=>f.id===fam);
+    fd.params.forEach(p=>{ state.params[fam][p.id]=p.def; });
+    buildSliders();
+    update();
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  buildFamilyPicker();
+  buildSliders();
+  buildLegend();
+  window.addEventListener('resize', resize);
+  resize(); // sizes canvas + draws
+  update();
+
+  </script>
+</body>
+</html>
