@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inequality Region Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #ineq-canvas { position: absolute; inset: 0; width: 100%; height: 100%;
+                   display: block; cursor: crosshair; }
+
+    /* ── Mode/Type tabs ──────────────────────────────────────── */
+    .mode-row { display: flex; gap: 3px; }
+    .mode-btn {
+      flex: 1; padding: 5px 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.1;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2);
+      cursor: pointer; text-align: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    .mode-btn:hover:not(.active) { background: var(--paper-3); }
+    .mode-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Sign selector ───────────────────────────────────────── */
+    .sign-row { display: flex; gap: 3px; align-items: center; }
+    .sign-btn {
+      width: 30px; height: 26px;
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    .sign-btn:hover:not(.active) { background: var(--paper-3); }
+    .sign-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Equation bar ────────────────────────────────────────── */
+    .eq-bar {
+      padding: 7px 12px;
+      background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+      flex-wrap: wrap; min-height: 34px;
+    }
+
+    /* ── Sliders ─────────────────────────────────────────────── */
+    .slider-grid {
+      display: grid; grid-template-columns: 72px 1fr 50px;
+      gap: 4px 8px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      display: flex; align-items: baseline; gap: 5px;
+    }
+    .param-lbl .letter { font-size: 15px; font-style: italic; font-weight: 700; }
+    .param-lbl .pdesc  { font-family: 'Patrick Hand', cursive; font-size: 10px; color: var(--ink-soft); }
+    .dyn-val[type=number] {
+      width: 46px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Feature chips ───────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip {
+      padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      display: inline-flex; align-items: baseline; gap: 4px;
+      background: var(--paper-2);
+    }
+    .chip-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .chip-val { font-weight: 600; color: var(--ink); font-size: 12px; }
+    .chip-ok  { background: #e8f5ec; border-color: #2a8a4a; }
+    .chip-no  { background: #fce8e4; border-color: #d94f2a; }
+
+    /* ── Ineq block (system) ─────────────────────────────────── */
+    .ineq-block {
+      border: 1.5px solid; border-radius: 3px;
+      padding: 8px 10px; margin-bottom: 8px;
+    }
+    .ineq-block-hdr {
+      font-family: 'Special Elite', monospace; font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    /* ── Insight ─────────────────────────────────────────────── */
+    .insight-box {
+      padding: 9px 11px;
+      background: var(--highlight); border: 1.5px solid var(--ink-2);
+      border-radius: 3px;
+    }
+    .insight-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--ink-soft); margin-bottom: 3px;
+    }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.4; }
+
+    /* ── Section label ───────────────────────────────────────── */
+    .sec-lbl {
+      font-family: 'Special Elite', monospace; font-size: 9px;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--ink-soft); margin-bottom: 5px;
+    }
+
+    /* ── Legend ──────────────────────────────────────────────── */
+    .anatomy-legend {
+      display: flex; flex-wrap: wrap; gap: 5px 12px;
+      padding: 5px 10px; border-top: 1.5px solid var(--ink-soft);
+      background: var(--paper-2); flex-shrink: 0;
+    }
+    .leg-item { display: flex; align-items: center; gap: 5px; }
+    .leg-label { font-family: 'Patrick Hand', cursive; font-size: 11px; color: var(--ink-2); }
+
+    /* ── Canvas hint ─────────────────────────────────────────── */
+    .canvas-hint {
+      padding: 3px 10px; background: var(--paper-3);
+      border-top: 1px solid var(--ink-soft); flex-shrink: 0;
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      color: var(--ink-soft); text-align: center;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important;
+                      border-right: none; border-bottom: 1.5px solid var(--ink-soft); }
+      .canvas-wrap { min-height: 260px; }
+    }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Inequality Explorer</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">shade the region that satisfies the inequality</div>
+      </div>
+
+      <!-- Type -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">type</div>
+        <div class="mode-row">
+          <button class="mode-btn active" data-mode="linear">Linear</button>
+          <button class="mode-btn" data-mode="quad">Quadratic</button>
+          <button class="mode-btn" data-mode="abs">Abs Value</button>
+          <button class="mode-btn" data-mode="system">System</button>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div id="params-area"></div>
+      </div>
+
+      <!-- Results chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">results</div>
+        <div class="chips-row" id="chips-area"></div>
+      </div>
+
+      <!-- Insight -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight-txt"></div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main class="tool-main"
+          style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+
+      <div class="eq-bar">
+        <span id="eq-display" style="color:var(--ink);">—</span>
+      </div>
+
+      <div class="canvas-wrap">
+        <canvas id="ineq-canvas"></canvas>
+      </div>
+
+      <div class="anatomy-legend" id="anatomy-legend"></div>
+      <div class="canvas-hint">click anywhere on the graph to place a test point ✦</div>
+
+    </main>
+  </div>
+
+  <script>
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  const DPR = window.devicePixelRatio || 1;
+  const TAU = 2 * Math.PI;
+
+  function fmt(n) {
+    if (!isFinite(n)) return '—';
+    const r = Math.round(n * 100) / 100;
+    return r === 0 ? '0' : String(r);
+  }
+  function cs(val, col) {
+    return `<span style="color:${col};font-weight:700;">${fmt(val)}</span>`;
+  }
+  function signHtml(s, col) {
+    const map = { '<':'&lt;', '>':'&gt;', '≤':'&le;', '≥':'&ge;' };
+    return `<span style="color:${col};font-weight:700;font-size:15px;">${map[s]||s}</span>`;
+  }
+
+  // ── Insights ───────────────────────────────────────────────────────────────
+  const INSIGHTS = {
+    linear:
+      'The boundary line splits the plane in two. A dashed line means points ON the line don\'t count (strict inequality). Strategy: pick any test point not on the boundary, plug its (x, y) into the inequality — shade the side that works. Try (0, 0) as a quick test.',
+    quad:
+      'Your boundary is a parabola. Same test-point strategy — the origin works unless the parabola passes through it. For y > a(x−h)²+k, you shade ABOVE the parabola. For y < ..., shade BELOW. Click anywhere to test a point instantly.',
+    abs:
+      'The V-shape creates two boundary arms. For y < a|x−h|+k, shade INSIDE the V (below both arms). For y > ..., shade OUTSIDE. The vertex at (h, k) is the "tip" of the boundary — everything else fans out from there.',
+    system:
+      'Both inequalities must be true at the same time. Shade each region separately — the OVERLAP where both shadings meet is the solution set. If the two regions don\'t overlap, there\'s no solution. Click any point to test both at once.',
+  };
+
+  // ── Param meta ─────────────────────────────────────────────────────────────
+  const PDEFS = {
+    m:  { label:'m',  desc:'slope',        min:-3, max:3, step:0.25, col:'#2a6fb4' },
+    b:  { label:'b',  desc:'y-intercept',  min:-6, max:6, step:0.5,  col:'#2a8a4a' },
+    a:  { label:'a',  desc:'stretch/flip', min:-3, max:3, step:0.1,  col:'#d94f2a' },
+    h:  { label:'h',  desc:'horiz shift',  min:-5, max:5, step:0.5,  col:'#2a6fb4' },
+    k:  { label:'k',  desc:'vert shift',   min:-5, max:5, step:0.5,  col:'#2a8a4a' },
+  };
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  let state = {
+    mode: 'linear',
+    linear: { m:1,  b:-1, sign:'<' },
+    quad:   { a:1,  h:0,  k:-2, sign:'<' },
+    abs:    { a:1,  h:0,  k:-2, sign:'<' },
+    system: {
+      ineq1: { m:1,  b:2,  sign:'<' },
+      ineq2: { m:-1, b:-2, sign:'>' },
+    },
+    testPt: { x:0, y:3 },
+  };
+
+  // ── Canvas / view ──────────────────────────────────────────────────────────
+  const canvas = document.getElementById('ineq-canvas');
+  const ctx    = canvas.getContext('2d');
+  let VIEW     = { xMin:-8, xMax:8, yMin:-6, yMax:6 };
+
+  function computeView(W, H) {
+    const scale = Math.min(W, H) / 14;
+    return {
+      xMin: -W / (2*scale),  xMax: W / (2*scale),
+      yMin: -H / (2*scale),  yMax: H / (2*scale),
+    };
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2w(px, py, W, H) {
+    return [
+      VIEW.xMin + px / W * (VIEW.xMax - VIEW.xMin),
+      VIEW.yMin + (H - py) / H * (VIEW.yMax - VIEW.yMin),
+    ];
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    const W = wrap.clientWidth, H = wrap.clientHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    draw();
+  }
+
+  // ── Evaluators ─────────────────────────────────────────────────────────────
+  function getFn(type, P) {
+    if (type === 'linear') return x => P.m * x + P.b;
+    if (type === 'quad')   return x => P.a * (x-P.h)*(x-P.h) + P.k;
+    if (type === 'abs')    return x => P.a * Math.abs(x-P.h) + P.k;
+    return x => x;
+  }
+
+  function satisfies(tx, ty, fn, sign) {
+    const fy = fn(tx);
+    if (sign === '<')  return ty <  fy;
+    if (sign === '≤')  return ty <= fy;
+    if (sign === '>')  return ty >  fy;
+    if (sign === '≥')  return ty >= fy;
+    return false;
+  }
+
+  // ── Draw helpers ───────────────────────────────────────────────────────────
+
+  // Build the filled region path (without stroking)
+  function buildRegionPath(fn, sign, W, H) {
+    const below   = sign === '<' || sign === '≤';
+    const steps   = Math.round(W * 2);
+    const yPad    = 2;
+    let started   = false, firstPx = 0, lastPx = 0;
+
+    ctx.beginPath();
+    for (let i = 0; i <= steps; i++) {
+      const wx = VIEW.xMin + i * (VIEW.xMax - VIEW.xMin) / steps;
+      let wy = fn(wx);
+      if (!isFinite(wy)) wy = below ? VIEW.yMax + yPad : VIEW.yMin - yPad;
+      wy = Math.max(VIEW.yMin - yPad, Math.min(VIEW.yMax + yPad, wy));
+      const [px, py] = w2c(wx, wy, W, H);
+      if (!started) { ctx.moveTo(px, py); firstPx = px; started = true; }
+      else ctx.lineTo(px, py);
+      lastPx = px;
+    }
+    if (!started) return false;
+
+    if (below) { ctx.lineTo(lastPx, H+yPad); ctx.lineTo(firstPx, H+yPad); }
+    else       { ctx.lineTo(lastPx, -yPad);  ctx.lineTo(firstPx, -yPad);  }
+    ctx.closePath();
+    return true;
+  }
+
+  function fillRegion(fn, sign, color, W, H) {
+    ctx.save();
+    if (buildRegionPath(fn, sign, W, H)) {
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // Draw boundary curve (dashed for strict, solid for non-strict)
+  function drawBoundary(fn, sign, strokeColor, W, H) {
+    const strict = sign === '<' || sign === '>';
+    const steps  = Math.round(W * 2);
+    ctx.save();
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth   = 2;
+    ctx.lineJoin    = 'round'; ctx.lineCap = 'round';
+    if (strict) ctx.setLineDash([8, 6]);
+    ctx.beginPath();
+    let started = false;
+    for (let i = 0; i <= steps; i++) {
+      const wx = VIEW.xMin + i * (VIEW.xMax - VIEW.xMin) / steps;
+      const wy = fn(wx);
+      if (!isFinite(wy) || Math.abs(wy) > (VIEW.yMax-VIEW.yMin)*4) {
+        started = false; continue;
+      }
+      const [px, py] = w2c(wx, wy, W, H);
+      if (!started) { ctx.moveTo(px, py); started = true; }
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Draw intersection region using clip trick
+  function drawIntersection(fn1, sign1, fn2, sign2, W, H) {
+    ctx.save();
+    if (buildRegionPath(fn1, sign1, W, H)) {
+      ctx.clip();
+      fillRegion(fn2, sign2, 'rgba(100,70,200,0.28)', W, H);
+    }
+    ctx.restore();
+  }
+
+  // ── Main draw ──────────────────────────────────────────────────────────────
+  function draw() {
+    const W = canvas.width  / DPR;
+    const H = canvas.height / DPR;
+    VIEW = computeView(W, H);
+
+    ctx.save();
+    ctx.scale(DPR, DPR);
+
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+
+    drawGrid(W, H);
+    drawAxes(W, H);
+
+    const mode = state.mode;
+
+    if (mode !== 'system') {
+      const P  = state[mode];
+      const fn = getFn(mode, P);
+      fillRegion(fn, P.sign, 'rgba(42,111,180,0.22)', W, H);
+      drawBoundary(fn, P.sign, '#2a6fb4', W, H);
+      // Key point dots (vertex for quad/abs, y-intercept for linear)
+      drawKeyDots(mode, P, fn, W, H);
+    } else {
+      const fn1 = getFn('linear', state.system.ineq1);
+      const fn2 = getFn('linear', state.system.ineq2);
+      fillRegion(fn1, state.system.ineq1.sign, 'rgba(42,111,180,0.20)', W, H);
+      fillRegion(fn2, state.system.ineq2.sign, 'rgba(217,79,42,0.20)',  W, H);
+      drawIntersection(fn1, state.system.ineq1.sign, fn2, state.system.ineq2.sign, W, H);
+      drawBoundary(fn1, state.system.ineq1.sign, '#2a6fb4', W, H);
+      drawBoundary(fn2, state.system.ineq2.sign, '#d94f2a', W, H);
+      drawSystemIntersectionDot(fn1, fn2, W, H);
+    }
+
+    drawTestPoint(W, H);
+    ctx.restore();
+  }
+
+  // Dot for key structural points on the boundary curve
+  function drawKeyDots(mode, P, fn, W, H) {
+    function dot(wx, wy, col) {
+      if (!isFinite(wx)||!isFinite(wy)) return;
+      if (wx<VIEW.xMin||wx>VIEW.xMax||wy<VIEW.yMin||wy>VIEW.yMax) return;
+      const [px, py] = w2c(wx, wy, W, H);
+      ctx.beginPath(); ctx.arc(px, py, 4, 0, TAU);
+      ctx.fillStyle = '#f6f1e4'; ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+    }
+    if (mode === 'quad' || mode === 'abs') {
+      dot(P.h, P.k, '#7a2a8a'); // vertex / corner
+    }
+    // y-intercept
+    const yi = fn(0);
+    if (isFinite(yi)) dot(0, yi, '#2a8a4a');
+    // x-intercepts (linear/quad)
+    if (mode === 'linear' && Math.abs(P.m) > 1e-9) {
+      const xi = -P.b / P.m;
+      dot(xi, 0, '#2a6fb4');
+    }
+    if (mode === 'quad' && Math.abs(P.a) > 1e-9) {
+      const disc = -P.k / P.a;
+      if (disc >= 0) {
+        const s = Math.sqrt(disc);
+        dot(P.h - s, 0, '#d94f2a');
+        if (s > 1e-4) dot(P.h + s, 0, '#d94f2a');
+      }
+    }
+  }
+
+  // Dot at the intersection of two linear boundary lines (system mode)
+  function drawSystemIntersectionDot(fn1, fn2, W, H) {
+    const {m:m1, b:b1} = state.system.ineq1;
+    const {m:m2, b:b2} = state.system.ineq2;
+    if (Math.abs(m1 - m2) < 1e-6) return; // parallel, no intersection
+    const xi = (b2 - b1) / (m1 - m2);
+    const yi = fn1(xi);
+    if (!isFinite(xi)||!isFinite(yi)) return;
+    if (xi<VIEW.xMin||xi>VIEW.xMax||yi<VIEW.yMin||yi>VIEW.yMax) return;
+    const [px, py] = w2c(xi, yi, W, H);
+    ctx.save();
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = 'rgba(100,70,200,0.9)'; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.fillStyle = 'rgba(100,70,200,0.9)';
+    ctx.font = '10px Patrick Hand, cursive';
+    ctx.textAlign = 'left';
+    ctx.fillText(`(${fmt(xi)}, ${fmt(yi)})`, px + 9, py - 5);
+    ctx.restore();
+  }
+
+  // Test point: crosshair + ✓/✗ + coordinates
+  function drawTestPoint(W, H) {
+    const tp = state.testPt;
+    const [px, py] = w2c(tp.x, tp.y, W, H);
+    if (px < -15 || px > W+15 || py < -15 || py > H+15) return;
+
+    const mode = state.mode;
+    let ok = false;
+    if (mode !== 'system') {
+      const P  = state[mode];
+      ok = satisfies(tp.x, tp.y, getFn(mode, P), P.sign);
+    } else {
+      const fn1 = getFn('linear', state.system.ineq1);
+      const fn2 = getFn('linear', state.system.ineq2);
+      ok = satisfies(tp.x, tp.y, fn1, state.system.ineq1.sign) &&
+           satisfies(tp.x, tp.y, fn2, state.system.ineq2.sign);
+    }
+
+    const col = ok ? '#2a8a4a' : '#d94f2a';
+    ctx.save();
+
+    // Crosshair arms
+    ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(px-16, py); ctx.lineTo(px+16, py); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px, py-16); ctx.lineTo(px, py+16); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dot
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+
+    // Label
+    const mark  = ok ? '✓' : '✗';
+    const label = `(${fmt(tp.x)}, ${fmt(tp.y)}) ${mark}`;
+    ctx.fillStyle  = col;
+    ctx.font       = 'bold 11px Patrick Hand, cursive';
+    ctx.textAlign  = px < W * 0.75 ? 'left' : 'right';
+    const lx = px < W * 0.75 ? px + 10 : px - 10;
+    ctx.fillText(label, lx, py - 10);
+
+    ctx.restore();
+  }
+
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(180,170,148,0.3)'; ctx.lineWidth = 0.5;
+    for (let gx=Math.ceil(VIEW.xMin); gx<=VIEW.xMax; gx++) {
+      const [px]=w2c(gx,0,W,H); ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke();
+    }
+    for (let gy=Math.ceil(VIEW.yMin); gy<=VIEW.yMax; gy++) {
+      const [,py]=w2c(0,gy,W,H); ctx.beginPath(); ctx.moveTo(0,py); ctx.lineTo(W,py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox,oy] = w2c(0,0,W,H);
+    ctx.strokeStyle = '#3a342a'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+    const xSpan = VIEW.xMax - VIEW.xMin;
+    const ySpan = VIEW.yMax - VIEW.yMin;
+    const xStep = xSpan>24?4:xSpan>12?2:1;
+    const yStep = ySpan>24?4:ySpan>12?2:1;
+
+    ctx.fillStyle = '#6b6357';
+    ctx.font = '10px JetBrains Mono, monospace';
+    for (let gx=Math.ceil(VIEW.xMin); gx<=VIEW.xMax; gx+=xStep) {
+      if (gx===0) continue;
+      const [px]=w2c(gx,0,W,H);
+      ctx.strokeStyle='#6b6357'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(px,oy-3); ctx.lineTo(px,oy+3); ctx.stroke();
+      ctx.textAlign='center'; ctx.fillText(gx, px, oy+14);
+    }
+    for (let gy=Math.ceil(VIEW.yMin); gy<=VIEW.yMax; gy+=yStep) {
+      if (gy===0) continue;
+      const [,py]=w2c(0,gy,W,H);
+      ctx.strokeStyle='#6b6357'; ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(ox-3,py); ctx.lineTo(ox+3,py); ctx.stroke();
+      ctx.textAlign='right'; ctx.fillText(gy, ox-7, py+4);
+    }
+  }
+
+  // ── Equation display ───────────────────────────────────────────────────────
+  function linearEqHtml(P, signCol) {
+    const {m, b, sign} = P;
+    const sg  = signHtml(sign, signCol);
+    let mPart;
+    if (Math.abs(m) < 1e-9)       mPart = '';
+    else if (Math.abs(m-1) < 1e-9) mPart = 'x';
+    else if (Math.abs(m+1) < 1e-9) mPart = '&minus;x';
+    else mPart = `${cs(m, PDEFS.m.col)}x`;
+
+    let bPart = '';
+    if (Math.abs(b) > 1e-9)
+      bPart = b > 0
+        ? ` + ${cs(b, PDEFS.b.col)}`
+        : ` &minus; ${cs(-b, PDEFS.b.col)}`;
+
+    const rhs = (mPart || bPart) ? `${mPart}${bPart}` : '0';
+    return `y ${sg} ${rhs}`;
+  }
+
+  function buildEq() {
+    const mode = state.mode;
+    let html = '';
+
+    if (mode === 'linear') {
+      html = linearEqHtml(state.linear, '#2a6fb4');
+    }
+    else if (mode === 'quad') {
+      const {a, h, k, sign} = state.quad;
+      const sg = signHtml(sign, '#2a6fb4');
+      const hP = Math.abs(h)<1e-9 ? 'x&sup2;'
+               : h>0 ? `(x&minus;${cs(h,PDEFS.h.col)})&sup2;`
+                     : `(x+${cs(-h,PDEFS.h.col)})&sup2;`;
+      const kP = Math.abs(k)<1e-9 ? ''
+               : k>0 ? ` + ${cs(k,PDEFS.k.col)}`
+                     : ` &minus; ${cs(-k,PDEFS.k.col)}`;
+      html = `y ${sg} ${cs(a,PDEFS.a.col)}${hP}${kP}`;
+    }
+    else if (mode === 'abs') {
+      const {a, h, k, sign} = state.abs;
+      const sg = signHtml(sign, '#2a6fb4');
+      const hP = Math.abs(h)<1e-9 ? '|x|'
+               : h>0 ? `|x&minus;${cs(h,PDEFS.h.col)}|`
+                     : `|x+${cs(-h,PDEFS.h.col)}|`;
+      const kP = Math.abs(k)<1e-9 ? ''
+               : k>0 ? ` + ${cs(k,PDEFS.k.col)}`
+                     : ` &minus; ${cs(-k,PDEFS.k.col)}`;
+      html = `y ${sg} ${cs(a,PDEFS.a.col)}${hP}${kP}`;
+    }
+    else if (mode === 'system') {
+      const e1 = linearEqHtml(state.system.ineq1, '#2a6fb4');
+      const e2 = linearEqHtml(state.system.ineq2, '#d94f2a');
+      html = `${e1}<span style="color:var(--ink-soft);margin:0 8px;font-size:12px;">AND</span>${e2}`;
+    }
+
+    document.getElementById('eq-display').innerHTML = html;
+  }
+
+  // ── Chips ──────────────────────────────────────────────────────────────────
+  function buildChips() {
+    const area = document.getElementById('chips-area');
+    area.innerHTML = '';
+    const tp   = state.testPt;
+    const mode = state.mode;
+
+    function chip(lbl, val, cls) {
+      const el = document.createElement('div');
+      el.className = 'feat-chip' + (cls ? ' '+cls : '');
+      el.innerHTML = `<span class="chip-lbl">${lbl}</span><span class="chip-val">${val}</span>`;
+      area.appendChild(el);
+    }
+
+    if (mode !== 'system') {
+      const P   = state[mode];
+      const fn  = getFn(mode, P);
+      const ok  = satisfies(tp.x, tp.y, fn, P.sign);
+      const bdr = P.sign === '<' || P.sign === '>' ? 'dashed — excluded' : 'solid — included';
+      const shd = P.sign === '<' || P.sign === '≤' ? 'below curve' : 'above curve';
+      chip('boundary', bdr);
+      chip('shading',  shd);
+      chip('test pt',  `(${fmt(tp.x)}, ${fmt(tp.y)}) ${ok?'✓':'✗'}`, ok?'chip-ok':'chip-no');
+    } else {
+      const fn1 = getFn('linear', state.system.ineq1);
+      const fn2 = getFn('linear', state.system.ineq2);
+      const r1  = satisfies(tp.x, tp.y, fn1, state.system.ineq1.sign);
+      const r2  = satisfies(tp.x, tp.y, fn2, state.system.ineq2.sign);
+      chip('ineq 1',   `(${fmt(tp.x)},${fmt(tp.y)}) ${r1?'✓':'✗'}`, r1?'chip-ok':'chip-no');
+      chip('ineq 2',   `(${fmt(tp.x)},${fmt(tp.y)}) ${r2?'✓':'✗'}`, r2?'chip-ok':'chip-no');
+      chip('solution', r1&&r2 ? 'both ✓ — solution!' : 'not a solution', (r1&&r2)?'chip-ok':'chip-no');
+      // Show intersection point
+      const {m:m1,b:b1}=state.system.ineq1, {m:m2,b:b2}=state.system.ineq2;
+      if (Math.abs(m1-m2)>1e-6) {
+        const xi=(b2-b1)/(m1-m2), yi=fn1(xi);
+        chip('lines cross', `(${fmt(xi)}, ${fmt(yi)})`);
+      } else {
+        chip('lines', 'parallel — no cross');
+      }
+    }
+  }
+
+  // ── Legend ─────────────────────────────────────────────────────────────────
+  function buildLegend() {
+    const mode = state.mode;
+    const leg  = document.getElementById('anatomy-legend');
+    leg.innerHTML = '';
+
+    function item(type, col, lbl) {
+      const el = document.createElement('div'); el.className = 'leg-item';
+      let sw = '';
+      if (type==='fill')
+        sw = `<div style="width:18px;height:13px;border-radius:2px;background:${col};"></div>`;
+      else if (type==='line')
+        sw = `<div style="width:22px;height:3px;border-radius:2px;background:${col};"></div>`;
+      else if (type==='dash')
+        sw = `<div style="width:22px;height:2px;background:repeating-linear-gradient(90deg,${col} 0,${col} 4px,transparent 4px,transparent 8px);"></div>`;
+      else if (type==='dot')
+        sw = `<div style="width:12px;height:12px;border-radius:50%;border:2.5px solid ${col};"></div>`;
+      el.innerHTML = sw + `<span class="leg-label">${lbl}</span>`;
+      leg.appendChild(el);
+    }
+
+    if (mode !== 'system') {
+      const sign = state[mode].sign;
+      item('fill', 'rgba(42,111,180,0.28)', 'solution region');
+      if (sign==='<'||sign==='>')
+        item('dash', '#2a6fb4', 'boundary (excluded — dashed)');
+      else
+        item('line', '#2a6fb4', 'boundary (included — solid)');
+      if (mode==='quad'||mode==='abs') item('dot', '#7a2a8a', 'vertex');
+      item('dot', '#d94f2a', 'test point (click to move)');
+    } else {
+      item('fill', 'rgba(42,111,180,0.25)',   'ineq 1 region (blue)');
+      item('fill', 'rgba(217,79,42,0.25)',    'ineq 2 region (orange)');
+      item('fill', 'rgba(100,70,200,0.30)',   'overlap — solution');
+      item('dot',  'rgba(100,70,200,0.9)',    'boundary intersection');
+      item('dot',  '#d94f2a', 'test point (click to move)');
+    }
+  }
+
+  // ── Params UI ──────────────────────────────────────────────────────────────
+  function buildParams() {
+    const area = document.getElementById('params-area');
+    area.innerHTML = '';
+    const mode = state.mode;
+
+    if (mode === 'linear') {
+      buildBlock(area, state.linear, 'linear', ['m','b'], null, '#2a6fb4');
+    } else if (mode === 'quad') {
+      buildBlock(area, state.quad,   'quad',   ['a','h','k'], null, '#2a6fb4');
+    } else if (mode === 'abs') {
+      buildBlock(area, state.abs,    'abs',    ['a','h','k'], null, '#2a6fb4');
+    } else if (mode === 'system') {
+      buildBlock(area, state.system.ineq1, 'system.ineq1', ['m','b'], 'Inequality 1', '#2a6fb4');
+      buildBlock(area, state.system.ineq2, 'system.ineq2', ['m','b'], 'Inequality 2', '#d94f2a');
+    }
+  }
+
+  function buildBlock(container, params, stateKey, pids, title, accentCol) {
+    const wrap = document.createElement('div');
+
+    if (title) {
+      const blk = document.createElement('div');
+      blk.className = 'ineq-block';
+      blk.style.borderColor = accentCol + '88';
+
+      const hdr = document.createElement('div');
+      hdr.className = 'ineq-block-hdr';
+      hdr.style.color = accentCol;
+      hdr.textContent = title;
+      blk.appendChild(hdr);
+
+      buildSignAndSliders(blk, params, stateKey, pids, accentCol);
+      container.appendChild(blk);
+    } else {
+      buildSignAndSliders(wrap, params, stateKey, pids, accentCol);
+      container.appendChild(wrap);
+    }
+  }
+
+  function buildSignAndSliders(parent, params, stateKey, pids, accentCol) {
+    // y [sign] ...
+    const signRow = document.createElement('div');
+    signRow.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:7px;';
+    const yLbl = document.createElement('span');
+    yLbl.style.cssText = `font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--ink-soft);`;
+    yLbl.textContent = 'y';
+    signRow.appendChild(yLbl);
+
+    const signWrap = document.createElement('div');
+    signWrap.className = 'sign-row';
+    ['<','≤','>','≥'].forEach(s => {
+      const btn = document.createElement('button');
+      btn.className = 'sign-btn' + (params.sign===s ? ' active' : '');
+      const map = {'<':'&lt;','>':'&gt;','≤':'&le;','≥':'&ge;'};
+      btn.innerHTML = map[s] || s;
+      btn.title = s === '<' ? 'strict less-than (dashed boundary)'
+                : s === '>' ? 'strict greater-than (dashed boundary)'
+                : s === '≤' ? 'less-than or equal (solid boundary)'
+                             : 'greater-than or equal (solid boundary)';
+      btn.addEventListener('click', () => {
+        setNestedState(stateKey, 'sign', s);
+        signWrap.querySelectorAll('.sign-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        buildLegend();
+        update();
+      });
+      signWrap.appendChild(btn);
+    });
+    signRow.appendChild(signWrap);
+    parent.appendChild(signRow);
+
+    // Sliders
+    const grid = document.createElement('div');
+    grid.className = 'slider-grid';
+    pids.forEach(pid => {
+      const pd = PDEFS[pid];
+      const lbl = document.createElement('label');
+      lbl.className = 'param-lbl';
+      lbl.style.color = pd.col;
+      lbl.innerHTML = `<span class="letter">${pd.label}</span><span class="pdesc">${pd.desc}</span>`;
+
+      const range = document.createElement('input');
+      range.type='range'; range.min=pd.min; range.max=pd.max;
+      range.step=pd.step; range.value=params[pid]; range.className='slider';
+
+      const num = document.createElement('input');
+      num.type='number'; num.className='dyn-val';
+      num.style.color = pd.col;
+      num.min=pd.min; num.max=pd.max; num.step=pd.step; num.value=params[pid];
+
+      range.addEventListener('input', () => {
+        const v = parseFloat(range.value);
+        setNestedState(stateKey, pid, v); num.value=v; update();
+      });
+      num.addEventListener('change', () => {
+        let v = parseFloat(num.value);
+        v = Math.max(pd.min, Math.min(pd.max, isNaN(v)?0:v));
+        setNestedState(stateKey, pid, v); range.value=v; num.value=v; update();
+      });
+
+      grid.appendChild(lbl); grid.appendChild(range); grid.appendChild(num);
+    });
+    parent.appendChild(grid);
+  }
+
+  // Dot-path state setter: 'linear' → state.linear.pid; 'system.ineq1' → state.system.ineq1.pid
+  function setNestedState(key, pid, val) {
+    const parts = key.split('.');
+    if (parts.length === 1) state[parts[0]][pid] = val;
+    else state[parts[0]][parts[1]][pid] = val;
+  }
+
+  // ── Full update ────────────────────────────────────────────────────────────
+  function update() { draw(); buildEq(); buildChips(); }
+
+  // ── Mode buttons ───────────────────────────────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.mode;
+      document.querySelectorAll('.mode-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('insight-txt').textContent = INSIGHTS[state.mode];
+      buildParams();
+      buildLegend();
+      update();
+    });
+  });
+
+  // ── Canvas click → move test point ─────────────────────────────────────────
+  canvas.addEventListener('click', e => {
+    const rect = canvas.getBoundingClientRect();
+    const W    = canvas.width  / DPR;
+    const H    = canvas.height / DPR;
+    const [wx, wy] = c2w(e.clientX - rect.left, e.clientY - rect.top, W, H);
+    state.testPt = { x: Math.round(wx*10)/10, y: Math.round(wy*10)/10 };
+    update();
+  });
+
+  // ── Init ───────────────────────────────────────────────────────────────────
+  document.getElementById('insight-txt').textContent = INSIGHTS.linear;
+  buildParams();
+  buildLegend();
+  window.addEventListener('resize', resize);
+  resize();
+  update();
+
+  </script>
+</body>
+</html>

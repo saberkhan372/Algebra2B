@@ -19,8 +19,8 @@ metadata:
 - `algebra-2-tools/` — Claude Design wireframe exports (reference only)
 - `video-learning/` — transcripts, batch insight notes, contact sheets, PDF extracts
 
-**42 tools currently built (as of 2026-05-28):**
-U1 (5): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher
+**44 tools currently built (as of 2026-05-28):**
+U1 (7): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher, **Function X-Ray**, **Inequality Region Explorer**
 U2 (6): Abs Value Grapher, Transformations Explorer, Neg Exponent Flipper, Diff of Squares, Diff of Cubes, **Parent Function Atlas**
 U3 (7): Imaginary Number Sandbox, Quadratic Standard Form, Rational Expression Builder, Complete the Square Trainer, Quadratic Word Problems Trainer, Rationalizing Denominators, **Quadratic Forms Explorer**
 U4 (4): Rational Exponents Tower, Cubic & Radical Grapher, Composition Machine, Inverse Function Revealer
@@ -29,7 +29,7 @@ U6 (7): Rational Simplifier, Adding Rational Expressions, Rational Mult/Div Step
 U7 (4): SOH CAH TOA Triangle Solver, Unit Circle Walker, Sine/Cosine Graph Builder, **Trig Explorer**
 U9 (3): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab
 
-**No tools missing** — all 42 tools are live. No coming-soon rows on any unit page.
+**No tools missing** — all 44 tools are live. No coming-soon rows on any unit page.
 
 **Explorer tools** (built 2026-05-28):
 - `tools/parent-function-atlas.html` — 5 families: x², |x|, √x, 2ˣ, 1/x with a/h/k sliders; live feature chips (domain, range, zeros, y-intercept, asymptotes); dashed asymptote lines, colored intercept dots
@@ -38,7 +38,11 @@ U9 (3): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab
 - `tools/rational-behavior.html` — rational function behavior explorer (asymptotes, holes, end behavior)
 - `tools/trig-explorer.html` — amplitude/period/phase shift explorer for sin/cos
 
-**index.html hover previews** (built 2026-05-28): each tool card's icon box animates a canvas preview on mouseenter — 21 renderers (parabola, sine, exponential, log, rational, etc.) using `requestAnimationFrame`, DPR-aware canvas sized at event time.
+**index.html hover previews** (built 2026-05-28): each tool card's icon box animates a canvas preview on mouseenter — 23 renderers (parabola, sine, exponential, log, rational, functions, xray, inequality, etc.) using `requestAnimationFrame`, DPR-aware canvas sized at event time.
+
+**Cross-unit mega-tools** (built 2026-05-28):
+- `tools/function-xray.html` — 9 function families (quad, abs, exp, log, rational, poly, radical, sin, cos) with a/h/k/b sliders, X-ray anatomy overlays (asymptotes, vertex, midline, axis of sym, period bracket), live feature chips
+- `tools/inequality-explorer.html` — Linear, Quadratic, Abs Value inequalities + 2-linear System; live shaded region, solid/dashed boundary, click-to-place test point with ✓/✗, intersection region highlighted in system mode
 
 **PLAN.md tracks all build phases** — see it for priority order, who builds what, and design constraints.
 
