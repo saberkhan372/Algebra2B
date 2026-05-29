@@ -37,6 +37,38 @@
       } catch (e) { return null; }
     },
 
+    /**
+     * Auto-wire all input[type=range][id] elements:
+     * - On load: restore saved state from URL hash
+     * - On change: debounce-save state to URL hash
+     * Call once after the page is ready (invoked by progress.js).
+     */
+    auto: function () {
+      var inputs = Array.from(document.querySelectorAll('input[type="range"][id]'));
+      if (!inputs.length) return;
+      var saved = UrlState.load();
+      if (saved) {
+        inputs.forEach(function (inp) {
+          if (saved[inp.id] !== undefined) {
+            inp.value = saved[inp.id];
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        });
+      }
+      var timer = null;
+      function saveAll() {
+        var obj = {};
+        inputs.forEach(function (inp) { obj[inp.id] = +inp.value; });
+        UrlState.save(obj);
+      }
+      inputs.forEach(function (inp) {
+        inp.addEventListener('input', function () {
+          clearTimeout(timer);
+          timer = setTimeout(saveAll, 250);
+        });
+      });
+    },
+
     /** Encode state into URL hash (no page reload). */
     save: function (state) {
       try {

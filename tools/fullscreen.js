@@ -109,6 +109,7 @@
       }
 
       exitBtn.style.display = 'block';
+      navBtn.style.display  = 'block';
       btn.style.background = '#1d1a14'; btn.style.color = '#f6f1e4'; btn.style.borderColor = '#1d1a14';
       requestFS();
       setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 80);
@@ -147,10 +148,156 @@
       }
 
       exitBtn.style.display = 'none';
+      navBtn.style.display  = 'none';
       btn.style.background = ''; btn.style.color = '#999'; btn.style.borderColor = '#999';
       if (isFS()) releaseFS();
       setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 80);
     }
+
+    // ── Quick-nav panel (teacher tool picker) ─────────────────────
+    // Minimal tool data — name, unit, href — embedded for self-containment
+    var NAV_TOOLS = [
+      {n:'Systems Explorer',u:'U1',h:'systems-explorer.html'},
+      {n:'Function X-Ray',u:'U1',h:'function-xray.html'},
+      {n:'Inequality Region Explorer',u:'U1',h:'inequality-explorer.html'},
+      {n:'Quadratic Slider Studio',u:'U1',h:'quadratic-slider.html'},
+      {n:'Substitution Stepper',u:'U1',h:'substitution-stepper.html'},
+      {n:'Elimination Race',u:'U1',h:'elimination-race.html'},
+      {n:'Factoring Quadratics Lab',u:'U1',h:'factoring-lab.html'},
+      {n:'Piecewise Function Grapher',u:'U1',h:'piecewise-grapher.html'},
+      {n:'Absolute Value Grapher',u:'U2',h:'abs-value-grapher.html'},
+      {n:'Transformations Explorer',u:'U2',h:'transformations.html'},
+      {n:'Negative Exponent Flipper',u:'U2',h:'neg-exponent-flipper.html'},
+      {n:'Difference of Squares',u:'U2',h:'diff-of-squares.html'},
+      {n:'Difference of Cubes',u:'U2',h:'diff-of-cubes.html'},
+      {n:'Parent Function Atlas',u:'U2',h:'parent-function-atlas.html'},
+      {n:'Complex Number Explorer',u:'U3',h:'complex-plane.html'},
+      {n:'Imaginary Number Sandbox',u:'U3',h:'imaginary-sandbox.html'},
+      {n:'Quadratic Standard Form',u:'U3',h:'quadratic-standard.html'},
+      {n:'Quadratic Forms Explorer',u:'U3',h:'quadratic-forms-explorer.html'},
+      {n:'Complete the Square Trainer',u:'U3',h:'complete-square.html'},
+      {n:'Rational Expression Builder',u:'U3',h:'rational-expressions.html'},
+      {n:'Quadratic Word Problems',u:'U3',h:'quadratic-word-problems.html'},
+      {n:'Rationalizing Denominators',u:'U3',h:'rationalizing-denominators.html'},
+      {n:'Composition & Inverse Lab',u:'U4',h:'composition-inverse.html'},
+      {n:'Composition Machine',u:'U4',h:'composition.html'},
+      {n:'Inverse Function Revealer',u:'U4',h:'inverse-function.html'},
+      {n:'Cubic & Radical Grapher',u:'U4',h:'cubic-radical.html'},
+      {n:'Rational Exponents Tower',u:'U4',h:'rational-exponents.html'},
+      {n:'Log ↔ Exp Mirror Explorer',u:'U5',h:'log-exp-mirror.html'},
+      {n:'Exponential Function Explorer',u:'U5',h:'exponential-explorer.html'},
+      {n:'Growth Race',u:'U5',h:'growth-race.html'},
+      {n:'Log ↔ Exponential Converter',u:'U5',h:'log-converter.html'},
+      {n:'Log Properties Sandbox',u:'U5',h:'log-properties.html'},
+      {n:'Exponential Equation Solver',u:'U5',h:'exponential-equation-solver.html'},
+      {n:'Exponential Model Builder',u:'U5',h:'exponential-model-builder.html'},
+      {n:'Rational Function Behavior',u:'U6',h:'rational-behavior.html'},
+      {n:'Polynomial Root Sculptor',u:'U6',h:'polynomial-roots.html'},
+      {n:'Polynomial Sketch Pad',u:'U6',h:'polynomial-sketch.html'},
+      {n:'Rational Simplifier',u:'U6',h:'rational-simplifier.html'},
+      {n:'Adding Rational Expressions',u:'U6',h:'adding-rationals.html'},
+      {n:'Rational Mult/Div Stepper',u:'U6',h:'rational-multdiv.html'},
+      {n:'Solving Rational Equations',u:'U6',h:'rational-equations.html'},
+      {n:'Polynomial Division Stepper',u:'U6',h:'polynomial-division-stepper.html'},
+      {n:'Unit Circle Wave Sync',u:'U7',h:'unit-circle-wave.html'},
+      {n:'Trig Function Explorer',u:'U7',h:'trig-explorer.html'},
+      {n:'Unit Circle Walker',u:'U7',h:'unit-circle.html'},
+      {n:'Sine/Cosine Graph Builder',u:'U7',h:'sine-cosine-builder.html'},
+      {n:'SOH CAH TOA Triangle Solver',u:'U7',h:'soh-cah-toa.html'},
+      {n:'Box Plot Builder',u:'U9',h:'box-plot-builder.html'},
+      {n:'Probability Rules Sandbox',u:'U9',h:'probability-sandbox.html'},
+      {n:'Sampling Bias Lab',u:'U9',h:'sampling-bias-lab.html'},
+    ];
+    var UNIT_COLORS = {U1:'#d94f2a',U2:'#2a6fb4',U3:'#8b4513',U4:'#2a8a4a',U5:'#8f6c00',U6:'#7a2a8a',U7:'#1a8a8a',U9:'#5a6a7a'};
+
+    // ── "⊞ tools" nav button (shown in board mode, top-left) ─────
+    var navBtn = document.createElement('button');
+    navBtn.id   = 'fs-nav';
+    navBtn.type = 'button';
+    navBtn.innerHTML = '&#x229E; tools';
+    navBtn.style.cssText = 'display:none;position:fixed;top:14px;left:16px;z-index:99999;'
+      + 'font-family:Lexend,system-ui,sans-serif;font-size:14px;'
+      + 'background:rgba(29,26,20,.85);color:#f6f1e4;'
+      + 'border:none;border-radius:5px;padding:6px 14px;cursor:pointer;';
+    document.body.appendChild(navBtn);
+
+    // ── Panel overlay ────────────────────────────────────────────
+    var panel = document.createElement('div');
+    panel.id  = 'fs-nav-panel';
+    panel.style.cssText = 'display:none;position:fixed;inset:0;z-index:199999;'
+      + 'background:rgba(15,12,8,.92);overflow-y:auto;padding:20px 16px 40px;';
+
+    // Panel header
+    var panelHead = document.createElement('div');
+    panelHead.style.cssText = 'display:flex;align-items:center;justify-content:space-between;'
+      + 'margin-bottom:20px;';
+    var panelTitle = document.createElement('div');
+    panelTitle.style.cssText = 'font-family:Lexend,sans-serif;font-size:18px;font-weight:700;color:#f6f1e4;';
+    panelTitle.textContent = 'Go to tool';
+    var closePanel = document.createElement('button');
+    closePanel.type = 'button';
+    closePanel.innerHTML = '&#x2715;';
+    closePanel.style.cssText = 'background:none;border:none;color:#f6f1e4;font-size:22px;cursor:pointer;padding:4px 8px;';
+    panelHead.appendChild(panelTitle);
+    panelHead.appendChild(closePanel);
+    panel.appendChild(panelHead);
+
+    // Current tool path (to highlight active)
+    var currentHref = location.pathname.split('/').pop();
+
+    // Group by unit
+    var units = [];
+    NAV_TOOLS.forEach(function(t) { if (units.indexOf(t.u) < 0) units.push(t.u); });
+    units.forEach(function(unit) {
+      var col = UNIT_COLORS[unit] || '#666';
+      var sec = document.createElement('div');
+      sec.style.cssText = 'margin-bottom:18px;';
+
+      var hdr = document.createElement('div');
+      hdr.style.cssText = 'font-family:Lexend,sans-serif;font-size:12px;font-weight:700;'
+        + 'text-transform:uppercase;letter-spacing:.08em;color:' + col + ';'
+        + 'margin-bottom:8px;padding-left:4px;';
+      hdr.textContent = unit;
+      sec.appendChild(hdr);
+
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:7px;';
+
+      NAV_TOOLS.filter(function(t){ return t.u === unit; }).forEach(function(t) {
+        var tb = document.createElement('a');
+        tb.href = t.h;
+        var isCurrent = t.h === currentHref;
+        tb.style.cssText = 'display:block;padding:10px 14px;border-radius:5px;text-decoration:none;'
+          + 'font-family:Lexend,sans-serif;font-size:14px;font-weight:' + (isCurrent ? '700' : '400') + ';'
+          + 'background:' + (isCurrent ? col : 'rgba(255,255,255,.08)') + ';'
+          + 'color:' + (isCurrent ? '#fff' : '#e8e0d0') + ';'
+          + 'border:1.5px solid ' + (isCurrent ? col : 'rgba(255,255,255,.12)') + ';'
+          + 'transition:background .1s;';
+        tb.textContent = t.n;
+        tb.addEventListener('mouseover', function() {
+          if (!isCurrent) tb.style.background = 'rgba(255,255,255,.16)';
+        });
+        tb.addEventListener('mouseout', function() {
+          if (!isCurrent) tb.style.background = 'rgba(255,255,255,.08)';
+        });
+        grid.appendChild(tb);
+      });
+      sec.appendChild(grid);
+      panel.appendChild(sec);
+    });
+    document.body.appendChild(panel);
+
+    function openPanel()  { panel.style.display = 'block'; }
+    function closePanel_() { panel.style.display = 'none'; }
+
+    navBtn.addEventListener('click', openPanel);
+    closePanel.addEventListener('click', closePanel_);
+    panel.addEventListener('click', function(e) {
+      if (e.target === panel) closePanel_();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && panel.style.display !== 'none') closePanel_();
+    });
 
     btn.addEventListener('click', function () { active ? exit() : enter(); });
     exitBtn.addEventListener('click', exit);

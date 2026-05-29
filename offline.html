@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're offline — A2 Playgrounds</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="paper-dots">
+  <nav class="site-nav">
+    <a href="/index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+  </nav>
+
+  <div style="max-width:520px; margin:80px auto; padding:0 24px; text-align:center;">
+    <div class="sk-box-thick rot-l" style="padding:40px 32px; position:relative;">
+      <div class="tape"></div>
+
+      <div style="font-size:52px; margin-bottom:8px;">📡</div>
+
+      <div style="font-family:'Caveat',cursive; font-size:36px; font-weight:700;
+                  color:var(--ink); margin-bottom:12px;">
+        No connection
+      </div>
+
+      <p style="font-family:var(--f-body); font-size:16px; color:var(--ink-2);
+                line-height:1.6; margin:0 0 12px;">
+        You're offline right now, but any tools you've already opened
+        are still available — the site works without Wi-Fi once cached.
+      </p>
+
+      <p style="font-family:var(--f-body); font-size:14px; color:var(--ink-soft);
+                margin:0 0 28px;">
+        Try going back and opening a tool you visited before.
+      </p>
+
+      <button onclick="location.reload()" class="btn accent big">
+        ↺ try again
+      </button>
+
+      <div style="margin-top:20px;">
+        <a href="/index.html" style="font-family:var(--f-body); font-size:14px;
+                                     color:var(--ink-soft);">
+          ← back to homepage (cached)
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

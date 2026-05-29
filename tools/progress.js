@@ -61,6 +61,37 @@
     });
   }
 
+  // ── Share button (item 7) ────────────────────────────────────────
+  // Injects a "🔗 copy link" button into the tool sidebar.
+  // Uses UrlState.copyBtn() if available (url-state.js), else its own fallback.
+  function injectShareBtn() {
+    var sidebar = document.querySelector('.tool-sidebar');
+    if (!sidebar || sidebar.querySelector('.share-btn-wrap')) return;
+
+    var wrap = document.createElement('div');
+    wrap.className = 'share-btn-wrap';
+
+    var btn;
+    if (window.UrlState && window.UrlState.copyBtn) {
+      btn = window.UrlState.copyBtn();
+    } else {
+      btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'url-state-btn save-png-btn';
+      btn.textContent = '🔗 copy link';
+      btn.addEventListener('click', function () {
+        var url = 'https://saberkhan372.github.io/Algebra2B/' +
+                  location.pathname.replace(/^\//, '');
+        navigator.clipboard && navigator.clipboard.writeText(url)
+          .then(function () { btn.textContent = '✓ copied!'; setTimeout(function () { btn.textContent = '🔗 copy link'; }, 2000); })
+          .catch(function () { btn.textContent = '⚠ try again'; setTimeout(function () { btn.textContent = '🔗 copy link'; }, 2000); });
+      });
+    }
+
+    wrap.appendChild(btn);
+    sidebar.insertBefore(wrap, sidebar.firstChild);
+  }
+
   // ── Main entry ───────────────────────────────────────────────────
   function init() {
     var path = location.pathname;
@@ -72,6 +103,14 @@
       var seg = path.split('/tools/')[1] || '';
       if (!seg.endsWith('.html')) seg += '.html';
       markVisited('tools/' + seg);
+
+      // Share button (item 7)
+      injectShareBtn();
+
+      // Auto-wire URL state for sliders (item 8) — defer so tool scripts run first
+      if (window.UrlState && window.UrlState.auto) {
+        setTimeout(window.UrlState.auto, 0);
+      }
     } else {
       // Homepage or unit page — tag cards now + after JS renders them
       applyBadges();
