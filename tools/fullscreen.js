@@ -35,8 +35,17 @@
       + 'border:none;border-radius:5px;padding:6px 14px;cursor:pointer;';
     document.body.appendChild(exitBtn);
 
-    // ── Elements to toggle ─────────────────────────────────────────
-    var SELECTORS = ['.site-nav', '.tool-sidebar', '.notebook-binding', '.pacing-banner'];
+    // ── Elements always hidden in board mode ─────────────────────
+    var ALWAYS_HIDE = ['.site-nav', '.notebook-binding', '.pacing-banner'];
+
+    // Sidebar: hide only if it's a pure info panel.
+    // Sidebars with interactive controls (sliders, family pickers, dynamic control areas)
+    // stay visible in board mode — students and teachers need them.
+    var sidebar = document.querySelector('.tool-sidebar');
+    var sidebarIsInfoOnly = sidebar && !sidebar.querySelector(
+      'input[type="range"], input[type="number"], canvas, select, '
+      + '.slider-grid, #slider-area, .family-grid, .piece-controls, #controls-area'
+    );
 
     // ── Fullscreen API ────────────────────────────────────────────
     function requestFS() {
@@ -53,25 +62,48 @@
     // ── Enter ─────────────────────────────────────────────────────
     function enter() {
       active = true;
-      SELECTORS.forEach(function (sel) {
+
+      // Hide nav + static chrome
+      ALWAYS_HIDE.forEach(function (sel) {
         var el = document.querySelector(sel);
         if (!el) return;
         saved[sel] = el.style.display;
         el.style.setProperty('display', 'none', 'important');
       });
 
+      // Hide info-only sidebar (keep control sidebars intact)
+      if (sidebarIsInfoOnly) {
+        saved._sb = sidebar.style.display;
+        sidebar.style.setProperty('display', 'none', 'important');
+      }
+
+      // Expand tool-page to fill screen
       var tp = document.querySelector('.tool-page');
       if (tp) {
-        saved._tpH = tp.style.height; saved._tpD = tp.style.display; saved._tpG = tp.style.gridTemplateColumns;
+        saved._tpH = tp.style.height;
+        saved._tpD = tp.style.display;
+        saved._tpG = tp.style.gridTemplateColumns;
         tp.style.setProperty('height', '100vh', 'important');
-        tp.style.setProperty('display', 'block', 'important');
-        tp.style.gridTemplateColumns = '';
+        // Only collapse to single column when sidebar is hidden
+        if (sidebarIsInfoOnly) {
+          tp.style.setProperty('display', 'block', 'important');
+          tp.style.gridTemplateColumns = '';
+        }
       }
+
+      // Expand tool-main
       var tm = document.querySelector('.tool-main');
       if (tm) {
-        saved._tmB = tm.style.borderRight; saved._tmH = tm.style.height; saved._tmO = tm.style.overflow;
-        tm.style.setProperty('border-right', 'none', 'important');
-        tm.style.setProperty('height', '100vh', 'important');
+        saved._tmB = tm.style.borderRight;
+        saved._tmH = tm.style.height;
+        saved._tmO = tm.style.overflow;
+        if (sidebarIsInfoOnly) {
+          tm.style.setProperty('border-right', 'none', 'important');
+          tm.style.setProperty('height', '100vh', 'important');
+        } else {
+          // Control sidebar kept: just let tool-page height drive it
+          tm.style.setProperty('height', '100%', 'important');
+        }
         tm.style.overflow = 'hidden';
       }
 
@@ -84,18 +116,24 @@
     // ── Exit ──────────────────────────────────────────────────────
     function exit() {
       active = false;
-      SELECTORS.forEach(function (sel) {
+
+      ALWAYS_HIDE.forEach(function (sel) {
         var el = document.querySelector(sel);
         if (!el) return;
         el.style.removeProperty('display');
         if (saved[sel]) el.style.display = saved[sel];
       });
 
+      if (sidebarIsInfoOnly && sidebar) {
+        sidebar.style.removeProperty('display');
+        if (saved._sb) sidebar.style.display = saved._sb;
+      }
+
       var tp = document.querySelector('.tool-page');
       if (tp) {
         tp.style.removeProperty('height'); tp.style.removeProperty('display');
-        if (saved._tpH) tp.style.height = saved._tpH;
-        if (saved._tpD) tp.style.display = saved._tpD;
+        if (saved._tpH) tp.style.height             = saved._tpH;
+        if (saved._tpD) tp.style.display            = saved._tpD;
         if (saved._tpG) tp.style.gridTemplateColumns = saved._tpG;
       }
       var tm = document.querySelector('.tool-main');
