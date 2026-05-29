@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complex Number Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #cx-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: crosshair;
+    }
+
+    /* ── Mode tabs ───────────────────────────────────────────── */
+    .mode-row { display: flex; gap: 3px; }
+    .mode-btn {
+      flex: 1; padding: 5px 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.1;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2);
+      cursor: pointer; text-align: center;
+      transition: background 0.1s, color 0.1s;
+    }
+    .mode-btn:hover:not(.active) { background: var(--paper-3); }
+    .mode-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Sliders ──────────────────────────────────────────────── */
+    .slider-grid {
+      display: grid; grid-template-columns: 72px 1fr 50px;
+      gap: 4px 8px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      display: flex; align-items: baseline; gap: 5px;
+    }
+    .param-lbl .letter { font-size: 15px; font-style: italic; font-weight: 700; }
+    .param-lbl .pdesc { font-family: 'Patrick Hand', cursive; font-size: 10px; color: var(--ink-soft); font-style: normal; }
+    .dyn-val[type=number] {
+      width: 46px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val[type=number]::-webkit-outer-spin-button,
+    .dyn-val[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .dyn-val[type=number]:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Feature chips ────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip {
+      padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+    }
+
+    /* ── Equation bar ─────────────────────────────────────────── */
+    .eq-bar {
+      padding: 7px 12px;
+      background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+      flex-wrap: wrap; min-height: 34px;
+    }
+    .eq-label { font-size: 12px; color: var(--ink-soft); white-space: nowrap; }
+
+    /* ── Insight box ──────────────────────────────────────────── */
+    .insight-box {
+      background: var(--highlight); border-radius: 4px;
+      padding: 10px 12px; margin-top: 6px;
+    }
+    .insight-lbl {
+      font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700;
+      color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px;
+    }
+    .insight-txt {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      color: var(--ink); line-height: 1.4;
+    }
+
+    /* ── Preset chips ─────────────────────────────────────────── */
+    .preset-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+    .preset-btn {
+      padding: 2px 7px; border-radius: 3px;
+      border: 1.5px solid var(--ink-soft);
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+    }
+    .preset-btn:hover { background: var(--paper-3); }
+
+    /* ── Hint bar ─────────────────────────────────────────────── */
+    .hint-bar {
+      padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px;
+      color: var(--ink-soft); background: var(--paper-2);
+      border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center;
+    }
+
+    /* ── Sec label ────────────────────────────────────────────── */
+    .sec-lbl {
+      font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700;
+      color: var(--ink-soft); text-transform: uppercase;
+      letter-spacing: 0.04em; margin-bottom: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 280px; }
+    }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Complex Plane</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          drag the point · see where numbers live
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u3.html" style="color:var(--ink-soft);">← U3 · Complex Numbers</a>
+        </div>
+      </div>
+
+      <!-- Mode tabs -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">mode</div>
+        <div class="mode-row">
+          <button class="mode-btn active" data-mode="explore">Explore</button>
+          <button class="mode-btn" data-mode="conjugate">Conjugate</button>
+          <button class="mode-btn" data-mode="roots">Roots</button>
+        </div>
+      </div>
+
+      <!-- Controls (rebuilt by JS) -->
+      <div id="controls-area" style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft); flex-shrink:0;">
+      </div>
+
+      <!-- Properties chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">properties</div>
+        <div class="chips-row" id="chips-area"></div>
+      </div>
+
+      <!-- Mr. K says -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight-txt">Pick a mode to get started.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+
+      <!-- Equation bar -->
+      <div class="eq-bar">
+        <span class="eq-label" id="eq-label">z =</span>
+        <span id="eq-display" style="color:var(--ink);">—</span>
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-wrap">
+        <canvas id="cx-canvas"></canvas>
+      </div>
+
+      <!-- Hint bar -->
+      <div class="hint-bar" id="hint-bar">drag the point to explore</div>
+
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR = window.devicePixelRatio || 1;
+  const TAU = 2 * Math.PI;
+  const canvas = document.getElementById('cx-canvas');
+  const ctx    = canvas.getContext('2d');
+  let VIEW     = { xMin: -7, xMax: 7, yMin: -5, yMax: 5 };
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const state = {
+    mode: 'explore',
+    explore:   { re: 3,  im: 2 },
+    conjugate: { re: 2,  im: 3 },
+    roots:     { A: 1,   B: 2,  C: 5 },   // y = Ax² + Bx + C  (D = 4-20 = -16 → complex)
+  };
+
+  // ── View ──────────────────────────────────────────────────────────────────
+  function computeView(W, H) {
+    const scale = W / 14;
+    return {
+      xMin: -W / (2*scale), xMax: W / (2*scale),
+      yMin: -H / (2*scale), yMax: H / (2*scale),
+    };
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2w(px, py, W, H) {
+    return [
+      VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin),
+      VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin),
+    ];
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    const W = wrap.clientWidth, H = wrap.clientHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    draw();
+  }
+
+  // ── Formatters ────────────────────────────────────────────────────────────
+  function fmt(n, d = 2) { return parseFloat(n.toFixed(d)).toString(); }
+
+  function fmtComplex(re, im, bold) {
+    const r  = fmt(re, 2);
+    const ai = Math.abs(im);
+    const iStr = ai === 1 ? 'i' : `${fmt(ai,2)}i`;
+    let s;
+    if      (im === 0)  s = r;
+    else if (re === 0)  s = im < 0 ? `-${iStr}` : iStr;
+    else                s = `${r} ${im < 0 ? '−' : '+'} ${iStr}`;
+    return s;
+  }
+
+  function fmtQuad(A, B, C) {
+    // Build "Ax² + Bx + C" string nicely
+    const Astr = A === 1 ? 'x²' : A === -1 ? '−x²' : `${A}x²`;
+    let s = Astr;
+    if (B !== 0) {
+      s += B > 0 ? ` + ${B}x` : ` − ${Math.abs(B)}x`;
+    }
+    if (C !== 0) {
+      s += C > 0 ? ` + ${C}` : ` − ${Math.abs(C)}`;
+    }
+    return s;
+  }
+
+  // ── Draw helpers ──────────────────────────────────────────────────────────
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(100,90,70,0.12)';
+    ctx.lineWidth   = 1;
+    ctx.setLineDash([]);
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x++) {
+      const [px] = w2c(x, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+    }
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y++) {
+      const [, py] = w2c(0, y, W, H);
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox, oy] = w2c(0, 0, W, H);
+    const A = 7; // arrow size px
+
+    ctx.strokeStyle = '#3a3020';
+    ctx.lineWidth   = 1.5;
+    ctx.setLineDash([]);
+
+    // Real axis
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W-A, oy-A/2); ctx.lineTo(W, oy); ctx.lineTo(W-A, oy+A/2); ctx.stroke();
+
+    // Imaginary axis
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox-A/2, A); ctx.lineTo(ox, 0); ctx.lineTo(ox+A/2, A); ctx.stroke();
+
+    // Axis labels
+    ctx.fillStyle = '#3a3020';
+    ctx.font = 'italic bold 13px serif';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText('Re', W - 22, oy - 3);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    ctx.fillText('Im', ox + 5, 3);
+
+    // Tick marks + number labels
+    const xSpan = VIEW.xMax - VIEW.xMin;
+    const step  = xSpan > 20 ? 4 : xSpan > 12 ? 2 : 1;
+
+    ctx.fillStyle = 'rgba(50,40,20,0.6)';
+    ctx.font = '11px "JetBrains Mono", monospace';
+
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x += step) {
+      if (x === 0) continue;
+      const [px] = w2c(x, 0, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3); ctx.stroke();
+      ctx.fillText(x.toString(), px, oy + 5);
+    }
+
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y += step) {
+      if (y === 0) continue;
+      const [, py] = w2c(0, y, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox - 3, py); ctx.lineTo(ox + 3, py); ctx.stroke();
+      ctx.fillText(y.toString(), ox - 6, py);
+    }
+
+    // Origin "0"
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+    ctx.fillText('0', ox - 4, oy + 4);
+  }
+
+  function drawDot(wx, wy, col, label, W, H) {
+    if (!isFinite(wx) || !isFinite(wy)) return;
+    const [px, py] = w2c(wx, wy, W, H);
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(px, py, 3, 0, TAU);
+    ctx.fillStyle = col; ctx.fill();
+    if (label) {
+      ctx.font = 'bold 13px "Patrick Hand", cursive';
+      ctx.fillStyle = col;
+      ctx.textAlign  = wx >= 0 ? 'left'   : 'right';
+      ctx.textBaseline = 'middle';
+      const dx = wx >= 0 ? 12 : -12;
+      const dy = wy >= 0 ? -14 : 14;
+      ctx.fillText(label, px + dx, py + dy);
+    }
+  }
+
+  function drawModLine(re, im, col, W, H) {
+    const [ox, oy] = w2c(0, 0, W, H);
+    const [px, py] = w2c(re, im, W, H);
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(px, py);
+    ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+    ctx.setLineDash([6, 4]); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  function drawAngleArc(re, im, col, W, H) {
+    const mod = Math.sqrt(re*re + im*im);
+    if (mod < 0.2) return;
+    const [ox, oy] = w2c(0, 0, W, H);
+    const scale    = W / (VIEW.xMax - VIEW.xMin);
+    const arcR     = Math.min(scale * 1.4, 40);
+    const θ        = Math.atan2(im, re);
+
+    ctx.beginPath();
+    // anticlockwise=true draws counterclockwise in canvas coords (= counter-clock in math since y flipped)
+    ctx.arc(ox, oy, arcR, 0, -θ, θ > 0);
+    ctx.strokeStyle = col; ctx.lineWidth = 1.5;
+    ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+    // θ label midway on arc
+    const midA = θ / 2;
+    const lr   = arcR + 13;
+    ctx.font = '11px "JetBrains Mono", monospace';
+    ctx.fillStyle = col;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('θ', ox + lr * Math.cos(midA), oy - lr * Math.sin(midA));
+  }
+
+  function drawProjections(re, im, col, W, H) {
+    if (im === 0 && re === 0) return;
+    const [ox, oy] = w2c(0, 0, W, H);
+    const [px, py] = w2c(re, im, W, H);
+    const [, pyRe] = w2c(re, 0, W, H);
+    const [pxIm]   = w2c(0, im, W, H);
+
+    ctx.strokeStyle = col + '55'; // low opacity
+    ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+
+    // vertical: from (re, 0) to (re, im)
+    if (im !== 0) {
+      ctx.beginPath(); ctx.moveTo(px, pyRe); ctx.lineTo(px, py); ctx.stroke();
+    }
+    // horizontal: from (0, im) to (re, im)
+    if (re !== 0) {
+      ctx.beginPath(); ctx.moveTo(pxIm, py); ctx.lineTo(px, py); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+
+  // ── Mode draws ────────────────────────────────────────────────────────────
+  function drawExplore(W, H) {
+    const { re, im } = state.explore;
+    drawProjections(re, im, '#7c4db5', W, H);
+    drawModLine(re, im, '#7c4db5', W, H);
+    drawAngleArc(re, im, '#7c4db5', W, H);
+    drawDot(re, im, '#7c4db5', `z = ${fmtComplex(re, im)}`, W, H);
+  }
+
+  function drawConjugate(W, H) {
+    const { re, im } = state.conjugate;
+
+    // Reflection axis (dashed vertical at x = re)
+    if (im !== 0) {
+      const [px] = w2c(re, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H);
+      ctx.strokeStyle = 'rgba(100,80,50,0.22)'; ctx.lineWidth = 1;
+      ctx.setLineDash([8, 5]); ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    drawModLine(re,  im, '#7c4db5', W, H);
+    drawModLine(re, -im, '#d94f2a', W, H);
+    drawDot(re,  im, '#7c4db5', 'z',  W, H);
+    drawDot(re, -im, '#d94f2a', 'z̄', W, H);
+
+    // Meeting point on real axis
+    if (im !== 0) drawDot(re, 0, '#888', null, W, H);
+  }
+
+  function drawRoots(W, H) {
+    const { A, B, C } = state.roots;
+    if (A === 0) return;
+    const D = B*B - 4*A*C;
+
+    if (D < 0) {
+      const re =  -B / (2*A);
+      const im =  Math.sqrt(-D) / (2*A);
+      // Reflection axis
+      const [px] = w2c(re, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H);
+      ctx.strokeStyle = 'rgba(100,80,50,0.18)'; ctx.lineWidth = 1;
+      ctx.setLineDash([8, 5]); ctx.stroke(); ctx.setLineDash([]);
+
+      drawModLine(re,  im, '#7c4db5', W, H);
+      drawModLine(re, -im, '#d94f2a', W, H);
+      drawDot(re,  im, '#7c4db5', `x₁ = ${fmtComplex(re, im)}`,  W, H);
+      drawDot(re, -im, '#d94f2a', `x₂ = ${fmtComplex(re,-im)}`,  W, H);
+      if (Math.abs(im) > 0.1) drawDot(re, 0, '#888', null, W, H);
+    } else {
+      const r1 = (-B + Math.sqrt(D)) / (2*A);
+      const r2 = (-B - Math.sqrt(D)) / (2*A);
+      drawDot(r1, 0, '#2a7f4f', `x₁ = ${fmt(r1,2)}`, W, H);
+      if (Math.abs(r1 - r2) > 0.05) {
+        drawDot(r2, 0, '#2a7f4f', `x₂ = ${fmt(r2,2)}`, W, H);
+      }
+    }
+  }
+
+  // ── Main draw ─────────────────────────────────────────────────────────────
+  function draw() {
+    const W = canvas.width  / DPR;
+    const H = canvas.height / DPR;
+    VIEW = computeView(W, H);
+
+    ctx.save();
+    ctx.scale(DPR, DPR);
+
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+
+    drawGrid(W, H);
+    drawAxes(W, H);
+
+    if      (state.mode === 'explore')   drawExplore(W, H);
+    else if (state.mode === 'conjugate') drawConjugate(W, H);
+    else                                 drawRoots(W, H);
+
+    ctx.restore();
+  }
+
+  // ── UI updaters ───────────────────────────────────────────────────────────
+  function chip(text, col) {
+    return `<span class="feat-chip" style="background:${col}18;border-color:${col}55;color:${col};">${text}</span>`;
+  }
+
+  function updateChips() {
+    const area = document.getElementById('chips-area');
+    const mode = state.mode;
+    let html = '';
+
+    if (mode === 'explore') {
+      const { re, im } = state.explore;
+      const mod = Math.sqrt(re*re + im*im);
+      const argDeg = Math.atan2(im, re) * 180 / Math.PI;
+      html += chip(fmtComplex(re, im), '#7c4db5');
+      html += chip(`|z| = ${fmt(mod, 2)}`, '#3a3020');
+      if (im === 0 && re !== 0) html += chip('real number', '#2a7f4f');
+      if (re === 0 && im !== 0) html += chip('pure imaginary', '#7c4db5');
+      if (im !== 0)             html += chip(`arg = ${fmt(argDeg, 1)}°`, '#666');
+      if (im !== 0)             html += chip(`z̄ = ${fmtComplex(re, -im)}`, '#d94f2a');
+      if (re === 0 && im === 0) html += chip('origin', '#999');
+
+    } else if (mode === 'conjugate') {
+      const { re, im } = state.conjugate;
+      const mod  = Math.sqrt(re*re + im*im);
+      const prod = re*re + im*im;
+      html += chip(`z = ${fmtComplex(re,  im)}`, '#7c4db5');
+      html += chip(`z̄ = ${fmtComplex(re, -im)}`, '#d94f2a');
+      html += chip(`|z| = |z̄| = ${fmt(mod, 2)}`, '#3a3020');
+      html += chip(`z · z̄ = ${fmt(prod, 2)}`, '#2a7f4f');
+      if (im !== 0) html += chip('mirror over Re axis', '#555');
+      else          html += chip('z = z̄  (real)', '#2a7f4f');
+
+    } else {
+      const { A, B, C } = state.roots;
+      const D = B*B - 4*A*C;
+      const dCol = D < 0 ? '#d94f2a' : D === 0 ? '#d4820a' : '#2a7f4f';
+      html += chip(`D = b²−4ac = ${D}`, dCol);
+      if (D < 0) {
+        const re = -B/(2*A), im = Math.sqrt(-D)/(2*A);
+        html += chip(`x₁ = ${fmtComplex(re,  im)}`, '#7c4db5');
+        html += chip(`x₂ = ${fmtComplex(re, -im)}`, '#d94f2a');
+        html += chip('conjugate pair', '#555');
+      } else if (D === 0) {
+        html += chip(`x = ${fmt(-B/(2*A), 2)}  (double root)`, '#2a7f4f');
+      } else {
+        html += chip(`x₁ = ${fmt((-B+Math.sqrt(D))/(2*A), 2)}`, '#2a7f4f');
+        html += chip(`x₂ = ${fmt((-B-Math.sqrt(D))/(2*A), 2)}`, '#2a7f4f');
+        html += chip('two real roots', '#2a7f4f');
+      }
+    }
+    area.innerHTML = html;
+  }
+
+  function updateEqBar() {
+    const mode = state.mode;
+    const lbl  = document.getElementById('eq-label');
+    const disp = document.getElementById('eq-display');
+
+    if (mode === 'explore') {
+      const { re, im } = state.explore;
+      lbl.textContent = 'z =';
+      disp.innerHTML  = `<span style="color:#7c4db5;font-weight:700;">${fmtComplex(re, im)}</span>`;
+
+    } else if (mode === 'conjugate') {
+      const { re, im } = state.conjugate;
+      lbl.textContent = '';
+      disp.innerHTML  = `<span style="color:#7c4db5;font-weight:700;">z = ${fmtComplex(re,  im)}</span>`
+                      + `<span style="color:var(--ink-soft); margin:0 6px;">↔</span>`
+                      + `<span style="color:#d94f2a;font-weight:700;">z̄ = ${fmtComplex(re, -im)}</span>`;
+    } else {
+      const { A, B, C } = state.roots;
+      lbl.textContent = 'y =';
+      disp.innerHTML  = `<span style="font-weight:700;">${fmtQuad(A, B, C)}</span>`;
+    }
+  }
+
+  function updateInsight() {
+    const el   = document.getElementById('insight-txt');
+    const mode = state.mode;
+
+    if (mode === 'explore') {
+      const { re, im } = state.explore;
+      if (re === 0 && im === 0) {
+        el.textContent = 'The origin — where real meets imaginary. Every complex number is a distance and direction from here.';
+      } else if (im === 0) {
+        el.textContent = 'When b = 0, the number lives right on the real axis. All the numbers you already know are hiding here.';
+      } else if (re === 0) {
+        el.textContent = 'Pure imaginary — lives on the vertical axis. This is where √(−1) = i lives. At b = 1 you\'re standing on i itself.';
+      } else {
+        el.textContent = 'Complex numbers are just coordinates. The real part moves you left/right; imaginary moves you up/down. That\'s it — it\'s just a point.';
+      }
+    } else if (mode === 'conjugate') {
+      const { im } = state.conjugate;
+      if (im === 0) {
+        el.textContent = 'When b = 0, z and z̄ are the same point — a real number is its own conjugate.';
+      } else {
+        el.textContent = 'Conjugates are mirror images over the real axis. Notice z · z̄ = a² + b² — always a real number! That\'s the conjugate trick for rationalizing denominators.';
+      }
+    } else {
+      const { A, B, C } = state.roots;
+      const D = B*B - 4*A*C;
+      if (D < 0) {
+        el.textContent = `D = ${D} < 0: this parabola doesn't cross the x-axis. Its roots exist — just not on the real number line. They're up here, as a conjugate pair.`;
+      } else if (D === 0) {
+        el.textContent = `D = 0: one root, right on the real axis. The parabola just touches the x-axis at its vertex without crossing.`;
+      } else {
+        el.textContent = `D = ${D} > 0: two real roots, both living on the real axis. Make C bigger until D goes negative — watch them fly off the real axis!`;
+      }
+    }
+  }
+
+  // ── Build controls (rebuilt on mode switch) ───────────────────────────────
+  function buildControls() {
+    const area = document.getElementById('controls-area');
+    const hint = document.getElementById('hint-bar');
+    const mode = state.mode;
+
+    if (mode === 'explore' || mode === 'conjugate') {
+      const P   = state[mode];
+      const col = mode === 'explore' ? '#7c4db5' : '#7c4db5';
+      area.innerHTML = `
+        <div class="sec-lbl">complex number</div>
+        <div class="slider-grid">
+          <div class="param-lbl">
+            <span class="letter" style="color:#7c4db5;">a</span>
+            <span class="pdesc">real part</span>
+          </div>
+          <input type="range" min="-6" max="6" step="0.5" value="${P.re}" id="re-slider">
+          <input type="number" class="dyn-val" id="re-val" value="${P.re}" min="-6" max="6" step="0.5">
+
+          <div class="param-lbl">
+            <span class="letter" style="color:#d94f2a;">b</span>
+            <span class="pdesc">imag part</span>
+          </div>
+          <input type="range" min="-6" max="6" step="0.5" value="${P.im}" id="im-slider">
+          <input type="number" class="dyn-val" id="im-val" value="${P.im}" min="-6" max="6" step="0.5">
+        </div>`;
+      hint.textContent = 'drag anywhere on the plane to move the point';
+
+      bindSlider('re-slider', 're-val', v => { P.re = v; update(); });
+      bindSlider('im-slider', 'im-val', v => { P.im = v; update(); });
+
+    } else {
+      // Roots mode
+      const P = state.roots;
+      area.innerHTML = `
+        <div class="sec-lbl">quadratic  y = Ax² + Bx + C</div>
+        <div class="slider-grid">
+          <div class="param-lbl">
+            <span class="letter">A</span><span class="pdesc">x²</span>
+          </div>
+          <input type="range" min="-3" max="3" step="1" value="${P.A}" id="A-slider">
+          <input type="number" class="dyn-val" id="A-val" value="${P.A}" min="-3" max="3" step="1">
+
+          <div class="param-lbl">
+            <span class="letter">B</span><span class="pdesc">x</span>
+          </div>
+          <input type="range" min="-6" max="6" step="1" value="${P.B}" id="B-slider">
+          <input type="number" class="dyn-val" id="B-val" value="${P.B}" min="-6" max="6" step="1">
+
+          <div class="param-lbl">
+            <span class="letter">C</span><span class="pdesc">const</span>
+          </div>
+          <input type="range" min="-6" max="9" step="1" value="${P.C}" id="C-slider">
+          <input type="number" class="dyn-val" id="C-val" value="${P.C}" min="-6" max="9" step="1">
+        </div>
+        <div class="preset-row">
+          <button class="preset-btn" data-preset="complex1">x²+5</button>
+          <button class="preset-btn" data-preset="complex2">x²+2x+5</button>
+          <button class="preset-btn" data-preset="double">x²+2x+1</button>
+          <button class="preset-btn" data-preset="real">x²−5x+6</button>
+        </div>`;
+      hint.textContent = 'adjust A, B, C — watch the roots jump on or off the real axis';
+
+      bindSlider('A-slider', 'A-val', v => {
+        if (v === 0) { v = P.A > 0 ? 1 : -1; }
+        P.A = v; update();
+        document.getElementById('A-slider').value = P.A;
+        document.getElementById('A-val').value    = P.A;
+      });
+      bindSlider('B-slider', 'B-val', v => { P.B = v; update(); });
+      bindSlider('C-slider', 'C-val', v => { P.C = v; update(); });
+
+      area.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const presets = {
+            complex1: { A:1, B:0, C:5  },
+            complex2: { A:1, B:2, C:5  },
+            double:   { A:1, B:2, C:1  },
+            real:     { A:1, B:-5, C:6 },
+          };
+          Object.assign(P, presets[btn.dataset.preset]);
+          document.getElementById('A-slider').value = P.A;
+          document.getElementById('A-val').value    = P.A;
+          document.getElementById('B-slider').value = P.B;
+          document.getElementById('B-val').value    = P.B;
+          document.getElementById('C-slider').value = P.C;
+          document.getElementById('C-val').value    = P.C;
+          update();
+        });
+      });
+    }
+  }
+
+  function bindSlider(sliderId, valId, onChange) {
+    const slider = document.getElementById(sliderId);
+    const valEl  = document.getElementById(valId);
+    if (!slider) return;
+    slider.addEventListener('input', e => {
+      const v = parseFloat(e.target.value);
+      valEl.value = v;
+      onChange(v);
+    });
+    valEl.addEventListener('change', e => {
+      const raw = parseFloat(e.target.value);
+      const v   = isNaN(raw) ? 0 : Math.max(parseFloat(slider.min), Math.min(parseFloat(slider.max), raw));
+      valEl.value    = v;
+      slider.value   = v;
+      onChange(v);
+    });
+  }
+
+  // ── Canvas drag interaction ───────────────────────────────────────────────
+  let dragging = false;
+
+  function posFromEvent(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    return [src.clientX - rect.left, src.clientY - rect.top];
+  }
+
+  function handleDrag(e) {
+    if (state.mode === 'roots') return;
+    e.preventDefault();
+    const [px, py] = posFromEvent(e);
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    let [wx, wy] = c2w(px, py, W, H);
+    // Snap to 0.5 grid
+    wx = Math.round(wx * 2) / 2;
+    wy = Math.round(wy * 2) / 2;
+    const P = state[state.mode];
+    P.re = Math.max(-6, Math.min(6, wx));
+    P.im = Math.max(-6, Math.min(6, wy));
+    // Sync sliders
+    const area = document.getElementById('controls-area');
+    const rs = area.querySelector('#re-slider');
+    if (rs) {
+      rs.value = P.re;
+      area.querySelector('#re-val').value = P.re;
+      area.querySelector('#im-slider').value = P.im;
+      area.querySelector('#im-val').value    = P.im;
+    }
+    update();
+  }
+
+  canvas.addEventListener('mousedown',  e => { if (state.mode !== 'roots') { dragging = true; handleDrag(e); } });
+  canvas.addEventListener('mousemove',  e => { if (dragging) handleDrag(e); });
+  canvas.addEventListener('mouseup',    ()  => { dragging = false; });
+  canvas.addEventListener('mouseleave', ()  => { dragging = false; });
+  canvas.addEventListener('touchstart', e => { if (state.mode !== 'roots') { dragging = true; handleDrag(e); } }, { passive: false });
+  canvas.addEventListener('touchmove',  e => { if (dragging) handleDrag(e); }, { passive: false });
+  canvas.addEventListener('touchend',   ()  => { dragging = false; });
+
+  // ── Mode switching ────────────────────────────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.mode = btn.dataset.mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+      buildControls();
+      update();
+    });
+  });
+
+  // ── Master update ─────────────────────────────────────────────────────────
+  function update() {
+    updateEqBar();
+    updateChips();
+    updateInsight();
+    draw();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  buildControls();
+  update();
+  resize();
+  </script>
+</body>
+</html>
