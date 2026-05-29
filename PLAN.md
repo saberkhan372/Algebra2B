@@ -13,6 +13,13 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Homepage:** Reorganized May 2026 — unit-grouped collapsible sections, dual filter rows (kind + unit chip), correct "all 50" count.  
 **Video-learning:** Complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
+**Classroom / board-mode improvements (May 2026):**
+- Board mode: `⛶ board` button on every tool via `tools/fullscreen.js`. Info sidebars collapse; control sidebars (sliders, equations) stay. `body.board-mode` CSS scaling.
+- Fonts: body switched to Lexend (`--f-body`). Canvas ctx.font labels kept handwritten.
+- Contrast: `--ink-soft`/`--ink-2` darkened. Kind colors unified to `--k-*` canonical vars. U5 badge + game amber fixed for WCAG AA.
+- Touch: `touch-action: none` on all 12 draggable canvases.
+- Wide-screen layout (#5): in progress.
+
 **50 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)

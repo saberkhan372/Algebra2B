@@ -23,6 +23,7 @@ Open `http://127.0.0.1:3333/`
 | `about.html` | Teacher letter, FAQ, credits |
 | `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks |
 | `tools/` | 50 standalone interactive tool pages |
+| `tools/fullscreen.js` | Board mode — injected into every tool, adds `⛶ board` button |
 | `styles.css` | Full design system — CSS variables, layout, components |
 | `manifest.json`, `sw.js` | PWA support (offline via service worker) |
 | `PLAN.md` | Working build plan, agent lanes, completed work log |

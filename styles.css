@@ -670,6 +670,36 @@ input[type="range"] {
   .tool-page { grid-template-columns: 1fr; height: auto; }
 }
 
+/* ── Wide-screen layout (smartboards, large monitors ≥1400px) ── */
+/* Give the sidebar more room so controls and text are readable from a distance.
+   Canvas stays dominant (1fr); sidebar grows from 300px → 400px. */
+@media (min-width: 1400px) {
+  .tool-page {
+    grid-template-columns: 1fr 400px;
+    font-size: 17px;          /* slight base-size nudge for distance legibility */
+  }
+  /* Override hardcoded width:296px on control sidebars */
+  .tool-sidebar[style*="width:296px"],
+  .tool-sidebar[style*="width: 296px"] {
+    width: 400px !important;
+  }
+  .tool-sidebar {
+    gap: 18px;
+    padding: 20px;
+  }
+  input[type="range"] { height: 26px; }
+  .slider-group .param-val { font-size: 15px; }
+  .tool-title  { font-size: 44px; }
+}
+
+@media (min-width: 1800px) {
+  .tool-page  { grid-template-columns: 1fr 460px; }
+  .tool-sidebar[style*="width:296px"],
+  .tool-sidebar[style*="width: 296px"] {
+    width: 460px !important;
+  }
+}
+
 .tool-main {
   padding: 20px 24px;
   display: flex;
