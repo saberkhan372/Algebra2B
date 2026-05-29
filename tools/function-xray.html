@@ -363,8 +363,8 @@
     if (fam === 'exp') { cx = 1;  cy = 2; }
     if (fam === 'log') { cx = 2;  cy = 0; }
 
-    const minSpan = 14; // world units to show in the shorter dimension
-    const scale   = Math.min(W, H) / minSpan; // px per world unit — same for x and y
+    const minSpan = 14; // world units to show across the canvas WIDTH
+    const scale   = W / minSpan; // px per world unit — x always shows 14 units; y adapts to canvas height
     return {
       xMin: cx - W / (2 * scale),
       xMax: cx + W / (2 * scale),

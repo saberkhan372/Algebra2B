@@ -279,7 +279,7 @@
   let VIEW     = { xMin:-8, xMax:8, yMin:-6, yMax:6 };
 
   function computeView(W, H) {
-    const scale = Math.min(W, H) / 14;
+    const scale = W / 14; // x always shows 14 units; y adapts to canvas height
     return {
       xMin: -W / (2*scale),  xMax: W / (2*scale),
       yMin: -H / (2*scale),  yMax: H / (2*scale),
