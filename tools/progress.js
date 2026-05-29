@@ -61,34 +61,47 @@
     });
   }
 
-  // ── Share button (item 7) ────────────────────────────────────────
-  // Injects a "🔗 copy link" button into the tool sidebar.
-  // Uses UrlState.copyBtn() if available (url-state.js), else its own fallback.
+  // ── Tool action buttons: share (item 7) + print (item 12) ──────
   function injectShareBtn() {
     var sidebar = document.querySelector('.tool-sidebar');
     if (!sidebar || sidebar.querySelector('.share-btn-wrap')) return;
 
+    // Set data-print-title so @media print CSS can show tool name
+    var titleEl = document.querySelector('.tool-title, h1.tool-title, [class*="tool-title"]');
+    if (titleEl) sidebar.setAttribute('data-print-title', titleEl.textContent.trim());
+
     var wrap = document.createElement('div');
     wrap.className = 'share-btn-wrap';
+    wrap.style.cssText = 'display:flex;gap:6px;flex-wrap:wrap;';
 
-    var btn;
+    // Share / copy-link button
+    var shareBtn;
     if (window.UrlState && window.UrlState.copyBtn) {
-      btn = window.UrlState.copyBtn();
+      shareBtn = window.UrlState.copyBtn();
     } else {
-      btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'url-state-btn save-png-btn';
-      btn.textContent = '🔗 copy link';
-      btn.addEventListener('click', function () {
+      shareBtn = document.createElement('button');
+      shareBtn.type = 'button';
+      shareBtn.className = 'url-state-btn save-png-btn';
+      shareBtn.textContent = '🔗 copy link';
+      shareBtn.addEventListener('click', function () {
         var url = 'https://saberkhan372.github.io/Algebra2B/' +
-                  location.pathname.replace(/^\//, '');
+                  location.pathname.replace(/^\//, '').replace(/([^.html])$/, '$1.html');
         navigator.clipboard && navigator.clipboard.writeText(url)
-          .then(function () { btn.textContent = '✓ copied!'; setTimeout(function () { btn.textContent = '🔗 copy link'; }, 2000); })
-          .catch(function () { btn.textContent = '⚠ try again'; setTimeout(function () { btn.textContent = '🔗 copy link'; }, 2000); });
+          .then(function () { shareBtn.textContent = '✓ copied!'; setTimeout(function () { shareBtn.textContent = '🔗 copy link'; }, 2000); })
+          .catch(function () { shareBtn.textContent = '⚠ try again'; setTimeout(function () { shareBtn.textContent = '🔗 copy link'; }, 2000); });
       });
     }
 
-    wrap.appendChild(btn);
+    // Print button (item 12)
+    var printBtn = document.createElement('button');
+    printBtn.type = 'button';
+    printBtn.className = 'url-state-btn save-png-btn';
+    printBtn.textContent = '🖨 print';
+    printBtn.title = 'Print key ideas and try-this prompts';
+    printBtn.addEventListener('click', function () { window.print(); });
+
+    wrap.appendChild(shareBtn);
+    wrap.appendChild(printBtn);
     sidebar.insertBefore(wrap, sidebar.firstChild);
   }
 

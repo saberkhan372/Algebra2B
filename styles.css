@@ -1162,3 +1162,48 @@ input[type="range"] {
   color: var(--ink);
   background: var(--paper-2);
 }
+
+/* ── Print styles (item 12 — "print key ideas") ── */
+@media print {
+  /* Hide everything interactive */
+  .site-nav, .notebook-binding, .pacing-banner,
+  .tool-main, .tool-card-icon, .canvas-wrap,
+  .sliders-row, .widget-container, .equation-display,
+  .share-btn-wrap, .print-btn-wrap, .try-next-section,
+  .related-box, .url-state-btn, .filter-row,
+  .save-png-btn, #fs-btn, #fs-exit, #fs-nav,
+  .tool-breadcrumb { display: none !important; }
+
+  /* Sidebar fills the page */
+  .tool-page { display: block !important; height: auto !important; }
+  .tool-sidebar {
+    width: 100% !important; max-width: 620px !important;
+    padding: 16px !important; background: white !important;
+    overflow: visible !important;
+  }
+
+  /* Clean up sketch-style borders for print */
+  .sk-box, .sk-box-thick, .sk-box-dashed,
+  .try-this-item, .how-to-box {
+    box-shadow: none !important;
+    transform: none !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+  }
+
+  /* Print title at top */
+  .tool-sidebar::before {
+    content: attr(data-print-title);
+    display: block;
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 8px;
+  }
+
+  * { color: #1d1a14 !important; background: white !important; }
+  body { background: white !important; }
+  a { text-decoration: none !important; }
+}

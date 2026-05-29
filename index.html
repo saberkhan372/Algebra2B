@@ -220,6 +220,16 @@
             <span><span class="sk-tag kind-reference" style="font-size:10px;">reference</span> look it up</span>
           </div>
         </div>
+
+        <!-- Progress summary (item 11) — populated by JS after progress.js loads -->
+        <div class="sidebar-section" id="progress-summary" style="margin-top:16px; display:none;">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+            <div class="section-label f-marker" style="font-size:12px;">YOUR PROGRESS</div>
+            <button id="progress-toggle" onclick="toggleProgress()"
+              style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--ink-soft);padding:0;">▾</button>
+          </div>
+          <div id="progress-bars"></div>
+        </div>
       </aside>
 
       <!-- Main content -->
@@ -261,6 +271,13 @@
           <button class="sk-pill" data-unit="U6" onclick="filterUnit(this)">U6</button>
           <button class="sk-pill" data-unit="U7" onclick="filterUnit(this)">U7</button>
           <button class="sk-pill" data-unit="U9" onclick="filterUnit(this)">U9</button>
+        </div>
+        <div class="filter-row filter-row-diff">
+          <span class="label f-marker">LEVEL:</span>
+          <button class="sk-pill active" data-diff="all" onclick="filterDiff(this)">all</button>
+          <button class="sk-pill" data-diff="1" onclick="filterDiff(this)">● easy</button>
+          <button class="sk-pill" data-diff="2" onclick="filterDiff(this)">●● medium</button>
+          <button class="sk-pill" data-diff="3" onclick="filterDiff(this)">●●● hard</button>
         </div>
 
         <!-- Section heading -->
@@ -349,7 +366,8 @@
       card.className = `tool-card sk-box ${i % 2 === 0 ? 'odd' : 'even'}`;
       card.dataset.kind = t.kind;
       card.dataset.unit = t.unit;
-      card.dataset.name = t.name.toLowerCase() + ' ' + t.topic.toLowerCase() + ' ' + t.unit.toLowerCase();
+      card.dataset.diff = t.diff;
+      card.dataset.name = t.name.toLowerCase() + ' ' + t.topic.toLowerCase() + ' ' + t.unit.toLowerCase() + ' ' + t.desc.toLowerCase();
       card.dataset.toolId = t.id;
       card.style.background = UNIT_BG[t.unit] || 'var(--paper)';
       card.innerHTML = `
@@ -408,6 +426,7 @@
 
     let activeKind = 'all';
     let activeUnit = 'all';
+    let activeDiff = 'all';
 
     function toggleSection(unit) {
       const grid  = document.getElementById('grid-'  + unit);
@@ -431,8 +450,40 @@
       applyFilter();
     }
 
+    function filterDiff(btn) {
+      document.querySelectorAll('.filter-row-diff .sk-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeDiff = btn.dataset.diff;
+      applyFilter();
+    }
+
+    // Highlight search matches in card names
+    function highlightCards(q) {
+      document.querySelectorAll('.tool-card').forEach(card => {
+        const nameEl = card.querySelector('.tool-card-name');
+        if (!nameEl) return;
+        if (!q) {
+          // Restore plain text (strip any <mark> tags)
+          if (nameEl.querySelector('mark')) nameEl.textContent = nameEl.textContent;
+          return;
+        }
+        const orig = nameEl.textContent;
+        const idx  = orig.toLowerCase().indexOf(q);
+        if (idx >= 0) {
+          nameEl.innerHTML =
+            orig.slice(0, idx) +
+            '<mark style="background:var(--highlight);border-radius:2px;padding:0 2px;">' +
+            orig.slice(idx, idx + q.length) +
+            '</mark>' +
+            orig.slice(idx + q.length);
+        } else {
+          nameEl.textContent = orig;
+        }
+      });
+    }
+
     function applyFilter() {
-      const q = document.getElementById('search-input').value.toLowerCase();
+      const q = document.getElementById('search-input').value.toLowerCase().trim();
       let total = 0;
       UNIT_ORDER.forEach(unit => {
         const section = document.querySelector(`.unit-section[data-unit="${unit}"]`);
@@ -443,8 +494,9 @@
         let sectionVisible = 0;
         grid.querySelectorAll('.tool-card').forEach(card => {
           const matchKind   = activeKind === 'all' || card.dataset.kind === activeKind;
+          const matchDiff   = activeDiff === 'all' || card.dataset.diff === activeDiff;
           const matchSearch = !q || card.dataset.name.includes(q);
-          if (matchKind && matchSearch) {
+          if (matchKind && matchDiff && matchSearch) {
             card.classList.remove('hidden'); sectionVisible++; total++;
           } else {
             card.classList.add('hidden');
@@ -455,10 +507,73 @@
         if (countEl) countEl.textContent = sectionVisible + ' tool' + (sectionVisible !== 1 ? 's' : '');
       });
       document.getElementById('tool-count').textContent = `(${total})`;
+      highlightCards(q);
     }
 
     document.getElementById('search-input').addEventListener('input', applyFilter);
     applyFilter();
+
+    // ── Progress summary (item 11) ───────────────────────────────────────
+    const UNIT_TOTALS = { U1:8, U2:6, U3:8, U4:5, U5:7, U6:8, U7:5, U9:3 };
+    const UNIT_NAMES  = {
+      U1:'Systems & Quadratics', U2:'Graphs & Exponents',
+      U3:'Rationals & Complex',  U4:'Rational Exponents',
+      U5:'Exponential & Log',    U6:'Rationals & Polynomials',
+      U7:'Trigonometry',         U9:'Statistics'
+    };
+
+    function buildProgressBars() {
+      let visited;
+      try { visited = new Set(JSON.parse(localStorage.getItem('a2pg-visited') || '[]')); }
+      catch(e) { visited = new Set(); }
+
+      const container = document.getElementById('progress-bars');
+      if (!container) return;
+
+      // Count visited per unit from TOOLS array
+      const counts = {};
+      UNIT_ORDER.forEach(u => { counts[u] = 0; });
+      TOOLS.forEach(t => {
+        if (visited.has(t.href)) counts[t.unit] = (counts[t.unit] || 0) + 1;
+      });
+
+      const totalVisited = Object.values(counts).reduce((a,b) => a+b, 0);
+      if (totalVisited === 0) return; // hide if nothing visited yet
+
+      document.getElementById('progress-summary').style.display = '';
+      container.innerHTML = '';
+
+      UNIT_ORDER.forEach(unit => {
+        const n     = counts[unit] || 0;
+        const total = UNIT_TOTALS[unit];
+        const pct   = Math.round((n / total) * 100);
+        const color = UNIT_INFO[unit]?.color || '#888';
+
+        const row = document.createElement('div');
+        row.style.cssText = 'margin-bottom:8px;';
+        row.innerHTML = `
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+            <span style="font-family:var(--f-body);font-size:11px;color:var(--ink-2);font-weight:600;">${unit}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink-soft);">${n}/${total}</span>
+          </div>
+          <div style="height:6px;background:var(--paper-3);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:3px;transition:width .4s;"></div>
+          </div>`;
+        container.appendChild(row);
+      });
+    }
+
+    let progressOpen = true;
+    function toggleProgress() {
+      const bars = document.getElementById('progress-bars');
+      const btn  = document.getElementById('progress-toggle');
+      progressOpen = !progressOpen;
+      bars.style.display = progressOpen ? '' : 'none';
+      btn.textContent = progressOpen ? '▾' : '▸';
+    }
+
+    // Build after progress.js sets up A2PG
+    setTimeout(buildProgressBars, 300);
 
     // ── Hover Preview System ─────────────────────────────────────────────
     (function() {
