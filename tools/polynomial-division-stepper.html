@@ -15,7 +15,7 @@
     .problem-card { padding:16px 20px; position:relative; }
     .problem-card .prob-label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
     .problem-expr { font-family:'JetBrains Mono',monospace; font-size:24px; line-height:1.2; }
-    .problem-sub { font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft); margin-top:6px; }
+    .problem-sub { font-family: var(--f-body); font-size:13px; color:var(--ink-soft); margin-top:6px; }
 
     .prob-picker { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
 
@@ -24,9 +24,9 @@
     .step-block.active { border-color:var(--accent); }
     .step-block.done { opacity:0.72; }
 
-    .step-q { font-family:'Patrick Hand',cursive; font-size:15px; margin-bottom:8px; color:var(--ink-2); }
+    .step-q { font-family: var(--f-body); font-size:15px; margin-bottom:8px; color:var(--ink-2); }
     .step-q strong { color:var(--ink); }
-    .step-warn { font-family:'Patrick Hand',cursive; font-size:13px; color:var(--redline); margin-bottom:6px; }
+    .step-warn { font-family: var(--f-body); font-size:13px; color:var(--redline); margin-bottom:6px; }
     .step-answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .step-input {
       border:2px solid var(--ink); border-radius:4px; padding:5px 10px;
@@ -88,7 +88,7 @@
           <div class="prob-label">RESULT</div>
           <div class="f-display" id="solved-expr"></div>
           <div id="solved-verdict"></div>
-          <div style="margin-top:8px; font-family:'Patrick Hand',cursive; font-size:14px;" id="solved-note"></div>
+          <div style="margin-top:8px; font-family: var(--f-body); font-size:14px;" id="solved-note"></div>
           <button class="btn accent" style="margin-top:10px;" onclick="nextProb()">next problem →</button>
         </div>
 

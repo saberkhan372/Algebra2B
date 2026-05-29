@@ -24,7 +24,7 @@
       display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px;
     }
     .preset-btn {
-      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      font-family: var(--f-body); font-size: 12px;
       padding: 4px 10px; border: 1.5px solid var(--ink-2);
       border-radius: 12px; background: var(--paper-2);
       cursor: pointer; transition: all 0.15s; color: var(--ink);
@@ -36,7 +36,7 @@
     .view-toggle { display: flex; gap: 6px; align-items: center; }
     .view-btn {
       padding: 5px 14px; border: 2px solid var(--ink-2); border-radius: 6px;
-      font-family: 'Patrick Hand', cursive; font-size: 13px; cursor: pointer;
+      font-family: var(--f-body); font-size: 13px; cursor: pointer;
       background: var(--paper-2); color: var(--ink); transition: all 0.15s;
     }
     .view-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
@@ -78,7 +78,7 @@
 
     /* fence display */
     .fence-row {
-      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      font-family: var(--f-body); font-size: 13px;
       color: var(--ink-soft); margin-top: 4px;
       display: flex; gap: 16px; flex-wrap: wrap;
     }
@@ -87,7 +87,7 @@
     /* skew chip */
     .skew-chip {
       display: inline-block; padding: 3px 10px; border-radius: 12px;
-      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      font-family: var(--f-body); font-size: 13px;
       border: 1.5px solid var(--ink-2); background: var(--paper-2);
       margin-left: 6px;
     }
@@ -97,7 +97,7 @@
 
     /* error message */
     .data-error {
-      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      font-family: var(--f-body); font-size: 13px;
       color: var(--redline); margin-top: 4px; display: none;
     }
 
@@ -156,7 +156,7 @@
           <button class="view-btn active" id="vbtn-box" onclick="setView('box')">☰ box plot</button>
           <button class="view-btn" id="vbtn-dot" onclick="setView('dot')">• dot plot</button>
         </div>
-        <div id="skew-display" style="font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft);"></div>
+        <div id="skew-display" style="font-family: var(--f-body); font-size:13px; color:var(--ink-soft);"></div>
       </div>
 
       <!-- Stats grid -->

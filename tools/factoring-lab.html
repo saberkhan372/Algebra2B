@@ -113,7 +113,7 @@
     }
     .step { display: flex; gap: 8px; align-items: baseline; margin-bottom: 4px; font-size: 14px; }
     .step .num { font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--accent); width: 20px; }
-    .step .content { font-family: 'Patrick Hand', cursive; flex: 1; }
+    .step .content { font-family: var(--f-body); flex: 1; }
     .step .math { font-family: 'JetBrains Mono', monospace; color: var(--ink-2); }
 
     .no-factor-msg {
@@ -121,7 +121,7 @@
       padding: 10px;
       background: var(--paper-2);
       border-radius: 4px;
-      font-family: 'Patrick Hand', cursive;
+      font-family: var(--f-body);
       font-size: 14px;
       color: var(--ink-soft);
     }
@@ -361,7 +361,7 @@
         const sqrtHint = Math.round(Math.sqrt(Math.abs(prod)));
         stepsEl.innerHTML = `
           <div class="step"><div class="num">①</div><div class="content">Find two numbers that <strong>multiply to ${prod}</strong> and <strong>add to ${b}</strong>.<br>
-            <span style="font-family:'Patrick Hand',cursive; color:#2a8a4a; font-size:13px;">Start near √(|ac|) ≈ ${sqrtHint} and spread from there.</span><br>
+            <span style="font-family: var(--f-body); color:#2a8a4a; font-size:13px;">Start near √(|ac|) ≈ ${sqrtHint} and spread from there.</span><br>
             <span class="math">${result.p} × ${result.q} = ${prod} &nbsp; and &nbsp; ${result.p} + ${result.q} = ${b} ✓</span>
           </div></div>
           <div class="step"><div class="num">②</div><div class="content">Factored form:<br>
@@ -376,7 +376,7 @@
         const sqrtHintNo = Math.round(Math.sqrt(Math.abs(a*c)));
         stepsEl.innerHTML = `
           <div class="step"><div class="num">①</div><div class="content">Look for two integers that multiply to <span class="math">${a*c}</span> and add to <span class="math">${b}</span>.<br>
-            <span style="font-family:'Patrick Hand',cursive; color:#2a8a4a; font-size:13px;">Started near √(|ac|) ≈ ${sqrtHintNo} — no pair sums to ${b}. None exist.</span>
+            <span style="font-family: var(--f-body); color:#2a8a4a; font-size:13px;">Started near √(|ac|) ≈ ${sqrtHintNo} — no pair sums to ${b}. None exist.</span>
           </div></div>
           <div class="step"><div class="num">②</div><div class="content">Discriminant: <span class="math">b²−4ac = ${disc}</span>. ${disc < 0 ? 'Negative → no real roots → not factorable over ℝ.' : 'Not a perfect square → irrational roots → not factorable over ℤ.'}</div></div>`;
       }

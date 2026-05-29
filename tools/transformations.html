@@ -41,11 +41,11 @@
     .annot {
       margin-top: 5px; padding: 7px 12px;
       background: var(--highlight); border-left: 4px solid var(--accent); border-radius: 3px;
-      font-family: 'Patrick Hand', cursive; font-size: 14px; min-height: 36px;
+      font-family: var(--f-body); font-size: 14px; min-height: 36px;
     }
 
     .bottom-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
-    .parent-chk { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+    .parent-chk { font-family: var(--f-body); font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
 
     /* sidebar formula card */
     .formula-card { text-align: center; padding: 10px 14px; border: 1.5px dashed var(--ink-2); border-radius: 4px; }
@@ -54,7 +54,7 @@
     /* transformation chips */
     .t-chip {
       padding: 3px 10px; border-radius: 4px;
-      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      font-family: var(--f-body); font-size: 13px;
       display: inline-flex; align-items: center; gap: 4px;
     }
     /* practice panel */
@@ -540,7 +540,7 @@
 
       if (el.children.length === 0) {
         const s = document.createElement('span');
-        s.style.cssText = "font-family:'Patrick Hand',cursive; font-size:13px; color:rgba(29,26,20,0.4);";
+        s.style.cssText = "font-family: var(--f-body); font-size:13px; color:rgba(29,26,20,0.4);";
         s.textContent = 'at parent function — no transformations yet';
         el.appendChild(s);
       }

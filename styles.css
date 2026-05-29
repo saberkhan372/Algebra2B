@@ -1,15 +1,18 @@
 /* Algebra 2 Playgrounds — Global Styles */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Patrick+Hand&family=Permanent+Marker&family=Special+Elite&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Lexend:wght@400;500;600;700&family=Patrick+Hand&family=Permanent+Marker&family=Special+Elite&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
   --paper:      #f6f1e4;
   --paper-2:    #efe7d3;
   --paper-3:    #e8dfc8;
   --ink:        #1d1a14;
-  --ink-2:      #3a342a;
-  --ink-soft:   #6b6357;
-  --ghost:      #b5ad9c;
+  --ink-2:      #322d24;   /* darkened for stronger secondary text */
+  --ink-soft:   #585044;   /* darkened from #6b6357 — ~7:1 on paper */
+  --ghost:      #9a917f;   /* darkened from #b5ad9c — readable, not invisible */
+
+  /* Clean reading font for body text + math; handwriting kept for headers/labels */
+  --f-body: 'Lexend', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --grid:       rgba(29,26,20,0.09);
   --accent:     #d94f2a;
   --accent-2:   #2a6fb4;
@@ -26,17 +29,18 @@ html, body {
   min-height: 100vh;
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Patrick Hand', 'Comic Neue', system-ui, sans-serif;
+  font-family: var(--f-body);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 a { color: inherit; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 /* ── Typography ── */
+/* Headers stay handwritten; .f-hand (body/reading text) now uses the clean font */
 .f-display { font-family: 'Caveat', cursive; font-weight: 700; }
-.f-hand    { font-family: 'Patrick Hand', cursive; }
+.f-hand    { font-family: var(--f-body); }
 .f-marker  { font-family: 'Permanent Marker', cursive; }
 .f-type    { font-family: 'Special Elite', monospace; }
 .f-mono    { font-family: 'JetBrains Mono', monospace; }
@@ -206,7 +210,7 @@ a:hover { text-decoration: underline; }
   border: 2px solid var(--ink);
   border-radius: 999px;
   padding: 5px 14px 5px 34px;
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 15px;
   background: var(--paper);
   color: var(--ink);
@@ -231,7 +235,7 @@ a:hover { text-decoration: underline; }
   margin-left: auto;
 }
 .nav-links a {
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 15px;
   padding: 4px 12px;
   border: 2px solid transparent;
@@ -252,7 +256,7 @@ a:hover { text-decoration: underline; }
 
 /* ── Board / Fullscreen mode ── */
 .fs-btn {
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 13px;
   background: none;
   border: 1.5px solid var(--ink-2);
@@ -275,7 +279,7 @@ a:hover { text-decoration: underline; }
   top: 14px;
   right: 16px;
   z-index: 99999;
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 14px;
   background: rgba(29,26,20,0.82);
   color: #f6f1e4;
@@ -287,14 +291,25 @@ a:hover { text-decoration: underline; }
 }
 .fs-exit-btn:hover { background: rgba(29,26,20,1); }
 
-/* Active board mode: nav hidden, sidebar hidden, canvas fills screen */
-body.fs-active .site-nav          { display: none !important; }
-body.fs-active .fs-exit-btn       { display: block; }
-body.fs-active .tool-sidebar      { display: none !important; }
-body.fs-active .tool-page         { height: 100vh !important; grid-template-columns: 1fr !important; }
-body.fs-active .tool-main         { border-right: none !important; }
-body.fs-active .notebook-binding  { display: none !important; }
-body.fs-active .pacing-banner     { display: none !important; }
+/* Board mode layout is driven by fullscreen.js (inline styles). These rules add
+   readability scaling on top. body.board-mode is toggled by fullscreen.js. */
+body.board-mode .tool-sidebar {
+  font-size: 1.12em;          /* bump control-panel text on the board */
+}
+body.board-mode .tool-sidebar .sec-lbl,
+body.board-mode .tool-sidebar .param-lbl,
+body.board-mode .tool-sidebar label {
+  font-size: 1.05em;
+}
+body.board-mode input[type="range"] {
+  height: 32px;               /* fatter hit area, easier from a distance */
+}
+body.board-mode .fs-exit-btn { font-size: 16px; padding: 8px 18px; }
+
+/* Native accent-color sliders (track + thumb tinted); taller = easier to hit */
+input[type="range"] {
+  accent-color: var(--accent);
+}
 
 /* ── Pacing Banner ── */
 .pacing-banner {
@@ -356,7 +371,7 @@ body.fs-active .pacing-banner     { display: none !important; }
   gap: 6px;
   padding: 5px 8px;
   border-radius: 4px;
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 14px;
   margin-bottom: 2px;
   transition: background 0.1s;
@@ -494,7 +509,7 @@ body.fs-active .pacing-banner     { display: none !important; }
   color: var(--ink-2);
 }
 .tool-card-name {
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 15px;
   line-height: 1.2;
   font-weight: 600;
@@ -719,6 +734,7 @@ body.fs-active .pacing-banner     { display: none !important; }
   flex: 1;
   accent-color: var(--accent);
   cursor: pointer;
+  height: 22px;
 }
 .slider-group .param-val {
   font-family: 'JetBrains Mono', monospace;
@@ -870,7 +886,7 @@ body.fs-active .pacing-banner     { display: none !important; }
   border-radius: 999px;
   background: var(--paper);
   color: var(--ink);
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 15px;
   cursor: pointer;
   transition: background 0.12s, transform 0.08s;
@@ -891,7 +907,7 @@ body.fs-active .pacing-banner     { display: none !important; }
 
 /* ── Save PNG button (injected by save-png.js) ── */
 .save-png-btn {
-  font-family: 'Patrick Hand', sans-serif;
+  font-family: var(--f-body);
   font-size: 11px;
   padding: 3px 10px;
   border-radius: 20px;
@@ -1008,7 +1024,7 @@ body.fs-active .pacing-banner     { display: none !important; }
 /* Empty state — subtle placeholder */
 .math-preview:empty::before {
   content: 'preview';
-  font-family: 'Patrick Hand', cursive;
+  font-family: var(--f-body);
   font-size: 11px;
   opacity: 0.35;
   letter-spacing: 0.04em;

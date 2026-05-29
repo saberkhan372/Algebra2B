@@ -33,7 +33,7 @@
       font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-soft);
     }
     .formula-tab.detected .ftab-formula { color: var(--ink); }
-    .ftab-kw { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
+    .ftab-kw { font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); margin-top: 3px; }
 
     /* keyword highlights in story */
     .kw-formula    { background: var(--highlight); border-radius: 3px; padding: 0 3px; font-weight: 600; }
@@ -44,7 +44,7 @@
     .problem-picker { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
     .prob-btn {
       padding: 5px 13px; border: 2px solid var(--ink); border-radius: 20px;
-      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 14px;
+      background: var(--paper); font-family: var(--f-body); font-size: 14px;
       cursor: pointer; transition: background .12s, color .12s;
     }
     .prob-btn.active { background: var(--ink); color: var(--paper); }
@@ -54,7 +54,7 @@
     .story-box {
       border: 2.5px solid var(--ink); border-radius: 8px;
       padding: 13px 16px; background: var(--paper);
-      font-family: 'Patrick Hand', cursive; font-size: 16px; line-height: 1.9;
+      font-family: var(--f-body); font-size: 16px; line-height: 1.9;
       margin-bottom: 12px;
     }
     .story-label {
@@ -154,7 +154,7 @@
     .n-sel-label { font-family: 'Permanent Marker', cursive; font-size: 12px; color: var(--ink-soft); }
     .n-btn {
       padding: 5px 14px; border: 2px solid var(--ink-soft); border-radius: 16px;
-      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 13px;
+      background: var(--paper); font-family: var(--f-body); font-size: 13px;
       cursor: pointer; transition: all 0.12s;
     }
     .n-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
@@ -238,7 +238,7 @@
     }
     .btn-ghost:hover { background: var(--paper-2); }
     .hint-text {
-      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft);
+      font-family: var(--f-body); font-size: 13px; color: var(--ink-soft);
     }
 
     /* ── shake ── */
@@ -330,7 +330,7 @@
         <span class="pct-val" id="pct-from"></span>
         <span class="pct-arrow">÷ 100 =</span>
         <span class="pct-val result" id="pct-to"></span>
-        <span style="font-family:'Patrick Hand',cursive; font-size:13px; color:#8b4513; margin-left:4px;">← always convert before plugging in!</span>
+        <span style="font-family: var(--f-body); font-size:13px; color:#8b4513; margin-left:4px;">← always convert before plugging in!</span>
       </div>
 
       <!-- ── EXACT + ANSWER ── -->

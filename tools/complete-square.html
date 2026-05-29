@@ -19,7 +19,7 @@
     .step-block.active { border-color:var(--accent); }
     .step-block.done   { opacity:0.7; }
 
-    .step-q { font-family:'Patrick Hand',cursive; font-size:15px; margin-bottom:8px; color:var(--ink-2); }
+    .step-q { font-family: var(--f-body); font-size:15px; margin-bottom:8px; color:var(--ink-2); }
     .step-q strong { color:var(--ink); }
     .step-answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
     .step-input {
@@ -49,7 +49,7 @@
       border-radius: 4px;
       background: var(--paper-2);
       padding: 8px 10px;
-      font-family: 'Patrick Hand', cursive;
+      font-family: var(--f-body);
       font-size: 14px;
       color: var(--ink-2);
     }
@@ -66,7 +66,7 @@
     details.deriv-details > summary::-webkit-details-marker { display: none; }
     .deriv-grid { display: grid; grid-template-columns: 1fr auto; gap: 3px 8px; align-items: baseline; margin-top: 6px; }
     .deriv-expr { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink); word-break: break-all; line-height: 1.5; }
-    .deriv-op   { font-family: 'Patrick Hand', cursive; font-size: 10px; color: var(--ink-2); white-space: nowrap; }
+    .deriv-op   { font-family: var(--f-body); font-size: 10px; color: var(--ink-2); white-space: nowrap; }
     .deriv-result { text-align: center; margin-top: 8px; padding: 7px; border: 2px solid var(--accent); border-radius: 4px; background: rgba(217,79,42,0.06); }
   </style>
 </head>
@@ -97,7 +97,7 @@
           <div class="tape"></div>
           <div class="prob-label">COMPLETE THE SQUARE FOR:</div>
           <div class="problem-expr" id="prob-expr"></div>
-          <div style="margin-top:6px; font-family:'Patrick Hand',cursive; font-size:14px; color:var(--ink-soft);" id="prob-goal">Convert to vertex form: y = (x − h)² + k</div>
+          <div style="margin-top:6px; font-family: var(--f-body); font-size:14px; color:var(--ink-soft);" id="prob-goal">Convert to vertex form: y = (x − h)² + k</div>
         </div>
 
         <div class="square-reminder" id="square-reminder"></div>
@@ -107,7 +107,7 @@
         <div class="solved-banner sk-box" id="solved-banner">
           <div class="prob-label">VERTEX FORM</div>
           <div class="f-display" id="solved-expr"></div>
-          <div style="margin-top:10px; font-family:'Patrick Hand',cursive; font-size:14px;" id="solved-note"></div>
+          <div style="margin-top:10px; font-family: var(--f-body); font-size:14px;" id="solved-note"></div>
           <div id="solved-forms"></div>
           <button class="btn accent" style="margin-top:12px;" onclick="nextProb()">next problem →</button>
         </div>
@@ -150,7 +150,7 @@
       <details class="sk-box deriv-details" style="padding:10px; background:var(--paper-2);">
         <summary style="display:flex; justify-content:space-between; align-items:center;">
           <span class="f-marker" style="font-size:11px;">📐 WHERE DID THE FORMULA COME FROM?</span>
-          <span style="font-family:'Patrick Hand',cursive; font-size:11px; color:var(--ink-2);">▸ show</span>
+          <span style="font-family: var(--f-body); font-size:11px; color:var(--ink-2);">▸ show</span>
         </summary>
         <div style="margin-top:8px; border-top:1px dashed var(--ink-2); padding-top:8px;">
           <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-bottom:2px;">
@@ -362,7 +362,7 @@
         const imagStr = Number.isInteger(imagPart) ? String(imagPart) : `√${kV}`;
         interceptHTML = `x = ${hV} ± ${imagStr}i`;
         const disc = p.b*p.b - 4*p.a*p.c;
-        imagNoteHTML = `<div style="margin-top:8px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:8px 10px; font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-2); line-height:1.5;">
+        imagNoteHTML = `<div style="margin-top:8px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:8px 10px; font-family: var(--f-body); font-size:13px; color:var(--ink-2); line-height:1.5;">
           ✦ Discriminant b²−4ac = <strong>${disc}</strong> &lt; 0 → <strong>no real roots → imaginary solutions!</strong><br>
           Parabola vertex (${hV}, ${kV}) sits above the x-axis — it never crosses it.<br>
           <a href="imaginary-sandbox.html" style="color:var(--accent); font-family:'Permanent Marker',cursive; font-size:12px;">→ Explore in Imaginary Sandbox</a>
@@ -386,7 +386,7 @@
       document.getElementById('solved-forms').innerHTML = `
         <div style="border-top:1.5px dashed var(--ink-2); padding-top:10px; margin-top:10px;">
           <div style="font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); margin-bottom:6px;">THREE FORMS OF THIS PARABOLA:</div>
-          <div style="font-family:'Patrick Hand',cursive; font-size:13px; line-height:2;">
+          <div style="font-family: var(--f-body); font-size:13px; line-height:2;">
             <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">${p.expr}</span><span style="color:var(--ink-soft);"> ← standard</span><br>
             <span style="color:var(--ink-soft); font-size:12px; padding-left:8px;">↕ complete the square ↕</span><br>
             <span style="font-family:'JetBrains Mono',monospace; color:var(--accent);">${p.vertexForm.replace('y = ','')}</span><span style="color:var(--ink-soft);"> ← vertex</span><br>

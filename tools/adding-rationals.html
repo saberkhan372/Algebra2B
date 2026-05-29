@@ -455,7 +455,7 @@
       if (sign === -1 && newNum2.length > 1) {
         const negNum2 = newNum2.map(c => -c);
         distributeWarning = `
-          <div style="margin-top:6px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:6px 10px; font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-2);">
+          <div style="margin-top:6px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:6px 10px; font-family: var(--f-body); font-size:13px; color:var(--ink-2);">
             ⚠ Distribute the <strong>−</strong> to <em>every term</em>:<br>
             <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">−(${fmtPoly(newNum2)}) = ${fmtPoly(negNum2)}</span>
           </div>`;
@@ -501,7 +501,7 @@
         steps.insertAdjacentHTML('beforeend', `
           <div class="step-card" style="background:#e8f4ec; border-color:#2a8a4a;">
             <div class="step-lbl" style="color:#2a8a4a;">💡 Step 6 — numerator factors! Simplify:</div>
-            <div class="step-body" style="font-size:13px; line-height:1.9; font-family:'Patrick Hand',cursive;">
+            <div class="step-body" style="font-size:13px; line-height:1.9; font-family: var(--f-body);">
               Numerator <span style="font-family:'JetBrains Mono',monospace;">${fmtPoly(combined)}</span>
               = <span style="font-family:'JetBrains Mono',monospace;">${cancelStr} · (${remainNumStr})</span><br>
               Cancel the shared factor <span style="font-family:'JetBrains Mono',monospace;">${cancelStr}</span>:

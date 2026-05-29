@@ -30,7 +30,7 @@
     .angle-sel-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
     .angle-sel-btn {
       padding:5px 14px; border:2px solid var(--ink-2); border-radius:6px;
-      font-family:'Patrick Hand',cursive; font-size:14px; cursor:pointer;
+      font-family: var(--f-body); font-size:14px; cursor:pointer;
       background:var(--paper-2); transition:all 0.15s;
     }
     .angle-sel-btn.active { background:var(--highlight); border-color:var(--accent); color:var(--ink); }
@@ -64,7 +64,7 @@
 
     .calc-output {
       background:var(--ink); color:#f6f1e4; border-radius:6px; padding:10px 14px;
-      font-family:'Patrick Hand',cursive; font-size:14px; line-height:1.7;
+      font-family: var(--f-body); font-size:14px; line-height:1.7;
       max-width:460px;
     }
     .calc-step { margin:0; }
@@ -74,7 +74,7 @@
 
     .warn-box {
       background:#fdecea; border:2px solid var(--redline); border-radius:6px;
-      padding:8px 12px; font-family:'Patrick Hand',cursive; font-size:13px;
+      padding:8px 12px; font-family: var(--f-body); font-size:13px;
       max-width:400px;
     }
 
@@ -89,7 +89,7 @@
     .special-title { font-family:'Permanent Marker',cursive; font-size:13px; margin-bottom:6px; }
     .special-table {
       width:100%; border-collapse:collapse; margin-top:8px;
-      font-family:'Patrick Hand',cursive; font-size:13px;
+      font-family: var(--f-body); font-size:13px;
     }
     .special-table th { border-bottom:2px solid var(--ink-2); padding:4px 6px; color:var(--ink-soft); font-size:11px; }
     .special-table td { padding:4px 6px; text-align:center; border-bottom:1px solid var(--ink-2); }
@@ -148,7 +148,7 @@
           <button class="angle-sel-btn" id="btn-refC-s" onclick="setSolveRef('C')">angle C</button>
         </div>
 
-        <div style="font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft); margin-top:4px;">
+        <div style="font-family: var(--f-body); font-size:13px; color:var(--ink-soft); margin-top:4px;">
           Enter any 2 values. Leave the unknown blank.
         </div>
         <div class="solve-grid">

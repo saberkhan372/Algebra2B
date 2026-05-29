@@ -28,7 +28,7 @@
     .sign-btns { display: flex; gap: 6px; }
     .sign-btn {
       padding: 5px 14px; border: 2px solid var(--ink); border-radius: 6px;
-      font-family: 'Patrick Hand', cursive; font-size: 14px; cursor: pointer;
+      font-family: var(--f-body); font-size: 14px; cursor: pointer;
       background: var(--paper-2); transition: all 0.15s;
     }
     .sign-btn.active.pos { background: #e8f4ec; border-color: #2a8a4a; color: #2a8a4a; font-weight: bold; }
@@ -43,7 +43,7 @@
       font-family: 'JetBrains Mono', monospace; font-size: 14px;
       position: relative;
     }
-    .zero-card .z-label { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); }
+    .zero-card .z-label { font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); }
     .zero-card input[type=number] {
       width: 46px; border: 1.5px solid var(--ink-2); border-radius: 4px;
       padding: 2px 4px; font-family: 'JetBrains Mono', monospace; font-size: 14px;
@@ -52,7 +52,7 @@
     .mult-btns { display: flex; gap: 3px; }
     .mult-btn {
       width: 28px; height: 28px; border: 1.5px solid var(--ink-2); border-radius: 4px;
-      background: var(--paper-2); font-family: 'Patrick Hand', cursive; font-size: 12px;
+      background: var(--paper-2); font-family: var(--f-body); font-size: 12px;
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: all 0.12s;
     }
@@ -65,7 +65,7 @@
     }
     .add-zero-btn {
       padding: 6px 12px; border: 2px dashed var(--ink-2); border-radius: 6px;
-      background: transparent; font-family: 'Patrick Hand', cursive; font-size: 14px;
+      background: transparent; font-family: var(--f-body); font-size: 14px;
       cursor: pointer; color: var(--ink-soft); transition: all 0.12s;
     }
     .add-zero-btn:hover { background: var(--paper-2); border-color: var(--accent); color: var(--accent); }
@@ -80,7 +80,7 @@
     /* Info chips */
     .info-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
     .ic {
-      padding: 3px 10px; border-radius: 4px; font-family: 'Patrick Hand', cursive; font-size: 13px;
+      padding: 3px 10px; border-radius: 4px; font-family: var(--f-body); font-size: 13px;
       border: 1.5px solid var(--ink-2);
     }
     .ic.end { background: #fdf0e0; border-color: #c8a000; }
@@ -96,7 +96,7 @@
       display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px;
     }
     .vocab-pill {
-      padding: 4px 10px; border-radius: 999px; font-family: 'Patrick Hand', cursive; font-size: 13px;
+      padding: 4px 10px; border-radius: 999px; font-family: var(--f-body); font-size: 13px;
       text-align: center; border: 1.5px solid var(--ink-2); background: var(--paper);
     }
     .vocab-pill.same { background: var(--highlight); border-color: var(--accent); }

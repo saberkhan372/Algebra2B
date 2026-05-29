@@ -45,7 +45,7 @@
     .ftog:hover:not(.on-n):not(.on-d) { background: var(--paper-2); }
 
     .factor-status {
-      font-family: 'Patrick Hand', cursive; font-size: 10px;
+      font-family: var(--f-body); font-size: 10px;
       text-align: center; min-height: 14px; color: var(--ink-soft);
       letter-spacing: 0.05em;
     }
@@ -76,7 +76,7 @@
     }
     .feat-chip {
       padding: 3px 9px; border-radius: 4px; border: 1.5px solid var(--ink-2);
-      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      font-family: var(--f-body); font-size: 13px;
       display: inline-flex; align-items: baseline; gap: 5px;
     }
     .chip-label {
@@ -129,7 +129,7 @@
     }
     .ha-row {
       display: flex; gap: 8px; align-items: baseline;
-      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      font-family: var(--f-body); font-size: 12px;
       padding: 3px 4px; border-radius: 3px;
       border-bottom: 1px dashed var(--ink-soft);
     }
@@ -153,7 +153,7 @@
       margin-bottom: 6px;
     }
     .try-q {
-      font-family: 'Patrick Hand', cursive; font-size: 12px; line-height: 1.45;
+      font-family: var(--f-body); font-size: 12px; line-height: 1.45;
       padding: 4px 0; border-bottom: 1px dashed var(--ink-soft);
     }
     .try-q:last-child { border-bottom: none; }
@@ -166,7 +166,7 @@
       display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap;
     }
     .tog-chk {
-      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2);
+      font-family: var(--f-body); font-size: 13px; color: var(--ink-2);
       display: flex; align-items: center; gap: 5px; cursor: pointer;
     }
   </style>
@@ -263,7 +263,7 @@
       <!-- How to use -->
       <div class="sk-box" style="padding:10px 12px; transform:rotate(-0.5deg);">
         <div class="section-label f-marker" style="margin-bottom:6px;">HOW IT WORKS</div>
-        <div style="font-family:'Patrick Hand',cursive; font-size:13px; line-height:1.5; color:var(--ink-2);">
+        <div style="font-family: var(--f-body); font-size:13px; line-height:1.5; color:var(--ink-2);">
           <b style="color:var(--ink);">N</b> → factor goes in numerator.<br>
           <b style="color:var(--ink);">D</b> → factor goes in denominator.<br>
           Both N &amp; D → the factor <em>cancels</em> — that's a <span style="color:#7c3aed; font-weight:700;">hole</span>!<br>

@@ -49,14 +49,14 @@
       font-family: 'Permanent Marker', cursive; font-size: 12px; margin-bottom: 4px;
     }
     .dec-then {
-      font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-top: 4px;
+      font-family: var(--f-body); font-size: 13px; color: var(--ink-soft); margin-top: 4px;
     }
 
     /* ---- problem picker ---- */
     .problem-picker { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
     .prob-btn {
       padding: 5px 13px; border: 2px solid var(--ink); border-radius: 20px;
-      background: var(--paper); font-family: 'Patrick Hand', cursive; font-size: 14px;
+      background: var(--paper); font-family: var(--f-body); font-size: 14px;
       cursor: pointer; transition: background .12s, color .12s;
     }
     .prob-btn.active { background: var(--ink); color: var(--paper); }
@@ -87,13 +87,13 @@
       background: #fdf0e0; border-color: #8b4513; border-style: dashed;
     }
     .step-note {
-      font-family: 'Patrick Hand', cursive; font-size: 14px; color: var(--ink-soft);
+      font-family: var(--f-body); font-size: 14px; color: var(--ink-soft);
       max-width: 300px; padding: 8px 10px 8px 12px;
       border-left: 3px solid var(--accent); align-self: center;
     }
     .step-badge {
       display: inline-block; padding: 3px 10px; border-radius: 12px;
-      font-family: 'Patrick Hand', cursive; font-size: 13px; align-self: center;
+      font-family: var(--f-body); font-size: 13px; align-self: center;
     }
     .step-badge.yes { background: #2a8a4a; color: #fff; }
     .step-badge.no  { background: #d94f2a; color: #fff; }
@@ -127,7 +127,7 @@
       background: #8b4513; color: #fff; padding: 2px 8px; border-radius: 4px;
     }
     .exact-text {
-      font-family: 'Patrick Hand', cursive; font-size: 13px; color: #8b4513;
+      font-family: var(--f-body); font-size: 13px; color: #8b4513;
     }
 
     /* ---- controls ---- */

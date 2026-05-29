@@ -42,7 +42,7 @@
     .toggle-btn {
       padding: 4px 7px; border-radius: 3px;
       border: 1.5px solid var(--ink-soft);
-      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      font-family: var(--f-body); font-size: 11px;
       background: var(--paper); color: var(--ink-2); cursor: pointer;
       align-self: center;
     }
@@ -72,15 +72,15 @@
 
     /* ── Chips ───────────────────────────────────────────────── */
     .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
-    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: 'Patrick Hand', cursive; font-size: 12px; }
+    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: var(--f-body); font-size: 12px; }
 
     /* ── Misc ────────────────────────────────────────────────── */
     .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
-    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
-    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
-    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .insight-lbl { font-family: var(--f-body); font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: var(--f-body); font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: var(--f-body); font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
     .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
-    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+    .hint-bar { padding: 4px 12px; font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
 
     @media (max-width: 900px) {
       .tool-page { flex-direction: column; }
@@ -130,7 +130,7 @@
         <div class="sign-row" style="margin-bottom:8px;">
           <button class="sign-btn active" id="sign-pos" data-sign="1">+</button>
           <button class="sign-btn"        id="sign-neg" data-sign="-1">−</button>
-          <span style="font-family:'Patrick Hand',cursive; font-size:12px; color:var(--ink-soft); margin-left:4px;">sign of leading term</span>
+          <span style="font-family: var(--f-body); font-size:12px; color:var(--ink-soft); margin-left:4px;">sign of leading term</span>
         </div>
         <div class="slider-grid">
           <div class="param-lbl">|a|</div>
@@ -498,7 +498,7 @@
           <div class="root-pos" style="color:${col};">x = ${n(r.x, 1)}</div>
           <div class="mult-row">
             ${[1,2,3].map(m => `<button class="mult-btn ${r.mult===m?'active':''}" data-ri="${i}" data-m="${m}" ${r.on?'':' disabled'}>${m}</button>`).join('')}
-            <span style="font-family:'Patrick Hand',cursive; font-size:11px; color:${col}; margin-left:4px;">${MULT_LABELS[r.mult]}</span>
+            <span style="font-family: var(--f-body); font-size:11px; color:${col}; margin-left:4px;">${MULT_LABELS[r.mult]}</span>
           </div>
         </div>
         <button class="toggle-btn ${r.on?'on':''}" data-ri="${i}">${r.on?'on':'off'}</button>

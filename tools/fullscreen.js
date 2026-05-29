@@ -13,7 +13,7 @@
     btn.type      = 'button';
     btn.title     = 'Board mode — fullscreen, canvas only';
     btn.innerHTML = '&#x26F6; board';
-    btn.style.cssText = 'font-family:"Patrick Hand",cursive;font-size:13px;background:none;'
+    btn.style.cssText = 'font-family:Lexend,system-ui,sans-serif;font-size:13px;background:none;'
       + 'border:1.5px solid #999;border-radius:3px;padding:3px 9px;'
       + 'cursor:pointer;color:#999;white-space:nowrap;';
     btn.addEventListener('mouseover', function () {
@@ -30,7 +30,7 @@
     exitBtn.type      = 'button';
     exitBtn.innerHTML = '&#x2715; exit board';
     exitBtn.style.cssText = 'display:none;position:fixed;top:14px;right:16px;z-index:99999;'
-      + 'font-family:"Patrick Hand",cursive;font-size:14px;'
+      + 'font-family:Lexend,system-ui,sans-serif;font-size:14px;'
       + 'background:rgba(29,26,20,.85);color:#f6f1e4;'
       + 'border:none;border-radius:5px;padding:6px 14px;cursor:pointer;';
     document.body.appendChild(exitBtn);
@@ -62,6 +62,7 @@
     // ── Enter ─────────────────────────────────────────────────────
     function enter() {
       active = true;
+      document.body.classList.add('board-mode');  // hook for board-scaling CSS
 
       // Hide nav + static chrome
       ALWAYS_HIDE.forEach(function (sel) {
@@ -116,6 +117,7 @@
     // ── Exit ──────────────────────────────────────────────────────
     function exit() {
       active = false;
+      document.body.classList.remove('board-mode');
 
       ALWAYS_HIDE.forEach(function (sel) {
         var el = document.querySelector(sel);

@@ -22,7 +22,7 @@
     .mode-row { display: flex; gap: 3px; }
     .mode-btn {
       flex: 1; padding: 5px 3px;
-      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      font-family: var(--f-body); font-size: 12px;
       border: 1.5px solid var(--ink-soft); border-radius: 3px;
       background: var(--paper-2); color: var(--ink-2);
       cursor: pointer; text-align: center;
@@ -32,7 +32,7 @@
 
     /* ── Chips ───────────────────────────────────────────────── */
     .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
-    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: 'Patrick Hand', cursive; font-size: 12px; }
+    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: var(--f-body); font-size: 12px; }
 
     /* ── Angle display ───────────────────────────────────────── */
     .angle-display {
@@ -41,13 +41,13 @@
       background: var(--paper-2); border: 1.5px solid var(--ink-soft);
     }
     .angle-row { display: flex; justify-content: space-between; align-items: baseline; }
-    .angle-lbl { font-family: 'Patrick Hand', cursive; font-size: 11px; color: var(--ink-soft); }
+    .angle-lbl { font-family: var(--f-body); font-size: 11px; color: var(--ink-soft); }
     .angle-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
 
     /* ── Animate button ──────────────────────────────────────── */
     .anim-btn {
       width: 100%; padding: 7px;
-      font-family: 'Patrick Hand', cursive; font-size: 14px; font-weight: 700;
+      font-family: var(--f-body); font-size: 14px; font-weight: 700;
       border: 2px solid var(--ink-soft); border-radius: 4px;
       background: var(--paper-2); color: var(--ink-2); cursor: pointer;
       transition: background 0.1s;
@@ -69,15 +69,15 @@
       transition: left 0.15s;
     }
     .tog-box.on::after { left: 15px; }
-    .tog-lbl { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-2); }
+    .tog-lbl { font-family: var(--f-body); font-size: 12px; color: var(--ink-2); }
 
     /* ── Misc ────────────────────────────────────────────────── */
     .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
-    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
-    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
-    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .insight-lbl { font-family: var(--f-body); font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: var(--f-body); font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: var(--f-body); font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
     .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
-    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+    .hint-bar { padding: 4px 12px; font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
 
     @media (max-width: 900px) {
       .tool-page { flex-direction: column; }

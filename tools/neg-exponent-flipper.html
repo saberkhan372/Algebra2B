@@ -57,7 +57,7 @@
       width: 36px; height: 36px; border: 2px solid var(--ink); border-radius: 50%;
       background: var(--paper); font-size: 20px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: background 0.1s;
-      font-family: 'Patrick Hand', cursive;
+      font-family: var(--f-body);
     }
     .exp-btn:hover { background: var(--paper-2); }
     .exp-display { font-family: 'JetBrains Mono', monospace; font-size: 18px; min-width: 40px; text-align: center; }
@@ -69,7 +69,7 @@
     }
     .example-chip:hover { background: var(--highlight); }
     .explanation-row {
-      max-width: 480px; text-align: center; font-family: 'Patrick Hand', cursive;
+      max-width: 480px; text-align: center; font-family: var(--f-body);
       font-size: 15px; color: var(--ink-2); line-height: 1.5;
     }
 
@@ -99,7 +99,7 @@
       font-family: 'Permanent Marker', cursive; font-size: 10px;
       position: absolute; top: 6px; right: 10px; opacity: 0.5;
     }
-    .step-lbl { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-soft); margin-bottom: 3px; }
+    .step-lbl { font-family: var(--f-body); font-size: 13px; color: var(--ink-soft); margin-bottom: 3px; }
     .step-expr { font-family: 'JetBrains Mono', monospace; font-size: 20px; color: var(--ink); }
 
     .step-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -121,7 +121,7 @@
     .fvt-card.valid .fvt-badge { background: #2a8a4a; color: #fff; }
     .fvt-card.invalid .fvt-badge { background: var(--redline); color: #fff; }
     .fvt-expr { font-family: 'JetBrains Mono', monospace; font-size: 22px; margin: 10px 0 4px; }
-    .fvt-note { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+    .fvt-note { font-family: var(--f-body); font-size: 13px; color: var(--ink-2); line-height: 1.4; }
     .fvt-result { font-family: 'JetBrains Mono', monospace; font-size: 20px; margin-top: 8px; }
     .fvt-card.valid .fvt-result { color: #2a8a4a; }
     .fvt-card.invalid .fvt-result { color: var(--redline); }
@@ -160,7 +160,7 @@
     .quiz-btn.q-correct { background: #e8f4ec; border-color: #2a8a4a; color: #2a8a4a; }
     .quiz-btn.q-wrong   { background: #fdecea; border-color: var(--redline); color: var(--redline); }
     .quiz-feedback {
-      font-family: 'Patrick Hand', cursive; font-size: 15px; min-height: 44px;
+      font-family: var(--f-body); font-size: 15px; min-height: 44px;
       line-height: 1.4; color: var(--ink-2); padding: 0 8px;
     }
     .quiz-score-box { font-family: 'Caveat', cursive; font-size: 26px; color: var(--accent); margin-top: 8px; }
