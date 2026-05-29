@@ -27,7 +27,7 @@ Algebra2B/
 ├── manifest.json       ← PWA manifest
 ├── sw.js               ← Service worker (offline caching)
 ├── tools/              ← 50 standalone tool pages + fullscreen.js
-├── tools/fullscreen.js ← Board mode script injected into all 52 tool pages
+├── tools/fullscreen.js ← Board mode script injected into all 50 tool pages
 ├── video-learning/     ← Transcripts, PDF extracts, contact sheets, batch insights
 ├── algebra-2-tools/    ← Claude design artifacts — reference only, not served to students
 ├── PLAN.md             ← Build plan, completed work log, agent lanes
@@ -156,7 +156,7 @@ Every tool page includes `<script src="fullscreen.js"></script>` as the last scr
 **Behavior:**
 - Clicking `⛶ board`: hides nav + chrome, expands canvas to 100vh, shows `✕ exit board` top-right, adds `body.board-mode` class (triggers scaling CSS), triggers native fullscreen API.
 - **Info sidebars** (Key Ideas, Try This) are hidden — canvas fills full width.
-- **Control sidebars** (sliders, equation editors, family pickers) stay visible — teachers need them during class. Detection: sidebar with `input[type=range]`, `.slider-grid`, `#controls-area`, `.piece-controls`, or `.family-grid` is a control sidebar.
+- **Control sidebars** (sliders, equation editors, family pickers) stay visible — teachers need them during class. Detection: sidebar with any of `input[type="range"]`, `input[type="number"]`, `canvas`, `select`, `.slider-grid`, `#slider-area`, `.family-grid`, `.piece-controls`, or `#controls-area` is treated as a control sidebar and kept visible.
 - `body.board-mode` in `styles.css` scales control-sidebar text, enlarges sliders (32px touch target), scales exit button.
 
 ---

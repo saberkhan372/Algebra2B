@@ -63,6 +63,13 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Log ↔ Exp Mirror Explorer (U5) — y=bˣ and y=log_b(x) on one canvas with y=x reflection line; base slider 0.2–8; quick-pick b=2/e/10/½; purple reflection point pairs with dashed connectors; "Everything Swaps" domain↔range table
 - Rational Function Behavior Explorer (U6) — 4 toggleable factors (N/D independently), holes/VAs/zeros emerge live; HA rule card highlights active rule; segment-split canvas drawing avoids asymptote artifacts
 - Trig Function Explorer (U7) — a/b/h/k sliders with π-formatted h display; sin/cos toggle; colored equation with parameter color-coding; live amplitude/period/phase shift/midline/first-peak/first-trough chips; period bracket + amplitude arrow annotations; peak/trough dots on canvas
+- Systems Explorer (U1) — drag two lines, watch intersection move live, set-equal algebra steps update in sync
+- Function X-Ray (U1/cross-unit) — 9 function families, one tool; slide parameters, see asymptotes/zeros/vertices/midlines as skeleton annotations
+- Inequality Region Explorer (U1/cross-unit) — linear, quadratic, abs value, systems; shade solution region live; click to test any point
+- Unit Circle Wave Sync (U7) — drag the angle, sine/cosine wave traces in real time; dashed connector links circle height to wave height
+- Complex Number Explorer (U3) — drag a+bi on the complex plane; see modulus, argument, conjugate live; roots mode shows why D<0 means imaginary roots
+- Composition & Inverse Lab (U4) — compose f and g, watch f∘g and g∘f diverge; flip to Inverse mode: drag point on f, see mirror on f⁻¹ over y=x
+- Growth Race (U5) — log, √x, x, x², 2^x on one canvas; drag cursor, watch live leaderboard flip; 2^x falls behind x² then explodes past it
 
 **No planned tools missing** — all 50 tools are live.
 
@@ -72,7 +79,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 3. ✓ Log↔Exponential Mirror Explorer (U5) — built
 4. ✓ Rational Function Behavior Explorer (U6) — built
 5. ✓ Trig Function Explorer (U7) — built
-6. Inequality Region Explorer (cross-unit) — linear/quadratic inequalities with live shading
+6. ✓ Inequality Region Explorer (cross-unit) — built (live at tools/inequality-explorer.html)
 
 **Archived/orphan prototype files not in student navigation:**
 - `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
