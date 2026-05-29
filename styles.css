@@ -250,6 +250,52 @@ a:hover { text-decoration: underline; }
   color: var(--paper);
 }
 
+/* ── Board / Fullscreen mode ── */
+.fs-btn {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  background: none;
+  border: 1.5px solid var(--ink-2);
+  border-radius: 3px;
+  padding: 3px 9px;
+  cursor: pointer;
+  color: var(--ink-2);
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  white-space: nowrap;
+}
+.fs-btn:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.fs-exit-btn {
+  display: none;
+  position: fixed;
+  top: 14px;
+  right: 16px;
+  z-index: 99999;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  background: rgba(29,26,20,0.82);
+  color: #f6f1e4;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 14px;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+.fs-exit-btn:hover { background: rgba(29,26,20,1); }
+
+/* Active board mode: nav hidden, sidebar hidden, canvas fills screen */
+body.fs-active .site-nav          { display: none !important; }
+body.fs-active .fs-exit-btn       { display: block; }
+body.fs-active .tool-sidebar      { display: none !important; }
+body.fs-active .tool-page         { height: 100vh !important; grid-template-columns: 1fr !important; }
+body.fs-active .tool-main         { border-right: none !important; }
+body.fs-active .notebook-binding  { display: none !important; }
+body.fs-active .pacing-banner     { display: none !important; }
+
 /* ── Pacing Banner ── */
 .pacing-banner {
   background: var(--highlight);

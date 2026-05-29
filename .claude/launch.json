@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "algebra2b",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "-p", "3333", "."],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "3333"],
       "port": 3333
     }
   ]
