@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Circle Wave — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #uc-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: crosshair;
+    }
+
+    /* ── Mode tabs ───────────────────────────────────────────── */
+    .mode-row { display: flex; gap: 3px; }
+    .mode-btn {
+      flex: 1; padding: 5px 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2);
+      cursor: pointer; text-align: center;
+    }
+    .mode-btn:hover:not(.active) { background: var(--paper-3); }
+    .mode-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Chips ───────────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: 'Patrick Hand', cursive; font-size: 12px; }
+
+    /* ── Angle display ───────────────────────────────────────── */
+    .angle-display {
+      display: flex; flex-direction: column; gap: 3px;
+      padding: 8px 10px; border-radius: 4px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-soft);
+    }
+    .angle-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .angle-lbl { font-family: 'Patrick Hand', cursive; font-size: 11px; color: var(--ink-soft); }
+    .angle-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; }
+
+    /* ── Animate button ──────────────────────────────────────── */
+    .anim-btn {
+      width: 100%; padding: 7px;
+      font-family: 'Patrick Hand', cursive; font-size: 14px; font-weight: 700;
+      border: 2px solid var(--ink-soft); border-radius: 4px;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+      transition: background 0.1s;
+    }
+    .anim-btn:hover { background: var(--paper-3); }
+    .anim-btn.playing { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Toggle ──────────────────────────────────────────────── */
+    .tog-row { display: flex; align-items: center; gap: 7px; cursor: pointer; }
+    .tog-box {
+      width: 30px; height: 16px; border-radius: 8px;
+      border: 1.5px solid var(--ink-soft); background: var(--paper-3);
+      position: relative; transition: background 0.15s;
+    }
+    .tog-box.on { background: var(--ink-2); border-color: var(--ink-2); }
+    .tog-box::after {
+      content: ''; position: absolute; top: 1px; left: 1px;
+      width: 10px; height: 10px; border-radius: 50%; background: white;
+      transition: left 0.15s;
+    }
+    .tog-box.on::after { left: 15px; }
+    .tog-lbl { font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-2); }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
+    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
+    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 300px; }
+    }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Unit Circle Wave</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          drag the angle · watch the wave trace
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u7.html" style="color:var(--ink-soft);">← U7 · Trigonometry</a>
+        </div>
+      </div>
+
+      <!-- Mode -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">function</div>
+        <div class="mode-row">
+          <button class="mode-btn active" data-mode="sin">sin(θ)</button>
+          <button class="mode-btn"        data-mode="cos">cos(θ)</button>
+        </div>
+      </div>
+
+      <!-- Angle display -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">current angle</div>
+        <div class="angle-display">
+          <div class="angle-row">
+            <span class="angle-lbl">degrees</span>
+            <span class="angle-val" id="deg-val">0°</span>
+          </div>
+          <div class="angle-row">
+            <span class="angle-lbl">radians</span>
+            <span class="angle-val" id="rad-val">0</span>
+          </div>
+          <div class="angle-row" style="margin-top:2px; padding-top:4px; border-top:1px dashed var(--ink-soft);">
+            <span class="angle-lbl" id="fn-lbl">sin(θ)</span>
+            <span class="angle-val" id="fn-val">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animate + snap -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft); display:flex; flex-direction:column; gap:8px;">
+        <button class="anim-btn" id="anim-btn">▶ animate</button>
+        <label class="tog-row" id="snap-tog">
+          <div class="tog-box" id="snap-box"></div>
+          <span class="tog-lbl">snap to special angles</span>
+        </label>
+      </div>
+
+      <!-- Chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">properties</div>
+        <div class="chips-row" id="chips"></div>
+      </div>
+
+      <!-- Mr. K says -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight">Hit animate and just watch. The sine wave isn't a separate thing — it's literally the height of the point on the circle, unrolled.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+      <div class="eq-bar"><span id="eqd">—</span></div>
+      <div class="canvas-wrap">
+        <canvas id="uc-canvas"></canvas>
+      </div>
+      <div class="hint-bar">drag on the circle to set the angle · drag on the wave to scrub · hit animate to watch it trace</div>
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR    = window.devicePixelRatio || 1;
+  const TAU    = Math.PI * 2;
+  const canvas = document.getElementById('uc-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  // Special angles (0 to 2π) with exact values
+  const SPEC = [
+    { a:0,              deg:0,   rad:'0',      sin:'0',      cos:'1',       label:'' },
+    { a:Math.PI/6,      deg:30,  rad:'π/6',    sin:'1/2',    cos:'√3/2',    label:'30°' },
+    { a:Math.PI/4,      deg:45,  rad:'π/4',    sin:'√2/2',   cos:'√2/2',    label:'45°' },
+    { a:Math.PI/3,      deg:60,  rad:'π/3',    sin:'√3/2',   cos:'1/2',     label:'60°' },
+    { a:Math.PI/2,      deg:90,  rad:'π/2',    sin:'1',      cos:'0',       label:'90°' },
+    { a:2*Math.PI/3,    deg:120, rad:'2π/3',   sin:'√3/2',   cos:'-1/2',    label:'120°' },
+    { a:3*Math.PI/4,    deg:135, rad:'3π/4',   sin:'√2/2',   cos:'-√2/2',   label:'135°' },
+    { a:5*Math.PI/6,    deg:150, rad:'5π/6',   sin:'1/2',    cos:'-√3/2',   label:'150°' },
+    { a:Math.PI,        deg:180, rad:'π',       sin:'0',      cos:'-1',      label:'180°' },
+    { a:7*Math.PI/6,    deg:210, rad:'7π/6',   sin:'-1/2',   cos:'-√3/2',   label:'210°' },
+    { a:5*Math.PI/4,    deg:225, rad:'5π/4',   sin:'-√2/2',  cos:'-√2/2',   label:'225°' },
+    { a:4*Math.PI/3,    deg:240, rad:'4π/3',   sin:'-√3/2',  cos:'-1/2',    label:'240°' },
+    { a:3*Math.PI/2,    deg:270, rad:'3π/2',   sin:'-1',     cos:'0',       label:'270°' },
+    { a:5*Math.PI/3,    deg:300, rad:'5π/3',   sin:'-√3/2',  cos:'1/2',     label:'300°' },
+    { a:7*Math.PI/4,    deg:315, rad:'7π/4',   sin:'-√2/2',  cos:'√2/2',    label:'315°' },
+    { a:11*Math.PI/6,   deg:330, rad:'11π/6',  sin:'-1/2',   cos:'√3/2',    label:'330°' },
+    { a:2*Math.PI,      deg:360, rad:'2π',      sin:'0',      cos:'1',       label:'' },
+  ];
+
+  const SIN_COL = '#c02040'; // red for sin
+  const COS_COL = '#2a6fb4'; // blue for cos
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const S = {
+    theta:   0,
+    mode:   'sin',
+    snap:    false,
+    animating: false,
+  };
+
+  let animRAF = null;
+
+  // ── Resize ────────────────────────────────────────────────────────────────
+  function resize() {
+    const wrap = canvas.parentElement;
+    canvas.width  = wrap.clientWidth  * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+    draw();
+  }
+
+  // ── Geometry helpers ──────────────────────────────────────────────────────
+  function layout(W, H) {
+    const r     = Math.min(W * 0.19, H * 0.38);
+    const cX    = r + W * 0.05;
+    const cY    = H * 0.5;
+    const wX    = cX + r + W * 0.04;
+    const wW    = W - wX - W * 0.02;
+    const wY    = cY;
+    const wSpan = 4 * Math.PI; // show 2 full periods
+    return { r, cX, cY, wX, wW, wY, wSpan };
+  }
+
+  // Map wave angle to canvas x
+  function waveX(alpha, wX, wW, wSpan) {
+    return wX + (alpha / wSpan) * wW;
+  }
+
+  // Map wave y-value to canvas y
+  function waveY(val, wY, r) {
+    return wY - r * val;
+  }
+
+  // ── Format helpers ────────────────────────────────────────────────────────
+  function fmtDeg(t) { return Math.round(((t % TAU) + TAU) % TAU * 180 / Math.PI) + '°'; }
+
+  function fmtRad(t) {
+    const norm = ((t % TAU) + TAU) % TAU;
+    if (S.snap) {
+      const sp = closestSpecial(norm);
+      if (sp) return sp.rad;
+    }
+    return parseFloat((norm / Math.PI).toFixed(3)) + 'π';
+  }
+
+  function fmtVal(t) {
+    const norm = ((t % TAU) + TAU) % TAU;
+    if (S.snap) {
+      const sp = closestSpecial(norm);
+      if (sp) return S.mode === 'sin' ? sp.sin : sp.cos;
+    }
+    const v = S.mode === 'sin' ? Math.sin(t) : Math.cos(t);
+    return parseFloat(v.toFixed(3)).toString();
+  }
+
+  function closestSpecial(normAngle) {
+    let best = null, bestD = 0.06;
+    SPEC.forEach(sp => {
+      const d = Math.abs(normAngle - sp.a);
+      if (d < bestD) { bestD = d; best = sp; }
+    });
+    return best;
+  }
+
+  function snapAngle(theta) {
+    const norm = ((theta % TAU) + TAU) % TAU;
+    const sp   = closestSpecial(norm);
+    if (!sp) return theta;
+    // Preserve full-rotation count
+    const turns = Math.floor(theta / TAU);
+    return turns * TAU + sp.a;
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function draw() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    const { r, cX, cY, wX, wW, wY, wSpan } = layout(W, H);
+    const theta = S.theta;
+    const norm  = ((theta % TAU) + TAU) % TAU;
+    const col   = S.mode === 'sin' ? SIN_COL : COS_COL;
+
+    ctx.save(); ctx.scale(DPR, DPR);
+
+    // ── Background ──────────────────────────────────────────────────────────
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+
+    // ── Divider between panels ───────────────────────────────────────────────
+    ctx.strokeStyle = 'rgba(100,90,70,0.18)'; ctx.lineWidth = 1; ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.moveTo(wX - W*0.02, 20); ctx.lineTo(wX - W*0.02, H - 20); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // ── CIRCLE PANEL ────────────────────────────────────────────────────────
+
+    // Quadrant fills
+    const qCols = ['rgba(50,180,80,0.06)', 'rgba(180,180,30,0.06)',
+                   'rgba(180,80,30,0.06)', 'rgba(30,80,180,0.06)'];
+    [[0, Math.PI/2], [Math.PI/2, Math.PI], [Math.PI, 3*Math.PI/2], [3*Math.PI/2, TAU]]
+      .forEach(([a, b], qi) => {
+        ctx.beginPath(); ctx.moveTo(cX, cY);
+        ctx.arc(cX, cY, r, -a, -b, true);
+        ctx.closePath(); ctx.fillStyle = qCols[qi]; ctx.fill();
+      });
+
+    // Circle rim
+    ctx.beginPath(); ctx.arc(cX, cY, r, 0, TAU);
+    ctx.strokeStyle = 'rgba(80,70,50,0.35)'; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // Axes
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(cX - r*1.1, cY); ctx.lineTo(cX + r*1.1, cY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cX, cY - r*1.1); ctx.lineTo(cX, cY + r*1.1); ctx.stroke();
+
+    // Axis labels
+    ctx.font = 'italic bold 11px serif'; ctx.fillStyle = '#3a3020';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('Re', cX + r*1.05, cY - 8);
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.fillText('Im', cX + 5, cY - r*1.06);
+
+    // Tick marks at ±1 on both axes
+    const tSize = 4;
+    ctx.fillStyle = 'rgba(50,40,20,0.45)'; ctx.font = '10px "JetBrains Mono",monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+    [-1, 1].forEach(v => {
+      ctx.beginPath(); ctx.moveTo(cX + v*r, cY - tSize); ctx.lineTo(cX + v*r, cY + tSize); ctx.stroke();
+      ctx.fillText(v, cX + v*r, cY + 6);
+    });
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    [-1, 1].forEach(v => {
+      ctx.beginPath(); ctx.moveTo(cX - tSize, cY - v*r); ctx.lineTo(cX + tSize, cY - v*r); ctx.stroke();
+      ctx.fillText(v === 1 ? 'i' : '-i', cX - 7, cY - v*r);
+    });
+
+    // Quadrant labels
+    ctx.font = 'bold 11px "Patrick Hand",cursive'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    const ql = r * 0.55;
+    [['I',ql,-ql,'rgba(50,150,60,0.55)'], ['II',-ql,-ql,'rgba(150,150,20,0.55)'],
+     ['III',-ql,ql,'rgba(150,60,20,0.55)'], ['IV',ql,ql,'rgba(20,60,150,0.55)']].forEach(([lbl,dx,dy,c]) => {
+      ctx.fillStyle = c; ctx.fillText(lbl, cX+dx, cY+dy);
+    });
+
+    // Point on circle
+    const pX = cX + r * Math.cos(theta);
+    const pY = cY - r * Math.sin(theta);
+
+    // Right triangle projections
+    const projX = cX + r * Math.cos(theta); // x-projection (foot of perpendicular to x-axis)
+    const projY = cY;                        // on x-axis
+
+    // cos leg (horizontal, blue)
+    ctx.beginPath(); ctx.moveTo(cX, cY); ctx.lineTo(projX, projY);
+    ctx.strokeStyle = COS_COL + '88'; ctx.lineWidth = 2; ctx.stroke();
+
+    // sin leg (vertical, red)
+    ctx.beginPath(); ctx.moveTo(projX, projY); ctx.lineTo(pX, pY);
+    ctx.strokeStyle = SIN_COL + '88'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Hypotenuse (radius)
+    ctx.beginPath(); ctx.moveTo(cX, cY); ctx.lineTo(pX, pY);
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Angle arc
+    if (Math.abs(theta) > 0.05) {
+      const arcR = r * 0.22;
+      ctx.beginPath();
+      ctx.arc(cX, cY, arcR, 0, -norm, norm > 0);
+      ctx.strokeStyle = '#7c4db5'; ctx.lineWidth = 1.5; ctx.stroke();
+
+      // θ label
+      const mid = norm / 2;
+      const lr = arcR + 12;
+      ctx.font = 'italic 11px serif'; ctx.fillStyle = '#7c4db5';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText('θ', cX + lr * Math.cos(mid), cY - lr * Math.sin(mid));
+    }
+
+    // Point dot
+    ctx.beginPath(); ctx.arc(pX, pY, 7, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(pX, pY, 3.5, 0, TAU);
+    ctx.fillStyle = col; ctx.fill();
+
+    // Foot dot on axis (projection)
+    ctx.beginPath(); ctx.arc(projX, projY, 4, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = SIN_COL; ctx.lineWidth = 1.5; ctx.stroke();
+
+    // ── WAVE PANEL ──────────────────────────────────────────────────────────
+
+    // Wave x-axis
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(wX, wY); ctx.lineTo(wX + wW, wY); ctx.stroke();
+
+    // Amplitude lines (±1)
+    ctx.strokeStyle = 'rgba(100,90,70,0.2)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(wX, wY - r); ctx.lineTo(wX + wW, wY - r); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(wX, wY + r); ctx.lineTo(wX + wW, wY + r); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Period tick marks at multiples of π/2
+    ctx.font = '9px "JetBrains Mono",monospace';
+    ctx.fillStyle = 'rgba(50,40,20,0.45)';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    const piLabels = ['0','π/2','π','3π/2','2π','5π/2','3π','7π/2','4π'];
+    for (let i = 0; i <= 8; i++) {
+      const alpha = i * Math.PI / 2;
+      const wx = waveX(alpha, wX, wW, wSpan);
+      ctx.strokeStyle = 'rgba(80,70,50,0.2)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(wx, wY - 4); ctx.lineTo(wx, wY + 4); ctx.stroke();
+      ctx.fillText(piLabels[i], wx, wY + 6);
+    }
+
+    // ±1 labels on wave y-axis
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillStyle = 'rgba(50,40,20,0.45)';
+    ctx.fillText('1',  wX - 4, wY - r);
+    ctx.fillText('-1', wX - 4, wY + r);
+    ctx.fillText('0',  wX - 4, wY);
+
+    // Full trace (dim, shows where wave will go)
+    ctx.beginPath(); let started = false;
+    for (let i = 0; i <= wW * 2; i++) {
+      const alpha = (i / (wW * 2)) * wSpan;
+      const val   = S.mode === 'sin' ? Math.sin(alpha) : Math.cos(alpha);
+      const wx    = waveX(alpha, wX, wW, wSpan);
+      const wy    = waveY(val, wY, r);
+      if (!started) { ctx.moveTo(wx, wy); started = true; } else ctx.lineTo(wx, wy);
+    }
+    ctx.strokeStyle = 'rgba(180,170,150,0.4)'; ctx.lineWidth = 2; ctx.stroke();
+
+    // Traced portion (bright, 0 to theta)
+    const traceEnd = Math.min(theta, wSpan);
+    if (traceEnd > 0) {
+      ctx.beginPath(); started = false;
+      const steps = Math.round(wW * 2);
+      for (let i = 0; i <= steps; i++) {
+        const alpha = (i / steps) * traceEnd;
+        if (alpha > traceEnd) break;
+        const val = S.mode === 'sin' ? Math.sin(alpha) : Math.cos(alpha);
+        const wx  = waveX(alpha, wX, wW, wSpan);
+        const wy  = waveY(val, wY, r);
+        if (!started) { ctx.moveTo(wx, wy); started = true; } else ctx.lineTo(wx, wy);
+      }
+      ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    }
+
+    // Current position on wave
+    const curAlpha = theta % wSpan;
+    const curVal   = S.mode === 'sin' ? Math.sin(curAlpha) : Math.cos(curAlpha);
+    const curWX    = waveX(curAlpha, wX, wW, wSpan);
+    const curWY    = waveY(curVal, wY, r);
+    ctx.beginPath(); ctx.arc(curWX, curWY, 6, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(curWX, curWY, 3, 0, TAU);
+    ctx.fillStyle = col; ctx.fill();
+
+    // ── CONNECTION LINE (the key visual!) ────────────────────────────────────
+    // For sin: horizontal dashed line at same y as circle point and wave dot
+    // For cos: horizontal dashed line at same y... but actually cos maps x→y differently
+    // We simplify: always draw horizontal at the current function value level
+
+    const connY = waveY(curVal, wY, r); // same y as wave dot
+    const connX1 = S.mode === 'sin' ? pX : cX + r * Math.cos(theta) + 8;
+    const connX2 = curWX - 6;
+
+    if (connX2 > connX1 + 5) {
+      ctx.beginPath(); ctx.moveTo(connX1, connY); ctx.lineTo(connX2, connY);
+      ctx.strokeStyle = col + '70'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    // Value label on connection line midpoint
+    const midX = (connX1 + connX2) / 2;
+    const valNum = S.mode === 'sin' ? Math.sin(theta) : Math.cos(theta);
+    ctx.font = '10px "JetBrains Mono",monospace'; ctx.fillStyle = col;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    const exactStr = S.snap ? (S.mode === 'sin' ? closestSpecial(norm)?.sin : closestSpecial(norm)?.cos) || '' : '';
+    ctx.fillText(exactStr || parseFloat(valNum.toFixed(2)).toString(), midX, connY - 3);
+
+    // ── SNAP DOTS on circle rim ──────────────────────────────────────────────
+    if (S.snap) {
+      SPEC.forEach(sp => {
+        if (!sp.label) return;
+        const sx = cX + r * Math.cos(sp.a);
+        const sy = cY - r * Math.sin(sp.a);
+        ctx.beginPath(); ctx.arc(sx, sy, 2.5, 0, TAU);
+        ctx.fillStyle = 'rgba(80,70,50,0.4)'; ctx.fill();
+      });
+    }
+
+    ctx.restore();
+  }
+
+  // ── UI updaters ───────────────────────────────────────────────────────────
+  function chip(text, col) {
+    return `<span class="feat-chip" style="background:${col}18;border-color:${col}55;color:${col};">${text}</span>`;
+  }
+
+  function updateSidebar() {
+    const norm = ((S.theta % TAU) + TAU) % TAU;
+    const deg  = Math.round(norm * 180 / Math.PI);
+    const col  = S.mode === 'sin' ? SIN_COL : COS_COL;
+    const sp   = S.snap ? closestSpecial(norm) : null;
+
+    document.getElementById('deg-val').textContent = deg + '°';
+    document.getElementById('rad-val').textContent = sp ? sp.rad : parseFloat((norm / Math.PI).toFixed(3)) + 'π';
+    document.getElementById('fn-lbl').textContent  = S.mode === 'sin' ? 'sin(θ)' : 'cos(θ)';
+    document.getElementById('fn-val').textContent  = sp ? (S.mode === 'sin' ? sp.sin : sp.cos)
+      : parseFloat((S.mode === 'sin' ? Math.sin(S.theta) : Math.cos(S.theta)).toFixed(3)).toString();
+
+    // Chips
+    const sinV = Math.sin(S.theta), cosV = Math.cos(S.theta);
+    const quad = Math.floor(norm / (Math.PI/2)) + 1;
+    const refA = norm <= Math.PI/2 ? norm : norm <= Math.PI ? Math.PI-norm
+      : norm <= 3*Math.PI/2 ? norm-Math.PI : TAU-norm;
+    let html = '';
+    html += chip(`θ = ${deg}°`, '#7c4db5');
+    html += chip(`sin = ${sp ? sp.sin : parseFloat(sinV.toFixed(3))}`, SIN_COL);
+    html += chip(`cos = ${sp ? sp.cos : parseFloat(cosV.toFixed(3))}`, COS_COL);
+    html += chip(`Q${quad}`, ['','rgba(50,150,60,0.8)','rgba(140,130,20,0.8)','rgba(150,60,20,0.8)','rgba(20,60,150,0.8)'][quad]);
+    html += chip(`ref = ${Math.round(refA * 180 / Math.PI)}°`, '#555');
+    if (Math.abs(sinV) > 0.99) html += chip('sin = ±1  max/min', SIN_COL);
+    if (Math.abs(cosV) < 0.01) html += chip('cos = 0  (axis)', COS_COL);
+    document.getElementById('chips').innerHTML = html;
+
+    // Eq bar
+    const fnVal = S.mode === 'sin' ? sinV : cosV;
+    const exact = sp ? (S.mode === 'sin' ? sp.sin : sp.cos) : null;
+    document.getElementById('eqd').innerHTML =
+      `<span style="color:#7c4db5;font-weight:700;">θ = ${deg}°</span>` +
+      `&nbsp;&nbsp;→&nbsp;&nbsp;` +
+      `<span style="color:${col};font-weight:700;">${S.mode}(θ) = ${exact || parseFloat(fnVal.toFixed(3))}</span>` +
+      (sp ? `&nbsp;&nbsp;<span style="color:var(--ink-soft);font-size:11px;">(exact)</span>` : '');
+
+    // Insight
+    const ins = document.getElementById('insight');
+    if (Math.abs(sinV) < 0.05 && S.mode === 'sin') {
+      ins.textContent = 'sin = 0 here — the point is on the x-axis. Sin measures how HIGH the point is, so when it\'s on the x-axis, sin is zero.';
+    } else if (Math.abs(sinV) > 0.97 && S.mode === 'sin') {
+      ins.textContent = 'sin is at its peak (±1) — the point is at the very top or bottom of the circle. Can\'t go higher than radius 1.';
+    } else if (Math.abs(cosV) < 0.05 && S.mode === 'cos') {
+      ins.textContent = 'cos = 0 here — the point is on the y-axis. Cos measures how FAR RIGHT the point is, so when it\'s on the y-axis, cos is zero.';
+    } else if (quad === 2 && S.mode === 'sin') {
+      ins.textContent = 'Q2: x is negative, y is still positive. So cos < 0 but sin > 0 here. The dashed line shows the height is still above the x-axis.';
+    } else if (quad === 3) {
+      ins.textContent = 'Q3: the point is below and to the left. Both sin and cos are negative. Notice the dashed line drops below the x-axis on the wave.';
+    } else {
+      ins.textContent = 'The dashed line shows the key connection: the y-height of the point on the circle equals exactly the height of the wave at this angle. Sine IS the y-coordinate.';
+    }
+  }
+
+  function update() {
+    updateSidebar();
+    draw();
+  }
+
+  // ── Animation ─────────────────────────────────────────────────────────────
+  function startAnim() {
+    S.animating = true;
+    document.getElementById('anim-btn').classList.add('playing');
+    document.getElementById('anim-btn').textContent = '■ stop';
+    function tick() {
+      if (!S.animating) return;
+      S.theta = (S.theta + 0.025) % (4 * Math.PI);
+      if (S.snap) S.theta = snapAngle(S.theta);
+      update();
+      animRAF = requestAnimationFrame(tick);
+    }
+    animRAF = requestAnimationFrame(tick);
+  }
+
+  function stopAnim() {
+    S.animating = false;
+    if (animRAF) { cancelAnimationFrame(animRAF); animRAF = null; }
+    document.getElementById('anim-btn').classList.remove('playing');
+    document.getElementById('anim-btn').textContent = '▶ animate';
+  }
+
+  document.getElementById('anim-btn').addEventListener('click', () => {
+    S.animating ? stopAnim() : startAnim();
+  });
+
+  // ── Snap toggle ───────────────────────────────────────────────────────────
+  document.getElementById('snap-tog').addEventListener('click', () => {
+    S.snap = !S.snap;
+    document.getElementById('snap-box').classList.toggle('on', S.snap);
+    if (S.snap) S.theta = snapAngle(S.theta);
+    update();
+  });
+
+  // ── Mode switch ───────────────────────────────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.mode = btn.dataset.mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+      update();
+    });
+  });
+
+  // ── Canvas drag ───────────────────────────────────────────────────────────
+  let dragging = false;
+
+  function angleFromCircle(px, py, W, H) {
+    const { cX, cY } = layout(W, H);
+    return Math.atan2(-(py - cY), px - cX);
+  }
+
+  function angleFromWave(px, W, H) {
+    const { wX, wW, wSpan } = layout(W, H);
+    return Math.max(0, Math.min(wSpan, (px - wX) / wW * wSpan));
+  }
+
+  function handleDrag(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    const px   = src.clientX - rect.left;
+    const py   = src.clientY - rect.top;
+    const W    = canvas.width / DPR, H = canvas.height / DPR;
+    const { cX, r, wX } = layout(W, H);
+
+    let newTheta;
+    if (px < wX - W*0.01) {
+      // Circle side — compute angle from center
+      let a = angleFromCircle(px, py, W, H);
+      if (a < 0) a += TAU;
+      // Preserve full-rotation count
+      const turns = Math.floor(S.theta / TAU);
+      newTheta = turns * TAU + a;
+      // Pick the turn count that minimizes jump
+      const candidates = [newTheta - TAU, newTheta, newTheta + TAU];
+      newTheta = candidates.reduce((best, c) => Math.abs(c - S.theta) < Math.abs(best - S.theta) ? c : best);
+    } else {
+      // Wave side
+      newTheta = angleFromWave(px, W, H);
+    }
+
+    newTheta = Math.max(0, Math.min(4 * Math.PI, newTheta));
+    S.theta = S.snap ? snapAngle(newTheta) : newTheta;
+    update();
+  }
+
+  canvas.addEventListener('mousedown',  e => { if (S.animating) stopAnim(); dragging = true;  handleDrag(e); });
+  canvas.addEventListener('mousemove',  e => { if (dragging) handleDrag(e); });
+  canvas.addEventListener('mouseup',    ()  => { dragging = false; });
+  canvas.addEventListener('mouseleave', ()  => { dragging = false; });
+  canvas.addEventListener('touchstart', e => { if (S.animating) stopAnim(); dragging = true;  handleDrag(e); }, { passive: false });
+  canvas.addEventListener('touchmove',  e => { if (dragging) handleDrag(e); }, { passive: false });
+  canvas.addEventListener('touchend',   ()  => { dragging = false; });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  update();
+  resize();
+  </script>
+</body>
+</html>
