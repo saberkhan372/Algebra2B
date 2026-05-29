@@ -493,6 +493,81 @@ input[type="range"] {
   gap: 14px;
 }
 
+/* ── Visited badge (progress.js) ── */
+.visited-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-family: var(--f-body);
+  font-size: 10px; font-weight: 700;
+  color: var(--green);
+  background: rgba(63,138,90,0.12);
+  border: 1px solid rgba(63,138,90,0.35);
+  border-radius: 3px;
+  padding: 1px 5px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+/* ── Start-here banner (progress.js) ── */
+.start-here-banner {
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--f-body);
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  text-align: center;
+  padding: 4px 8px;
+  margin: -12px -12px 8px -12px;  /* bleed to card edges */
+  border-radius: 4px 4px 0 0;
+}
+
+/* ── Try-next section (related.js) ── */
+.try-next-section {
+  border-top: 1.5px dashed var(--ink-2);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.try-next-label {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 11px; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.try-next-cards { display: flex; flex-direction: column; gap: 7px; }
+.try-next-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  background: var(--paper);
+  border: 1.5px solid var(--ink-2);
+  border-radius: 4px;
+  text-decoration: none; color: var(--ink);
+  transition: background 0.1s, border-color 0.1s;
+}
+.try-next-card:hover {
+  background: var(--paper-2);
+  border-color: var(--ink);
+  text-decoration: none;
+}
+.try-next-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--ink-soft);
+  width: 22px; flex-shrink: 0; text-align: center;
+}
+.try-next-info { flex: 1; min-width: 0; }
+.try-next-name {
+  font-family: var(--f-body);
+  font-size: 13px; font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.try-next-meta {
+  font-family: var(--f-body);
+  font-size: 11px; color: var(--ink-soft);
+  margin-top: 1px;
+}
+
 .tool-card {
   padding: 12px;
   display: flex;

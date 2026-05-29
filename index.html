@@ -402,6 +402,9 @@
 
     buildSections();
     document.getElementById('filter-all-btn').textContent = 'all ' + TOOLS.length;
+    // Apply visited badges + start-here banners after grid is built
+    if (window.A2PG) window.A2PG.applyBadges();
+    else window.addEventListener('load', function () { window.A2PG && window.A2PG.applyBadges(); });
 
     let activeKind = 'all';
     let activeUnit = 'all';
@@ -1294,6 +1297,7 @@
       drawPreview();
     })();
   </script>
+  <script src="tools/progress.js"></script>
   <script>
     // Register service worker for offline/PWA support
     if ('serviceWorker' in navigator) {
