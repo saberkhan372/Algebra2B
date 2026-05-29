@@ -14,208 +14,169 @@
     }
     .map-hero .eyebrow {
       font-family: 'Permanent Marker', cursive;
-      font-size: 11px;
-      color: var(--ink-soft);
-      letter-spacing: 0.1em;
-      margin-bottom: 4px;
+      font-size: 11px; color: var(--ink-soft);
+      letter-spacing: 0.1em; margin-bottom: 4px;
     }
     .map-hero h1 {
-      font-family: 'Caveat', cursive;
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--ink);
-      margin: 0 0 5px;
+      font-family: 'Caveat', cursive; font-size: 36px;
+      font-weight: 700; color: var(--ink); margin: 0 0 6px;
     }
     .map-hero .sub {
-      font-family: 'Patrick Hand', cursive;
-      font-size: 15px;
-      color: var(--ink-2);
+      font-family: 'Patrick Hand', cursive; font-size: 14px; color: var(--ink-2);
     }
     .map-hero .sub strong { color: var(--accent); }
 
-    /* ── Semester section ─────────────────────────────── */
-    .sem-section { padding: 18px 24px 4px; }
-    .sem-label {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 11px;
-      color: var(--ink-soft);
-      letter-spacing: 0.08em;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .sem-label::after {
-      content: '';
-      flex: 1;
-      height: 1.5px;
-      background: var(--ink-2);
-      opacity: 0.2;
+    /* ── Kind legend (hero) ───────────────────────────── */
+    .kind-legend-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 10px; align-items: center;
     }
 
-    /* ── Horizontal scroll track ──────────────────────── */
+    /* ── Semester section ─────────────────────────────── */
+    .sem-section { padding: 16px 24px 4px; }
+    .sem-label {
+      font-family: 'Permanent Marker', cursive; font-size: 11px;
+      color: var(--ink-soft); letter-spacing: 0.08em;
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .sem-label::after {
+      content: ''; flex: 1; height: 1.5px;
+      background: var(--ink-2); opacity: 0.2;
+    }
+
+    /* ── Horizontal scroll ────────────────────────────── */
     .map-scroll {
-      overflow-x: auto;
-      padding: 4px 24px 16px;
+      overflow-x: auto; padding: 4px 24px 16px;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-      scrollbar-color: var(--ink-2) transparent;
+      scrollbar-width: thin; scrollbar-color: var(--ink-2) transparent;
     }
     .map-scroll::-webkit-scrollbar { height: 5px; }
     .map-scroll::-webkit-scrollbar-track { background: transparent; }
     .map-scroll::-webkit-scrollbar-thumb { background: var(--ink-2); border-radius: 3px; }
-
     .map-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 0;
-      width: max-content;
+      display: flex; align-items: flex-start; gap: 0; width: max-content;
     }
 
-    /* ── Arrow connector between cards ───────────────── */
+    /* ── Arrow ────────────────────────────────────────── */
     .map-arrow {
-      display: flex;
-      align-items: flex-start;
-      padding: 46px 8px 0;
-      color: var(--ink-soft);
-      font-size: 20px;
-      flex-shrink: 0;
-      user-select: none;
+      display: flex; align-items: flex-start; padding: 46px 8px 0;
+      color: var(--ink-soft); font-size: 20px; flex-shrink: 0; user-select: none;
     }
 
     /* ── Unit card ────────────────────────────────────── */
     .unit-card {
-      width: 236px;
-      flex-shrink: 0;
-      border: 1.5px solid var(--ink-2);
-      border-radius: 6px;
-      background: var(--paper);
-      overflow: hidden;
+      width: 268px; flex-shrink: 0;
+      border: 1.5px solid var(--ink-2); border-radius: 6px;
+      background: var(--paper); overflow: hidden;
       box-shadow: 2px 3px 0 rgba(29,26,20,0.07);
       transition: box-shadow 0.15s, transform 0.15s;
     }
-    .unit-card:hover {
-      box-shadow: 3px 5px 0 rgba(29,26,20,0.12);
-      transform: translateY(-1px);
-    }
-
-    /* Colored top stripe via CSS custom property --uc set inline on card */
-    .unit-card-top {
-      height: 6px;
-      background: var(--uc, #999);
-    }
+    .unit-card:hover { box-shadow: 3px 5px 0 rgba(29,26,20,0.12); transform: translateY(-1px); }
+    .unit-card-top { height: 6px; background: var(--uc, #999); }
 
     .unit-header {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 10px 12px 9px;
-      border-bottom: 1px dashed var(--ink-2);
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 12px 9px; border-bottom: 1px dashed var(--ink-2);
     }
     .unit-badge {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--uc, #999);
-      color: #fff;
-      font-family: 'Permanent Marker', cursive;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      border: 2px solid rgba(255,255,255,0.4);
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--uc, #999); color: #fff;
+      font-family: 'Permanent Marker', cursive; font-size: 13px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4);
     }
     .unit-name {
-      font-family: 'Caveat', cursive;
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.15;
+      font-family: 'Caveat', cursive; font-size: 17px;
+      font-weight: 700; color: var(--ink); line-height: 1.15;
     }
     .unit-dates {
-      font-family: 'Patrick Hand', cursive;
-      font-size: 11px;
-      color: var(--ink-soft);
-      margin-top: 2px;
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      color: var(--ink-soft); margin-top: 2px;
     }
     .unit-tool-count {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      background: var(--paper-2);
-      border: 1px solid var(--ink-2);
-      border-radius: 3px;
-      padding: 1px 5px;
-      color: var(--ink-soft);
-      margin-left: auto;
-      align-self: flex-start;
-      margin-top: 2px;
+      font-family: 'JetBrains Mono', monospace; font-size: 10px;
+      background: var(--paper-2); border: 1px solid var(--ink-2);
+      border-radius: 3px; padding: 1px 5px; color: var(--ink-soft);
+      margin-left: auto; align-self: flex-start; margin-top: 2px;
       white-space: nowrap;
     }
 
-    /* ── Topic list ───────────────────────────────────── */
-    .topic-list {
-      list-style: none;
-      padding: 5px 0 6px;
-      margin: 0;
-    }
+    /* ── Tool list ────────────────────────────────────── */
+    .topic-list { list-style: none; padding: 4px 0 6px; margin: 0; }
+
     .topic-item {
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
-      padding: 5px 12px;
-      font-family: 'Patrick Hand', cursive;
-      font-size: 13.5px;
-      line-height: 1.3;
-      border-radius: 0;
+      display: flex; align-items: baseline; gap: 6px;
+      padding: 4px 12px; font-family: 'Patrick Hand', cursive;
+      font-size: 13px; line-height: 1.3;
+      border-left: 3px solid transparent;
       transition: background 0.1s;
     }
     .topic-item:hover { background: var(--paper-2); }
 
-    .topic-item.has-tool::before {
-      content: '🔧';
-      font-size: 11px;
-      flex-shrink: 0;
-      margin-top: 1px;
+    /* Kind-colored left border + link colors */
+    .topic-item.kind-explorer  { border-left-color: #7c4db5; }
+    .topic-item.kind-visualizer{ border-left-color: #2a6fb4; }
+    .topic-item.kind-practice  { border-left-color: #2a7f4f; }
+    .topic-item.kind-game      { border-left-color: #d4820a; }
+    .topic-item.kind-reference { border-left-color: #666;    }
+
+    .topic-item a {
+      color: var(--ink); text-decoration: none; flex: 1;
     }
-    .topic-item.has-tool a {
-      color: var(--ink);
-      text-decoration: none;
-      flex: 1;
-    }
-    .topic-item.has-tool a:hover {
-      color: var(--uc, var(--accent));
-      text-decoration: underline;
-    }
+    .topic-item a:hover { text-decoration: underline; }
+    .topic-item.kind-explorer  a:hover { color: #7c4db5; }
+    .topic-item.kind-visualizer a:hover{ color: #2a6fb4; }
+    .topic-item.kind-practice  a:hover { color: #2a7f4f; }
+    .topic-item.kind-game      a:hover { color: #d4820a; }
 
     .topic-item.no-tool {
-      color: var(--ink-soft);
+      color: var(--ink-soft); border-left-color: transparent;
     }
     .topic-item.no-tool::before {
-      content: '—';
-      font-size: 12px;
-      flex-shrink: 0;
-      opacity: 0.4;
+      content: '—'; font-size: 12px; flex-shrink: 0; opacity: 0.35;
     }
 
-    /* ── Legend + footer ──────────────────────────────── */
-    .map-footer {
-      padding: 14px 24px 36px;
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: flex-start;
+    /* ── Kind pill ────────────────────────────────────── */
+    .kp {
+      font-family: 'JetBrains Mono', monospace; font-size: 8.5px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em;
+      padding: 1px 5px; border-radius: 2px; flex-shrink: 0;
+      white-space: nowrap;
     }
-    .map-legend {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: center;
-      font-family: 'Patrick Hand', cursive;
-      font-size: 13px;
+    .kp.explorer  { background: #7c4db515; color: #7c4db5; border: 1px solid #7c4db535; }
+    .kp.visualizer{ background: #2a6fb415; color: #2a6fb4; border: 1px solid #2a6fb435; }
+    .kp.practice  { background: #2a7f4f15; color: #2a7f4f; border: 1px solid #2a7f4f35; }
+    .kp.game      { background: #d4820a15; color: #d4820a; border: 1px solid #d4820a35; }
+    .kp.reference { background: #66666615; color: #666;    border: 1px solid #66666635; }
+
+    /* Tiny cross-unit marker */
+    .cu-tag {
+      font-family: 'Patrick Hand', cursive; font-size: 9px;
+      color: var(--ink-soft); flex-shrink: 0;
+    }
+
+    /* ── Kind section dividers inside cards ───────────── */
+    .kind-divider {
+      font-family: 'Patrick Hand', cursive; font-size: 9px;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--ink-soft); padding: 5px 12px 2px; margin-top: 2px;
+      border-top: 1px solid var(--ink-soft);
+      opacity: 0.5;
+    }
+    .kind-divider:first-of-type { border-top: none; margin-top: 0; padding-top: 4px; }
+
+    /* ── Legend row in hero ───────────────────────────── */
+    .legend-kp {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
       color: var(--ink-2);
     }
-    .legend-item { display: flex; align-items: center; gap: 5px; }
+
+    /* ── Footer ───────────────────────────────────────── */
+    .map-footer {
+      padding: 14px 24px 36px; display: flex;
+      gap: 16px; flex-wrap: wrap; align-items: center;
+    }
 
     /* ── Mobile ───────────────────────────────────────── */
     @media (max-width: 680px) {
@@ -241,7 +202,14 @@
   <div class="map-hero">
     <div class="eyebrow">ALGEBRA 2 · 2025 – 2026</div>
     <h1>Course Roadmap 🗺️</h1>
-    <p class="sub">8 units &nbsp;·&nbsp; 39 tools &nbsp;·&nbsp; <strong>tap any 🔧 topic</strong> to open its playground</p>
+    <p class="sub">8 units &nbsp;·&nbsp; <strong>50 tools</strong> &nbsp;·&nbsp; click any tool to open it</p>
+    <div class="kind-legend-row">
+      <span class="legend-kp"><span class="kp explorer">explorer</span> multi-mode, drag &amp; discover</span>
+      <span class="legend-kp"><span class="kp visualizer">visualizer</span> see it move</span>
+      <span class="legend-kp"><span class="kp practice">practice</span> step-by-step</span>
+      <span class="legend-kp"><span class="kp game">game</span> race / score</span>
+      <span class="legend-kp"><span class="kp reference">reference</span> look it up</span>
+    </div>
   </div>
 
   <!-- ═══════════════ SEMESTER 1 ═══════════════ -->
@@ -260,16 +228,46 @@
             <div class="unit-name">Systems &amp; Quadratics</div>
             <div class="unit-dates">Sept 2 – Sept 26</div>
           </div>
-          <span class="unit-tool-count">5 tools</span>
+          <span class="unit-tool-count">8 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/substitution-stepper.html">Substitution &amp; Elimination</a></li>
-          <li class="topic-item has-tool"><a href="tools/elimination-race.html">Elimination Method</a></li>
-          <li class="topic-item has-tool"><a href="tools/factoring-lab.html">Factoring Quadratics</a></li>
-          <li class="topic-item has-tool"><a href="tools/quadratic-slider.html">Graphing Quadratics (vertex form)</a></li>
-          <li class="topic-item has-tool"><a href="tools/piecewise-grapher.html">Piecewise Functions</a></li>
-          <li class="topic-item no-tool">Quadratic Formula</li>
-          <li class="topic-item no-tool">Unit 1 Review &amp; Quiz</li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/systems-explorer.html">Systems Explorer</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/function-xray.html">Function X-Ray</a>
+            <span class="cu-tag">★all</span>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/inequality-explorer.html">Inequality Region Explorer</a>
+            <span class="cu-tag">★all</span>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/quadratic-slider.html">Quadratic Slider Studio</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/piecewise-grapher.html">Piecewise Function Grapher</a>
+          </li>
+          <li class="kind-divider">practice &amp; games</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/substitution-stepper.html">Substitution Stepper</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/factoring-lab.html">Factoring Quadratics Lab</a>
+          </li>
+          <li class="topic-item kind-game">
+            <span class="kp game">★</span>
+            <a href="tools/elimination-race.html">Elimination Race</a>
+          </li>
         </ul>
       </div>
 
@@ -287,13 +285,33 @@
           <span class="unit-tool-count">6 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/abs-value-grapher.html">Absolute Value Graphs</a></li>
-          <li class="topic-item has-tool"><a href="tools/quadratic-standard.html">Quadratic Graphs (standard form)</a></li>
-          <li class="topic-item no-tool">Rules of Exponents Review</li>
-          <li class="topic-item has-tool"><a href="tools/transformations.html">Function Transformations</a></li>
-          <li class="topic-item has-tool"><a href="tools/neg-exponent-flipper.html">Negative Exponents</a></li>
-          <li class="topic-item has-tool"><a href="tools/diff-of-squares.html">Difference of Squares</a></li>
-          <li class="topic-item has-tool"><a href="tools/diff-of-cubes.html">Difference of Cubes</a></li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/parent-function-atlas.html">Parent Function Atlas</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/transformations.html">Transformations Explorer</a>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/abs-value-grapher.html">Absolute Value Grapher</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/neg-exponent-flipper.html">Negative Exponent Flipper</a>
+          </li>
+          <li class="kind-divider">practice &amp; games</li>
+          <li class="topic-item kind-game">
+            <span class="kp game">★</span>
+            <a href="tools/diff-of-squares.html">Difference of Squares</a>
+          </li>
+          <li class="topic-item kind-reference">
+            <span class="kp reference">—</span>
+            <a href="tools/diff-of-cubes.html">Difference of Cubes</a>
+          </li>
         </ul>
       </div>
 
@@ -305,19 +323,47 @@
         <div class="unit-header">
           <div class="unit-badge">U3</div>
           <div>
-            <div class="unit-name">Rationals &amp; Imaginary</div>
+            <div class="unit-name">Rationals &amp; Complex</div>
             <div class="unit-dates">Oct 20 – Nov 7</div>
           </div>
-          <span class="unit-tool-count">7 tools</span>
+          <span class="unit-tool-count">8 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/imaginary-sandbox.html">Imaginary Numbers</a></li>
-          <li class="topic-item has-tool"><a href="tools/imaginary-sandbox.html">Complex Number Operations</a></li>
-          <li class="topic-item has-tool"><a href="tools/complete-square.html">Completing the Square</a></li>
-          <li class="topic-item has-tool"><a href="tools/quadratic-word-problems.html">Quadratic Word Problems</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-expressions.html">Rational Expressions</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-simplifier.html">Simplifying Rationals</a></li>
-          <li class="topic-item has-tool"><a href="tools/rationalizing-denominators.html">Rationalizing Denominators</a></li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/complex-plane.html">Complex Number Explorer</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/quadratic-forms-explorer.html">Quadratic Forms Explorer</a>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/imaginary-sandbox.html">Imaginary Number Sandbox</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/quadratic-standard.html">Quadratic Standard Form</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/rational-expressions.html">Rational Expression Builder</a>
+          </li>
+          <li class="kind-divider">practice</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/complete-square.html">Complete the Square Trainer</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/quadratic-word-problems.html">Quadratic Word Problems</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/rationalizing-denominators.html">Rationalizing Denominators</a>
+          </li>
         </ul>
       </div>
 
@@ -332,20 +378,37 @@
             <div class="unit-name">Rational Exponents</div>
             <div class="unit-dates">Nov 10 – Dec 5</div>
           </div>
-          <span class="unit-tool-count">4 tools</span>
+          <span class="unit-tool-count">5 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/rational-exponents.html">Intro to Rational Exponents</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-exponents.html">Radical ↔ Exponent Form</a></li>
-          <li class="topic-item has-tool"><a href="tools/cubic-radical.html">Cubic &amp; Radical Graphs</a></li>
-          <li class="topic-item has-tool"><a href="tools/composition.html">Function Composition</a></li>
-          <li class="topic-item has-tool"><a href="tools/inverse-function.html">Inverse Functions</a></li>
-          <li class="topic-item no-tool">Unit 4 Review &amp; Quiz</li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/composition-inverse.html">Composition &amp; Inverse Lab</a>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/cubic-radical.html">Cubic &amp; Radical Grapher</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/composition.html">Composition Machine</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/inverse-function.html">Inverse Function Revealer</a>
+          </li>
+          <li class="kind-divider">games</li>
+          <li class="topic-item kind-game">
+            <span class="kp game">★</span>
+            <a href="tools/rational-exponents.html">Rational Exponents Tower</a>
+          </li>
         </ul>
       </div>
 
     </div>
-  </div><!-- /semester 1 scroll -->
+  </div>
 
   <!-- ═══════════════ SEMESTER 2 ═══════════════ -->
   <div class="sem-section" style="margin-top:8px;">
@@ -363,15 +426,39 @@
             <div class="unit-name">Exponential &amp; Log</div>
             <div class="unit-dates">January – February</div>
           </div>
-          <span class="unit-tool-count">5 tools</span>
+          <span class="unit-tool-count">7 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/exponential-explorer.html">Exponential Functions</a></li>
-          <li class="topic-item has-tool"><a href="tools/exponential-explorer.html">Exponential Decay</a></li>
-          <li class="topic-item has-tool"><a href="tools/exponential-model-builder.html">Interest &amp; Exponential Models</a></li>
-          <li class="topic-item has-tool"><a href="tools/log-converter.html">Logarithmic Functions</a></li>
-          <li class="topic-item has-tool"><a href="tools/log-properties.html">Log Properties</a></li>
-          <li class="topic-item has-tool"><a href="tools/exponential-equation-solver.html">Solving Exp &amp; Log Equations</a></li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/log-exp-mirror.html">Log ↔ Exp Mirror Explorer</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/growth-race.html">Growth Race</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/exponential-explorer.html">Exponential Function Explorer</a>
+          </li>
+          <li class="kind-divider">practice</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/exponential-model-builder.html">Exponential Model Builder</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/log-properties.html">Log Properties Sandbox</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/exponential-equation-solver.html">Exponential Equation Solver</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/log-converter.html">Log ↔ Exponential Converter</a>
+          </li>
         </ul>
       </div>
 
@@ -386,16 +473,44 @@
             <div class="unit-name">Rationals &amp; Polynomials</div>
             <div class="unit-dates">February – March</div>
           </div>
-          <span class="unit-tool-count">7 tools</span>
+          <span class="unit-tool-count">8 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/rational-simplifier.html">Simplifying Rational Expressions</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-expressions.html">Rational Functions &amp; Asymptotes</a></li>
-          <li class="topic-item has-tool"><a href="tools/polynomial-sketch.html">Polynomial Graphs &amp; Multiplicity</a></li>
-          <li class="topic-item has-tool"><a href="tools/polynomial-division-stepper.html">Polynomial Long Division</a></li>
-          <li class="topic-item has-tool"><a href="tools/adding-rationals.html">Adding Rational Expressions</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-multdiv.html">Multiplying &amp; Dividing Rationals</a></li>
-          <li class="topic-item has-tool"><a href="tools/rational-equations.html">Solving Rational Equations</a></li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/rational-behavior.html">Rational Function Behavior</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/polynomial-roots.html">Polynomial Root Sculptor</a>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/polynomial-sketch.html">Polynomial Sketch Pad</a>
+          </li>
+          <li class="kind-divider">practice</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/rational-simplifier.html">Rational Simplifier</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/adding-rationals.html">Adding Rational Expressions</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/rational-multdiv.html">Rational Mult/Div Stepper</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/rational-equations.html">Solving Rational Equations</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/polynomial-division-stepper.html">Polynomial Division Stepper</a>
+          </li>
         </ul>
       </div>
 
@@ -410,14 +525,32 @@
             <div class="unit-name">Trigonometry</div>
             <div class="unit-dates">March – April</div>
           </div>
-          <span class="unit-tool-count">4 tools</span>
+          <span class="unit-tool-count">5 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/soh-cah-toa.html">Right Triangle Trig</a></li>
-          <li class="topic-item has-tool"><a href="tools/unit-circle.html">The Unit Circle</a></li>
-          <li class="topic-item has-tool"><a href="tools/sine-cosine-builder.html">Sine &amp; Cosine Graphs</a></li>
-          <li class="topic-item has-tool"><a href="tools/sincos-grapher.html">Graphing Trig Functions</a></li>
-          <li class="topic-item no-tool">Trig Review &amp; Quiz</li>
+          <li class="kind-divider">explorers</li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/unit-circle-wave.html">Unit Circle Wave Sync</a>
+          </li>
+          <li class="topic-item kind-explorer">
+            <span class="kp explorer">ex</span>
+            <a href="tools/trig-explorer.html">Trig Function Explorer</a>
+          </li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/unit-circle.html">Unit Circle Walker</a>
+          </li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/sine-cosine-builder.html">Sine/Cosine Graph Builder</a>
+          </li>
+          <li class="kind-divider">practice</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/soh-cah-toa.html">SOH CAH TOA Triangle Solver</a>
+          </li>
         </ul>
       </div>
 
@@ -435,23 +568,33 @@
           <span class="unit-tool-count">3 tools</span>
         </div>
         <ul class="topic-list">
-          <li class="topic-item has-tool"><a href="tools/box-plot-builder.html">Statistics &amp; Data Displays</a></li>
-          <li class="topic-item has-tool"><a href="tools/probability-sandbox.html">Probability Rules</a></li>
-          <li class="topic-item has-tool"><a href="tools/sampling-bias-lab.html">Sampling &amp; Distributions</a></li>
+          <li class="kind-divider">visualizers</li>
+          <li class="topic-item kind-visualizer">
+            <span class="kp visualizer">vis</span>
+            <a href="tools/box-plot-builder.html">Box Plot Builder</a>
+          </li>
+          <li class="kind-divider">practice</li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/probability-sandbox.html">Probability Rules Sandbox</a>
+          </li>
+          <li class="topic-item kind-practice">
+            <span class="kp practice">✎</span>
+            <a href="tools/sampling-bias-lab.html">Sampling Bias Lab</a>
+          </li>
           <li class="topic-item no-tool">Final Exam Review</li>
         </ul>
       </div>
 
     </div>
-  </div><!-- /semester 2 scroll -->
+  </div>
 
-  <!-- Footer / legend -->
+  <!-- Footer -->
   <div class="map-footer">
-    <div class="map-legend">
-      <span class="legend-item">🔧 has a tool — click to open</span>
-      <span class="legend-item" style="color:var(--ink-soft);">— no tool for this lesson</span>
+    <div style="font-family:'Patrick Hand',cursive; font-size:13px; color:var(--ink-soft);">
+      <strong style="color:var(--ink-2);">★ all</strong> = cross-unit tool (appears in every unit)
     </div>
-    <a href="index.html" class="btn small" style="margin-left:auto;">← all tools</a>
+    <a href="index.html" class="btn small" style="margin-left:auto;">← all 50 tools</a>
   </div>
 
 </body>
