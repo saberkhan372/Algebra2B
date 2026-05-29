@@ -7,12 +7,13 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 7 unit pages (u1–u7), 42 tools wired into the homepage grid (U9 now has multiple tools; no u9.html unit page yet — breadcrumb links to all-tools).  
-**Curriculum:** 7 full units (Sept → May, year complete).  
-**Unit pages:** U1–U7 fully wired. No tools missing — all coming-soon rows resolved.  
-**Video-learning:** complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
+**Site:** 8 unit pages (u1–u7 + u9), **50 tools** wired into the homepage grid.  
+**Curriculum:** All 8 units complete (Sept → May). Year is done.  
+**Unit pages:** U1–U7 + U9 fully wired. No coming-soon rows remain.  
+**Homepage:** Reorganized May 2026 — unit-grouped collapsible sections, dual filter rows (kind + unit chip), correct "all 50" count.  
+**Video-learning:** Complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**42 tools built/integrated:**
+**50 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -56,7 +57,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Rational Function Behavior Explorer (U6) — 4 toggleable factors (N/D independently), holes/VAs/zeros emerge live; HA rule card highlights active rule; segment-split canvas drawing avoids asymptote artifacts
 - Trig Function Explorer (U7) — a/b/h/k sliders with π-formatted h display; sin/cos toggle; colored equation with parameter color-coding; live amplitude/period/phase shift/midline/first-peak/first-trough chips; period bracket + amplitude arrow annotations; peak/trough dots on canvas
 
-**No planned tools missing** — all 42 tools are live.
+**No planned tools missing** — all 50 tools are live.
 
 **Explorer roadmap (in priority order):**
 1. ✓ Parent Function Atlas — built

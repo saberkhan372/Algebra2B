@@ -1,64 +1,44 @@
 # Project Overview
 
-Last updated: 2026-05-27
+Last updated: 2026-05-28
 
 ## Repository
 
-`saberkhan372/Algebra2B` is a static GitHub Pages site for Algebra 2 classroom intuition tools.
+`saberkhan372/Algebra2B` — static GitHub Pages site for Algebra 2 classroom tools.
 
-Local repo:
-
-`/Users/khans/Documents/Algebra2Playground/Algebra2B`
-
-Live site:
-
-`https://saberkhan372.github.io/Algebra2B/`
+Local path: `/Users/saberkhan/Documents/coding/Algebra2B`
+Live site: `https://saberkhan372.github.io/Algebra2B/`
 
 Local preview:
-
 ```bash
-ruby -run -e httpd . -p 8091
+python3 -m http.server 3333
 ```
-
-Then open:
-
-`http://127.0.0.1:8091/`
+Then open `http://127.0.0.1:3333/`
 
 ## Current State
 
-- Branch: `main`
-- Remote: `origin` -> `https://github.com/saberkhan372/Algebra2B.git`
-- Latest pushed commit before these memory docs: `57d8c4b Add final Algebra 2B tools and sync pages`
-- The site has 7 unit pages, `u1.html` through `u7.html`.
-- The homepage tool grid is driven by the `TOOLS` array in `index.html`.
-- The current homepage count is 28 tools.
+- Branch: `main` — remote `origin` → `https://github.com/saberkhan372/Algebra2B.git`
+- **50 tools** built and integrated (all 8 units complete).
+- **8 unit pages**: `u1.html` through `u7.html` plus `u9.html`.
+- Homepage has unit-grouped collapsible sections + kind & unit filter chip rows.
 - `PLAN.md` is the working build plan and should stay synced with actual site state.
+- `CODEBASE.md` is the orientation doc for agents — read it first.
 
 ## Main Files
 
-- `index.html` - homepage, search/filter tool grid, pacing banner.
-- `about.html` - teacher letter, FAQ, credits.
-- `u1.html` through `u7.html` - unit landing pages and lesson stacks.
-- `tools/` - standalone interactive tool pages.
-- `styles.css` - shared design system and layout.
-- `PLAN.md` - build plan, completed work, remaining work, agent lanes.
-- `video-learning/` - transcripts, PDF extracts, contact sheets, and synthesis notes.
-- `algebra-2-tools/` - Claude design/wireframe artifacts, reference only.
+| File | Purpose |
+|---|---|
+| `index.html` | Homepage: TOOLS array, unit sections, filter logic, hover preview canvases |
+| `map.html` | Visual course roadmap — horizontal scroll unit cards |
+| `about.html` | Teacher letter, FAQ, credits |
+| `u1.html`–`u7.html`, `u9.html` | Unit landing pages with lesson stacks |
+| `styles.css` | Full shared design system |
+| `PLAN.md` | Build plan, completed work, agent lanes |
+| `CODEBASE.md` | Agent orientation — file structure, patterns, TOOLS array anatomy |
+| `tools/` | 50 standalone interactive HTML tool pages |
+| `video-learning/` | Transcripts, PDF extracts, contact sheets, synthesis notes |
+| `algebra-2-tools/` | Design wireframe artifacts — reference only |
 
-## Live Tool Count
+## No Remaining Planned Tools
 
-28 tools are built and integrated.
-
-Recently added direct URLs:
-
-- `https://saberkhan372.github.io/Algebra2B/tools/sine-cosine-builder.html`
-- `https://saberkhan372.github.io/Algebra2B/tools/exponential-equation-solver.html`
-- `https://saberkhan372.github.io/Algebra2B/tools/polynomial-division-stepper.html`
-
-## Remaining Work
-
-As of the latest `PLAN.md`, the main remaining planned tool is:
-
-- Exponential Model Builder, U5 D3
-
-Check `PLAN.md` before starting, because Claude/Codex may update the plan between sessions.
+All 50 planned tools are live. Future additions come from teacher requests or video-learning insights. Check `PLAN.md` for any queued items.
