@@ -8,8 +8,6 @@ Interactive classroom tools for Algebra 2 — 50 tools across 8 units, built for
 
 ```bash
 python3 -m http.server 3333
-# or
-ruby -run -e httpd . -p 3333
 ```
 
 Open `http://127.0.0.1:3333/`
@@ -18,16 +16,21 @@ Open `http://127.0.0.1:3333/`
 
 | Path | What it is |
 |---|---|
-| `index.html` | Homepage — unit sections, kind + unit filter chips, 50-tool grid |
+| `index.html` | Homepage — unit sections, kind / unit / level filter rows, progress summary, 50-tool grid |
 | `map.html` | Visual course roadmap — scrollable unit cards |
 | `about.html` | Teacher letter, FAQ, credits |
-| `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks |
+| `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks and tool cards |
+| `404.html` | Friendly 404 page (GitHub Pages serves automatically for broken links) |
+| `offline.html` | Offline fallback page (served by service worker when network unavailable) |
 | `tools/` | 50 standalone interactive tool pages |
-| `tools/fullscreen.js` | Board mode — injected into every tool, adds `⛶ board` button |
-| `styles.css` | Full design system — CSS variables, layout, components |
-| `manifest.json`, `sw.js` | PWA support (offline via service worker) |
-| `PLAN.md` | Working build plan, agent lanes, completed work log |
-| `CODEBASE.md` | Codebase guide for agents — read this before touching anything |
+| `tools/url-state.js` | URL hash state — encode slider positions; shareable pre-configured examples |
+| `tools/progress.js` | Visited badges, start-here banners, share + print buttons |
+| `tools/related.js` | "Try Next" section — 3 related tools injected into every info sidebar |
+| `tools/fullscreen.js` | Board mode (`⛶ board`), teacher quick-nav overlay (`⊞ tools`) |
+| `styles.css` | Full design system — CSS variables, layout, board/print/wide-screen rules |
+| `manifest.json`, `sw.js` | PWA support — precaches all 50 tools + scripts for offline use |
+| `PLAN.md` | Working build plan, completed work log, agent lanes |
+| `CODEBASE.md` | Codebase guide for agents — read before touching anything |
 | `video-learning/` | Whisper transcripts, PDF extracts, contact sheets, synthesis notes |
 | `algebra-2-tools/` | Claude design/wireframe artifacts — reference only, not served |
 
@@ -43,6 +46,25 @@ Open `http://127.0.0.1:3333/`
 | U6 | Rationals & Polynomials | 8 |
 | U7 | Trigonometry | 5 |
 | U9 | Statistics & Probability | 3 |
+
+## Student features
+
+- **Visited tracking** — ✓ badge on cards you've opened (localStorage, no logins)
+- **Start here** — orange banner on the best entry-point card per unit
+- **Try Next** — 3 contextually related tools at bottom of every tool sidebar
+- **Progress bars** — per-unit progress summary in homepage sidebar
+- **Search** — searches tool names AND descriptions; results highlight matched text
+- **Difficulty filter** — filter by ● easy / ●● medium / ●●● hard
+- **Share link** — copies canonical URL; encodes current slider state
+
+## Classroom / teacher features
+
+- **Board mode** (`⛶ board`) — hides chrome, canvas fills screen; info sidebars collapse, control sidebars stay
+- **Quick-nav** (`⊞ tools`) — in board mode, opens full-screen tool picker grouped by unit
+- **Print key ideas** (`🖨 print`) — prints only sidebar content (HOW TO USE, TRY THIS, KEY IDEA)
+- **URL state** — slider positions encoded in URL hash; share a specific example with one click
+- **Wide-screen layout** — at ≥1400px sidebar grows for smartboard legibility
+- **Touch support** — all draggable canvases have `touch-action: none`
 
 ## Excluded from git
 

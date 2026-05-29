@@ -13,12 +13,18 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Homepage:** Reorganized May 2026 — unit-grouped collapsible sections, dual filter rows (kind + unit chip), correct "all 50" count.  
 **Video-learning:** Complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
-**Classroom / board-mode improvements (May 2026):**
-- Board mode: `⛶ board` button on every tool via `tools/fullscreen.js`. Info sidebars collapse; control sidebars (sliders, equations) stay. `body.board-mode` CSS scaling.
-- Fonts: body switched to Lexend (`--f-body`). Canvas ctx.font labels kept handwritten.
-- Contrast: `--ink-soft`/`--ink-2` darkened. Kind colors unified to `--k-*` canonical vars. U5 badge + game amber fixed for WCAG AA.
-- Touch: `touch-action: none` on all 12 draggable canvases.
-- Wide-screen layout (#5): in progress.
+**Student & classroom improvements (May 2026) — all complete:**
+- Board mode + teacher quick-nav (`⛶ board` / `⊞ tools`) — `tools/fullscreen.js`
+- Wide-screen layout ≥1400px / ≥1800px; touch `touch-action: none` on 12 canvases
+- Lexend body font; kind colors unified to `--k-*` vars (WCAG AA); contrast darkened
+- Visited badges + start-here banners — `tools/progress.js`
+- Try Next (3 related tools) — `tools/related.js`
+- Share / copy link button — `tools/progress.js` + `tools/url-state.js`
+- URL state encoding for sliders — `UrlState.auto()` in `tools/url-state.js`
+- Print key ideas — `🖨 print` button in every sidebar; `@media print` CSS
+- Difficulty filter row on homepage (●/●●/●●●); search includes descriptions + highlights
+- Unit progress bars in homepage sidebar
+- `404.html` + `offline.html`; service worker v6 with offline fallback
 
 **50 tools built/integrated:**
 - Absolute Value Grapher (U2)

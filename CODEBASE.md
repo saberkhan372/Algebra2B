@@ -18,21 +18,26 @@ This document explains the repository structure, conventions, and patterns for a
 
 ```
 Algebra2B/
-├── index.html          ← Homepage: TOOLS array, unit sections, filter logic, hover previews
-├── map.html            ← Visual course roadmap (horizontal scroll unit cards)
-├── about.html          ← Teacher letter, FAQ
-├── u1.html – u7.html   ← Unit landing pages
-├── u9.html             ← Statistics & Probability unit page
-├── styles.css          ← Entire design system (CSS vars, layout, component classes)
-├── manifest.json       ← PWA manifest
-├── sw.js               ← Service worker (offline caching)
-├── tools/              ← 50 standalone tool pages + fullscreen.js
-├── tools/fullscreen.js ← Board mode script injected into all 50 tool pages
-├── video-learning/     ← Transcripts, PDF extracts, contact sheets, batch insights
-├── algebra-2-tools/    ← Claude design artifacts — reference only, not served to students
-├── PLAN.md             ← Build plan, completed work log, agent lanes
-├── CODEBASE.md         ← This file
-└── .claude/            ← Agent memory files (memory.md, project_overview.md, design_constraints.md)
+├── index.html              ← Homepage: TOOLS array, unit sections, 3 filter rows, progress bars
+├── map.html                ← Visual course roadmap (horizontal scroll unit cards)
+├── about.html              ← Teacher letter, FAQ
+├── 404.html                ← Friendly 404 page (GitHub Pages serves automatically)
+├── offline.html            ← Offline fallback (service worker serves when network fails)
+├── u1.html – u7.html       ← Unit landing pages
+├── u9.html                 ← Statistics & Probability unit page
+├── styles.css              ← Entire design system (board/print/wide-screen rules included)
+├── manifest.json           ← PWA manifest
+├── sw.js                   ← Service worker v6 — precaches all 50 tools + scripts
+├── tools/                  ← 50 standalone tool pages + 4 shared scripts
+├── tools/url-state.js      ← URL hash state: UrlState.load/save/auto/copyBtn
+├── tools/progress.js       ← Visited badges, start-here, share button, print button
+├── tools/related.js        ← "TRY NEXT" section — 3 related tools per tool
+├── tools/fullscreen.js     ← Board mode, teacher quick-nav overlay
+├── video-learning/         ← Transcripts, PDF extracts, contact sheets, batch insights
+├── algebra-2-tools/        ← Claude design artifacts — reference only, not served
+├── PLAN.md                 ← Build plan, completed work log, agent lanes
+├── CODEBASE.md             ← This file
+└── .claude/                ← Agent memory files
 ```
 
 ---
@@ -123,7 +128,11 @@ All tool pages live in `tools/` and share this structure:
   </div>
 
   <script> /* all tool logic inline */ </script>
-  <script src="fullscreen.js"></script>  <!-- always last -->
+  <!-- Shared scripts — always in this exact order, always last -->
+  <script src="url-state.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
 </body>
 </html>
 ```
@@ -146,6 +155,51 @@ ctx.scale(DPR, DPR);
 ```css
 #my-canvas { touch-action: none; }
 ```
+
+---
+
+## Shared scripts — what each does
+
+All four scripts are injected into every tool page (in order above). They are self-contained IIFEs; none require configuration from the tool page.
+
+### url-state.js
+- `UrlState.load()` — reads `#s=...` URL hash, returns plain object or null
+- `UrlState.save(obj)` — encodes object into URL hash (no page reload)
+- `UrlState.auto()` — auto-wires ALL `input[type="range"][id]` elements: restores state from hash on load (dispatches `input` events), saves on change (debounced 250ms). Called by `progress.js` on tool pages.
+- `UrlState.copyBtn()` — returns a styled "🔗 copy link" button element
+
+### progress.js
+Runs on tool pages AND homepage/unit pages. Detects context from `location.pathname`.
+
+**On tool pages:**
+- Marks tool href as visited in `localStorage` (`a2pg-visited` key, Set of hrefs)
+- Injects `🔗 copy link` + `🖨 print` buttons at top of `.tool-sidebar`
+- Sets `data-print-title` on sidebar for `@media print` title display
+- Calls `UrlState.auto()` (after tool's own scripts have registered listeners)
+
+**On homepage / unit pages:**
+- Reads `a2pg-visited` and adds `✓` visited badge to matching `.tool-card` elements
+- Adds orange `★ start here` banner to one designated card per unit
+
+**Start-here tools (one per unit):**
+`systems-explorer` (U1), `abs-value-grapher` (U2), `imaginary-sandbox` (U3), `composition` (U4), `log-exp-mirror` (U5), `rational-simplifier` (U6), `unit-circle` (U7), `box-plot-builder` (U9)
+
+**Exposed on `window.A2PG`:**
+- `A2PG.applyBadges()` — called by `index.html` after `buildSections()` to tag homepage cards
+
+### related.js
+- Embeds full 50-tool dataset (no API call)
+- Detects current tool from URL, finds 3 related tools: same-unit different-kind first (explorers preferred), then same-topic cross-unit
+- Injects `TRY NEXT` section at bottom of `.tool-sidebar`
+- Handles both `/foo.html` and `/foo` URL formats
+
+### fullscreen.js
+- Injects `⛶ board` button into `.nav-links`
+- **Enter board mode:** hides nav + chrome, expands canvas to 100vh, adds `body.board-mode` class for CSS scaling
+- **Info sidebars** (Key Ideas, HOW TO USE, TRY THIS) → hidden in board mode
+- **Control sidebars** (sliders, equations, family pickers) → kept visible. Detection selector: `input[type="range"], input[type="number"], canvas, select, .slider-grid, #slider-area, .family-grid, .piece-controls, #controls-area`
+- Injects `⊞ tools` button (shown in board mode, top-left) → opens full-screen panel listing all 50 tools grouped by unit as large tap targets
+- Syncs with native Fullscreen API; `Escape` exits board mode
 
 ---
 
@@ -210,12 +264,14 @@ var(--k-reference)  /* gray #5f5f5f */
 
 ## Sync checklist (after adding or modifying a tool)
 
-1. **TOOLS array** in `index.html` — add/update entry with all 9 fields.
-2. **Unit page** (`u1.html`…`u9.html`) — add/update the lesson row and link it live.
-3. **`<script src="fullscreen.js"></script>`** — last script tag in `<body>`.
+1. **TOOLS array** in `index.html` — add/update entry with all 9 fields (`id`, `prev`, `name`, `unit`, `topic`, `kind`, `diff`, `code`, `desc`, `href`).
+2. **Unit page** (`u1.html`…`u9.html`) — add/update the lesson row and link it live; add tool card to the grid.
+3. **Shared scripts** — last four `<script>` tags must be in order: `url-state.js`, `progress.js`, `related.js`, `fullscreen.js`.
 4. **If canvas is draggable** — add `touch-action: none` to the canvas CSS rule.
-5. **PLAN.md** current state — update tool count and list.
-6. **Verify**: run the inline-script parse check from `.claude/design_constraints.md`.
+5. **Update `related.js`** — add the new tool to the `TOOLS` array embedded in that file (same 8 fields minus `prev` and `desc`).
+6. **PLAN.md** current state — update tool count and list.
+7. **sw.js** — add the new tool's path to `PRECACHE_URLS` and bump `CACHE_VERSION`.
+8. **Verify**: run the inline-script parse check from `.claude/design_constraints.md`.
 
 ---
 
@@ -245,10 +301,13 @@ Do NOT ask Codex to invent: pedagogical framing, Try This questions, Key Ideas c
 
 ## Common pitfalls
 
-- **Stale counts** — homepage "all N" button is auto-derived from `TOOLS.length`. HTML placeholder doesn't matter, but TOOLS array must be complete.
-- **Missing `prev` key** — hover preview silently shows nothing. Reuse an existing key or add a renderer.
-- **`localStorage`** — do not use it except `tools/elimination-race.html` (personal best only).
-- **Canvas labels stay handwritten** — `ctx.font` strings in canvas drawing code intentionally keep `'Patrick Hand'`. Do not change these; it's the notebook feel inside the graphs.
-- **Inline color hex values** — only acceptable inside canvas drawing code. Use CSS vars everywhere else.
-- **Kind color pitfall** — kind chip colors come from `--k-*` CSS vars. Do not hardcode `#7c4db5` etc. in HTML.
+- **Stale counts** — homepage "all N" button is auto-derived from `TOOLS.length`. HTML placeholder doesn't matter, but the TOOLS array must be complete.
+- **Missing `prev` key** — hover preview silently shows nothing. Reuse an existing key or add a renderer to the `R` object in `index.html`.
+- **`localStorage`** — do not use it except `tools/elimination-race.html` (personal best) and `a2pg-visited` (managed by progress.js). Do not read/write `a2pg-visited` from tool pages — progress.js handles it.
+- **Canvas labels stay handwritten** — `ctx.font` strings in canvas drawing code intentionally keep `'Patrick Hand'`. Do not change these.
+- **Inline color hex values** — only acceptable inside canvas drawing code (`ctx.fillStyle = '#d94f2a'`). Use CSS vars everywhere else.
+- **Kind colors** — use `--k-*` CSS vars, not hardcoded hex.
+- **related.js TOOLS list** — this embedded list must be kept in sync with `index.html`'s TOOLS array when tools are added or removed.
+- **sw.js cache version** — bump `CACHE_VERSION` whenever you add/change a file that should be precached, or returning visitors will see stale content.
 - **Orphan tool files** — `tools/exponential-equations.html` and `tools/sincos-grapher.html` are deprecated prototypes. Don't link to them.
+- **URL state + sliders** — `UrlState.auto()` only wires inputs that have BOTH `type="range"` AND an `id` attribute. New tools with sliders must give their inputs explicit IDs for URL state to work.
