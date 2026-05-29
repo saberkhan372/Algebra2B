@@ -122,7 +122,7 @@
     <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
     <div class="nav-search">
       <span class="search-icon">🔎</span>
-      <input type="text" id="search-input" placeholder="search 46 tools..." autocomplete="off" />
+      <input type="text" id="search-input" placeholder="search 47 tools..." autocomplete="off" />
     </div>
     <div class="nav-links">
       <a href="index.html" class="active">home</a>
@@ -134,7 +134,7 @@
   <!-- Pacing banner -->
   <div class="pacing-banner">
     <span>🎉 Year complete!</span>
-    <span class="unit-label">All 8 units · 46 tools</span>
+    <span class="unit-label">All 8 units · 47 tools</span>
     <span>— explore anything ↗</span>
   </div>
 
@@ -289,6 +289,7 @@
       { id: 'expeq', prev: 'exponential',  name: 'Exponential Equation Solver',     unit: 'U5', topic: 'Exponentials',kind: 'practice',   diff: 2, code: 'Ee', desc: 'Choose same-base, log-both-sides, or ln, then solve step by step.',         href: 'tools/exponential-equation-solver.html' },
       { id: 'emb',   prev: 'exponential',  name: 'Exponential Model Builder',       unit: 'U5', topic: 'Exponentials',kind: 'practice',   diff: 3, code: 'Em', desc: 'Drag P, r, t, n into the right formula. Keep exact form before rounding.',    href: 'tools/exponential-model-builder.html' },
       { id: 'logmirror', prev: 'log',     name: 'Log ↔ Exp Mirror Explorer',      unit: 'U5', topic: 'Logs',        kind: 'explorer',   diff: 2, code: 'Lm', desc: 'One canvas. Two curves. Slide the base and watch y=bˣ and y=log_b(x) reflect over y=x.', href: 'tools/log-exp-mirror.html' },
+      { id: 'growrace', prev: 'growrace', name: 'Growth Race',                     unit: 'U5', topic: 'Growth',      kind: 'explorer',   diff: 2, code: 'Gr', desc: 'log, √x, x, x², and 2^x on one canvas. Drag the cursor and watch the live leaderboard flip — 2^x falls behind x², then explodes past it at x=4. The race never lies.', href: 'tools/growth-race.html' },
       { id: 'rsimp', prev: 'rational',     name: 'Rational Simplifier',             unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 2, code: 'Rs', desc: 'Factor first, cancel matching factors, and keep excluded values.',             href: 'tools/rational-simplifier.html' },
       { id: 'addr',  prev: 'rational',     name: 'Adding Rational Expressions',     unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Ar', desc: 'Build the LCD from factor chips, rewrite, combine, and simplify.',             href: 'tools/adding-rationals.html' },
       { id: 'rmul',  prev: 'rational',     name: 'Rational Mult/Div Stepper',       unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Md', desc: 'KCF first, factor everything, cancel matching pairs, then lock domain restrictions.', href: 'tools/rational-multdiv.html' },
@@ -961,6 +962,41 @@
           ctx.fillStyle = '#7c4db5'; ctx.fill();
           ctx.beginPath(); ctx.arc(ox+re*sc, oy+im*sc, 4, 0, Math.PI*2);
           ctx.fillStyle = '#d94f2a'; ctx.fill();
+        },
+
+        growrace(ctx, W, H, t) {
+          bg(ctx, W, H);
+          // Non-uniform view: x 0-6, y 0-16
+          const xMin=-0.3, xMax=6.4, yMin=-0.8, yMax=17.5;
+          function gw2c(wx,wy){return [(wx-xMin)/(xMax-xMin)*W, H-(wy-yMin)/(yMax-yMin)*H];}
+          // Axes
+          const [ox,oy]=gw2c(0,0); ctx.strokeStyle='#3a3020'; ctx.lineWidth=1.5;
+          ctx.beginPath();ctx.moveTo(0,oy);ctx.lineTo(W,oy);ctx.stroke();
+          ctx.beginPath();ctx.moveTo(ox,H);ctx.lineTo(ox,0);ctx.stroke();
+          // Animated cursor
+          const cx=1+4.5*((Math.sin(t*0.3)+1)/2);
+          const [cpx]=gw2c(cx,0);
+          ctx.strokeStyle='rgba(60,50,30,0.25)';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+          ctx.beginPath();ctx.moveTo(cpx,0);ctx.lineTo(cpx,H);ctx.stroke();ctx.setLineDash([]);
+          // Curves: log₂, √x, x, x², 2^x
+          const fns=[
+            {f:x=>Math.log2(x),col:'#8B6014',dom:x=>x>0},
+            {f:x=>Math.sqrt(x), col:'#1a7a6e',dom:x=>x>=0},
+            {f:x=>x,            col:'#2a6fb4',dom:()=>true},
+            {f:x=>x*x,          col:'#d4820a',dom:()=>true},
+            {f:x=>Math.pow(2,x),col:'#c02040',dom:()=>true},
+          ];
+          fns.forEach(({f,col,dom})=>{
+            ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.beginPath(); let s=false;
+            for(let i=0;i<=W*2;i++){const wx=xMin+i*(xMax-xMin)/(W*2); if(!dom(wx)){s=false;continue;} const wy=f(wx); if(!isFinite(wy)||wy>yMax+0.5||wy<yMin){s=false;continue;} const [px,py]=gw2c(wx,wy); if(!s){ctx.moveTo(px,py);s=true;}else ctx.lineTo(px,py);} ctx.stroke();
+          });
+          // Dots at cursor
+          fns.forEach(({f,col,dom})=>{
+            if(!dom(cx))return; const wy=f(cx); if(!isFinite(wy)||wy>yMax+0.3)return;
+            const [px,py]=gw2c(cx,wy);
+            ctx.fillStyle='#f6f1e4'; ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();
+            ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.stroke();
+          });
         },
 
       }; // end PREVIEW_RENDERERS

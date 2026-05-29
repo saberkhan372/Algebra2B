@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Growth Race — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #race-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: ew-resize;
+    }
+
+    /* ── Function toggles ────────────────────────────────────── */
+    .fn-toggle {
+      display: flex; align-items: center; gap: 7px;
+      padding: 4px 8px; margin-bottom: 3px;
+      border: 1.5px solid var(--ink-soft); border-radius: 4px;
+      background: var(--paper-2); cursor: pointer;
+      transition: background 0.1s;
+    }
+    .fn-toggle.off { opacity: 0.42; }
+    .fn-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .fn-name { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; }
+    .fn-val  { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: auto; color: var(--ink-soft); }
+
+    /* ── Leaderboard ─────────────────────────────────────────── */
+    .ldb { display: flex; flex-direction: column; gap: 2px; }
+    .ldb-row {
+      display: grid; grid-template-columns: 16px 46px 1fr 44px;
+      align-items: center; gap: 4px; padding: 3px 5px; border-radius: 3px;
+    }
+    .ldb-pos  { font-family: 'Patrick Hand', cursive; font-size: 11px; color: var(--ink-soft); text-align: center; }
+    .ldb-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; }
+    .ldb-bar  { height: 7px; border-radius: 2px; min-width: 2px; }
+    .ldb-val  { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-align: right; }
+
+    /* ── Zoom tabs ───────────────────────────────────────────── */
+    .zoom-row { display: flex; gap: 3px; }
+    .zoom-btn {
+      flex: 1; padding: 4px 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2);
+      cursor: pointer; text-align: center;
+    }
+    .zoom-btn:hover:not(.active) { background: var(--paper-3); }
+    .zoom-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Slider row ──────────────────────────────────────────── */
+    .slider-grid { display: grid; grid-template-columns: 40px 1fr 46px; gap: 4px 8px; align-items: center; }
+    .param-lbl { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-style: italic; font-weight: 700; }
+    .dyn-val[type=number] {
+      width: 44px; border: none; border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px; -moz-appearance: textfield;
+    }
+    .dyn-val::-webkit-outer-spin-button, .dyn-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .dyn-val:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
+    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
+    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+    .callout-chip {
+      display: inline-block; padding: 2px 9px; border-radius: 3px; margin-top: 6px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      border: 1.5px solid; background: transparent;
+    }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 260px; }
+    }
+  </style>
+</head>
+<body class="paper-lined">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Growth Race</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          drag x · watch who's winning
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u5.html" style="color:var(--ink-soft);">← U5 · Exponential &amp; Log</a>
+        </div>
+      </div>
+
+      <!-- View zoom -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">view</div>
+        <div class="zoom-row">
+          <button class="zoom-btn active" data-zoom="close">Close (0–6)</button>
+          <button class="zoom-btn"        data-zoom="wide">Wide (0–8)</button>
+        </div>
+      </div>
+
+      <!-- Function toggles -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">functions — click to show/hide</div>
+        <div id="fn-toggles"></div>
+      </div>
+
+      <!-- X cursor -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">cursor</div>
+        <div class="slider-grid">
+          <div class="param-lbl">x</div>
+          <input type="range" min="0.1" max="6" step="0.1" value="2" id="x-sl">
+          <input type="number" class="dyn-val" id="x-vl" value="2" min="0.1" max="8" step="0.1">
+        </div>
+        <div id="callout" style="margin-top:4px;"></div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl" id="ldb-title">race at x = 2.0</div>
+        <div class="ldb" id="ldb"></div>
+      </div>
+
+      <!-- Insight -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight">Drag x to the right and watch 2^x slowly fall behind x², then explode past everything.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+      <div class="eq-bar"><span id="eqd">—</span></div>
+      <div class="canvas-wrap">
+        <canvas id="race-canvas"></canvas>
+      </div>
+      <div class="hint-bar">drag left/right on canvas to move the cursor &nbsp;·&nbsp; toggle functions with the checkboxes</div>
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR    = window.devicePixelRatio || 1;
+  const canvas = document.getElementById('race-canvas');
+  const ctx    = canvas.getContext('2d');
+
+  // ── Functions ─────────────────────────────────────────────────────────────
+  const FUNS = [
+    { id:'log',  label:'log₂(x)', fn:x=>Math.log2(x),       dom:x=>x>0,   col:'#8B6014', on:true  },
+    { id:'sqrt', label:'√x',      fn:x=>Math.sqrt(x),        dom:x=>x>=0,  col:'#1a7a6e', on:true  },
+    { id:'lin',  label:'x',       fn:x=>x,                   dom:()=>true, col:'#2a6fb4', on:true  },
+    { id:'quad', label:'x²',      fn:x=>x*x,                 dom:()=>true, col:'#d4820a', on:true  },
+    { id:'cube', label:'x³',      fn:x=>x*x*x,               dom:()=>true, col:'#8c3a22', on:false },
+    { id:'exp',  label:'2^x',     fn:x=>Math.pow(2,x),       dom:()=>true, col:'#c02040', on:true  },
+  ];
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const S = { x: 2, zoom: 'close' };
+
+  const ZOOM_SETTINGS = {
+    close: { xMax:6,  yMax:16, xStep:1,  yStep:4,  xSlMax:'6'  },
+    wide:  { xMax:8,  yMax:64, xStep:2,  yStep:16, xSlMax:'8'  },
+  };
+
+  // VIEW is non-uniform (different scale for x and y) — intentional for growth comparison
+  let VIEW = { xMin:-0.3, xMax:6.4, yMin:-0.8, yMax:17.5 };
+
+  function updateView() {
+    const z = ZOOM_SETTINGS[S.zoom];
+    VIEW = {
+      xMin: -0.3,
+      xMax: z.xMax + 0.4,
+      yMin: -(z.yMax * 0.04),
+      yMax: z.yMax * 1.06,
+    };
+    // Update x slider max
+    const sl = document.getElementById('x-sl');
+    sl.max = z.xSlMax;
+    if (S.x > parseFloat(z.xSlMax)) {
+      S.x = parseFloat(z.xSlMax);
+      sl.value = S.x;
+      document.getElementById('x-vl').value = S.x;
+    }
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2wx(px, W) {
+    return VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin);
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    canvas.width  = wrap.clientWidth  * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+    draw();
+  }
+
+  // ── Format ────────────────────────────────────────────────────────────────
+  function n(v, d = 2) {
+    if (!isFinite(v)) return '—';
+    return parseFloat(v.toFixed(d)).toString();
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function draw() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    const z = ZOOM_SETTINGS[S.zoom];
+
+    ctx.save(); ctx.scale(DPR, DPR);
+
+    // Background
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+
+    // Grid lines
+    ctx.strokeStyle = 'rgba(100,90,70,0.1)'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    for (let x = 0; x <= z.xMax; x += z.xStep) {
+      const [px] = w2c(x, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+    }
+    for (let y = 0; y <= z.yMax; y += z.yStep) {
+      const [, py] = w2c(0, y, W, H);
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+
+    // Axes
+    const [ox, oy] = w2c(0, 0, W, H);
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 0); ctx.stroke();
+
+    // Tick labels — x axis
+    ctx.fillStyle = 'rgba(50,40,20,0.55)'; ctx.font = '11px "JetBrains Mono",monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let x = 0; x <= z.xMax; x += z.xStep) {
+      if (x === 0) continue;
+      const [px] = w2c(x, 0, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3); ctx.stroke();
+      ctx.fillText(x, px, oy + 5);
+    }
+
+    // Tick labels — y axis
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let y = 0; y <= z.yMax; y += z.yStep) {
+      if (y === 0) continue;
+      const [, py] = w2c(0, y, W, H);
+      if (py < 0 || py > H) continue;
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox - 3, py); ctx.lineTo(ox + 3, py); ctx.stroke();
+      ctx.fillText(y, ox - 6, py);
+    }
+
+    // "0" at origin
+    ctx.textAlign = 'right'; ctx.textBaseline = 'top';
+    ctx.fillText('0', ox - 4, oy + 4);
+
+    // Tie-point annotation at x=4, y=16 (when in range)
+    if (z.yMax >= 16 && 4 <= z.xMax) {
+      const [tx, ty] = w2c(4, 16, W, H);
+      if (ty >= 0 && ty <= H) {
+        ctx.strokeStyle = 'rgba(160,100,20,0.4)'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(tx - 40, ty - 14); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.font = '10px "Patrick Hand",cursive'; ctx.fillStyle = 'rgba(140,80,10,0.7)';
+        ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.fillText('tie: 2⁴ = 4² = 16', tx - 42, ty - 14);
+      }
+    }
+
+    // Curves
+    FUNS.filter(f => f.on).forEach(f => {
+      const steps = Math.round(W * 2);
+      let started = false;
+      ctx.beginPath();
+      ctx.strokeStyle = f.col; ctx.lineWidth = 2.2; ctx.setLineDash([]);
+      for (let i = 0; i <= steps; i++) {
+        const wx = VIEW.xMin + i * (VIEW.xMax - VIEW.xMin) / steps;
+        if (!f.dom(wx)) { started = false; continue; }
+        const wy = f.fn(wx);
+        if (!isFinite(wy)) { started = false; continue; }
+        // Don't plot below 0 for this tool
+        if (wy < VIEW.yMin - 0.5) { started = false; continue; }
+        const [px, py] = w2c(wx, wy, W, H);
+        if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+    });
+
+    // Cursor vertical line
+    const [cx] = w2c(S.x, 0, W, H);
+    ctx.strokeStyle = 'rgba(60,50,30,0.28)'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dots at cursor
+    FUNS.filter(f => f.on && f.dom(S.x)).forEach(f => {
+      const wy = f.fn(S.x);
+      if (!isFinite(wy) || wy > VIEW.yMax + 0.3) return;
+      const [px, py] = w2c(S.x, wy, W, H);
+      if (py < -4 || py > H + 4) return;
+      ctx.beginPath(); ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#f6f1e4'; ctx.fill();
+      ctx.strokeStyle = f.col; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(px, py, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = f.col; ctx.fill();
+    });
+
+    ctx.restore();
+  }
+
+  // ── Sidebar updates ───────────────────────────────────────────────────────
+  function buildToggleButtons() {
+    const area = document.getElementById('fn-toggles');
+    area.innerHTML = FUNS.map(f => `
+      <div class="fn-toggle ${f.on ? '' : 'off'}" data-fid="${f.id}" tabindex="0">
+        <div class="fn-dot" style="background:${f.col};"></div>
+        <span class="fn-name" style="color:${f.col};">${f.label}</span>
+        <span class="fn-val" id="tv-${f.id}">—</span>
+      </div>`).join('');
+
+    area.querySelectorAll('.fn-toggle').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const f = FUNS.find(ff => ff.id === btn.dataset.fid);
+        f.on = !f.on;
+        btn.classList.toggle('off', !f.on);
+        update();
+      });
+    });
+  }
+
+  function updateToggleVals() {
+    FUNS.forEach(f => {
+      const el = document.getElementById(`tv-${f.id}`);
+      if (!el) return;
+      if (!f.on) { el.textContent = 'off'; el.style.color = ''; return; }
+      if (!f.dom(S.x)) { el.textContent = 'undef'; return; }
+      const v = f.fn(S.x);
+      el.textContent = isFinite(v) ? n(v, 2) : '∞';
+      el.style.color = f.col;
+    });
+  }
+
+  function updateLeaderboard() {
+    const lbl  = document.getElementById('ldb-title');
+    const area = document.getElementById('ldb');
+    lbl.textContent = `race at x = ${n(S.x, 2)}`;
+
+    const visible = FUNS
+      .filter(f => f.on && f.dom(S.x))
+      .map(f => ({ ...f, val: f.fn(S.x) }))
+      .filter(f => isFinite(f.val))
+      .sort((a, b) => b.val - a.val);
+
+    if (visible.length === 0) { area.innerHTML = '<div style="color:var(--ink-soft);font-family:\'Patrick Hand\',cursive;font-size:12px;">No functions visible</div>'; return; }
+
+    const maxVal = Math.max(...visible.map(f => f.val), 0.001);
+    const medals = ['🥇','🥈','🥉','4','5','6'];
+
+    area.innerHTML = visible.map((f, i) => {
+      const barW = Math.max(2, Math.round((f.val / maxVal) * 100));
+      return `<div class="ldb-row">
+        <span class="ldb-pos">${medals[i]||i+1}</span>
+        <span class="ldb-name" style="color:${f.col};">${f.label}</span>
+        <div style="display:flex;align-items:center;overflow:hidden;">
+          <div class="ldb-bar" style="width:${barW}%;background:${f.col}55;border-left:3px solid ${f.col};"></div>
+        </div>
+        <span class="ldb-val" style="color:${f.col};">${n(f.val,2)}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function updateCallout() {
+    const el = document.getElementById('callout');
+    const x  = S.x;
+    const expV = Math.pow(2, x), quadV = x * x;
+
+    // Detect the famous tie at x=4 (within 0.2)
+    if (Math.abs(x - 4) < 0.15 && Math.abs(expV - quadV) < 0.5) {
+      el.innerHTML = `<span class="callout-chip" style="color:#c02040;border-color:#c0204060;">2^x = x² = ${n(quadV,0)} here!</span>`;
+    } else if (Math.abs(x - 2) < 0.12 && Math.abs(expV - quadV) < 0.5) {
+      el.innerHTML = `<span class="callout-chip" style="color:#d4820a;border-color:#d4820a60;">tie: 2² = 2² = 4</span>`;
+    } else if (x > 4.5 && FUNS.find(f=>f.id==='exp').on && FUNS.find(f=>f.id==='quad').on) {
+      el.innerHTML = `<span class="callout-chip" style="color:#c02040;border-color:#c0204060;">2^x leads x² — for good</span>`;
+    } else if (x > 2.1 && x < 3.9 && FUNS.find(f=>f.id==='quad').on && FUNS.find(f=>f.id==='exp').on) {
+      el.innerHTML = `<span class="callout-chip" style="color:#d4820a;border-color:#d4820a60;">x² ahead of 2^x — for now</span>`;
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
+  function updateEqBar() {
+    const el = document.getElementById('eqd');
+    const visible = FUNS.filter(f => f.on && f.dom(S.x)).sort((a, b) => b.fn(S.x) - a.fn(S.x));
+    if (visible.length === 0) { el.textContent = 'all hidden'; return; }
+    const leader = visible[0];
+    el.innerHTML = `x = <strong>${n(S.x,2)}</strong>`
+      + `&nbsp;&nbsp;·&nbsp;&nbsp;`
+      + `<span style="color:${leader.col};font-weight:700;">leader: ${leader.label} = ${n(leader.fn(S.x), 2)}</span>`;
+  }
+
+  function updateInsight() {
+    const el = document.getElementById('insight');
+    const x  = S.x;
+    const expF = FUNS.find(f => f.id === 'exp');
+    const quadF = FUNS.find(f => f.id === 'quad');
+
+    if (x <= 1.5) {
+      el.textContent = 'At small x, exponential is not impressive — it starts slowly. Polynomials and even the linear function are ahead. This surprises students every time.';
+    } else if (x <= 3.0) {
+      el.textContent = 'x² is beating 2^x right now! From x = 2 to x = 4, the polynomial is winning the race. Don\'t count exponential out — it\'s building momentum.';
+    } else if (Math.abs(x - 4) < 0.3) {
+      el.textContent = '2^4 = 16 = 4². Famous tie! This is the exact moment the exponential catches the quadratic. Drag past 4 and watch 2^x pull away — forever.';
+    } else if (x <= 6) {
+      el.textContent = 'Exponential has taken the lead and it will NEVER give it back. No matter how fast the polynomial grows, exponential eventually outpaces it — for any polynomial.';
+    } else {
+      el.textContent = 'At large x, 2^x leaves everything in the dust. Even x³ can\'t keep up past x ≈ 10. This is why exponential growth is described as "explosive."';
+    }
+  }
+
+  function update() {
+    updateToggleVals();
+    updateLeaderboard();
+    updateCallout();
+    updateEqBar();
+    updateInsight();
+    draw();
+  }
+
+  // ── Slider ────────────────────────────────────────────────────────────────
+  const xSl = document.getElementById('x-sl');
+  const xVl = document.getElementById('x-vl');
+  xSl.addEventListener('input', e => {
+    S.x = parseFloat(e.target.value);
+    xVl.value = S.x;
+    update();
+  });
+  xVl.addEventListener('change', e => {
+    const z = ZOOM_SETTINGS[S.zoom];
+    S.x = Math.max(0.01, Math.min(z.xMax, parseFloat(e.target.value) || 1));
+    xVl.value = S.x; xSl.value = S.x;
+    update();
+  });
+
+  // ── Zoom tabs ─────────────────────────────────────────────────────────────
+  document.querySelectorAll('.zoom-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.zoom = btn.dataset.zoom;
+      document.querySelectorAll('.zoom-btn').forEach(b => b.classList.toggle('active', b === btn));
+      updateView();
+      update();
+      resize();
+    });
+  });
+
+  // ── Canvas drag ───────────────────────────────────────────────────────────
+  let dragging = false;
+
+  function handleDrag(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    const px   = src.clientX - rect.left;
+    const W    = canvas.width / DPR;
+    const z    = ZOOM_SETTINGS[S.zoom];
+    S.x = Math.max(0.01, Math.min(z.xMax, Math.round(c2wx(px, W) * 10) / 10));
+    xSl.value = S.x; xVl.value = S.x;
+    update();
+  }
+
+  canvas.addEventListener('mousedown',  e => { dragging = true;  handleDrag(e); });
+  canvas.addEventListener('mousemove',  e => { if (dragging) handleDrag(e); });
+  canvas.addEventListener('mouseup',    ()  => { dragging = false; });
+  canvas.addEventListener('mouseleave', ()  => { dragging = false; });
+  canvas.addEventListener('touchstart', e => { dragging = true;  handleDrag(e); }, { passive: false });
+  canvas.addEventListener('touchmove',  e => { if (dragging) handleDrag(e); },     { passive: false });
+  canvas.addEventListener('touchend',   ()  => { dragging = false; });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  updateView();
+  buildToggleButtons();
+  update();
+  resize();
+  </script>
+</body>
+</html>
