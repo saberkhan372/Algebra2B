@@ -122,7 +122,7 @@
     <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
     <div class="nav-search">
       <span class="search-icon">🔎</span>
-      <input type="text" id="search-input" placeholder="search 47 tools..." autocomplete="off" />
+      <input type="text" id="search-input" placeholder="search 48 tools..." autocomplete="off" />
     </div>
     <div class="nav-links">
       <a href="index.html" class="active">home</a>
@@ -134,7 +134,7 @@
   <!-- Pacing banner -->
   <div class="pacing-banner">
     <span>🎉 Year complete!</span>
-    <span class="unit-label">All 8 units · 47 tools</span>
+    <span class="unit-label">All 8 units · 48 tools</span>
     <span>— explore anything ↗</span>
   </div>
 
@@ -296,6 +296,7 @@
       { id: 'req',   prev: 'rational',     name: 'Solving Rational Equations',      unit: 'U6', topic: 'Rationals',   kind: 'practice',   diff: 3, code: 'Re', desc: 'LCD · multiply · solve · check for extraneous solutions step by step.',      href: 'tools/rational-equations.html' },
       { id: 'poly',  prev: 'polynomial',   name: 'Polynomial Sketch Pad',           unit: 'U6', topic: 'Polynomials', kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Set roots and multiplicities, then sketch cross, bounce, and end behavior.', href: 'tools/polynomial-sketch.html' },
       { id: 'pdiv',  prev: 'polynomial',   name: 'Polynomial Division Stepper',     unit: 'U6', topic: 'Polynomials', kind: 'practice',   diff: 3, code: 'Pd', desc: 'Long division and synthetic — step through divide, multiply, subtract, bring down. Factor verdict at the end.', href: 'tools/polynomial-division-stepper.html' },
+      { id: 'polyr', prev: 'polynomial',   name: 'Polynomial Root Sculptor',        unit: 'U6', topic: 'Polynomials', kind: 'explorer',   diff: 2, code: 'Pr', desc: 'Drag roots on the x-axis, click to cycle multiplicity — cross / bounce / flat-cross. End behavior arrows update live. Sculpt the curve by adding and removing roots.', href: 'tools/polynomial-roots.html' },
       { id: 'rfb',   prev: 'rational',     name: 'Rational Function Behavior',      unit: 'U6', topic: 'Rationals',   kind: 'explorer',   diff: 2, code: 'Rb', desc: 'Toggle factors in and out of N and D. Watch holes, V.A.s, and asymptote rules emerge.', href: 'tools/rational-behavior.html' },
       { id: 'soht',  prev: 'triangle',     name: 'SOH CAH TOA Triangle Solver',     unit: 'U7', topic: 'Trigonometry',kind: 'practice',   diff: 2, code: 'St', desc: 'Click a reference angle, watch opp/adj labels update, and solve the triangle.', href: 'tools/soh-cah-toa.html' },
       { id: 'unitc', prev: 'unitcircle',   name: 'Unit Circle Walker',              unit: 'U7', topic: 'Trigonometry',kind: 'visualizer', diff: 3, code: 'Uc', desc: 'Drag around the unit circle and watch sine or cosine trace a wave.',          href: 'tools/unit-circle.html' },
@@ -962,6 +963,34 @@
           ctx.fillStyle = '#7c4db5'; ctx.fill();
           ctx.beginPath(); ctx.arc(ox+re*sc, oy+im*sc, 4, 0, Math.PI*2);
           ctx.fillStyle = '#d94f2a'; ctx.fill();
+        },
+
+        polynomial(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox=W/2, oy=H/2, sc=W/14;
+          grid(ctx, ox, oy, sc, W, H, 7);
+          axes(ctx, ox, oy, W, H);
+          // Animate roots shifting
+          const r1=-3+0.5*Math.sin(t*0.3), r2=0, r3=3-0.4*Math.sin(t*0.25);
+          const c=0.18;
+          ctx.strokeStyle='#3a3020'; ctx.lineWidth=2; ctx.beginPath();
+          let s=false;
+          for(let i=0;i<=W*2;i++){
+            const wx=(i/(W*2))*(W/sc)-W/(2*sc);
+            const wy=c*(wx-r1)*Math.pow(wx-r2,2)*(wx-r3);
+            if(!isFinite(wy)||Math.abs(wy)>H/(1.5*sc)){s=false;continue;}
+            const px=ox+wx*sc, py=oy-wy*sc;
+            if(!s){ctx.moveTo(px,py);s=true;}else ctx.lineTo(px,py);
+          }
+          ctx.stroke();
+          // Root dots
+          [[r1,'#2a6fb4',1],[r2,'#c02040',2],[r3,'#1a7a6e',1]].forEach(([rx,col,m])=>{
+            const px=ox+rx*sc;
+            ctx.beginPath(); ctx.arc(px,oy,5,0,Math.PI*2);
+            ctx.fillStyle='#f6f1e4'; ctx.fill();
+            ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke();
+            if(m%2===0){ctx.beginPath();ctx.arc(px,oy,2.5,0,Math.PI*2);ctx.fillStyle=col;ctx.fill();}
+          });
         },
 
         growrace(ctx, W, H, t) {

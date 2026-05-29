@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polynomial Root Sculptor — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #poly-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: default;
+    }
+
+    /* ── Root slots ──────────────────────────────────────────── */
+    .root-slot {
+      display: grid; grid-template-columns: 12px 1fr auto;
+      align-items: center; gap: 6px; padding: 6px 8px;
+      border: 1.5px solid var(--ink-soft); border-radius: 4px;
+      margin-bottom: 5px; background: var(--paper-2);
+      transition: opacity 0.15s;
+    }
+    .root-slot.inactive { opacity: 0.4; }
+    .root-bar   { width: 12px; height: 30px; border-radius: 2px; }
+    .root-inner { display: flex; flex-direction: column; gap: 3px; }
+    .root-pos   { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; }
+    .mult-row   { display: flex; gap: 3px; }
+    .mult-btn {
+      width: 26px; height: 20px; border-radius: 2px;
+      border: 1.5px solid var(--ink-soft);
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      background: var(--paper); color: var(--ink-2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .mult-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+    .toggle-btn {
+      padding: 4px 7px; border-radius: 3px;
+      border: 1.5px solid var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      background: var(--paper); color: var(--ink-2); cursor: pointer;
+      align-self: center;
+    }
+    .toggle-btn.on  { background: var(--ink-2); color: var(--paper); }
+
+    /* ── Leading coeff ───────────────────────────────────────── */
+    .sign-row { display: flex; gap: 4px; align-items: center; }
+    .sign-btn {
+      width: 30px; height: 26px; border-radius: 3px;
+      border: 1.5px solid var(--ink-soft);
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sign-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Slider row ──────────────────────────────────────────── */
+    .slider-grid { display: grid; grid-template-columns: 54px 1fr 46px; gap: 4px 8px; align-items: center; }
+    .param-lbl { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+    .dyn-val[type=number] {
+      width: 44px; border: none; border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px; -moz-appearance: textfield;
+    }
+    .dyn-val::-webkit-outer-spin-button, .dyn-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .dyn-val:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Chips ───────────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: 'Patrick Hand', cursive; font-size: 12px; }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
+    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
+    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 280px; }
+    }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Root Sculptor</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          drag roots · change multiplicity · sculpt the curve
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u6.html" style="color:var(--ink-soft);">← U6 · Polynomials</a>
+        </div>
+      </div>
+
+      <!-- Roots -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">roots — drag on canvas or click × to cycle mult</div>
+        <div id="root-slots"></div>
+      </div>
+
+      <!-- Leading coefficient -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">leading coefficient</div>
+        <div class="sign-row" style="margin-bottom:8px;">
+          <button class="sign-btn active" id="sign-pos" data-sign="1">+</button>
+          <button class="sign-btn"        id="sign-neg" data-sign="-1">−</button>
+          <span style="font-family:'Patrick Hand',cursive; font-size:12px; color:var(--ink-soft); margin-left:4px;">sign of leading term</span>
+        </div>
+        <div class="slider-grid">
+          <div class="param-lbl">|a|</div>
+          <input type="range" min="0.1" max="1.0" step="0.1" value="0.3" id="mag-sl">
+          <input type="number" class="dyn-val" id="mag-vl" value="0.3" min="0.1" max="1.0" step="0.1">
+        </div>
+      </div>
+
+      <!-- Properties chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">properties</div>
+        <div class="chips-row" id="chips"></div>
+      </div>
+
+      <!-- Mr. K says -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight">Drag any colored dot on the x-axis to move a root. Click its × to change how the curve behaves there.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+      <div class="eq-bar"><span id="eqd">—</span></div>
+      <div class="canvas-wrap">
+        <canvas id="poly-canvas"></canvas>
+      </div>
+      <div class="hint-bar">drag the colored dots on the x-axis to move roots &nbsp;·&nbsp; click a dot to cycle multiplicity (cross / bounce / flat)</div>
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR    = window.devicePixelRatio || 1;
+  const TAU    = Math.PI * 2;
+  const canvas = document.getElementById('poly-canvas');
+  const ctx    = canvas.getContext('2d');
+  let VIEW     = { xMin: -7, xMax: 7, yMin: -5, yMax: 5 };
+
+  const ROOT_COLS = ['#2a6fb4', '#c02040', '#1a7a6e', '#d4820a'];
+  const MULT_LABELS = { 1: '× cross', 2: '◦ bounce', 3: '∿ flat-cross' };
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const S = {
+    roots: [
+      { x: -3, mult: 1, on: true  },
+      { x:  0, mult: 2, on: true  },
+      { x:  3, mult: 1, on: true  },
+      { x:  5, mult: 1, on: false },
+    ],
+    sign: 1,     // +1 or -1
+    mag:  0.3,   // |leading coefficient|
+  };
+
+  // ── View ──────────────────────────────────────────────────────────────────
+  function computeView(W, H) {
+    const sc = W / 14;
+    return { xMin: -W/(2*sc), xMax: W/(2*sc), yMin: -H/(2*sc), yMax: H/(2*sc) };
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2wx(px, W) {
+    return VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin);
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    canvas.width  = wrap.clientWidth  * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+    draw();
+  }
+
+  // ── Polynomial helpers ────────────────────────────────────────────────────
+  function activeRoots() { return S.roots.filter(r => r.on); }
+
+  function evalPoly(x) {
+    const ar = activeRoots();
+    if (ar.length === 0) return 0;
+    let v = S.sign * S.mag;
+    for (const r of ar) v *= Math.pow(x - r.x, r.mult);
+    return v;
+  }
+
+  function degree() { return activeRoots().reduce((s, r) => s + r.mult, 0); }
+
+  function endBehavior() {
+    const d = degree(), c = S.sign * S.mag;
+    const rightUp = c > 0;
+    const leftUp  = d % 2 === 0 ? c > 0 : c < 0;
+    return { rightUp, leftUp };
+  }
+
+  function yIntercept() { return evalPoly(0); }
+
+  // ── Format ────────────────────────────────────────────────────────────────
+  function n(v, d = 2) { return isFinite(v) ? parseFloat(v.toFixed(d)).toString() : '?'; }
+
+  function fmtLeading() {
+    const d  = degree();
+    const c  = S.sign * S.mag;
+    const cs = n(Math.abs(c), 1);
+    const sign = c > 0 ? '' : '−';
+    return `${sign}${cs}x${d > 1 ? ('⁰¹²³⁴⁵⁶⁷⁸⁹'[d] || ('^'+d)) : ''}`;
+  }
+
+  function chip(text, col) {
+    return `<span class="feat-chip" style="background:${col}18;border-color:${col}55;color:${col};">${text}</span>`;
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(100,90,70,0.12)'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x++) {
+      const [px] = w2c(x, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+    }
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y++) {
+      const [, py] = w2c(0, y, W, H);
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox, oy] = w2c(0, 0, W, H);
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 0); ctx.stroke();
+    const step = (VIEW.xMax - VIEW.xMin) > 20 ? 4 : (VIEW.xMax - VIEW.xMin) > 12 ? 2 : 1;
+    ctx.fillStyle = 'rgba(50,40,20,0.5)'; ctx.font = '11px "JetBrains Mono",monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x += step) {
+      if (x === 0) continue;
+      const [px] = w2c(x, 0, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy-3); ctx.lineTo(px, oy+3); ctx.stroke();
+      ctx.fillText(x, px, oy + 5);
+    }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y += step) {
+      if (y === 0) continue;
+      const [, py] = w2c(0, y, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox-3, py); ctx.lineTo(ox+3, py); ctx.stroke();
+      ctx.fillText(y, ox-6, py);
+    }
+  }
+
+  function drawCurve(W, H) {
+    const ar = activeRoots();
+    if (ar.length === 0) return;
+    const steps = Math.round(W * 3);
+    let started = false;
+    ctx.beginPath();
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+    for (let i = 0; i <= steps; i++) {
+      const wx = VIEW.xMin + i * (VIEW.xMax - VIEW.xMin) / steps;
+      const wy = evalPoly(wx);
+      if (!isFinite(wy) || Math.abs(wy) > (VIEW.yMax - VIEW.yMin) * 5) { started = false; continue; }
+      const [px, py] = w2c(wx, wy, W, H);
+      if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+  }
+
+  function drawEndArrows(W, H) {
+    const { rightUp, leftUp } = endBehavior();
+    const d = degree();
+    if (d === 0) return;
+
+    const [ox, oy] = w2c(0, 0, W, H);
+    const margin = 28, headLen = 10;
+
+    function arrowUp(x, bottomY) {
+      ctx.beginPath();
+      ctx.moveTo(x, bottomY); ctx.lineTo(x, bottomY - margin);
+      ctx.moveTo(x - headLen/2, bottomY - margin + headLen);
+      ctx.lineTo(x, bottomY - margin);
+      ctx.lineTo(x + headLen/2, bottomY - margin + headLen);
+      ctx.stroke();
+    }
+    function arrowDown(x, topY) {
+      ctx.beginPath();
+      ctx.moveTo(x, topY); ctx.lineTo(x, topY + margin);
+      ctx.moveTo(x - headLen/2, topY + margin - headLen);
+      ctx.lineTo(x, topY + margin);
+      ctx.lineTo(x + headLen/2, topY + margin - headLen);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = 'rgba(60,50,30,0.55)'; ctx.lineWidth = 2;
+    const leftX = 22, rightX = W - 22;
+
+    if (leftUp)   arrowUp(leftX, H - 8);
+    else          arrowDown(leftX, 8);
+    if (rightUp)  arrowUp(rightX, H - 8);
+    else          arrowDown(rightX, 8);
+
+    // Labels
+    ctx.font = '10px "Patrick Hand",cursive'; ctx.fillStyle = 'rgba(60,50,30,0.55)';
+    ctx.textAlign = 'center'; ctx.textBaseline = leftUp ? 'bottom' : 'top';
+    ctx.fillText('x→-∞', leftX, leftUp ? H - margin - 6 : margin + 6);
+    ctx.textBaseline = rightUp ? 'bottom' : 'top';
+    ctx.fillText('x→+∞', rightX, rightUp ? H - margin - 6 : margin + 6);
+  }
+
+  function drawRootDots(W, H) {
+    const [, oy] = w2c(0, 0, W, H);
+    S.roots.forEach((r, i) => {
+      if (!r.on) return;
+      const [px] = w2c(r.x, 0, W, H);
+      const col  = ROOT_COLS[i];
+
+      // Draw root indicator line
+      ctx.strokeStyle = col + '55'; ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(px, oy - 40); ctx.lineTo(px, oy + 40); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Root dot on x-axis
+      ctx.beginPath(); ctx.arc(px, oy, 8, 0, TAU);
+      ctx.fillStyle = '#f6f1e4'; ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+      if (r.mult % 2 === 0) {
+        // Even mult: filled inner (bounce visual cue)
+        ctx.beginPath(); ctx.arc(px, oy, 4, 0, TAU);
+        ctx.fillStyle = col; ctx.fill();
+      } else {
+        // Odd mult: just the ring (cross visual cue)
+        ctx.beginPath(); ctx.arc(px, oy, 2, 0, TAU);
+        ctx.fillStyle = col; ctx.fill();
+      }
+
+      // Multiplicity label above the dot
+      ctx.font = 'bold 10px "JetBrains Mono",monospace';
+      ctx.fillStyle = col;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      const multTxt = r.mult > 1 ? `m=${r.mult}` : '';
+      if (multTxt) ctx.fillText(multTxt, px, oy - 11);
+
+      // Root position label below
+      ctx.font = '10px "Patrick Hand",cursive'; ctx.fillStyle = col;
+      ctx.textBaseline = 'top';
+      ctx.fillText(n(r.x, 1), px, oy + 12);
+    });
+  }
+
+  function drawYIntercept(W, H) {
+    const yi = yIntercept();
+    if (!isFinite(yi)) return;
+    const [px, py] = w2c(0, yi, W, H);
+    if (py < 0 || py > H) return;
+    ctx.beginPath(); ctx.arc(px, py, 5, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = '#7c4db5'; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath(); ctx.arc(px, py, 2.5, 0, TAU);
+    ctx.fillStyle = '#7c4db5'; ctx.fill();
+    ctx.font = '10px "Patrick Hand",cursive'; ctx.fillStyle = '#7c4db5';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(`y-int: ${n(yi, 2)}`, px + 9, py);
+  }
+
+  function draw() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    VIEW = computeView(W, H);
+
+    ctx.save(); ctx.scale(DPR, DPR);
+    ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0, 0, W, H);
+
+    drawGrid(W, H);
+    drawAxes(W, H);
+    drawCurve(W, H);
+    drawEndArrows(W, H);
+    drawRootDots(W, H);
+    drawYIntercept(W, H);
+
+    ctx.restore();
+  }
+
+  // ── UI updaters ───────────────────────────────────────────────────────────
+  function updateChips() {
+    const area = document.getElementById('chips');
+    const ar   = activeRoots();
+    const d    = degree();
+    const { rightUp, leftUp } = endBehavior();
+    let html   = '';
+
+    html += chip(`degree ${d}`, '#3a3020');
+    if (d > 0) html += chip(`leading: ${fmtLeading()}`, S.sign > 0 ? '#2a6fb4' : '#c02040');
+
+    ar.forEach((r, i) => {
+      const idx = S.roots.indexOf(r);
+      const col = ROOT_COLS[idx];
+      const lab = r.mult === 1 ? 'cross' : r.mult === 2 ? 'bounce' : 'flat-cross';
+      html += chip(`x=${n(r.x,1)} (${lab})`, col);
+    });
+
+    if (d > 0) {
+      const eb = `x→+∞: y→${rightUp?'+∞':'-∞'} · x→-∞: y→${leftUp?'+∞':'-∞'}`;
+      html += chip(eb, '#555');
+    }
+
+    const yi = yIntercept();
+    if (isFinite(yi)) html += chip(`y-int: ${n(yi, 2)}`, '#7c4db5');
+
+    if (d > 0) {
+      html += chip(d % 2 === 0 ? 'even degree → same ends' : 'odd degree → opposite ends', '#444');
+    }
+
+    area.innerHTML = html;
+  }
+
+  function updateEqBar() {
+    const el = document.getElementById('eqd');
+    const ar = activeRoots();
+    if (ar.length === 0) { el.textContent = 'f(x) = 0  (no active roots)'; return; }
+
+    const c  = S.sign * S.mag;
+    const cs = n(Math.abs(c), 1);
+    const sgn = c < 0 ? '−' : '';
+    const factors = ar.map(r => {
+      const h  = n(Math.abs(r.x), 1);
+      const op = r.x >= 0 ? ' − ' : ' + ';
+      const inner = r.x === 0 ? 'x' : `(x${op}${h})`;
+      return r.mult > 1 ? `${inner}${['','','²','³'][r.mult]||'ⁿ'}` : inner;
+    }).join('·');
+
+    el.innerHTML = `f(x) = <strong>${sgn}${cs}·${factors}</strong>`;
+  }
+
+  function updateInsight() {
+    const el = document.getElementById('insight');
+    const ar = activeRoots();
+    const d  = degree();
+
+    const evenMults = ar.filter(r => r.mult % 2 === 0);
+    const oddMults  = ar.filter(r => r.mult % 2 !== 0);
+
+    if (ar.length === 0) {
+      el.textContent = 'Turn on at least one root to see a curve.';
+    } else if (evenMults.length > 0 && oddMults.length > 0) {
+      el.textContent = `See the difference: odd multiplicity roots (open rings) — the curve crosses right through. Even multiplicity (filled dots) — the curve touches and bounces back. Same zeros, completely different behavior.`;
+    } else if (evenMults.length > 0) {
+      el.textContent = `All roots have even multiplicity — the curve bounces at each one, never crossing. Add an odd-multiplicity root and watch a crossing appear.`;
+    } else {
+      el.textContent = `${d % 2 === 0 ? 'Even' : 'Odd'} degree polynomial. ${d % 2 === 0 ? 'Both ends go the same direction' : 'Ends point in opposite directions'}. Flip the leading sign to see the curve flip.`;
+    }
+  }
+
+  function buildRootSlots() {
+    const area = document.getElementById('root-slots');
+    area.innerHTML = S.roots.map((r, i) => {
+      const col  = ROOT_COLS[i];
+      return `<div class="root-slot ${r.on ? '' : 'inactive'}" data-ri="${i}">
+        <div class="root-bar" style="background:${col}80; border-left:3px solid ${col};"></div>
+        <div class="root-inner">
+          <div class="root-pos" style="color:${col};">x = ${n(r.x, 1)}</div>
+          <div class="mult-row">
+            ${[1,2,3].map(m => `<button class="mult-btn ${r.mult===m?'active':''}" data-ri="${i}" data-m="${m}" ${r.on?'':' disabled'}>${m}</button>`).join('')}
+            <span style="font-family:'Patrick Hand',cursive; font-size:11px; color:${col}; margin-left:4px;">${MULT_LABELS[r.mult]}</span>
+          </div>
+        </div>
+        <button class="toggle-btn ${r.on?'on':''}" data-ri="${i}">${r.on?'on':'off'}</button>
+      </div>`;
+    }).join('');
+
+    // Mult buttons
+    area.querySelectorAll('.mult-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const ri = +btn.dataset.ri, m = +btn.dataset.m;
+        S.roots[ri].mult = m;
+        buildRootSlots();
+        update();
+      });
+    });
+
+    // Toggle on/off
+    area.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const ri = +btn.dataset.ri;
+        S.roots[ri].on = !S.roots[ri].on;
+        buildRootSlots();
+        update();
+      });
+    });
+  }
+
+  function refreshRootPositions() {
+    document.querySelectorAll('.root-slot').forEach((slot, i) => {
+      const posEl = slot.querySelector('.root-pos');
+      if (posEl) posEl.textContent = `x = ${n(S.roots[i].x, 1)}`;
+    });
+  }
+
+  // ── Canvas root drag ──────────────────────────────────────────────────────
+  let dragRootIdx = null;
+  let didDrag     = false;
+
+  function rootHitTest(px, py, W, H) {
+    const [, oy] = w2c(0, 0, W, H);
+    if (Math.abs(py - oy) > 18) return -1;
+    const wx = c2wx(px, W);
+    let best = -1, bestDist = 0.8;
+    S.roots.forEach((r, i) => {
+      if (!r.on) return;
+      const d = Math.abs(r.x - wx);
+      if (d < bestDist) { bestDist = d; best = i; }
+    });
+    return best;
+  }
+
+  function evtPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    return [src.clientX - rect.left, src.clientY - rect.top];
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    const [px, py] = evtPos(e);
+    dragRootIdx = rootHitTest(px, py, W, H);
+    didDrag     = false;
+    if (dragRootIdx >= 0) canvas.style.cursor = 'ew-resize';
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (dragRootIdx < 0) {
+      // Show cursor hint
+      const W = canvas.width / DPR, H = canvas.height / DPR;
+      const [px, py] = evtPos(e);
+      canvas.style.cursor = rootHitTest(px, py, W, H) >= 0 ? 'ew-resize' : 'default';
+      return;
+    }
+    didDrag = true;
+    const W = canvas.width / DPR;
+    const [px] = evtPos(e);
+    const wx = Math.round(c2wx(px, W) * 2) / 2;
+    S.roots[dragRootIdx].x = Math.max(-6, Math.min(6, wx));
+    refreshRootPositions();
+    update();
+  });
+
+  canvas.addEventListener('mouseup', e => {
+    if (dragRootIdx >= 0 && !didDrag) {
+      // Click on root: cycle multiplicity
+      S.roots[dragRootIdx].mult = (S.roots[dragRootIdx].mult % 3) + 1;
+      buildRootSlots();
+      update();
+    }
+    dragRootIdx = -1;
+    canvas.style.cursor = 'default';
+  });
+  canvas.addEventListener('mouseleave', () => { dragRootIdx = -1; });
+
+  canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    const [px, py] = evtPos(e);
+    dragRootIdx = rootHitTest(px, py, W, H); didDrag = false;
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (dragRootIdx < 0) return;
+    didDrag = true;
+    const W = canvas.width / DPR;
+    const [px] = evtPos(e);
+    const wx = Math.round(c2wx(px, W) * 2) / 2;
+    S.roots[dragRootIdx].x = Math.max(-6, Math.min(6, wx));
+    refreshRootPositions();
+    update();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', e => {
+    if (dragRootIdx >= 0 && !didDrag) {
+      S.roots[dragRootIdx].mult = (S.roots[dragRootIdx].mult % 3) + 1;
+      buildRootSlots(); update();
+    }
+    dragRootIdx = -1;
+  });
+
+  // ── Leading coefficient controls ──────────────────────────────────────────
+  document.querySelectorAll('.sign-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.sign = +btn.dataset.sign;
+      document.querySelectorAll('.sign-btn').forEach(b =>
+        b.classList.toggle('active', +b.dataset.sign === S.sign));
+      update();
+    });
+  });
+
+  const magSl = document.getElementById('mag-sl');
+  const magVl = document.getElementById('mag-vl');
+  magSl.addEventListener('input', e => { S.mag = +e.target.value; magVl.value = S.mag; update(); });
+  magVl.addEventListener('change', e => {
+    S.mag = Math.max(0.1, Math.min(1.0, +e.target.value || 0.3));
+    magVl.value = S.mag; magSl.value = S.mag; update();
+  });
+
+  // ── Master update ─────────────────────────────────────────────────────────
+  function update() {
+    updateChips();
+    updateEqBar();
+    updateInsight();
+    draw();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  buildRootSlots();
+  update();
+  resize();
+  </script>
+</body>
+</html>
