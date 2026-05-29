@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Systems Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #sys-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: default;
+    }
+
+    /* ── Line strips ─────────────────────────────────────────── */
+    .line-strip {
+      padding: 8px 10px; border-radius: 4px; border: 2px solid;
+      margin-bottom: 6px;
+    }
+    .eq-display {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      font-weight: 700; margin-bottom: 6px;
+    }
+
+    /* ── Slider grid ─────────────────────────────────────────── */
+    .slider-grid {
+      display: grid; grid-template-columns: 56px 1fr 46px;
+      gap: 4px 8px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      display: flex; align-items: baseline; gap: 4px;
+    }
+    .param-lbl .letter { font-size: 14px; font-style: italic; font-weight: 700; }
+    .param-lbl .pdesc  { font-family: 'Patrick Hand', cursive; font-size: 10px; color: var(--ink-soft); }
+    .dyn-val[type=number] {
+      width: 44px; border: none; border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px; -moz-appearance: textfield;
+    }
+    .dyn-val::-webkit-outer-spin-button, .dyn-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .dyn-val:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Case banner ─────────────────────────────────────────── */
+    .case-banner {
+      padding: 6px 10px; border-radius: 4px; text-align: center;
+      font-family: 'Patrick Hand', cursive; font-size: 13px; font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    /* ── Substitution steps ──────────────────────────────────── */
+    .sub-box {
+      padding: 8px 10px; border-radius: 4px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-soft);
+    }
+    .sub-step {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      line-height: 1.6; color: var(--ink-2);
+    }
+    .sub-step.indent { padding-left: 12px; }
+    .sub-step.solution {
+      font-family: 'Patrick Hand', cursive; font-size: 13px;
+      margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--ink-soft);
+      color: #1a7a6e; font-weight: 700;
+    }
+    .sub-step.alert { color: #c04040; font-family: 'Patrick Hand', cursive; font-size: 13px; }
+
+    /* ── Chips ───────────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip { padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft); font-family: 'Patrick Hand', cursive; font-size: 12px; }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
+    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
+    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 280px; }
+    }
+  </style>
+</head>
+<body class="paper-grid">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:20px; line-height:1;">Systems Explorer</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          drag the lines · find the crossing
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u1.html" style="color:var(--ink-soft);">← U1 · Systems</a>
+        </div>
+      </div>
+
+      <!-- Line 1 -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="line-strip" id="strip1" style="border-color:#2a6fb4; background:#2a6fb408;">
+          <div class="eq-display" id="eq1" style="color:#2a6fb4;">y = 2x + 1</div>
+          <div class="slider-grid">
+            <div class="param-lbl"><span class="letter" style="color:#2a6fb4;">m₁</span><span class="pdesc">slope</span></div>
+            <input type="range" min="-4" max="4" step="0.5" value="2"  id="m1-sl">
+            <input type="number" class="dyn-val" id="m1-vl" value="2"  min="-4" max="4" step="0.5">
+            <div class="param-lbl"><span class="letter" style="color:#2a6fb4;">b₁</span><span class="pdesc">y-int</span></div>
+            <input type="range" min="-7" max="7"  step="0.5" value="1"  id="b1-sl">
+            <input type="number" class="dyn-val" id="b1-vl" value="1"  min="-7" max="7"  step="0.5">
+          </div>
+        </div>
+
+        <!-- Line 2 -->
+        <div class="line-strip" id="strip2" style="border-color:#c02040; background:#c0204008;">
+          <div class="eq-display" id="eq2" style="color:#c02040;">y = −x + 4</div>
+          <div class="slider-grid">
+            <div class="param-lbl"><span class="letter" style="color:#c02040;">m₂</span><span class="pdesc">slope</span></div>
+            <input type="range" min="-4" max="4" step="0.5" value="-1" id="m2-sl">
+            <input type="number" class="dyn-val" id="m2-vl" value="-1" min="-4" max="4" step="0.5">
+            <div class="param-lbl"><span class="letter" style="color:#c02040;">b₂</span><span class="pdesc">y-int</span></div>
+            <input type="range" min="-7" max="7"  step="0.5" value="4"  id="b2-sl">
+            <input type="number" class="dyn-val" id="b2-vl" value="4"  min="-7" max="7"  step="0.5">
+          </div>
+        </div>
+      </div>
+
+      <!-- Case + algebra -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="case-banner" id="case-banner">—</div>
+        <div class="sub-box">
+          <div class="sec-lbl" style="margin-bottom:4px;">substitution</div>
+          <div id="sub-steps">—</div>
+        </div>
+      </div>
+
+      <!-- Chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">properties</div>
+        <div class="chips-row" id="chips"></div>
+      </div>
+
+      <!-- Mr. K says -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight">The solution is the one point that makes BOTH equations true at the same time — where both lines cross.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+      <div class="eq-bar"><span id="eqd">—</span></div>
+      <div class="canvas-wrap">
+        <canvas id="sys-canvas"></canvas>
+      </div>
+      <div class="hint-bar">drag either line on the canvas to shift it · use sliders to change slope · click anywhere to test a point</div>
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR    = window.devicePixelRatio || 1;
+  const TAU    = Math.PI * 2;
+  const canvas = document.getElementById('sys-canvas');
+  const ctx    = canvas.getContext('2d');
+  const L1_COL = '#2a6fb4', L2_COL = '#c02040', SOL_COL = '#1a7a6e';
+  let VIEW     = { xMin: -7, xMax: 7, yMin: -5, yMax: 5 };
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const S = {
+    L1: { m: 2,  b: 1 },
+    L2: { m: -1, b: 4 },
+    test: null,   // {x, y} world coords
+  };
+
+  // ── View ──────────────────────────────────────────────────────────────────
+  function computeView(W, H) {
+    const sc = W / 14;
+    return { xMin: -W/(2*sc), xMax: W/(2*sc), yMin: -H/(2*sc), yMax: H/(2*sc) };
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2w(px, py, W, H) {
+    return [
+      VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin),
+      VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin),
+    ];
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    canvas.width  = wrap.clientWidth  * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+    draw();
+  }
+
+  // ── Math ──────────────────────────────────────────────────────────────────
+  function intersection() {
+    const dm = S.L1.m - S.L2.m, db = S.L2.b - S.L1.b;
+    if (Math.abs(dm) < 1e-9) return null;
+    const xi = db / dm, yi = S.L1.m * xi + S.L1.b;
+    return { x: xi, y: yi };
+  }
+
+  function systemCase() {
+    const dm = S.L1.m - S.L2.m, db = S.L2.b - S.L1.b;
+    if (Math.abs(dm) < 1e-9) {
+      return Math.abs(db) < 1e-9 ? 'infinite' : 'parallel';
+    }
+    return 'unique';
+  }
+
+  // ── Format ────────────────────────────────────────────────────────────────
+  function n(v, d = 2) { return isFinite(v) ? parseFloat(v.toFixed(d)).toString() : '?'; }
+
+  function fmtCoeff(c) {
+    if (Math.abs(c - 1) < 1e-9)  return '';
+    if (Math.abs(c + 1) < 1e-9)  return '−';
+    return (c < 0 ? '−' : '') + n(Math.abs(c), 1);
+  }
+
+  function fmtLine(m, b) {
+    const mStr = Math.abs(m) < 1e-9 ? '' : `${fmtCoeff(m)}x`;
+    const bStr = Math.abs(b) < 1e-9 ? '' : (b > 0 ? (mStr ? ' + ' : '') + n(b, 1) : ' − ' + n(Math.abs(b), 1));
+    const body = mStr + bStr || '0';
+    return `y = ${body}`;
+  }
+
+  function fmtRHS(m, b) {
+    const mStr = Math.abs(m) < 1e-9 ? '' : `${fmtCoeff(m)}x`;
+    const bStr = Math.abs(b) < 1e-9 ? '' : (b > 0 ? (mStr ? ' + ' : '') + n(b, 1) : ' − ' + n(Math.abs(b), 1));
+    return mStr + bStr || '0';
+  }
+
+  function chip(text, col) {
+    return `<span class="feat-chip" style="background:${col}18;border-color:${col}55;color:${col};">${text}</span>`;
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(100,90,70,0.12)'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x++) {
+      const [px] = w2c(x, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+    }
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y++) {
+      const [, py] = w2c(0, y, W, H);
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox, oy] = w2c(0, 0, W, H);
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 0); ctx.stroke();
+    const step = (VIEW.xMax - VIEW.xMin) > 20 ? 4 : (VIEW.xMax - VIEW.xMin) > 12 ? 2 : 1;
+    ctx.fillStyle = 'rgba(50,40,20,0.5)'; ctx.font = '11px "JetBrains Mono",monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x += step) {
+      if (x === 0) continue;
+      const [px] = w2c(x, 0, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy-3); ctx.lineTo(px, oy+3); ctx.stroke();
+      ctx.fillText(x, px, oy + 5);
+    }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y += step) {
+      if (y === 0) continue;
+      const [, py] = w2c(0, y, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox-3, py); ctx.lineTo(ox+3, py); ctx.stroke();
+      ctx.fillText(y, ox-6, py);
+    }
+  }
+
+  function drawLine(L, col, W, H, isDashed) {
+    // Draw across entire canvas
+    const steps = 2;
+    const x0 = VIEW.xMin, x1 = VIEW.xMax;
+    const y0 = L.m * x0 + L.b, y1 = L.m * x1 + L.b;
+    const [p0x, p0y] = w2c(x0, y0, W, H);
+    const [p1x, p1y] = w2c(x1, y1, W, H);
+    ctx.beginPath(); ctx.moveTo(p0x, p0y); ctx.lineTo(p1x, p1y);
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5;
+    if (isDashed) ctx.setLineDash([8, 6]); else ctx.setLineDash([]);
+    ctx.stroke(); ctx.setLineDash([]);
+
+    // Y-intercept dot
+    const [bpx, bpy] = w2c(0, L.b, W, H);
+    if (bpy >= 0 && bpy <= H) {
+      ctx.beginPath(); ctx.arc(bpx, bpy, 5, 0, TAU);
+      ctx.fillStyle = '#f6f1e4'; ctx.fill();
+      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.arc(bpx, bpy, 2.5, 0, TAU);
+      ctx.fillStyle = col; ctx.fill();
+    }
+  }
+
+  function drawIntersection(W, H) {
+    const sol = intersection();
+    if (!sol) return;
+    if (sol.x < VIEW.xMin - 1 || sol.x > VIEW.xMax + 1) return;
+    if (sol.y < VIEW.yMin - 1 || sol.y > VIEW.yMax + 1) return;
+
+    const [px, py] = w2c(sol.x, sol.y, W, H);
+
+    // Glow effect
+    const grad = ctx.createRadialGradient(px, py, 0, px, py, 18);
+    grad.addColorStop(0, SOL_COL + '55');
+    grad.addColorStop(1, SOL_COL + '00');
+    ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(px, py, 18, 0, TAU); ctx.fill();
+
+    // Ring + dot
+    ctx.beginPath(); ctx.arc(px, py, 9, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = SOL_COL; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(px, py, 4.5, 0, TAU);
+    ctx.fillStyle = SOL_COL; ctx.fill();
+
+    // Coordinate label
+    ctx.font = 'bold 12px "Patrick Hand",cursive'; ctx.fillStyle = SOL_COL;
+    ctx.textAlign = sol.x >= 0 ? 'left' : 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`(${n(sol.x, 2)}, ${n(sol.y, 2)})`, px + (sol.x >= 0 ? 12 : -12), py - 6);
+
+    // Projection lines (dashed)
+    const [ox, oy] = w2c(0, 0, W, H);
+    ctx.strokeStyle = SOL_COL + '50'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(ox, py); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawTestPoint(W, H) {
+    if (!S.test) return;
+    const { x, y } = S.test;
+    const [px, py] = w2c(x, y, W, H);
+    const sat1 = Math.abs(S.L1.m * x + S.L1.b - y) < 0.05;
+    const sat2 = Math.abs(S.L2.m * x + S.L2.b - y) < 0.05;
+    const both = sat1 && sat2;
+    const col  = both ? SOL_COL : sat1 ? L1_COL : sat2 ? L2_COL : '#888';
+
+    ctx.beginPath(); ctx.arc(px, py, 7, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.stroke();
+
+    ctx.font = 'bold 11px "Patrick Hand",cursive'; ctx.fillStyle = col;
+    ctx.textAlign = x >= 0 ? 'left' : 'right';
+    ctx.textBaseline = 'middle';
+    const lbl = both ? '✓ solves both' : sat1 ? '✓ L1 only' : sat2 ? '✓ L2 only' : '✗ neither';
+    ctx.fillText(lbl, px + (x >= 0 ? 10 : -10), py - 12);
+  }
+
+  function draw() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    VIEW = computeView(W, H);
+
+    ctx.save(); ctx.scale(DPR, DPR);
+    ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0, 0, W, H);
+
+    drawGrid(W, H);
+    drawAxes(W, H);
+
+    const sc = systemCase();
+    drawLine(S.L1, L1_COL, W, H, sc === 'parallel');
+    drawLine(S.L2, L2_COL, W, H, sc === 'parallel');
+
+    if (sc === 'unique')   drawIntersection(W, H);
+    if (sc === 'infinite') {
+      // Highlight: thicker glow behind
+      const x0 = VIEW.xMin, x1 = VIEW.xMax;
+      const y0 = S.L1.m*x0+S.L1.b, y1 = S.L1.m*x1+S.L1.b;
+      const [p0x,p0y]=w2c(x0,y0,W,H), [p1x,p1y]=w2c(x1,y1,W,H);
+      ctx.beginPath(); ctx.moveTo(p0x,p0y); ctx.lineTo(p1x,p1y);
+      ctx.strokeStyle=SOL_COL+'60'; ctx.lineWidth=8; ctx.stroke();
+    }
+    if (sc === 'parallel') {
+      // Draw hatching between lines to show the gap
+      const [ox,oy]=w2c(0,0,W,H);
+      const midB = (S.L1.b+S.L2.b)/2;
+      const [,mpY]=w2c(0,midB,W,H);
+      ctx.font='12px "Patrick Hand",cursive'; ctx.fillStyle='rgba(100,80,50,0.5)';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText('no crossing — parallel lines', W/2, mpY);
+    }
+
+    drawTestPoint(W, H);
+    ctx.restore();
+  }
+
+  // ── UI updaters ───────────────────────────────────────────────────────────
+  function updateUI() {
+    // Equation displays
+    document.getElementById('eq1').textContent = fmtLine(S.L1.m, S.L1.b);
+    document.getElementById('eq2').textContent = fmtLine(S.L2.m, S.L2.b);
+
+    const sc  = systemCase();
+    const sol = intersection();
+
+    // Case banner
+    const banner = document.getElementById('case-banner');
+    if (sc === 'unique') {
+      banner.style.background = '#1a7a6e18'; banner.style.color = '#1a7a6e'; banner.style.borderColor = '#1a7a6e60';
+      banner.textContent = '⚡ one solution';
+    } else if (sc === 'parallel') {
+      banner.style.background = '#c0204018'; banner.style.color = '#c02040'; banner.style.borderColor = '#c0204060';
+      banner.textContent = '⟂ no solution — parallel';
+    } else {
+      banner.style.background = '#2a6fb418'; banner.style.color = '#2a6fb4'; banner.style.borderColor = '#2a6fb460';
+      banner.textContent = '∞ infinite solutions — same line';
+    }
+
+    // Substitution steps
+    const subEl = document.getElementById('sub-steps');
+    if (sc === 'unique' && sol) {
+      const dm = S.L1.m - S.L2.m, db = S.L2.b - S.L1.b;
+      const rhs1 = fmtRHS(S.L1.m, S.L1.b);
+      const rhs2 = fmtRHS(S.L2.m, S.L2.b);
+      const lhsDm = fmtCoeff(dm) + 'x';
+      const xVal  = n(sol.x, 2), yVal = n(sol.y, 2);
+      subEl.innerHTML =
+        `<div class="sub-step">set equal:</div>` +
+        `<div class="sub-step indent" style="color:${L1_COL};">${rhs1}</div>` +
+        `<div class="sub-step indent">&nbsp;= <span style="color:${L2_COL};">${rhs2}</span></div>` +
+        `<div class="sub-step indent">${lhsDm} = ${n(db,1)}</div>` +
+        `<div class="sub-step indent">x = ${xVal}</div>` +
+        `<div class="sub-step indent">y = ${n(S.L1.m,1)}(${xVal}) + ${n(S.L1.b,1)} = ${yVal}</div>` +
+        `<div class="sub-step solution">✓ solution: (${xVal}, ${yVal})</div>`;
+    } else if (sc === 'parallel') {
+      subEl.innerHTML = `<div class="sub-step alert">Setting equal gives a false statement (like 3 = 7). No x satisfies both — the lines never meet.</div>`;
+    } else {
+      subEl.innerHTML = `<div class="sub-step alert">Setting equal gives 0 = 0 — always true! Every point on the line is a solution.</div>`;
+    }
+
+    // Chips
+    const chips = document.getElementById('chips');
+    let html = '';
+    html += chip(`L1: ${fmtLine(S.L1.m, S.L1.b)}`, L1_COL);
+    html += chip(`L2: ${fmtLine(S.L2.m, S.L2.b)}`, L2_COL);
+    if (sc === 'unique' && sol) {
+      html += chip(`(${n(sol.x,2)}, ${n(sol.y,2)})`, SOL_COL);
+    }
+    if (sc === 'parallel') html += chip('no solution', '#c02040');
+    if (sc === 'infinite') html += chip('infinite solutions', '#2a6fb4');
+    const slopeDiff = sc === 'parallel' ? 'same slope → parallel' : sc === 'unique' ? `different slopes` : 'same slope + y-int';
+    html += chip(slopeDiff, '#555');
+    chips.innerHTML = html;
+
+    // Eq bar
+    const eqd = document.getElementById('eqd');
+    if (sc === 'unique' && sol) {
+      eqd.innerHTML =
+        `<span style="color:${L1_COL};font-weight:700;">${fmtLine(S.L1.m, S.L1.b)}</span>` +
+        `&nbsp;&nbsp;∩&nbsp;&nbsp;` +
+        `<span style="color:${L2_COL};font-weight:700;">${fmtLine(S.L2.m, S.L2.b)}</span>` +
+        `&nbsp;&nbsp;→&nbsp;&nbsp;` +
+        `<span style="color:${SOL_COL};font-weight:700;">(${n(sol.x,2)}, ${n(sol.y,2)})</span>`;
+    } else {
+      eqd.innerHTML =
+        `<span style="color:${L1_COL};font-weight:700;">${fmtLine(S.L1.m, S.L1.b)}</span>` +
+        `&nbsp;&nbsp;vs&nbsp;&nbsp;` +
+        `<span style="color:${L2_COL};font-weight:700;">${fmtLine(S.L2.m, S.L2.b)}</span>`;
+    }
+
+    // Insight
+    const ins = document.getElementById('insight');
+    if (sc === 'parallel') {
+      ins.textContent = 'Same slope means these lines run side by side — they never cross. Try making the slopes different and watch a solution appear.';
+    } else if (sc === 'infinite') {
+      ins.textContent = 'Same slope AND same y-intercept means it\'s one line, not two. Every point on the line satisfies both equations. Infinite solutions.';
+    } else if (sol && Math.abs(sol.x) < 0.05 && Math.abs(sol.y) < 0.05) {
+      ins.textContent = 'The lines cross at the origin — (0, 0). Both equations are satisfied by x = 0 and y = 0.';
+    } else {
+      ins.textContent = `The green point is the ONLY coordinate pair that satisfies both equations simultaneously. Plug (${n(sol?.x,2)}, ${n(sol?.y,2)}) into either equation — you get a true statement.`;
+    }
+  }
+
+  function update() {
+    updateUI();
+    draw();
+  }
+
+  // ── Slider bindings ───────────────────────────────────────────────────────
+  function bindSl(slId, vlId, cb) {
+    const sl = document.getElementById(slId), vl = document.getElementById(vlId);
+    sl.addEventListener('input',  e => { const v=+e.target.value; vl.value=v; cb(v); });
+    vl.addEventListener('change', e => {
+      const v=Math.max(+sl.min,Math.min(+sl.max,+e.target.value||0));
+      vl.value=v; sl.value=v; cb(v);
+    });
+  }
+
+  bindSl('m1-sl','m1-vl', v => { S.L1.m = v; update(); });
+  bindSl('b1-sl','b1-vl', v => { S.L1.b = v; update(); });
+  bindSl('m2-sl','m2-vl', v => { S.L2.m = v; update(); });
+  bindSl('b2-sl','b2-vl', v => { S.L2.b = v; update(); });
+
+  // ── Canvas interaction ────────────────────────────────────────────────────
+  let dragLine  = null;  // 1 or 2
+  let lastWY    = null;
+  let isDragging = false;
+
+  function lineHit(px, py, W, H, L) {
+    const wx = VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin);
+    const wy = VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin);
+    const expectedWy = L.m * wx + L.b;
+    // Compute how many pixels off the line the click is
+    const scaleY = H / (VIEW.yMax - VIEW.yMin);
+    const dyPx = Math.abs(wy - expectedWy) * scaleY;
+    return dyPx < 14;
+  }
+
+  function evtPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    return [src.clientX - rect.left, src.clientY - rect.top];
+  }
+
+  canvas.addEventListener('mousedown', e => {
+    const W = canvas.width/DPR, H = canvas.height/DPR;
+    const [px, py] = evtPos(e);
+    if (lineHit(px, py, W, H, S.L1)) {
+      dragLine = 1;
+      lastWY   = VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin);
+      isDragging = false;
+    } else if (lineHit(px, py, W, H, S.L2)) {
+      dragLine = 2;
+      lastWY   = VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin);
+      isDragging = false;
+    } else {
+      dragLine = null;
+    }
+  });
+
+  canvas.addEventListener('mousemove', e => {
+    if (dragLine === null) {
+      const W = canvas.width/DPR, H = canvas.height/DPR;
+      const [px, py] = evtPos(e);
+      const overL1 = lineHit(px, py, W, H, S.L1);
+      const overL2 = lineHit(px, py, W, H, S.L2);
+      canvas.style.cursor = (overL1 || overL2) ? 'ns-resize' : 'crosshair';
+      return;
+    }
+    isDragging = true;
+    const W = canvas.width/DPR, H = canvas.height/DPR;
+    const [px, py] = evtPos(e);
+    const curWY = VIEW.yMin + ((H - py) / H) * (VIEW.yMax - VIEW.yMin);
+    const delta = curWY - lastWY;
+    const L = dragLine === 1 ? S.L1 : S.L2;
+    L.b = Math.round((L.b + delta) * 2) / 2;
+    L.b = Math.max(-7, Math.min(7, L.b));
+    lastWY = curWY;
+    // Sync slider
+    const bid = dragLine === 1 ? 'b1' : 'b2';
+    document.getElementById(`${bid}-sl`).value = L.b;
+    document.getElementById(`${bid}-vl`).value = L.b;
+    update();
+  });
+
+  canvas.addEventListener('mouseup', e => {
+    if (!isDragging && dragLine === null) {
+      // Test point click
+      const W = canvas.width/DPR, H = canvas.height/DPR;
+      const [px, py] = evtPos(e);
+      const [wx, wy] = c2w(px, py, W, H);
+      const snappedX = Math.round(wx * 2) / 2;
+      const snappedY = Math.round(wy * 2) / 2;
+      if (S.test && Math.abs(S.test.x - snappedX) < 0.3 && Math.abs(S.test.y - snappedY) < 0.3) {
+        S.test = null; // click same spot to clear
+      } else {
+        S.test = { x: snappedX, y: snappedY };
+      }
+      update();
+    }
+    dragLine = null; isDragging = false;
+    canvas.style.cursor = 'crosshair';
+  });
+  canvas.addEventListener('mouseleave', () => { dragLine = null; isDragging = false; });
+
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); const [px,py]=evtPos(e); const W=canvas.width/DPR,H=canvas.height/DPR; if(lineHit(px,py,W,H,S.L1)){dragLine=1;}else if(lineHit(px,py,W,H,S.L2)){dragLine=2;}else{dragLine=null;} isDragging=false; lastWY=VIEW.yMin+((H-py)/H)*(VIEW.yMax-VIEW.yMin); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); if(!dragLine)return; isDragging=true; const [px,py]=evtPos(e); const W=canvas.width/DPR,H=canvas.height/DPR; const curWY=VIEW.yMin+((H-py)/H)*(VIEW.yMax-VIEW.yMin); const delta=curWY-lastWY; const L=dragLine===1?S.L1:S.L2; L.b=Math.round((L.b+delta)*2)/2; L.b=Math.max(-7,Math.min(7,L.b)); const bid=dragLine===1?'b1':'b2'; document.getElementById(`${bid}-sl`).value=L.b; document.getElementById(`${bid}-vl`).value=L.b; lastWY=curWY; update(); }, {passive:false});
+  canvas.addEventListener('touchend', () => { dragLine=null; isDragging=false; });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  update();
+  resize();
+  </script>
+</body>
+</html>
