@@ -350,16 +350,27 @@
   const canvas  = document.getElementById('xray-canvas');
   const ctx     = canvas.getContext('2d');
 
-  // View bounds — updated per family before draw
+  // View bounds — recomputed every draw using uniform square scale
   let VIEW = { xMin: -8, xMax: 8, yMin: -6, yMax: 6 };
 
-  function getView() {
+  // Compute VIEW so that x and y use the SAME pixels-per-unit scale.
+  // minSpan = minimum world-units visible in the shorter canvas dimension.
+  // cx/cy = world-coordinate center of the view.
+  function computeView(W, H) {
     const fam = state.family;
-    if (fam === 'poly') return { xMin:-7, xMax:7, yMin:-18, yMax:18 };
-    if (fam === 'exp')  return { xMin:-5, xMax:8, yMin:-7,  yMax:12 };
-    if (fam === 'log')  return { xMin:-4, xMax:9, yMin:-7,  yMax:7  };
-    if (fam === 'sin' || fam === 'cos') return { xMin:-8, xMax:8, yMin:-6, yMax:6 };
-    return { xMin:-8, xMax:8, yMin:-7, yMax:7 };
+    // Shift center for asymmetric families
+    let cx = 0, cy = 0;
+    if (fam === 'exp') { cx = 1;  cy = 2; }
+    if (fam === 'log') { cx = 2;  cy = 0; }
+
+    const minSpan = 14; // world units to show in the shorter dimension
+    const scale   = Math.min(W, H) / minSpan; // px per world unit — same for x and y
+    return {
+      xMin: cx - W / (2 * scale),
+      xMax: cx + W / (2 * scale),
+      yMin: cy - H / (2 * scale),
+      yMax: cy + H / (2 * scale),
+    };
   }
 
   function resize() {
@@ -530,9 +541,9 @@
 
   // ── Draw ───────────────────────────────────────────────────────────────────
   function draw() {
-    VIEW = getView();
     const W = canvas.width  / DPR;
     const H = canvas.height / DPR;
+    VIEW = computeView(W, H);
     ctx.save();
     ctx.scale(DPR, DPR);
     ctx.fillStyle = '#f6f1e4';
@@ -564,18 +575,20 @@
     ctx.beginPath(); ctx.moveTo(0,oy);  ctx.lineTo(W,oy);  ctx.stroke();
     ctx.beginPath(); ctx.moveTo(ox,0);  ctx.lineTo(ox,H);  ctx.stroke();
 
-    // Axis tick labels
+    // Axis tick labels — step adapts to current view span
     ctx.fillStyle = '#6b6357';
     ctx.font = `${10}px 'JetBrains Mono', monospace`;
-    const xStep = VIEW.xMax > 7 ? 2 : 1;
-    const yStep = VIEW.yMax > 7 ? 4 : 2;
+    const xSpan = VIEW.xMax - VIEW.xMin;
+    const ySpan = VIEW.yMax - VIEW.yMin;
+    const xStep = xSpan > 24 ? 4 : xSpan > 12 ? 2 : 1;
+    const yStep = ySpan > 24 ? 4 : ySpan > 12 ? 2 : 1;
     for (let gx=Math.ceil(VIEW.xMin); gx<=VIEW.xMax; gx+=xStep) {
       if (gx===0) continue;
       const [px] = w2c(gx,0,W,H);
       ctx.strokeStyle='#6b6357'; ctx.lineWidth=1;
       ctx.beginPath(); ctx.moveTo(px,oy-3); ctx.lineTo(px,oy+3); ctx.stroke();
       ctx.textAlign='center';
-      if (Math.abs(gx)%2===0 || xStep===1) ctx.fillText(gx, px, oy+14);
+      ctx.fillText(gx, px, oy+14);
     }
     for (let gy=Math.ceil(VIEW.yMin); gy<=VIEW.yMax; gy+=yStep) {
       if (gy===0) continue;
