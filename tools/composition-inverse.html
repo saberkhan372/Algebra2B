@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composition &amp; Inverse Lab — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    @media (max-width: 900px) { html, body { overflow: auto; } }
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    .canvas-wrap { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+    #ci-canvas {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      display: block; cursor: ew-resize;
+    }
+
+    /* ── Mode tabs ───────────────────────────────────────────── */
+    .mode-row { display: flex; gap: 3px; }
+    .mode-btn {
+      flex: 1; padding: 5px 3px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2);
+      cursor: pointer; text-align: center;
+    }
+    .mode-btn:hover:not(.active) { background: var(--paper-3); }
+    .mode-btn.active { background: var(--ink-2); color: var(--paper); border-color: var(--ink-2); }
+
+    /* ── Function selects ────────────────────────────────────── */
+    .fn-label {
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      font-weight: 700; color: var(--ink-soft);
+      text-transform: uppercase; margin-bottom: 2px;
+    }
+    .fn-select {
+      width: 100%; padding: 4px 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper); color: var(--ink); cursor: pointer;
+    }
+    .fn-select:focus { outline: none; border-color: var(--accent); }
+
+    /* ── Slider row ──────────────────────────────────────────── */
+    .slider-grid {
+      display: grid; grid-template-columns: 54px 1fr 46px;
+      gap: 4px 8px; align-items: center;
+    }
+    .param-lbl {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      font-style: italic; font-weight: 700;
+    }
+    .dyn-val[type=number] {
+      width: 44px; border: none;
+      border-bottom: 1.5px solid var(--ink-soft); border-radius: 0;
+      background: transparent;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      color: var(--ink); text-align: center; padding: 1px 2px;
+      -moz-appearance: textfield;
+    }
+    .dyn-val::-webkit-outer-spin-button,
+    .dyn-val::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .dyn-val:focus { outline: none; border-bottom-color: var(--accent); }
+
+    /* ── Flow chain ──────────────────────────────────────────── */
+    .flow-chain { display: flex; flex-direction: column; gap: 0; margin-top: 10px; }
+    .flow-node {
+      padding: 6px 10px;
+      border: 1.5px solid var(--ink-soft); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      text-align: center; background: var(--paper-2);
+    }
+    .flow-node.result { background: var(--highlight); border-color: var(--accent); }
+    .flow-arrow {
+      text-align: center; padding: 1px 0;
+      font-family: 'Patrick Hand', cursive; font-size: 11px;
+      color: var(--ink-soft); line-height: 1.3;
+    }
+
+    /* ── Chips ───────────────────────────────────────────────── */
+    .chips-row { display: flex; flex-wrap: wrap; gap: 4px; }
+    .feat-chip {
+      padding: 2px 8px; border-radius: 3px; border: 1.5px solid var(--ink-soft);
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+    }
+
+    /* ── Eq bar ──────────────────────────────────────────────── */
+    .eq-bar {
+      padding: 7px 12px;
+      background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2);
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+      flex-wrap: wrap; min-height: 34px;
+    }
+
+    /* ── Misc ────────────────────────────────────────────────── */
+    .insight-box { background: var(--highlight); border-radius: 4px; padding: 10px 12px; margin-top: 6px; }
+    .insight-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-2); text-transform: uppercase; margin-bottom: 4px; }
+    .insight-txt { font-family: 'Patrick Hand', cursive; font-size: 13px; color: var(--ink); line-height: 1.4; }
+    .sec-lbl { font-family: 'Patrick Hand', cursive; font-size: 10px; font-weight: 700; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .swap-btn {
+      width: 100%; margin-top: 5px; padding: 4px;
+      font-family: 'Patrick Hand', cursive; font-size: 12px;
+      border: 1.5px solid var(--ink-soft); border-radius: 3px;
+      background: var(--paper-2); color: var(--ink-2); cursor: pointer;
+    }
+    .swap-btn:hover { background: var(--paper-3); }
+    .restrict-note {
+      margin-top: 5px; font-family: 'Patrick Hand', cursive; font-size: 12px;
+      color: #c04040; min-height: 16px;
+    }
+    .hint-bar { padding: 4px 12px; font-family: 'Patrick Hand', cursive; font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
+
+    @media (max-width: 900px) {
+      .tool-page { flex-direction: column; }
+      .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
+      .canvas-wrap { min-height: 280px; }
+    }
+  </style>
+</head>
+<body class="paper-grid">
+
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="../index.html">home</a>
+      <a href="../map.html">map</a>
+      <a href="../about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="tool-page" style="display:flex;">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="tool-sidebar sk-box"
+           style="width:296px; display:flex; flex-direction:column; gap:0; padding:0; flex-shrink:0; overflow-y:auto;">
+
+      <!-- Header -->
+      <div style="padding:10px 13px 8px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="f-display" style="font-size:19px; line-height:1;">Composition &amp; Inverse</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+          compose two functions · flip to find the inverse
+        </div>
+        <div class="f-type" style="font-size:11px; margin-top:4px;">
+          <a href="../u4.html" style="color:var(--ink-soft);">← U4 · Functions</a>
+        </div>
+      </div>
+
+      <!-- Mode tabs -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">mode</div>
+        <div class="mode-row">
+          <button class="mode-btn active" data-mode="compose">f∘g Compose</button>
+          <button class="mode-btn"        data-mode="inverse">f⁻¹ Inverse</button>
+        </div>
+      </div>
+
+      <!-- Dynamic controls -->
+      <div id="ctrl" style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft); flex-shrink:0;"></div>
+
+      <!-- Properties chips -->
+      <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
+        <div class="sec-lbl">properties</div>
+        <div class="chips-row" id="chips"></div>
+      </div>
+
+      <!-- Mr. K says -->
+      <div style="padding:9px 13px; flex:1;">
+        <div class="sec-lbl">mr. k says</div>
+        <div class="insight-box">
+          <div class="insight-lbl">key idea</div>
+          <div class="insight-txt" id="insight">Choose a mode to get started.</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ── Main ────────────────────────────────────────────────── -->
+    <main style="display:flex; flex-direction:column; flex:1; overflow:hidden; min-width:0;">
+      <div class="eq-bar"><span id="eqd">—</span></div>
+      <div class="canvas-wrap">
+        <canvas id="ci-canvas"></canvas>
+      </div>
+      <div class="hint-bar" id="hint">drag left/right on canvas to set x</div>
+    </main>
+  </div>
+
+  <script>
+  // ── Constants ─────────────────────────────────────────────────────────────
+  const DPR    = window.devicePixelRatio || 1;
+  const TAU    = Math.PI * 2;
+  const canvas = document.getElementById('ci-canvas');
+  const ctx    = canvas.getContext('2d');
+  let   VIEW   = { xMin:-7, xMax:7, yMin:-5, yMax:5 };
+
+  // ── Function library ──────────────────────────────────────────────────────
+  const FUNS = [
+    { id:'lin',   label:'2x + 1',  fn:x=>2*x+1,           dom:()=>true,    inv:x=>(x-1)/2,         iLabel:'(x−1)/2',  iDom:()=>true,    restrict:null },
+    { id:'third', label:'x/3',     fn:x=>x/3,              dom:()=>true,    inv:x=>3*x,              iLabel:'3x',       iDom:()=>true,    restrict:null },
+    { id:'quad',  label:'x²',      fn:x=>x*x,              dom:x=>x>=0,     inv:x=>Math.sqrt(x),     iLabel:'√x',       iDom:x=>x>=0,     restrict:'x ≥ 0' },
+    { id:'cube',  label:'x³',      fn:x=>x*x*x,            dom:()=>true,    inv:x=>Math.cbrt(x),     iLabel:'∛x',       iDom:()=>true,    restrict:null },
+    { id:'sqrt',  label:'√x',      fn:x=>Math.sqrt(x),     dom:x=>x>=0,     inv:x=>x*x,              iLabel:'x²',       iDom:x=>x>=0,     restrict:'x ≥ 0' },
+    { id:'exp2',  label:'2ˣ',      fn:x=>Math.pow(2,x),   dom:()=>true,    inv:x=>Math.log2(x),     iLabel:'log₂x',    iDom:x=>x>0,      restrict:null },
+    { id:'recip', label:'1/x',     fn:x=>1/x,              dom:x=>x!==0,    inv:x=>1/x,              iLabel:'1/x',      iDom:x=>x!==0,    restrict:'x ≠ 0', selfInv:true },
+  ];
+
+  const getF = id => FUNS.find(f => f.id === id);
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  const S = {
+    mode: 'compose',
+    fId:  'lin',
+    gId:  'quad',
+    x:    2,
+    a:    2,     // inverse mode draggable x
+  };
+
+  // ── View ──────────────────────────────────────────────────────────────────
+  function computeView(W, H) {
+    const sc = W / 14;
+    return { xMin:-W/(2*sc), xMax:W/(2*sc), yMin:-H/(2*sc), yMax:H/(2*sc) };
+  }
+
+  function w2c(wx, wy, W, H) {
+    return [
+      (wx - VIEW.xMin) / (VIEW.xMax - VIEW.xMin) * W,
+      H - (wy - VIEW.yMin) / (VIEW.yMax - VIEW.yMin) * H,
+    ];
+  }
+
+  function c2wx(px, W) {
+    return VIEW.xMin + (px / W) * (VIEW.xMax - VIEW.xMin);
+  }
+
+  function resize() {
+    const wrap = canvas.parentElement;
+    canvas.width  = wrap.clientWidth  * DPR;
+    canvas.height = wrap.clientHeight * DPR;
+    draw();
+  }
+
+  // ── Draw helpers ──────────────────────────────────────────────────────────
+  function drawBg(W, H) {
+    ctx.fillStyle = '#f6f1e4';
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawGrid(W, H) {
+    ctx.strokeStyle = 'rgba(100,90,70,0.12)'; ctx.lineWidth = 1; ctx.setLineDash([]);
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x++) {
+      const [px] = w2c(x, 0, W, H);
+      ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+    }
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y++) {
+      const [, py] = w2c(0, y, W, H);
+      ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+    }
+  }
+
+  function drawAxes(W, H) {
+    const [ox, oy] = w2c(0, 0, W, H);
+    ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, H); ctx.lineTo(ox, 0); ctx.stroke();
+    const step = (VIEW.xMax - VIEW.xMin) > 20 ? 4 : (VIEW.xMax - VIEW.xMin) > 12 ? 2 : 1;
+    ctx.fillStyle = 'rgba(50,40,20,0.5)'; ctx.font = '11px "JetBrains Mono",monospace';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for (let x = Math.ceil(VIEW.xMin); x <= VIEW.xMax; x += step) {
+      if (x === 0) continue;
+      const [px] = w2c(x, 0, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3); ctx.stroke();
+      ctx.fillText(x, px, oy + 5);
+    }
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    for (let y = Math.ceil(VIEW.yMin); y <= VIEW.yMax; y += step) {
+      if (y === 0) continue;
+      const [, py] = w2c(0, y, W, H);
+      ctx.strokeStyle = '#3a3020'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(ox - 3, py); ctx.lineTo(ox + 3, py); ctx.stroke();
+      ctx.fillText(y, ox - 6, py);
+    }
+  }
+
+  function plotCurve(fn, dom, col, W, H, dash) {
+    const steps = Math.round(W * 2);
+    let started = false;
+    ctx.beginPath();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.2;
+    if (dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+    for (let i = 0; i <= steps; i++) {
+      const wx = VIEW.xMin + i * (VIEW.xMax - VIEW.xMin) / steps;
+      if (!dom(wx)) { started = false; continue; }
+      const wy = fn(wx);
+      if (!isFinite(wy) || Math.abs(wy) > (VIEW.yMax - VIEW.yMin) * 4) { started = false; continue; }
+      const [px, py] = w2c(wx, wy, W, H);
+      if (!started) { ctx.moveTo(px, py); started = true; } else ctx.lineTo(px, py);
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  function dot(wx, wy, col, label, W, H) {
+    if (!isFinite(wx) || !isFinite(wy)) return;
+    if (wy < VIEW.yMin - 0.5 || wy > VIEW.yMax + 0.5) return;
+    const [px, py] = w2c(wx, wy, W, H);
+    ctx.beginPath(); ctx.arc(px, py, 6, 0, TAU);
+    ctx.fillStyle = '#f6f1e4'; ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(px, py, 3, 0, TAU);
+    ctx.fillStyle = col; ctx.fill();
+    if (label) {
+      ctx.font = 'bold 12px "Patrick Hand",cursive';
+      ctx.fillStyle = col;
+      ctx.textAlign = wx >= 0 ? 'left' : 'right';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, px + (wx >= 0 ? 11 : -11), py - 13);
+    }
+  }
+
+  function canvasLegend(lines, W) {
+    ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+    lines.forEach(([text, col], i) => {
+      ctx.font = 'bold 12px "Patrick Hand",cursive';
+      ctx.fillStyle = col;
+      ctx.fillText(text, 10, 8 + i * 18);
+    });
+  }
+
+  // ── Mode: Compose ─────────────────────────────────────────────────────────
+  function drawCompose(W, H) {
+    const F = getF(S.fId), G = getF(S.gId);
+
+    // f∘g: apply g first, then f
+    plotCurve(
+      x => F.fn(G.fn(x)),
+      x => G.dom(x) && F.dom(G.fn(x)),
+      '#7c4db5', W, H
+    );
+    // g∘f: apply f first, then g
+    plotCurve(
+      x => G.fn(F.fn(x)),
+      x => F.dom(x) && G.dom(F.fn(x)),
+      '#d94f2a', W, H
+    );
+
+    // Vertical cursor at S.x
+    const [cx] = w2c(S.x, 0, W, H);
+    ctx.strokeStyle = 'rgba(60,50,30,0.22)'; ctx.lineWidth = 1;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Dots at S.x
+    const x  = S.x;
+    const gx = G.dom(x) ? G.fn(x) : NaN;
+    const fog = isFinite(gx) && F.dom(gx) ? F.fn(gx) : NaN;
+    const fx  = F.dom(x) ? F.fn(x) : NaN;
+    const gof = isFinite(fx) && G.dom(fx) ? G.fn(fx) : NaN;
+    dot(x, fog, '#7c4db5', `f∘g = ${n(fog)}`, W, H);
+    dot(x, gof, '#d94f2a', `g∘f = ${n(gof)}`, W, H);
+
+    canvasLegend([
+      [`— f(g(x))  f = ${F.label}, g = ${G.label}`, '#7c4db5'],
+      [`— g(f(x))  g = ${G.label}, f = ${F.label}`, '#d94f2a'],
+    ], W);
+  }
+
+  // ── Mode: Inverse ─────────────────────────────────────────────────────────
+  function drawInverse(W, H) {
+    const F = getF(S.fId);
+
+    // y = x  (reflection line)
+    plotCurve(x => x, () => true, 'rgba(100,90,70,0.38)', W, H, [7, 5]);
+
+    // f(x)
+    plotCurve(F.fn, F.dom, '#7c4db5', W, H);
+
+    // f⁻¹(x)
+    plotCurve(F.inv, F.iDom, '#d94f2a', W, H);
+
+    // y=x label
+    const tx = Math.min(VIEW.xMax - 1.2, 4);
+    const [lx, ly] = w2c(tx, tx, W, H);
+    ctx.font = '11px "Patrick Hand",cursive';
+    ctx.fillStyle = 'rgba(80,70,50,0.55)';
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText('y = x', lx + 5, ly - 9);
+
+    // Draggable point (a, f(a)) on f
+    const a = S.a;
+    if (F.dom(a)) {
+      const fa = F.fn(a);
+      dot(a, fa, '#7c4db5', `(${n(a)}, ${n(fa)})`, W, H);
+
+      // Mirror point (f(a), a) on f⁻¹
+      if (isFinite(fa) && F.iDom(fa)) {
+        dot(fa, a, '#d94f2a', `(${n(fa)}, ${n(a)})`, W, H);
+        // Dashed connector
+        const [p1x, p1y] = w2c(a, fa, W, H);
+        const [p2x, p2y] = w2c(fa, a,  W, H);
+        ctx.strokeStyle = 'rgba(100,80,50,0.3)'; ctx.lineWidth = 1;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
+
+    canvasLegend([
+      [`— f(x) = ${F.label}`,    '#7c4db5'],
+      [`— f⁻¹(x) = ${F.iLabel}`, '#d94f2a'],
+    ], W);
+  }
+
+  // ── Draw ──────────────────────────────────────────────────────────────────
+  function draw() {
+    const W = canvas.width / DPR, H = canvas.height / DPR;
+    VIEW = computeView(W, H);
+    ctx.save(); ctx.scale(DPR, DPR);
+    drawBg(W, H); drawGrid(W, H); drawAxes(W, H);
+    if (S.mode === 'compose') drawCompose(W, H);
+    else                      drawInverse(W, H);
+    ctx.restore();
+  }
+
+  // ── Formatters ────────────────────────────────────────────────────────────
+  function n(v, d = 2) { return isFinite(v) ? parseFloat(v.toFixed(d)).toString() : '—'; }
+
+  function chip(text, col) {
+    return `<span class="feat-chip" style="background:${col}18;border-color:${col}55;color:${col};">${text}</span>`;
+  }
+
+  // ── UI updaters ───────────────────────────────────────────────────────────
+  function updateChips() {
+    const area = document.getElementById('chips');
+    let   html = '';
+
+    if (S.mode === 'compose') {
+      const F = getF(S.fId), G = getF(S.gId), x = S.x;
+      const gx  = G.dom(x) ? G.fn(x) : NaN;
+      const fog = isFinite(gx) && F.dom(gx) ? F.fn(gx) : NaN;
+      const fx  = F.dom(x) ? F.fn(x) : NaN;
+      const gof = isFinite(fx) && G.dom(fx) ? G.fn(fx) : NaN;
+      html += chip(`f = ${F.label}`, '#7c4db5');
+      html += chip(`g = ${G.label}`, '#d94f2a');
+      if (isFinite(fog)) html += chip(`f∘g(${n(x,1)}) = ${n(fog)}`, '#7c4db5');
+      if (isFinite(gof)) html += chip(`g∘f(${n(x,1)}) = ${n(gof)}`, '#d94f2a');
+      const same = isFinite(fog) && isFinite(gof) && Math.abs(fog - gof) < 0.01;
+      html += chip(same ? '= equal at this x' : '≠ order matters', same ? '#2a7f4f' : '#c04040');
+
+    } else {
+      const F = getF(S.fId), a = S.a;
+      html += chip(`f(x) = ${F.label}`,       '#7c4db5');
+      html += chip(`f⁻¹(x) = ${F.iLabel}`,   '#d94f2a');
+      if (F.restrict) html += chip(`domain: ${F.restrict}`, '#666');
+      if (F.selfInv)  html += chip('f is its own inverse!', '#2a7f4f');
+      if (F.dom(a)) {
+        const fa = F.fn(a);
+        html += chip(`(${n(a,1)}, ${n(fa,1)}) ↔ (${n(fa,1)}, ${n(a,1)})`, '#555');
+      }
+    }
+    area.innerHTML = html;
+  }
+
+  function updateEqBar() {
+    const el = document.getElementById('eqd');
+    if (S.mode === 'compose') {
+      const F = getF(S.fId), G = getF(S.gId);
+      el.innerHTML =
+        `<span style="color:#7c4db5;font-weight:700;">f(g(x))</span>` +
+        `&nbsp;— f = ${F.label}, g = ${G.label}` +
+        `&nbsp;&nbsp;·&nbsp;&nbsp;` +
+        `<span style="color:#d94f2a;font-weight:700;">g(f(x))</span>` +
+        `&nbsp;shows the reversed order`;
+    } else {
+      const F = getF(S.fId);
+      el.innerHTML =
+        `<span style="color:#7c4db5;font-weight:700;">f(x) = ${F.label}</span>` +
+        `&nbsp;&nbsp;↔&nbsp;&nbsp;` +
+        `<span style="color:#d94f2a;font-weight:700;">f⁻¹(x) = ${F.iLabel}</span>` +
+        `&nbsp;— reflected over y = x`;
+    }
+  }
+
+  function updateFlowChain() {
+    const el = document.getElementById('flow-chain');
+    if (!el) return;
+    const F = getF(S.fId), G = getF(S.gId), x = S.x;
+    const gx  = G.dom(x) ? G.fn(x) : NaN;
+    const fog = isFinite(gx) && F.dom(gx) ? F.fn(gx) : NaN;
+    el.innerHTML = `
+      <div class="flow-node">
+        <span style="color:var(--ink-soft); font-size:10px;">INPUT</span><br>
+        x = <strong>${n(x, 2)}</strong>
+      </div>
+      <div class="flow-arrow">↓&nbsp; g(x) = ${G.label}</div>
+      <div class="flow-node" style="border-color:#d94f2a88;">
+        g(x) = <strong style="color:#d94f2a;">${n(gx, 3)}</strong>
+      </div>
+      <div class="flow-arrow">↓&nbsp; f(·) = ${F.label}</div>
+      <div class="flow-node result">
+        <span style="color:var(--ink-soft); font-size:10px;">OUTPUT</span><br>
+        f(g(x)) = <strong style="color:#7c4db5;">${n(fog, 3)}</strong>
+      </div>`;
+  }
+
+  function updateInsight() {
+    const el = document.getElementById('insight');
+    if (S.mode === 'compose') {
+      const F = getF(S.fId), G = getF(S.gId), x = S.x;
+      const gx = G.dom(x) ? G.fn(x) : NaN;
+      const fog = isFinite(gx) && F.dom(gx) ? F.fn(gx) : NaN;
+      const fx  = F.dom(x) ? F.fn(x) : NaN;
+      const gof = isFinite(fx) && G.dom(fx) ? G.fn(fx) : NaN;
+      if (S.fId === S.gId) {
+        el.textContent = `When f and g are the same function, f∘g = g∘f always. That's a special case. Try using two different functions!`;
+      } else if (isFinite(fog) && isFinite(gof) && Math.abs(fog - gof) < 0.01) {
+        el.textContent = `Equal here! But try moving x or swapping functions — usually f∘g ≠ g∘f. The order you apply functions almost always matters.`;
+      } else {
+        el.textContent = `f∘g means "run x through g first, then send the result into f." Reversing the order gives a completely different answer. That's why we write f∘g, not just fg.`;
+      }
+    } else {
+      const F = getF(S.fId);
+      if (F.selfInv) {
+        el.textContent = `1/x is its own inverse — flip it twice and you're back where you started. Very rare! Most inverses are a different function entirely.`;
+      } else if (F.restrict) {
+        el.textContent = `${F.label} isn't one-to-one without the restriction ${F.restrict}. Two x-values can give the same output — so the inverse can't tell which to return. Restrict the domain and it works perfectly.`;
+      } else {
+        el.textContent = `Every point (a, b) on f flips to (b, a) on f⁻¹. That's the reflection over y = x. Notice the two dots are always mirrors of each other across that line.`;
+      }
+    }
+  }
+
+  // ── Build controls ────────────────────────────────────────────────────────
+  function buildControls() {
+    const ctrl = document.getElementById('ctrl');
+    const hint = document.getElementById('hint');
+    const opts = FUNS.map(f => `<option value="${f.id}">${f.label}</option>`).join('');
+
+    if (S.mode === 'compose') {
+      ctrl.innerHTML = `
+        <div class="sec-lbl">functions</div>
+        <div style="margin-bottom:6px;">
+          <div class="fn-label" style="color:#7c4db5;">f(x) — outer</div>
+          <select class="fn-select" id="f-sel">${opts}</select>
+        </div>
+        <div>
+          <div class="fn-label" style="color:#d94f2a;">g(x) — inner</div>
+          <select class="fn-select" id="g-sel">${opts}</select>
+        </div>
+        <button class="swap-btn" id="swap-btn">⇄ swap f and g</button>
+        <div style="margin-top:10px;">
+          <div class="sec-lbl">input value x</div>
+          <div class="slider-grid">
+            <div class="param-lbl" style="color:#3a3020;">x</div>
+            <input type="range" min="-5" max="5" step="0.25" value="${S.x}" id="x-sl">
+            <input type="number" class="dyn-val" id="x-vl" value="${S.x}" min="-5" max="5" step="0.25">
+          </div>
+        </div>
+        <div id="flow-chain" class="flow-chain"></div>`;
+
+      ctrl.querySelector('#f-sel').value = S.fId;
+      ctrl.querySelector('#g-sel').value = S.gId;
+
+      ctrl.querySelector('#f-sel').addEventListener('change', e => { S.fId = e.target.value; update(); });
+      ctrl.querySelector('#g-sel').addEventListener('change', e => { S.gId = e.target.value; update(); });
+      ctrl.querySelector('#swap-btn').addEventListener('click', () => {
+        [S.fId, S.gId] = [S.gId, S.fId];
+        ctrl.querySelector('#f-sel').value = S.fId;
+        ctrl.querySelector('#g-sel').value = S.gId;
+        update();
+      });
+      bindSl('x-sl', 'x-vl', v => { S.x = v; updateFlowChain(); update(); });
+      hint.textContent = 'drag left/right on canvas to set x';
+
+    } else {
+      ctrl.innerHTML = `
+        <div class="sec-lbl">function f(x)</div>
+        <select class="fn-select" id="f-sel">${opts}</select>
+        <div class="restrict-note" id="rnote"></div>
+        <div style="margin-top:10px;">
+          <div class="sec-lbl">drag point — a</div>
+          <div class="slider-grid">
+            <div class="param-lbl" style="color:#7c4db5;">a</div>
+            <input type="range" min="-5" max="5" step="0.25" value="${S.a}" id="a-sl">
+            <input type="number" class="dyn-val" id="a-vl" value="${S.a}" min="-5" max="5" step="0.25">
+          </div>
+        </div>`;
+
+      ctrl.querySelector('#f-sel').value = S.fId;
+      ctrl.querySelector('#f-sel').addEventListener('change', e => {
+        S.fId = e.target.value; refreshRestrictNote(); update();
+      });
+      bindSl('a-sl', 'a-vl', v => { S.a = v; update(); });
+      refreshRestrictNote();
+      hint.textContent = 'drag the purple dot along f(x) to see the mirror';
+    }
+  }
+
+  function refreshRestrictNote() {
+    const el = document.getElementById('rnote');
+    if (!el) return;
+    const F = getF(S.fId);
+    el.textContent = F.restrict ? `⚠ domain restricted to ${F.restrict} for inverse to exist` : '';
+  }
+
+  function bindSl(slId, vlId, cb) {
+    const sl = document.getElementById(slId), vl = document.getElementById(vlId);
+    if (!sl) return;
+    sl.addEventListener('input', e => { const v = +e.target.value; vl.value = v; cb(v); });
+    vl.addEventListener('change', e => {
+      const v = Math.max(+sl.min, Math.min(+sl.max, +e.target.value || 0));
+      vl.value = v; sl.value = v; cb(v);
+    });
+  }
+
+  // ── Canvas interaction ────────────────────────────────────────────────────
+  let dragging = false;
+
+  function handleDrag(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const src  = e.touches ? e.touches[0] : e;
+    const px   = src.clientX - rect.left;
+    const W    = canvas.width / DPR;
+    const wx   = Math.round(c2wx(px, W) * 4) / 4; // snap to 0.25
+
+    if (S.mode === 'compose') {
+      S.x = Math.max(-5, Math.min(5, wx));
+      const sl = document.getElementById('x-sl'), vl = document.getElementById('x-vl');
+      if (sl) { sl.value = S.x; vl.value = S.x; }
+      updateFlowChain();
+    } else {
+      S.a = Math.max(-5, Math.min(5, wx));
+      const sl = document.getElementById('a-sl'), vl = document.getElementById('a-vl');
+      if (sl) { sl.value = S.a; vl.value = S.a; }
+    }
+    update();
+  }
+
+  canvas.addEventListener('mousedown',  e => { dragging = true;  handleDrag(e); });
+  canvas.addEventListener('mousemove',  e => { if (dragging) handleDrag(e); });
+  canvas.addEventListener('mouseup',    ()  => { dragging = false; });
+  canvas.addEventListener('mouseleave', ()  => { dragging = false; });
+  canvas.addEventListener('touchstart', e => { dragging = true;  handleDrag(e); }, { passive:false });
+  canvas.addEventListener('touchmove',  e => { if (dragging) handleDrag(e); },     { passive:false });
+  canvas.addEventListener('touchend',   ()  => { dragging = false; });
+
+  // ── Mode switch ───────────────────────────────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      S.mode = btn.dataset.mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+      buildControls();
+      update();
+    });
+  });
+
+  // ── Master update ─────────────────────────────────────────────────────────
+  function update() {
+    updateEqBar();
+    updateChips();
+    updateInsight();
+    if (S.mode === 'compose') updateFlowChain();
+    draw();
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  window.addEventListener('resize', resize);
+  buildControls();
+  update();
+  resize();
+  </script>
+</body>
+</html>

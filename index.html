@@ -122,7 +122,7 @@
     <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
     <div class="nav-search">
       <span class="search-icon">🔎</span>
-      <input type="text" id="search-input" placeholder="search 45 tools..." autocomplete="off" />
+      <input type="text" id="search-input" placeholder="search 46 tools..." autocomplete="off" />
     </div>
     <div class="nav-links">
       <a href="index.html" class="active">home</a>
@@ -134,7 +134,7 @@
   <!-- Pacing banner -->
   <div class="pacing-banner">
     <span>🎉 Year complete!</span>
-    <span class="unit-label">All 8 units · 45 tools</span>
+    <span class="unit-label">All 8 units · 46 tools</span>
     <span>— explore anything ↗</span>
   </div>
 
@@ -278,6 +278,7 @@
       { id: 'qstd',  prev: 'parabola',     name: 'Quadratic Standard Form',         unit: 'U3', topic: 'Quadratics',  kind: 'visualizer', diff: 2, code: 'Qf', desc: 'Slide a, b, c and connect vertex, discriminant, and roots.',              href: 'tools/quadratic-standard.html' },
       { id: 'rex',   prev: 'rational',     name: 'Rational Expression Builder',     unit: 'U3', topic: 'Rationals',   kind: 'visualizer', diff: 2, code: 'Rx', desc: 'Build a rational expression and see its graph, domain, and holes.',               href: 'tools/rational-expressions.html' },
       { id: 'comp',  prev: 'parabola',     name: 'Complete the Square Trainer',     unit: 'U3', topic: 'Quadratics',  kind: 'practice',   diff: 2, code: 'Cs', desc: 'Step through completing the square at your own pace. Each step explained.',      href: 'tools/complete-square.html' },
+      { id: 'cinv',  prev: 'compinv',      name: 'Composition & Inverse Lab',      unit: 'U4', topic: 'Functions',   kind: 'explorer',   diff: 2, code: 'Ci', desc: 'Compose f and g two ways — watch f∘g and g∘f diverge. Flip to Inverse mode: drag a point on f and see its mirror on f⁻¹ over y = x.', href: 'tools/composition-inverse.html' },
       { id: 'ratx',  prev: 'exponent',     name: 'Rational Exponents Tower',        unit: 'U4', topic: 'Exponents',   kind: 'game',       diff: 3, code: 'Re', desc: 'Match x^(m/n) to its radical form. Stack your correct answers.',                  href: 'tools/rational-exponents.html' },
       { id: 'cubic', prev: 'cubic',        name: 'Cubic & Radical Grapher',         unit: 'U4', topic: 'Radicals',    kind: 'visualizer', diff: 3, code: 'Cr', desc: 'Compare cubic inflection points with square-root starting points.',           href: 'tools/cubic-radical.html' },
       { id: 'fcomp', prev: 'composition',  name: 'Composition Machine',             unit: 'U4', topic: 'Functions',   kind: 'visualizer', diff: 2, code: 'Cm', desc: 'Send x through f and g in order. Swap the order and compare.',             href: 'tools/composition.html' },
@@ -912,6 +913,29 @@
           // vertex dot
           ctx.fillStyle = '#7a2a8a';
           ctx.beginPath(); ctx.arc(ox + h*sc, oy - k*sc, 4, 0, Math.PI*2); ctx.fill();
+        },
+
+        compinv(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const ox = W/2, oy = H/2, sc = W/13;
+          grid(ctx, ox, oy, sc, W, H, 6);
+          axes(ctx, ox, oy, W, H);
+          // y=x line
+          ctx.strokeStyle='rgba(100,90,70,0.35)'; ctx.lineWidth=1; ctx.setLineDash([5,4]);
+          ctx.beginPath(); ctx.moveTo(ox-(oy/sc)*sc, oy+(oy/sc)*sc); ctx.lineTo(ox+(oy/sc)*sc, oy-(oy/sc)*sc); ctx.stroke(); ctx.setLineDash([]);
+          // f(x) = x³ (purple)
+          ctx.strokeStyle='#7c4db5'; ctx.lineWidth=2; ctx.beginPath(); let st=false;
+          for(let i=0;i<=W*2;i++){const wx=(-W/2+i*(W/(W*2)))/sc; const wy=wx*wx*wx; if(!isFinite(wy)||Math.abs(wy*sc)>H){st=false;continue;} const px=ox+wx*sc,py=oy-wy*sc; if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);} ctx.stroke();
+          // f⁻¹(x) = ∛x (orange)
+          ctx.strokeStyle='#d94f2a'; ctx.lineWidth=2; ctx.beginPath(); st=false;
+          for(let i=0;i<=W*2;i++){const wx=(-W/2+i*(W/(W*2)))/sc; const wy=Math.cbrt(wx); const px=ox+wx*sc,py=oy-wy*sc; if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);} ctx.stroke();
+          // Animated mirror-pair
+          const a=2.0*Math.sin(t*0.4)+0.3; const fa=a*a*a;
+          const mx=ox+a*sc, my=oy-fa*sc, mx2=ox+fa*sc, my2=oy-a*sc;
+          ctx.strokeStyle='rgba(100,80,50,0.3)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+          ctx.beginPath(); ctx.moveTo(mx,my); ctx.lineTo(mx2,my2); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle='#7c4db5'; ctx.beginPath(); ctx.arc(mx,my,4,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle='#d94f2a'; ctx.beginPath(); ctx.arc(mx2,my2,4,0,Math.PI*2); ctx.fill();
         },
 
         complex(ctx, W, H, t) {
