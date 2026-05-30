@@ -121,6 +121,8 @@
         { id: 'elim',   code: 'El', name: 'Elimination Race',           href: 'tools/elimination-race.html',    desc: 'Solve systems by elimination — race against yourself.' },
         { id: 'piece',  code: 'Pw', name: 'Piecewise Grapher',          href: 'tools/piecewise-grapher.html',   desc: 'Build piecewise rules and watch endpoints behave.' },
         { id: 'ineqx',  code: 'Iq', name: 'Inequality Region Explorer', href: 'tools/inequality-explorer.html', desc: 'Shade the solution region live. Click to test any point.' },
+        { id: 'ineqsol',code: 'Is', name: 'Inequality Solver',          href: 'tools/inequality-solver.html',   desc: 'Step-by-step — flip alert fires every time you divide by a negative.' },
+        { id: 'psform', code: 'Ps', name: 'Point-Slope Form Trainer',   href: 'tools/point-slope.html',         desc: 'Enter point + slope, two points, or find parallel/perp slope.' },
       ]
     },
     {
@@ -145,6 +147,9 @@
         { id: 'fcomp', code: 'Cm', name: 'Composition Machine',      href: 'tools/composition.html',            desc: 'Send x through f and g in order. Swap and compare.' },
         { id: 'cinv',  code: 'Ci', name: 'Composition & Inverse Lab',href: 'tools/composition-inverse.html',    desc: 'Compose f and g two ways — watch f∘g and g∘f diverge.' },
         { id: 'inv',   code: 'Iv', name: 'Inverse Function Revealer',href: 'tools/inverse-function.html',       desc: 'Reflect f and f⁻¹ over y = x and test one-to-one functions.' },
+        { id: 'absveq', code: 'Ae', name: 'Abs Value Equation Stepper', href: 'tools/abs-value-equations.html', desc: 'Isolate → two branches → solve each → check both. No-solution case included.' },
+        { id: 'fnote',  code: 'Fn', name: 'Function Notation Evaluator',href: 'tools/function-notation.html',   desc: 'Plug any value into f(x) — see each substitution step. Piecewise mode.' },
+        { id: 'domr',   code: 'Dr', name: 'Domain Restriction Sorter',  href: 'tools/domain-restriction.html', desc: 'Classify the restriction rule, solve the inequality, read interval notation.' },
       ]
     },
     {
@@ -157,6 +162,7 @@
         { id: 'ratx',   code: 'Rx', name: 'Rational Exponents Tower',    href: 'tools/rational-exponents.html',    desc: 'Match x^(m/n) to radical form. Stack correct answers.' },
         { id: 'imag',   code: 'Im', name: 'Imaginary Number Sandbox',    href: 'tools/imaginary-sandbox.html',     desc: 'Plot complex numbers. See what multiplying by i does.' },
         { id: 'cplane', code: 'Cp', name: 'Complex Number Explorer',     href: 'tools/complex-plane.html',         desc: 'Drag a+bi — see modulus, argument, conjugate live.' },
+        { id: 'liteq',  code: 'Le', name: 'Literal Equation Isolator',  href: 'tools/literal-equations.html',     desc: 'One occurrence: isolate directly. Multiple: factor the target out.' },
       ]
     },
     {
@@ -169,6 +175,7 @@
         { id: 'logp',      code: 'Lp', name: 'Log Properties Sandbox',   href: 'tools/log-properties.html',             desc: 'Expand, condense, and simplify logs step by step.' },
         { id: 'expeq',     code: 'Eq', name: 'Exponential Equation Solver',href: 'tools/exponential-equation-solver.html',desc: 'Same-base, log-both-sides, or ln — step by step.' },
         { id: 'growrace',  code: 'Gr', name: 'Growth Race',              href: 'tools/growth-race.html',                desc: 'log, √x, x, x², 2^x on one canvas. Live leaderboard.' },
+        { id: 'expstep',   code: 'Es', name: 'Exponential Equations Stepper', href: 'tools/exponential-equations.html', desc: 'Three lanes: same base, log both sides, or x on both sides.' },
       ]
     },
     {
@@ -193,6 +200,8 @@
         { id: 'ucwave', code: 'Uw', name: 'Unit Circle Wave Sync',     href: 'tools/unit-circle-wave.html',     desc: 'Circle height connected to wave height by a dashed line.' },
         { id: 'trigb',  code: 'Sg', name: 'Sine/Cosine Graph Builder', href: 'tools/sine-cosine-builder.html',  desc: 'Build amplitude, period, phase shift, and midline.' },
         { id: 'trigx',  code: 'Tg', name: 'Trig Function Explorer',    href: 'tools/trig-explorer.html',        desc: 'Slide a, b, h, k — amplitude, period, phase shift chips.' },
+        { id: 'cotrad', code: 'Co', name: 'Coterminal & Radians',       href: 'tools/coterminal-radian.html',    desc: 'Drill coterminal angles, then convert with dimensional analysis.' },
+        { id: 'scgraph',code: 'Sg', name: 'Sine / Cosine Graph Builder',href: 'tools/sincos-grapher.html',       desc: 'Trace the wave from unit-circle coordinates. Then shape it.' },
       ]
     },
     {
@@ -218,6 +227,12 @@
     { a: 'trans',     b: 'trigx',     label: 'a·f(b(x−h))+k rules apply identically to trig graphs' },
     { a: 'rfb',       b: 'xray',      label: 'rational function is one of the 9 families in X-Ray' },
     { a: 'poly',      b: 'quad',      label: 'a degree-2 polynomial IS the parabola' },
+    { a: 'absveq',   b: 'absv',      label: 'solving |expr|=k is where the V meets a horizontal line' },
+    { a: 'ineqsol',  b: 'ineqx',     label: '1-variable inequality vs shaded 2-variable region' },
+    { a: 'fnote',    b: 'piece',     label: 'f(x) notation — piecewise is f(x) with conditional rules' },
+    { a: 'domr',     b: 'cubic',     label: 'radical domain x ≥ h is visible as the starting point on the graph' },
+    { a: 'cotrad',   b: 'unitc',     label: 'coterminal angles and radians are defined on the unit circle' },
+    { a: 'expstep',  b: 'expeq',     label: 'two approaches to solving exponential equations — same goal' },
   ];
 
   // ── Build flat node map: id → {x, y, color, ...tool} ──────────────────────
