@@ -6,7 +6,7 @@ This document explains the repository structure, conventions, and patterns for a
 
 ## What the project is
 
-**Algebra 2 Playgrounds** is a fully static, zero-dependency, GitHub Pages site of 59 interactive math tools for an Algebra 2 classroom. There is no build step, no bundler, no framework, and no backend. Everything is plain HTML, CSS, and vanilla JavaScript.
+**Algebra 2 Playgrounds** is a fully static, zero-dependency, GitHub Pages site of 62 interactive math tools for an Algebra 2 classroom. There is no build step, no bundler, no framework, and no backend. Everything is plain HTML, CSS, and vanilla JavaScript.
 
 **Live site:** `https://saberkhan372.github.io/Algebra2B/`  
 **Local path:** `/Users/saberkhan/Documents/coding/Algebra2B`  
@@ -27,8 +27,8 @@ Algebra2B/
 ├── u9.html                 ← Statistics & Probability unit page
 ├── styles.css              ← Entire design system (board/print/wide-screen rules included)
 ├── manifest.json           ← PWA manifest
-├── sw.js                   ← Service worker — precaches all 59 tools + scripts
-├── tools/                  ← 59 standalone tool pages + 4 shared scripts
+├── sw.js                   ← Service worker — precaches all 62 tools + scripts
+├── tools/                  ← 62 standalone tool pages + shared scripts
 ├── tools/url-state.js      ← URL hash state: UrlState.load/save/auto/copyBtn
 ├── tools/progress.js       ← Visited badges, start-here, share button, print button
 ├── tools/related.js        ← "TRY NEXT" section — 3 related tools per tool
@@ -222,7 +222,7 @@ Included on the 19 tools that have `input[type="range"][id]` sliders. Silently e
 - Uses a separate `#r=` hash key — does not conflict with `UrlState`'s `#s=` key
 
 ### related.js
-- Embeds full 59-tool dataset (no API call)
+- Embeds full 62-tool dataset (no API call)
 - Detects current tool from URL, finds 3 related tools: same-unit different-kind first (explorers preferred), then same-topic cross-unit
 - Injects `TRY NEXT` section at bottom of `.tool-sidebar`
 - Handles both `/foo.html` and `/foo` URL formats
@@ -232,7 +232,7 @@ Included on the 19 tools that have `input[type="range"][id]` sliders. Silently e
 - **Enter board mode:** hides nav + chrome, expands canvas to 100vh, adds `body.board-mode` class for CSS scaling
 - **Info sidebars** (Key Ideas, HOW TO USE, TRY THIS) → hidden in board mode
 - **Control sidebars** (sliders, equations, family pickers) → kept visible. Detection selector: `input[type="range"], input[type="number"], canvas, select, .slider-grid, #slider-area, .family-grid, .piece-controls, #controls-area`
-- Injects `⊞ tools` button (shown in board mode, top-left) → opens full-screen panel listing all 59 tools grouped by unit as large tap targets
+- Injects `⊞ tools` button (shown in board mode, top-left) → opens full-screen panel listing all 62 tools grouped by unit as large tap targets
 - Syncs with native Fullscreen API; `Escape` exits board mode
 
 ---
@@ -309,6 +309,7 @@ var(--k-reference)  /* gray #5f5f5f */
 6. **Update `related.js`** — add the new tool to the `TOOLS` array embedded in that file (same 8 fields minus `prev` and `desc`).
 7. **PLAN.md** current state — update tool count and list.
 8. **sw.js** — add the new tool's path to `PRECACHE_URLS` and bump `CACHE_VERSION`.
+9. **Markdown docs** — update tool counts in `README.md`, `CODEBASE.md`, `.claude/project_overview.md`, `.claude/memory.md`, `memory/project_overview.md`.
 9. **Verify**: run the inline-script parse check from `.claude/design_constraints.md`.
 
 ---
