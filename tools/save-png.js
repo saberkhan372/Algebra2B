@@ -42,7 +42,7 @@
     document.body.removeChild(a);
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function attachButtons() {
     document.querySelectorAll('canvas[id]').forEach(function (canvas) {
       const WRAPPER_SELECTOR =
         '.widget-container, .canvas-wrapper, .canvas-wrap, .canvas-panel';
@@ -72,5 +72,11 @@
         canvas.insertAdjacentElement('afterend', btn);
       }
     });
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachButtons);
+  } else {
+    attachButtons();
+  }
 })();
