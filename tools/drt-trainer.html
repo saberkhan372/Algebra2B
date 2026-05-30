@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distance · Rate · Time Trainer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* Problem picker */
+    .prob-picker { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .prob-btn {
+      padding:6px 14px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); font-family:'Permanent Marker',cursive; font-size:12px;
+      cursor:pointer; transition:all .12s;
+    }
+    .prob-btn.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+    .prob-btn:hover:not(.active) { border-color:var(--accent); }
+
+    /* Scenario card */
+    .scenario-card {
+      padding:14px 16px; background:var(--paper-2); border:2px solid var(--ink-2);
+      border-radius:6px; margin-bottom:10px;
+    }
+    .scenario-label { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:6px; }
+    .scenario-text { font-family:var(--f-body); font-size:14px; color:var(--ink); line-height:1.7; }
+    .scenario-goal { margin-top:8px; font-family:'Permanent Marker',cursive; font-size:12px; color:var(--accent); }
+
+    /* Step cards */
+    .step-card {
+      border-radius:6px; border:2px solid var(--ink-2); padding:12px 14px;
+      margin-bottom:10px; opacity:0; pointer-events:none; transition:opacity .25s;
+    }
+    .step-card.revealed { opacity:1; pointer-events:auto; }
+    .s-picture  { background:#fdf0e0; border-color:#c07820; }
+    .s-define   { background:#dde9f6; border-color:#2a6fb4; }
+    .s-table    { background:var(--paper-2); border-color:var(--ink-2); }
+    .s-equations{ background:#e8f4ec; border-color:#2a8a4a; }
+    .s-solve    { background:#f0eaf5; border-color:#7a2a8a; }
+    .s-answer   { background:var(--highlight); border-color:#c8a000; }
+
+    .step-num  { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:3px; text-transform:uppercase; }
+    .step-lbl  { font-family:var(--f-body); font-size:13px; color:var(--ink-2); margin-bottom:8px; }
+    .step-lbl strong { color:var(--ink); }
+    .step-note { font-family:var(--f-body); font-size:12px; color:var(--ink-soft); margin-top:8px; font-style:italic; }
+
+    /* DRT table */
+    .drt-table { width:100%; border-collapse:collapse; margin:8px 0; font-family:'JetBrains Mono',monospace; font-size:13px; }
+    .drt-table th {
+      background:var(--ink); color:var(--paper); padding:6px 10px; text-align:center;
+      font-family:'Permanent Marker',cursive; font-size:11px; letter-spacing:.5px;
+    }
+    .drt-table td {
+      border:1.5px solid var(--ink-2); padding:7px 10px; text-align:center;
+      background:var(--paper);
+    }
+    .drt-table tr.row-a td { background:#fdf0e0; }
+    .drt-table tr.row-b td { background:#dde9f6; }
+    .drt-table tr.row-sum td { background:#e8f4ec; font-weight:700; }
+    .drt-table .highlight { color:var(--accent); font-weight:700; }
+    .drt-table .row-lbl { font-family:'Permanent Marker',cursive; font-size:11px; text-align:left; }
+
+    /* Math expressions */
+    .math-block {
+      font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--ink);
+      line-height:2; margin:6px 0;
+    }
+    .math-arrow { color:var(--ink-soft); font-size:12px; margin:0 6px; }
+
+    /* Answer chip */
+    .answer-chip {
+      display:inline-block; padding:6px 16px; border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:16px;
+      background:#e8f4ec; border:2px solid #2a8a4a; color:#1a5a2a;
+      margin:4px 4px 4px 0;
+    }
+
+    /* Reveal button */
+    .reveal-btn {
+      width:100%; padding:10px; margin-top:4px;
+      background:var(--accent); color:#fff; border:none; border-radius:4px;
+      font-family:'Permanent Marker',cursive; font-size:14px;
+      cursor:pointer; transition:background .12s;
+    }
+    .reveal-btn:hover { background:#c03f1c; }
+    .reveal-btn:disabled { background:var(--ink-soft); cursor:default; }
+
+    /* Picture sketch area */
+    .sketch { font-family:'Patrick Hand',cursive; font-size:18px; text-align:center; padding:10px 0; color:var(--ink); line-height:1.8; }
+  </style>
+</head>
+<body class="paper-dots">
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Foundations</a></div>
+      <div class="tool-title f-display">Distance · Rate · Time Trainer</div>
+      <div class="tool-tagline f-hand">Draw a picture → define variables → fill in D = R × T → write equations → solve.</div>
+
+      <div class="prob-picker" id="prob-picker"></div>
+      <div id="scenario"></div>
+      <div id="stage"></div>
+      <button class="reveal-btn" id="reveal-btn" onclick="revealNext()">Show step 1 →</button>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:#fdf0e0; border-color:#c07820;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px; color:#c07820;">THE GOLDEN FORMULA</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:20px; text-align:center; padding:8px 0; color:var(--ink);">
+          D = R × T
+        </div>
+        <div class="f-hand" style="font-size:13px; color:var(--ink-2); line-height:1.7; margin-top:6px;">
+          <strong>D</strong>istance = <strong>R</strong>ate × <strong>T</strong>ime<br>
+          One row per traveler. Same trip means same time. Same distance means same D.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SETUP STRATEGY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.9; color:var(--ink-2);">
+          <span style="color:#c07820;">①</span> Draw a picture — label what moves where.<br>
+          <span style="color:#2a6fb4;">②</span> Define variables — name the unknowns.<br>
+          <span style="color:var(--ink-2);">③</span> Fill in the table — D, R, T for each row.<br>
+          <span style="color:#2a8a4a;">④</span> Write equations — one per row.<br>
+          <span style="color:#7a2a8a;">⑤</span> Solve — elimination usually works best.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#dde9f6; border-color:#2a6fb4;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px; color:#2a6fb4;">WITH/AGAINST PATTERN</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          Plane/wind or boat/current:<br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">
+            with → add speeds (P + W)<br>
+            against → subtract (P − W)
+          </span><br>
+          Same distance each way → set D equal and divide to find R.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">MR. K SAYS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          Always draw a picture first. Label which direction each person/vehicle is moving. If you can't draw it, you won't be able to write the equation.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">In P1, why are both distances 720 miles? What does "round trip" mean for D?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In P3, both cars use the same variable t. Why? What would happen if one car left earlier?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">In P4, Alex's time is t but Maria's is t+1. Set up a new catch-up problem where the head start is 2 hours instead of 1.</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="substitution-stepper.html">→ Substitution Stepper</a>
+        <a class="related-link f-hand" href="elimination-race.html">→ Elimination Race</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── Problem bank ──────────────────────────────────────────────────────────
+  const PROBLEMS = [
+    // ── P1: Plane + Wind ─────────────────────────────────────────────────
+    {
+      label: '✈ Plane + Wind',
+      type: 'drt',
+      scenario: 'A plane traveled 720 miles from City A to City B with a tailwind in 8 hours. The return trip against the headwind took 24 hours. Find the plane\'s speed in calm air and the wind speed.',
+      goal: 'Find: plane speed P and wind speed W',
+      steps: [
+        {
+          cls: 's-picture',
+          num: 'step 1 — draw a picture',
+          lbl: 'Sketch the two trips. Label the direction of the wind.',
+          body: `<div class="sketch">
+            City A ——→ 720 mi, 8 hrs, wind helps ——→ City B<br>
+            City A ←—— 720 mi, 24 hrs, wind fights ←—— City B
+          </div>`,
+          note: 'Same distance both ways. Different times because the wind changes effective speed.',
+        },
+        {
+          cls: 's-define',
+          num: 'step 2 — define variables',
+          lbl: 'Name the two unknowns.',
+          body: `<div class="math-block">
+            P = plane speed in calm air (mph)<br>
+            W = wind speed (mph)<br><br>
+            With wind: effective rate = P + W<br>
+            Against wind: effective rate = P − W
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-table',
+          num: 'step 3 — fill in D = R × T',
+          lbl: 'One row per trip. D = R × T.',
+          body: `<table class="drt-table">
+            <tr><th></th><th>D (miles)</th><th>R (mph)</th><th>T (hrs)</th></tr>
+            <tr class="row-a"><td class="row-lbl">With wind →</td><td>720</td><td class="highlight">P + W</td><td>8</td></tr>
+            <tr class="row-b"><td class="row-lbl">Against wind ←</td><td>720</td><td class="highlight">P − W</td><td>24</td></tr>
+          </table>`,
+          note: 'D is given (720 both ways). T is given. R is unknown — that\'s where P and W go.',
+        },
+        {
+          cls: 's-equations',
+          num: 'step 4 — write the equations',
+          lbl: 'Each row gives one equation: D = R × T.',
+          body: `<div class="math-block">
+            Row 1: &nbsp;720 = (P + W) · 8 &nbsp;<span class="math-arrow">→</span>&nbsp; P + W = 90<br>
+            Row 2: &nbsp;720 = (P − W) · 24 <span class="math-arrow">→</span>&nbsp; P − W = 30
+          </div>`,
+          note: 'Divide both sides of each equation to simplify. Now it\'s a clean system.',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 5 — solve by elimination',
+          lbl: 'Add the two equations — W cancels.',
+          body: `<div class="math-block">
+            &nbsp;&nbsp;P + W = 90<br>
+            + P − W = 30<br>
+            ————————<br>
+            &nbsp;&nbsp;2P &nbsp;&nbsp;&nbsp;= 120 &nbsp;<span class="math-arrow">→</span>&nbsp; P = 60<br><br>
+            Plug back: 60 + W = 90 <span class="math-arrow">→</span> W = 30
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-answer',
+          num: 'answer',
+          lbl: 'Write the answer in context.',
+          body: `<div style="margin-bottom:8px;" class="f-hand">The plane's speed in calm air is <span class="answer-chip">60 mph</span> and the wind speed is <span class="answer-chip">30 mph</span>.</div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2);">Check: with wind → 90 mph × 8 hr = 720 ✓ &nbsp; against → 30 mph × 24 hr = 720 ✓</div>`,
+          note: '',
+        },
+      ],
+    },
+
+    // ── P2: Boat + Current ────────────────────────────────────────────────
+    {
+      label: '⛵ Boat + Current',
+      type: 'drt',
+      scenario: 'A riverboat can travel 60 miles downstream in 3 hours. The return trip upstream takes 5 hours. Find the boat\'s speed in still water and the speed of the current.',
+      goal: 'Find: boat speed B and current speed C',
+      steps: [
+        {
+          cls: 's-picture',
+          num: 'step 1 — draw a picture',
+          lbl: 'Sketch both directions. Show current pushing the boat.',
+          body: `<div class="sketch">
+            ← current flows this way ←<br><br>
+            Dock ——→ 60 mi, 3 hrs, current helps ——→ Town<br>
+            Dock ←—— 60 mi, 5 hrs, current fights ←—— Town
+          </div>`,
+          note: 'Same 60 miles each way. Current adds speed going downstream, subtracts going upstream.',
+        },
+        {
+          cls: 's-define',
+          num: 'step 2 — define variables',
+          lbl: '',
+          body: `<div class="math-block">
+            B = boat speed in still water (mph)<br>
+            C = current speed (mph)<br><br>
+            Downstream: rate = B + C<br>
+            Upstream: &nbsp;&nbsp;rate = B − C
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-table',
+          num: 'step 3 — fill in D = R × T',
+          lbl: '',
+          body: `<table class="drt-table">
+            <tr><th></th><th>D (miles)</th><th>R (mph)</th><th>T (hrs)</th></tr>
+            <tr class="row-a"><td class="row-lbl">Downstream →</td><td>60</td><td class="highlight">B + C</td><td>3</td></tr>
+            <tr class="row-b"><td class="row-lbl">Upstream ←</td><td>60</td><td class="highlight">B − C</td><td>5</td></tr>
+          </table>`,
+          note: '',
+        },
+        {
+          cls: 's-equations',
+          num: 'step 4 — write the equations',
+          lbl: 'D = R × T for each row.',
+          body: `<div class="math-block">
+            60 = (B + C) · 3 &nbsp;<span class="math-arrow">→</span>&nbsp; B + C = 20<br>
+            60 = (B − C) · 5 &nbsp;<span class="math-arrow">→</span>&nbsp; B − C = 12
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 5 — solve by elimination',
+          lbl: 'Add equations to cancel C.',
+          body: `<div class="math-block">
+            &nbsp;&nbsp;B + C = 20<br>
+            + B − C = 12<br>
+            ————————<br>
+            &nbsp;&nbsp;2B &nbsp;&nbsp;&nbsp;= 32 &nbsp;<span class="math-arrow">→</span>&nbsp; B = 16<br><br>
+            16 + C = 20 <span class="math-arrow">→</span> C = 4
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-answer',
+          num: 'answer',
+          lbl: '',
+          body: `<div class="f-hand">Boat speed: <span class="answer-chip">16 mph</span> &nbsp; Current: <span class="answer-chip">4 mph</span></div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:8px;">Check: downstream → 20 mph × 3 hr = 60 ✓ &nbsp; upstream → 12 mph × 5 hr = 60 ✓</div>`,
+          note: '',
+        },
+      ],
+    },
+
+    // ── P3: Two cars meeting ──────────────────────────────────────────────
+    {
+      label: '🚗 Two Cars Meet',
+      type: 'meet',
+      scenario: 'Two cities are 225 miles apart. A car leaves City A at 45 mph and another leaves City B at 30 mph at the same time, driving toward each other. How long until they meet?',
+      goal: 'Find: time t until the cars meet',
+      steps: [
+        {
+          cls: 's-picture',
+          num: 'step 1 — draw a picture',
+          lbl: 'Both cars drive toward each other. Together they cover 225 miles.',
+          body: `<div class="sketch">
+            City A ——→ · · · 225 miles · · · ←—— City B<br>
+            &nbsp;&nbsp;&nbsp;45 mph &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 30 mph<br><br>
+            They start at the same time → same t
+          </div>`,
+          note: 'Key: combined distances add up to the total gap.',
+        },
+        {
+          cls: 's-define',
+          num: 'step 2 — define variables',
+          lbl: '',
+          body: `<div class="math-block">
+            t = time in hours (same for both cars)<br><br>
+            Car A travels: D₁ = 45t miles<br>
+            Car B travels: D₂ = 30t miles
+          </div>`,
+          note: 'Because they leave at the same time, t is the same in both expressions.',
+        },
+        {
+          cls: 's-table',
+          num: 'step 3 — fill in D = R × T',
+          lbl: '',
+          body: `<table class="drt-table">
+            <tr><th></th><th>D (miles)</th><th>R (mph)</th><th>T (hrs)</th></tr>
+            <tr class="row-a"><td class="row-lbl">Car A (from A)</td><td class="highlight">45t</td><td>45</td><td class="highlight">t</td></tr>
+            <tr class="row-b"><td class="row-lbl">Car B (from B)</td><td class="highlight">30t</td><td>30</td><td class="highlight">t</td></tr>
+            <tr class="row-sum"><td class="row-lbl">Together</td><td>225</td><td>—</td><td>—</td></tr>
+          </table>`,
+          note: 'The total row is the key: D₁ + D₂ = 225.',
+        },
+        {
+          cls: 's-equations',
+          num: 'step 4 — write the equation',
+          lbl: 'Their distances add up to 225 miles.',
+          body: `<div class="math-block">
+            45t + 30t = 225<br>
+            75t = 225
+          </div>`,
+          note: 'Only one equation needed because there\'s only one unknown.',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 5 — solve',
+          lbl: '',
+          body: `<div class="math-block">
+            75t = 225<br>
+            t = 225 ÷ 75 = 3 hours
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-answer',
+          num: 'answer',
+          lbl: '',
+          body: `<div class="f-hand">The cars meet after <span class="answer-chip">3 hours</span>.</div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:8px;">Check: Car A traveled 45×3=135 mi. Car B traveled 30×3=90 mi. 135+90=225 ✓</div>`,
+          note: '',
+        },
+      ],
+    },
+
+    // ── P4: Catch-up ─────────────────────────────────────────────────────
+    {
+      label: '🚴 Catch-Up',
+      type: 'catchup',
+      scenario: 'Maria leaves school at 2:00 PM walking at 4 mph. Alex leaves school at 3:00 PM on a bike at 16 mph. At what time does Alex catch up to Maria?',
+      goal: 'Find: when Alex catches Maria (they travel the same distance)',
+      steps: [
+        {
+          cls: 's-picture',
+          num: 'step 1 — draw a picture',
+          lbl: 'Both leave from the same place in the same direction. Alex starts 1 hour later.',
+          body: `<div class="sketch">
+            School ——→ · · · · · · · · →<br><br>
+            Maria: leaves 2:00 PM, 4 mph, walks for (t + 1) hours<br>
+            Alex: &nbsp;leaves 3:00 PM, 16 mph, rides for t hours
+          </div>`,
+          note: 'Alex catches Maria when they\'re at the same distance from school.',
+        },
+        {
+          cls: 's-define',
+          num: 'step 2 — define variables',
+          lbl: '',
+          body: `<div class="math-block">
+            t = Alex's travel time (hours)<br><br>
+            Maria left 1 hour earlier, so her time = t + 1<br><br>
+            Maria's distance: D = 4(t + 1)<br>
+            Alex's distance: &nbsp;D = 16t
+          </div>`,
+          note: 'When Alex catches Maria, both distances are equal.',
+        },
+        {
+          cls: 's-table',
+          num: 'step 3 — fill in D = R × T',
+          lbl: '',
+          body: `<table class="drt-table">
+            <tr><th></th><th>D (miles)</th><th>R (mph)</th><th>T (hrs)</th></tr>
+            <tr class="row-a"><td class="row-lbl">Maria</td><td class="highlight">4(t+1)</td><td>4</td><td class="highlight">t + 1</td></tr>
+            <tr class="row-b"><td class="row-lbl">Alex</td><td class="highlight">16t</td><td>16</td><td class="highlight">t</td></tr>
+          </table>`,
+          note: 'No total row — instead, set the two distances equal.',
+        },
+        {
+          cls: 's-equations',
+          num: 'step 4 — write the equation',
+          lbl: 'Set the distances equal (that\'s the catch-up condition).',
+          body: `<div class="math-block">
+            4(t + 1) = 16t<br>
+            4t + 4 = 16t<br>
+            4 = 12t
+          </div>`,
+          note: 'Distribute, collect t-terms on one side.',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 5 — solve',
+          lbl: '',
+          body: `<div class="math-block">
+            4 = 12t<br>
+            t = 4/12 = 1/3 hour = 20 minutes
+          </div>`,
+          note: 'Alex rides for 20 minutes after leaving at 3:00 PM.',
+        },
+        {
+          cls: 's-answer',
+          num: 'answer',
+          lbl: '',
+          body: `<div class="f-hand">Alex catches Maria at <span class="answer-chip">3:20 PM</span>.</div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:8px;">Check: Maria walked 4 × (1/3 + 1) = 4 × 4/3 = 16/3 mi. Alex biked 16 × 1/3 = 16/3 mi. ✓</div>`,
+          note: '',
+        },
+      ],
+    },
+
+    // ── P5: Ticket problem ────────────────────────────────────────────────
+    {
+      label: '🎟 Ticket Problem',
+      type: 'cost',
+      scenario: '3 adult tickets and 5 child tickets cost $85. 2 adult tickets and 3 child tickets cost $55. Find the price of each type of ticket.',
+      goal: 'Find: adult price a and child price c',
+      steps: [
+        {
+          cls: 's-picture',
+          num: 'step 1 — read & label',
+          lbl: 'No motion here — but the setup skill is the same: define variables, write equations.',
+          body: `<div class="sketch">
+            Purchase 1: 3 adult + 5 child = $85<br>
+            Purchase 2: 2 adult + 3 child = $55<br><br>
+            Two unknowns → need two equations
+          </div>`,
+          note: 'Cost problems use the same "define → table → equations → solve" strategy.',
+        },
+        {
+          cls: 's-define',
+          num: 'step 2 — define variables',
+          lbl: '',
+          body: `<div class="math-block">
+            a = price of one adult ticket ($)<br>
+            c = price of one child ticket ($)
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-table',
+          num: 'step 3 — cost table (quantity × price = total)',
+          lbl: 'Same idea as D = R × T — just a different formula.',
+          body: `<table class="drt-table">
+            <tr><th></th><th>Adult tickets</th><th>Child tickets</th><th>Total cost</th></tr>
+            <tr class="row-a"><td class="row-lbl">Purchase 1</td><td class="highlight">3a</td><td class="highlight">5c</td><td>$85</td></tr>
+            <tr class="row-b"><td class="row-lbl">Purchase 2</td><td class="highlight">2a</td><td class="highlight">3c</td><td>$55</td></tr>
+          </table>`,
+          note: '',
+        },
+        {
+          cls: 's-equations',
+          num: 'step 4 — write the equations',
+          lbl: '',
+          body: `<div class="math-block">
+            3a + 5c = 85 &nbsp; ①<br>
+            2a + 3c = 55 &nbsp; ②
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 5 — solve by elimination',
+          lbl: 'Eliminate a: multiply ① by 2 and ② by 3.',
+          body: `<div class="math-block">
+            6a + 10c = 170 &nbsp; (① × 2)<br>
+            6a + &nbsp;9c = 165 &nbsp; (② × 3)<br>
+            ——————————<br>
+            c = 5<br><br>
+            Sub into ①: 3a + 25 = 85 → 3a = 60 → a = 20
+          </div>`,
+          note: '',
+        },
+        {
+          cls: 's-answer',
+          num: 'answer',
+          lbl: '',
+          body: `<div class="f-hand">Adult ticket: <span class="answer-chip">$20</span> &nbsp; Child ticket: <span class="answer-chip">$5</span></div>
+          <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-top:8px;">Check ①: 3(20)+5(5) = 60+25 = 85 ✓ &nbsp; Check ②: 2(20)+3(5) = 40+15 = 55 ✓</div>`,
+          note: '',
+        },
+      ],
+    },
+  ];
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let currentIdx = 0;
+  let stepIdx    = 0;
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  function renderPicker() {
+    document.getElementById('prob-picker').innerHTML = PROBLEMS.map((p, i) =>
+      `<button class="prob-btn${i === currentIdx ? ' active' : ''}" onclick="loadProblem(${i})">${p.label}</button>`
+    ).join('');
+  }
+
+  function renderScenario() {
+    const p = PROBLEMS[currentIdx];
+    document.getElementById('scenario').innerHTML = `
+      <div class="scenario-card sk-box">
+        <div class="scenario-label">THE PROBLEM</div>
+        <div class="scenario-text">${p.scenario}</div>
+        <div class="scenario-goal">${p.goal}</div>
+      </div>`;
+  }
+
+  function renderSteps() {
+    const p = PROBLEMS[currentIdx];
+    let html = '';
+    p.steps.forEach((step, i) => {
+      const revealed = stepIdx > i;
+      html += `<div class="step-card ${step.cls}${revealed ? ' revealed' : ''}">
+        <div class="step-num">${step.num}</div>
+        ${step.lbl ? `<div class="step-lbl">${step.lbl}</div>` : ''}
+        <div>${step.body}</div>
+        ${step.note ? `<div class="step-note">${step.note}</div>` : ''}
+      </div>`;
+    });
+    document.getElementById('stage').innerHTML = html;
+
+    const btn = document.getElementById('reveal-btn');
+    if (stepIdx >= p.steps.length) {
+      btn.textContent = 'All steps shown ✓';
+      btn.disabled = true;
+    } else {
+      btn.textContent = stepIdx === 0 ? 'Show step 1 →' : 'Show next step →';
+      btn.disabled = false;
+    }
+  }
+
+  function render() {
+    renderPicker();
+    renderScenario();
+    renderSteps();
+  }
+
+  function revealNext() {
+    if (stepIdx < PROBLEMS[currentIdx].steps.length) {
+      stepIdx++;
+      renderSteps();
+    }
+  }
+
+  function loadProblem(idx) {
+    currentIdx = idx;
+    stepIdx = 0;
+    render();
+    document.getElementById('scenario').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  render();
+  </script>
+  <script src="url-state.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
+</body>
+</html>
