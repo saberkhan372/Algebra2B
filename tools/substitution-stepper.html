@@ -79,6 +79,7 @@
           <button class="sk-pill prob-btn" data-prob="1" onclick="loadProblem(1, this)">P2</button>
           <button class="sk-pill prob-btn" data-prob="2" onclick="loadProblem(2, this)">P3</button>
           <button class="sk-pill prob-btn" data-prob="3" onclick="loadProblem(3, this)">P4</button>
+          <button class="sk-pill prob-btn" data-prob="4" onclick="loadProblem(4, this)">P5</button>
           <button class="btn small" onclick="resetProblem()">↺ restart</button>
         </div>
 
@@ -188,6 +189,17 @@
         solution: 'x = 11/3, y = 8/3',
         check: ['① 2(11/3) + 8/3 = 10 → 10 = 10', '② 8/3 = 11/3 − 1 → 8/3 = 8/3']
       },
+      {
+        eq1: 'y = 3x − 2',  eq2: '3x − y = 7',
+        noSolution: true,
+        steps: [
+          { title: 'Identify the isolated variable', instruction: 'Equation ① has y isolated. What is y?', hint: 'y = 3x − 2', answer: '3x-2', display: 'y = 3x − 2' },
+          { title: 'Substitute into equation ②', instruction: 'Replace y in 3x − y = 7 with (3x − 2). Simplify.', hint: '3x − (3x − 2) = 7  →  3x − 3x + 2 = 7  →  2 = 7', answer: '2=7', display: '3x − (3x − 2) = 7  →  2 = 7' },
+          { title: 'What does 2 = 7 mean?', instruction: 'Is 2 = 7 ever true? What does this tell us about the system?', hint: 'Never true → No Solution', answer: 'no solution', display: '2 = 7 is never true → No Solution ∅' },
+        ],
+        solution: 'No Solution ∅ — these lines are parallel (same slope, different y-intercepts).',
+        check: ['Both lines have slope 3. They never intersect.']
+      },
     ];
 
     let currentProb = 0, currentStep = 0;
@@ -280,7 +292,8 @@
       box.style.padding = '14px';
       box.style.background = 'var(--highlight)';
       document.getElementById('solution-text').textContent = `Solution: ${p.solution}`;
-      document.getElementById('check-text').innerHTML = `<strong>Check both originals:</strong><br>${p.check.join('<br>')}`;
+      const checkLabel = p.noSolution ? 'Why no solution:' : 'Check both originals:';
+      document.getElementById('check-text').innerHTML = `<strong>${checkLabel}</strong><br>${p.check.join('<br>')}`;
     }
 
     function resetProblem() { loadProblem(currentProb, null); }

@@ -529,7 +529,7 @@
       } else if (F.restrict) {
         el.textContent = `${F.label} isn't one-to-one without the restriction ${F.restrict}. Two x-values can give the same output — so the inverse can't tell which to return. Restrict the domain and it works perfectly.`;
       } else {
-        el.textContent = `Every point (a, b) on f flips to (b, a) on f⁻¹. That's the reflection over y = x. Notice the two dots are always mirrors of each other across that line.`;
+        el.textContent = `Every point (a, b) on f flips to (b, a) on f⁻¹. To prove two functions are inverses, you must show BOTH f(g(x)) = x AND g(f(x)) = x — that's the textbook definition. One direction isn't enough.`;
       }
     }
   }
