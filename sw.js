@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v17';
+const CACHE_VERSION = 'a2p-v18';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -27,6 +27,7 @@ const PRECACHE_URLS = [
   '/u6.html',
   '/u7.html',
   '/u9.html',
+  '/u8.html',
   // Shared scripts
   '/tools/fullscreen.js',
   '/tools/progress.js',

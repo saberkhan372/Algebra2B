@@ -212,7 +212,7 @@
             <li><a href="u5.html"><span class="unit-id">U5 · done</span><span class="unit-name">Exponential &amp; Log</span></a></li>
             <li><a href="u6.html"><span class="unit-id">U6 · done</span><span class="unit-name">Rationals &amp; Polynomials</span></a></li>
             <li><a href="u7.html"><span class="unit-id">U7 · done</span><span class="unit-name">Trigonometry</span></a></li>
-            <li><a href="u9.html"><span class="unit-id">U9 · done</span><span class="unit-name">Statistics &amp; Probability</span></a></li>
+            <li><a href="u8.html"><span class="unit-id">U8 · done</span><span class="unit-name">Statistics &amp; Probability</span></a></li>
           </ul>
         </div>
 
@@ -280,7 +280,7 @@
           <button class="sk-pill" data-unit="U5" onclick="filterUnit(this)">U5</button>
           <button class="sk-pill" data-unit="U6" onclick="filterUnit(this)">U6</button>
           <button class="sk-pill" data-unit="U7" onclick="filterUnit(this)">U7</button>
-          <button class="sk-pill" data-unit="U9" onclick="filterUnit(this)">U9</button>
+          <button class="sk-pill" data-unit="U8" onclick="filterUnit(this)">U8</button>
         </div>
         <div class="filter-row filter-row-diff">
           <span class="label f-marker">LEVEL:</span>
@@ -343,9 +343,9 @@
       { id: 'trigb', prev: 'sine',         name: 'Sine/Cosine Graph Builder',       unit: 'U7', topic: 'Trigonometry',kind: 'visualizer', diff: 2, code: 'Sc', desc: 'Build amplitude, period, phase shift, and midline from one trig equation.', href: 'tools/sine-cosine-builder.html' },
       { id: 'ucwave', prev: 'ucwave',       name: 'Unit Circle Wave Sync',           unit: 'U7', topic: 'Trigonometry',kind: 'explorer',   diff: 2, code: 'Uw', desc: 'Drag the angle — the sine/cosine wave traces in real time. A dashed line connects the circle\'s height to the wave\'s height so the link is impossible to miss. Animate to watch it unfold.', href: 'tools/unit-circle-wave.html' },
       { id: 'trigx', prev: 'sine',         name: 'Trig Function Explorer',          unit: 'U7', topic: 'Trigonometry',kind: 'explorer',   diff: 2, code: 'Tx', desc: 'Slide a, b, h, k and watch amplitude, period, phase shift, midline chips update. Switch sin ↔ cos.', href: 'tools/trig-explorer.html' },
-      { id: 'bxplt', prev: 'boxplot',      name: 'Box Plot Builder',                unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Bp', desc: 'Enter any dataset — see the 5-number summary, IQR, outlier fences, and skew shape.', href: 'tools/box-plot-builder.html' },
-      { id: 'probx', prev: 'probability',  name: 'Probability Rules Sandbox',       unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Roll two dice — watch experimental probability converge to theoretical. Complement, OR, AND rules live.', href: 'tools/probability-sandbox.html' },
-      { id: 'smpbx', prev: 'probability',  name: 'Sampling Bias Lab',               unit: 'U9', topic: 'Statistics',  kind: 'visualizer', diff: 3, code: 'Sb', desc: 'Compare random vs biased sampling — watch sample means converge (or drift) toward the true population mean.', href: 'tools/sampling-bias-lab.html' },
+      { id: 'bxplt', prev: 'boxplot',      name: 'Box Plot Builder',                unit: 'U8', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Bp', desc: 'Enter any dataset — see the 5-number summary, IQR, outlier fences, and skew shape.', href: 'tools/box-plot-builder.html' },
+      { id: 'probx', prev: 'probability',  name: 'Probability Rules Sandbox',       unit: 'U8', topic: 'Statistics',  kind: 'visualizer', diff: 2, code: 'Ps', desc: 'Roll two dice — watch experimental probability converge to theoretical. Complement, OR, AND rules live.', href: 'tools/probability-sandbox.html' },
+      { id: 'smpbx', prev: 'probability',  name: 'Sampling Bias Lab',               unit: 'U8', topic: 'Statistics',  kind: 'visualizer', diff: 3, code: 'Sb', desc: 'Compare random vs biased sampling — watch sample means converge (or drift) toward the true population mean.', href: 'tools/sampling-bias-lab.html' },
       { id: 'qwpx',  prev: 'projectile',   name: 'Quadratic Word Problems Trainer', unit: 'U3', topic: 'Quadratics',  kind: 'practice',   diff: 2, code: 'Qw', desc: '4 projectile motion problems — step through vertex, max height, and landing time with a live trajectory canvas.', href: 'tools/quadratic-word-problems.html' },
       { id: 'ratd',  prev: 'rational',     name: 'Rationalizing Denominators',      unit: 'U3', topic: 'Radicals',    kind: 'practice',   diff: 2, code: 'Rd', desc: 'Step through 4 types: monomial radical, binomial radical, imaginary denominator, and complex conjugate.', href: 'tools/rationalizing-denominators.html' },
       { id: 'cplane', prev: 'complex',      name: 'Complex Number Explorer',         unit: 'U3', topic: 'Complex',     kind: 'explorer',   diff: 2, code: 'Cx', desc: 'Drag a+bi around the complex plane. See modulus, argument, and conjugate live. Roots mode reveals why D < 0 means complex conjugate roots.', href: 'tools/complex-plane.html' },
@@ -366,7 +366,7 @@
       { id: 'scgraph', prev: 'sine',        name: 'Sine / Cosine Graph Builder',      unit: 'U7', topic: 'Trigonometry', kind: 'visualizer', diff: 2, code: 'Sg', desc: 'Start from the unit circle — y-coordinates trace sine, x-coordinates trace cosine. Then shape amplitude, period, and shift.', href: 'tools/sincos-grapher.html' },
       { id: 'lineq',   prev: 'linear',      name: 'Linear Equations Explorer',        unit: 'U1', topic: 'Linear',       kind: 'explorer',   diff: 1, code: 'Lx', desc: 'All three forms + live rise/run graph. VUXHOY for vertical/horizontal lines. Verify a point is on the line.', href: 'tools/linear-equations.html' },
       { id: 'drt',     prev: 'systems',     name: 'Distance · Rate · Time Trainer',    unit: 'U1', topic: 'Systems',       kind: 'practice',   diff: 2, code: 'Dt', desc: 'Draw a picture → define variables → fill in the D=R×T table → write equations → solve. Plane/wind, boat/current, meeting, catch-up, and ticket problems.', href: 'tools/drt-trainer.html' },
-      { id: 'conics',  prev: 'conics',      name: 'Conic Sections Explorer',           unit: 'U9', topic: 'Conics',        kind: 'explorer',   diff: 2, code: 'Cn', desc: 'Explore parabolas, circles, ellipses, and hyperbolas — slide h, k, and axes; identify conics from their equations.', href: 'tools/conics.html' },
+      { id: 'conics',  prev: 'conics',      name: 'Conic Sections Explorer',           unit: 'U8', topic: 'Conics',        kind: 'explorer',   diff: 2, code: 'Cn', desc: 'Explore parabolas, circles, ellipses, and hyperbolas — slide h, k, and axes; identify conics from their equations.', href: 'tools/conics.html' },
     ];
 
     const UNIT_INFO = {
@@ -377,11 +377,11 @@
       U5: { name: 'Exponential &amp; Log',        dates: 'January – February', color: '#8f6c00' },
       U6: { name: 'Rationals &amp; Polynomials',  dates: 'February – March',   color: '#7a2a8a' },
       U7: { name: 'Trigonometry',                 dates: 'March – April',      color: '#1a8a8a' },
-      U9: { name: 'Statistics &amp; Probability', dates: 'April – May',        color: '#5a6a7a' },
+      U8: { name: 'Statistics &amp; Probability', dates: 'April – May',        color: '#5a6a7a' },
     };
-    const UNIT_ORDER = ['U1','U2','U3','U4','U5','U6','U7','U9'];
+    const UNIT_ORDER = ['U1','U2','U3','U4','U5','U6','U7','U8'];
     const KIND_ORDER  = { explorer: 0, visualizer: 1, practice: 2, game: 3, reference: 4 };
-    const UNIT_BG     = { U1:'#fdf0ea', U2:'#eaf2fb', U3:'#f5ece3', U4:'#eaf5ee', U5:'#fdf4e3', U6:'#f0eaf5', U7:'#e8eefb', U9:'#f5eaf3' };
+    const UNIT_BG     = { U1:'#fdf0ea', U2:'#eaf2fb', U3:'#f5ece3', U4:'#eaf5ee', U5:'#fdf4e3', U6:'#f0eaf5', U7:'#e8eefb', U8:'#f5eaf3' };
 
     function buildCard(t, i) {
       const card = document.createElement('a');
@@ -543,12 +543,12 @@
     applyFilter();
 
     // ── Progress summary (item 11) ───────────────────────────────────────
-    const UNIT_TOTALS = { U1:14, U2:6, U3:8, U4:6, U5:7, U6:8, U7:5, U9:4 };
+    const UNIT_TOTALS = { U1:14, U2:6, U3:8, U4:6, U5:7, U6:8, U7:5, U8:4 };
     const UNIT_NAMES  = {
       U1:'Systems & Quadratics', U2:'Graphs & Exponents',
       U3:'Rationals & Complex',  U4:'Rational Exponents',
       U5:'Exponential & Log',    U6:'Rationals & Polynomials',
-      U7:'Trigonometry',         U9:'Statistics'
+      U7:'Trigonometry',         U8:'Statistics'
     };
 
     function buildProgressBars() {

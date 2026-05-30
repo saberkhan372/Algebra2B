@@ -14,7 +14,7 @@
     'tools/log-exp-mirror.html':     'U5 · start here',
     'tools/rational-simplifier.html':'U6 · start here',
     'tools/unit-circle.html':        'U7 · start here',
-    'tools/box-plot-builder.html':   'U9 · start here',
+    'tools/box-plot-builder.html':   'U8 · start here',
   };
 
   // ── Storage helpers ──────────────────────────────────────────────

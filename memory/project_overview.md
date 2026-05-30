@@ -13,7 +13,7 @@ metadata:
 - `index.html` — homepage with 62-tool grid, search/filter, animated TOTW canvas, per-card canvas hover previews
 - `about.html` — teacher letter, FAQ, credits
 - `map.html` — full visual map of all tools organized by unit
-- `u1.html`–`u7.html` — unit pages (lesson stacks with tool links); `u9.html` for Statistics
+- `u1.html`–`u7.html` — unit pages (lesson stacks with tool links); `u8.html` for Statistics
 - `tools/` — 62 standalone interactive HTML tools
 - `styles.css` — all shared CSS variables and classes
 - `algebra-2-tools/` — Claude Design wireframe exports (reference only)
@@ -27,7 +27,7 @@ U4 (6): Rational Exponents Tower, Cubic & Radical Grapher, Composition Machine, 
 U5 (8): Log↔Exp Converter, Exponential Function Explorer, Log Properties Sandbox, Exponential Equation Solver, Exponential Model Builder, Log↔Exp Mirror, Growth Race, Exponential Equations Stepper
 U6 (8): Rational Simplifier, Adding Rational Expressions, Rational Mult/Div Stepper, Solving Rational Equations, Polynomial Sketch Pad, Polynomial Division Stepper, Rational Behavior, Polynomial Roots
 U7 (7): SOH CAH TOA Triangle Solver, Unit Circle Walker, Sine/Cosine Graph Builder, Trig Explorer, Unit Circle Wave Sync, Sine/Cosine Graph Builder (from circle), Coterminal Angles & Radian Conversion
-U9 (4): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab, **Conic Sections Explorer**
+U8 (4): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab, **Conic Sections Explorer**
 
 **No missing tools** — all 63 tools live. No coming-soon rows on any unit page.
 

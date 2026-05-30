@@ -24,7 +24,7 @@ Algebra2B/
 ├── 404.html                ← Friendly 404 page (GitHub Pages serves automatically)
 ├── offline.html            ← Offline fallback (service worker serves when network fails)
 ├── u1.html – u7.html       ← Unit landing pages
-├── u9.html                 ← Statistics & Probability unit page
+├── u8.html                 ← Statistics & Probability unit page
 ├── styles.css              ← Entire design system (board/print/wide-screen rules included)
 ├── manifest.json           ← PWA manifest
 ├── sw.js                   ← Service worker — precaches all 62 tools + scripts
@@ -51,7 +51,7 @@ The homepage is driven by a single `const TOOLS = [...]` array in `index.html`. 
   id:    'sysexp',                          // unique slug, used for hover preview lookup
   prev:  'systems',                         // key into the preview renderer map (R object)
   name:  'Systems Explorer',               // display name on card and in search
-  unit:  'U1',                              // one of: U1 U2 U3 U4 U5 U6 U7 U9
+  unit:  'U1',                              // one of: U1 U2 U3 U4 U5 U6 U7 U8
   topic: 'Systems',                         // short topic label (appears in search index)
   kind:  'explorer',                        // see Tool kinds below
   diff:  1,                                 // difficulty dots: 1 = easy, 2 = medium, 3 = hard
@@ -80,9 +80,9 @@ The homepage is driven by a single `const TOOLS = [...]` array in `index.html`. 
 | U5 | Exponential & Log | January – February | `#8f6c00` |
 | U6 | Rationals & Polynomials | February – March | `#7a2a8a` |
 | U7 | Trigonometry | March – April | `#1a8a8a` |
-| U9 | Statistics & Probability | April – May | `#5a6a7a` |
+| U8 | Statistics & Probability | April – May | `#5a6a7a` |
 
-U8 exists in video-learning materials but is folded into U6 on this site. There is no `u8.html`.
+The old U8 label (rational functions) was folded into U6. `u8.html` is now the Statistics, Probability &amp; Conics unit page.
 
 ---
 
@@ -204,7 +204,7 @@ Runs on tool pages AND homepage/unit pages. Detects context from `location.pathn
 - Adds orange `★ start here` banner to one designated card per unit
 
 **Start-here tools (one per unit):**
-`systems-explorer` (U1), `abs-value-grapher` (U2), `imaginary-sandbox` (U3), `composition` (U4), `log-exp-mirror` (U5), `rational-simplifier` (U6), `unit-circle` (U7), `box-plot-builder` (U9)
+`systems-explorer` (U1), `abs-value-grapher` (U2), `imaginary-sandbox` (U3), `composition` (U4), `log-exp-mirror` (U5), `rational-simplifier` (U6), `unit-circle` (U7), `box-plot-builder` (U8)
 
 **Exposed on `window.A2PG`:**
 - `A2PG.applyBadges()` — called by `index.html` after `buildSections()` to tag homepage cards
@@ -302,7 +302,7 @@ var(--k-reference)  /* gray #5f5f5f */
 ## Sync checklist (after adding or modifying a tool)
 
 1. **TOOLS array** in `index.html` — add/update entry with all 9 fields (`id`, `prev`, `name`, `unit`, `topic`, `kind`, `diff`, `code`, `desc`, `href`).
-2. **Unit page** (`u1.html`…`u9.html`) — add/update the lesson row and link it live; add tool card to the grid.
+2. **Unit page** (`u1.html`…`u8.html`) — add/update the lesson row and link it live; add tool card to the grid.
 3. **Shared scripts** — last tags must be in order: `url-state.js`, `progress.js`, `replay.js` *(if sliders)*, `related.js`, `fullscreen.js`. Optionally `save-png.js` *(if canvas)* before `url-state.js`.
 4. **If canvas is draggable** — add `touch-action: none` to the canvas CSS rule.
 5. **If the tool has `input[type="range"][id]` sliders** — add `<script src="replay.js"></script>` between `progress.js` and `related.js`.

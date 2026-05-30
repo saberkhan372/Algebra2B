@@ -12,8 +12,8 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
 ## Current State (as of 2026-05-30)
 
-- **62 tools** across 8 units (U1–U7, U9). All units complete.
-- **8 unit pages**: `u1.html`–`u7.html` + `u9.html`. All counts/statuses accurate.
+- **62 tools** across 8 units (U1–U7, U8). All units complete.
+- **8 unit pages**: `u1.html`–`u7.html` + `u8.html`. All counts/statuses accurate.
 - Homepage: unit sections collapse by default; filter/search auto-expands matching units; three filter rows (kind / unit / level).
 
 ### Shared scripts in `tools/` (loaded by every tool page)

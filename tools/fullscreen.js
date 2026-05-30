@@ -204,11 +204,11 @@
       {n:'Unit Circle Walker',u:'U7',h:'unit-circle.html'},
       {n:'Sine/Cosine Graph Builder',u:'U7',h:'sine-cosine-builder.html'},
       {n:'SOH CAH TOA Triangle Solver',u:'U7',h:'soh-cah-toa.html'},
-      {n:'Box Plot Builder',u:'U9',h:'box-plot-builder.html'},
-      {n:'Probability Rules Sandbox',u:'U9',h:'probability-sandbox.html'},
-      {n:'Sampling Bias Lab',u:'U9',h:'sampling-bias-lab.html'},
+      {n:'Box Plot Builder',u:'U8',h:'box-plot-builder.html'},
+      {n:'Probability Rules Sandbox',u:'U8',h:'probability-sandbox.html'},
+      {n:'Sampling Bias Lab',u:'U8',h:'sampling-bias-lab.html'},
     ];
-    var UNIT_COLORS = {U1:'#d94f2a',U2:'#2a6fb4',U3:'#8b4513',U4:'#2a8a4a',U5:'#8f6c00',U6:'#7a2a8a',U7:'#1a8a8a',U9:'#5a6a7a'};
+    var UNIT_COLORS = {U1:'#d94f2a',U2:'#2a6fb4',U3:'#8b4513',U4:'#2a8a4a',U5:'#8f6c00',U6:'#7a2a8a',U7:'#1a8a8a',U8:'#5a6a7a'};
 
     // ── "⊞ tools" nav button (shown in board mode, top-left) ─────
     var navBtn = document.createElement('button');

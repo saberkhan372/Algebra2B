@@ -21,7 +21,7 @@ Open `http://127.0.0.1:3333/`
 | `concept-map.html` | Concept subway map — 63 nodes in 8 threads, 20 cross-thread bridges; hover tooltips, click to open tool |
 | `shapes.html` | The Graph Shapes — 10 interactive canvases (one per function family) with live equation editor + sliders |
 | `about.html` | Teacher letter, FAQ, credits |
-| `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks and tool cards |
+| `u1.html` – `u7.html`, `u8.html` | Unit landing pages with lesson stacks and tool cards |
 | `404.html` | Friendly 404 page (GitHub Pages serves automatically for broken links) |
 | `offline.html` | Offline fallback page (served by service worker when network unavailable) |
 | `tools/` | 62 standalone interactive tool pages |
@@ -49,7 +49,7 @@ Open `http://127.0.0.1:3333/`
 | U5 | Exponential & Log | 8 |
 | U6 | Rationals & Polynomials | 8 |
 | U7 | Trigonometry | 7 |
-| U9 | Statistics, Probability & Conics | 4 |
+| U8 | Statistics, Probability & Conics | 4 |
 
 ## Student features
 

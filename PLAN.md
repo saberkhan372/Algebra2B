@@ -9,7 +9,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 **Site:** 8 unit pages (u1–u7 + u9), **62 tools** wired into the homepage grid.  
 **Curriculum:** All 8 units complete (Sept → May). Year is done.  
-**Unit pages:** U1–U7 + U9 fully wired. No coming-soon rows remain.  
+**Unit pages:** U1–U7 + U8 fully wired. No coming-soon rows remain.  
 **Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip).  
 **Video-learning:** Complete through batch 12 — 75+ transcripts, extracted PDF text, 37 contact sheets, 12 synthesis notes. 46 additional transcripts from batch-11 transcription pass (29 complete, 17 pending at time of writing).
 
@@ -63,9 +63,9 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - SOH CAH TOA Triangle Solver (U7)
 - Unit Circle Walker (U7)
 - Sine/Cosine Graph Builder (U7)
-- Box Plot Builder (U9) — first U9 tool; 5-number summary, IQR, outlier fences, dot/box views
-- Probability Rules Sandbox (U9)
-- Sampling Bias Lab (U9)
+- Box Plot Builder (U8) — first U8 tool; 5-number summary, IQR, outlier fences, dot/box views
+- Probability Rules Sandbox (U8)
+- Sampling Bias Lab (U8)
 - Quadratic Word Problems Trainer (U3)
 - Rationalizing Denominators (U3)
 - Parent Function Atlas (U2) — Phase 1: 5 families (x², |x|, √x, 2ˣ, 1/x), a/h/k sliders, live domain/range/zeros/asymptote feature chips, asymptote canvas lines, intercept dots
@@ -92,7 +92,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 **3 tools added in batch-13 video-insight pass (May 2026):**
 - Linear Equations Explorer (U1, D1) — all three forms + live rise/run graph; VUXHOY for vertical/horizontal lines; verify a point is on the line
-- Conic Sections Explorer (U9, D4–D8) — 4-mode canvas tool (parabola/circle/ellipse/hyperbola) with live chips, orientation toggles, foci, asymptotes + box method; Identify game with 8 equations
+- Conic Sections Explorer (U8, D4–D8) — 4-mode canvas tool (parabola/circle/ellipse/hyperbola) with live chips, orientation toggles, foci, asymptotes + box method; Identify game with 8 equations
 - Radical Equation Solver (U4, D5) — 5 presets; isolate → square → solve → mandatory check-back; extraneous solutions get red ✗ chip and strikethrough
 
 **Sidebar upgrades (batch-13):**
@@ -222,9 +222,9 @@ Transcribed lessons so far:
 - U7-D2 - standard position, positive/negative angle direction, coterminal angles, radians, and degree/radian conversion.
 - U7-D3 - periodic functions, Ferris wheel models, amplitude, midline, period, and table-to-wave graphing.
 - U7-D4 - sine/cosine graphs, reference angles, unit-circle exact values, and `(cos theta, sin theta)` coordinate meaning.
-- U9-D1 - statistics intro, categorical/quantitative variables, frequency and relative-frequency tables, bar/pie charts, and misleading graphs.
-- U9-D2 - probability rules, experimental/theoretical probability, law of large numbers, complements, and `or`/`and` probability language.
-- U9-D3 - sampling bias, data displays, mean/median/mode, skew, quartiles/IQR, outlier fences, and box plots.
+- U8-D1 - statistics intro, categorical/quantitative variables, frequency and relative-frequency tables, bar/pie charts, and misleading graphs.
+- U8-D2 - probability rules, experimental/theoretical probability, law of large numbers, complements, and `or`/`and` probability language.
+- U8-D3 - sampling bias, data displays, mean/median/mode, skew, quartiles/IQR, outlier fences, and box plots.
 - U8-D2 - multiplying/dividing rational expressions, keep-change-flip, factor cancellation, and original-domain restrictions.
 - U8-D3 - adding/subtracting rational expressions, LCD building, numerator combining, sign distribution, and final simplification.
 - U8-D4 - solving rational equations, common denominators, excluded values, extraneous candidates, and no-solution cases.
@@ -245,7 +245,7 @@ Batch-11 transcription pass (46 additional videos — 29 complete as of 2026-05-
 - U3-D1 Video (24-25) - imaginary numbers (24-25 version).
 - Remaining 17 videos (U3-D2 through U4-D5, review/study-guide videos, calculator help, misc) - transcription in progress.
 
-U9 note: the newly transcribed U9-D1 through U9-D3 classroom videos are statistics/probability lessons. The local video inventory also contains a separate `Unit 9 Review Video (Conics)`, so future U9 planning should keep those strands distinct until the source materials are reconciled.
+U8 note: the newly transcribed U8-D1 through U8-D3 classroom videos are statistics/probability lessons. The local video inventory also contains a separate `Unit 9 Review Video (Conics)`, so future U8 planning should keep those strands distinct until the source materials are reconciled.
 
 PDF text extracted so far:
 
@@ -291,9 +291,9 @@ Contact sheets created:
 - U8-D2 multiplying and dividing rational expressions.
 - U8-D3 adding and subtracting rational expressions.
 - U8-D4 rational equations.
-- U9-D1 statistics displays.
-- U9-D2 probability rules.
-- U9-D3 sampling and distributions.
+- U8-D1 statistics displays.
+- U8-D2 probability rules.
+- U8-D3 sampling and distributions.
 - Unit 8 study guide.
 
 ### Unit page sync (May 2026)

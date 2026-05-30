@@ -29,4 +29,4 @@ metadata:
 - batch-11: cross-site audit — linked orphaned tools, improved Adding Rationals, Abs Value Grapher h-tooltip; built Literal Equations, Domain Restriction Sorter, Coterminal & Radians
 - batch-12: U1 (25-26) full analysis — slope, piecewise plug-boundary technique, inequalities flip rule, abs value two-branch, function notation; built Inequality Solver, Abs Value Equation Stepper, Point-Slope Trainer, Function Notation Evaluator
 
-**U9 note:** U9-D1–D3 videos are stats/probability; a separate "Unit 9 Review Video (Conics)" also exists — keep these strands distinct until source materials are reconciled.
+**U8 note:** U8-D1–D3 videos are stats/probability; a separate "Unit 9 Review Video (Conics)" also exists — keep these strands distinct until source materials are reconciled.
