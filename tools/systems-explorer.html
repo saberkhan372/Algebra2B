@@ -89,11 +89,6 @@
       .canvas-wrap { min-height: 280px; }
     }
 
-    /* ── Replay panel ─────────────────────────────────────────── */
-    .rp-dot { animation: rp-blink 0.9s ease-in-out infinite; }
-    @keyframes rp-blink { 0%,100%{opacity:1;} 50%{opacity:0.08;} }
-    .rp-bar-wrap { height:4px; background:var(--paper-3); border-radius:2px; overflow:hidden; margin-top:6px; }
-    .rp-bar-fill { height:100%; background:var(--accent); border-radius:2px; width:0%; transition:width 80ms linear; }
   </style>
 </head>
 <body class="paper-grid">
@@ -166,40 +161,6 @@
       <div style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
         <div class="sec-lbl">properties</div>
         <div class="chips-row" id="chips"></div>
-      </div>
-
-      <!-- Replay -->
-      <div id="replay-wrap" style="padding:9px 13px; border-bottom:1.5px solid var(--ink-soft);">
-        <div class="sec-lbl">replay</div>
-        <!-- idle -->
-        <div id="rp-idle" style="display:flex; align-items:center; gap:8px;">
-          <button id="rp-rec" class="btn accent" style="font-size:12px; padding:4px 10px;">⏺ rec</button>
-          <span class="f-hand" style="font-size:11px; color:var(--ink-soft);">record &amp; share a walkthrough</span>
-        </div>
-        <!-- recording -->
-        <div id="rp-recording" style="display:none; align-items:center; gap:8px;">
-          <span class="rp-dot" style="color:#c02040; font-size:16px; line-height:1;">●</span>
-          <span id="rp-fcount" class="f-mono" style="font-size:11px; color:var(--ink-soft);">0 frames</span>
-          <button id="rp-stop" class="btn" style="font-size:12px; padding:4px 10px; margin-left:auto;">⏹ stop</button>
-        </div>
-        <!-- done -->
-        <div id="rp-done" style="display:none; flex-direction:column; gap:5px;">
-          <div style="display:flex; align-items:center; gap:6px;">
-            <span id="rp-dcount" class="f-mono" style="font-size:11px; color:var(--ink-soft);"></span>
-            <button id="rp-new" class="btn" style="font-size:11px; padding:2px 7px; margin-left:auto;">⏺ new</button>
-          </div>
-          <div style="display:flex; gap:6px;">
-            <button id="rp-play" class="btn accent" style="font-size:12px; padding:4px 10px;">▶ play</button>
-            <button id="rp-share" class="btn" style="font-size:12px; padding:4px 10px;">🔗 share</button>
-          </div>
-          <div class="rp-bar-wrap"><div id="rp-bar" class="rp-bar-fill"></div></div>
-        </div>
-        <!-- auto-playing from URL -->
-        <div id="rp-auto" style="display:none; flex-direction:column; gap:5px;">
-          <div class="f-hand" style="font-size:12px; color:var(--ink-2);">▶ playing replay…</div>
-          <div class="rp-bar-wrap"><div id="rp-abar" class="rp-bar-fill"></div></div>
-          <button id="rp-skip" class="btn" style="font-size:11px; padding:2px 8px; align-self:flex-start;">■ skip</button>
-        </div>
       </div>
 
       <!-- Mr. K says -->
@@ -660,194 +621,10 @@
   resize();
   </script>
 
-  <script>
-  // ── Replay ────────────────────────────────────────────────────────────────
-  ;(function () {
-    'use strict';
-    const SLIDER_IDS = ['m1-sl', 'b1-sl', 'm2-sl', 'b2-sl'];
-    const MAX_GAP    = 2000;   // cap pauses to 2 s during normalisation
-
-    const sliders = SLIDER_IDS.map(id => document.getElementById(id));
-    let timeline = [], recording = false, recStart = 0;
-    let lastVals = null, rafId = null, pollTimer = null;
-
-    const $ = id => document.getElementById(id);
-
-    // ── Encoding ──────────────────────────────────────────────────────────
-    function encode(tl) {
-      return btoa(JSON.stringify(tl.map(f => [f.t, ...f.v])))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    }
-    function decode(str) {
-      try {
-        const b = str.replace(/-/g, '+').replace(/_/g, '/');
-        const arr = JSON.parse(atob(b));
-        return arr.map(row => ({ t: row[0], v: row.slice(1) }));
-      } catch (e) { return null; }
-    }
-    function replayFromHash() {
-      try {
-        const r = new URLSearchParams(location.hash.slice(1)).get('r');
-        return r ? decode(r) : null;
-      } catch (e) { return null; }
-    }
-
-    // ── Helpers ───────────────────────────────────────────────────────────
-    function vals()         { return sliders.map(s => +s.value); }
-    function valsEq(a, b)  { return a && b && a.every((v, i) => v === b[i]); }
-
-    function setPanel(name) {
-      ['idle','recording','done','auto'].forEach(n => {
-        const el = $('rp-' + n);
-        if (el) el.style.display = (n === name ? 'flex' : 'none');
-      });
-    }
-
-    // ── Capture (poll every 50 ms — catches slider drags AND canvas drags) ─
-    function snapFrame() {
-      if (!recording) return;
-      const v = vals();
-      if (valsEq(v, lastVals)) return;
-      timeline.push({ t: Date.now() - recStart, v: [...v] });
-      lastVals = [...v];
-      $('rp-fcount').textContent = timeline.length + ' frame' + (timeline.length !== 1 ? 's' : '');
-    }
-
-    $('rp-rec').addEventListener('click', () => {
-      timeline  = [];
-      recStart  = Date.now();
-      lastVals  = null;
-      recording = true;
-      snapFrame();                     // capture start state
-      setPanel('recording');
-      pollTimer = setInterval(snapFrame, 50);
-    });
-
-    $('rp-stop').addEventListener('click', () => {
-      recording = false;
-      clearInterval(pollTimer);
-      if (timeline.length < 2) { setPanel('idle'); return; }
-      // Normalise: rebuild timeline with gaps capped at MAX_GAP
-      const norm = [{ t: 0, v: timeline[0].v }];
-      let cumT = 0;
-      for (let i = 1; i < timeline.length; i++) {
-        cumT += Math.min(timeline[i].t - timeline[i-1].t, MAX_GAP);
-        norm.push({ t: cumT, v: timeline[i].v });
-      }
-      timeline = norm;
-      const totalSec = (timeline[timeline.length - 1].t / 1000).toFixed(1);
-      $('rp-dcount').textContent = timeline.length + ' frames · ' + totalSec + 's';
-      $('rp-bar').style.width = '0%';
-      $('rp-play').textContent = '▶ play';
-      $('rp-play').disabled = false;
-      setPanel('done');
-    });
-
-    $('rp-new').addEventListener('click', () => {
-      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-      timeline = [];
-      setPanel('idle');
-    });
-
-    // ── Playback ──────────────────────────────────────────────────────────
-    function applyFrame(f) {
-      f.v.forEach((val, i) => {
-        sliders[i].value = val;
-        sliders[i].dispatchEvent(new Event('input', { bubbles: true }));
-      });
-    }
-
-    function runPlay(tl, barEl, onDone) {
-      if (rafId) cancelAnimationFrame(rafId);
-      const t0  = performance.now();
-      const dur = tl[tl.length - 1].t || 1;
-      let idx   = 0;
-      applyFrame(tl[0]);
-      idx = 1;
-      function tick(now) {
-        const elapsed = now - t0;
-        while (idx < tl.length && tl[idx].t <= elapsed) applyFrame(tl[idx++]);
-        if (barEl) barEl.style.width = Math.min(100, elapsed / dur * 100) + '%';
-        if (idx < tl.length) {
-          rafId = requestAnimationFrame(tick);
-        } else {
-          if (barEl) barEl.style.width = '100%';
-          rafId = null;
-          onDone();
-        }
-      }
-      rafId = requestAnimationFrame(tick);
-    }
-
-    $('rp-play').addEventListener('click', () => {
-      if (!timeline.length) return;
-      $('rp-play').disabled = true;
-      runPlay(timeline, $('rp-bar'), () => {
-        $('rp-play').disabled = false;
-        $('rp-play').textContent = '▶ again';
-      });
-    });
-
-    $('rp-share').addEventListener('click', () => {
-      if (!timeline.length) return;
-      const url = location.origin + location.pathname + '#r=' + encode(timeline);
-      const btn = $('rp-share');
-      const flash = ok => {
-        btn.textContent = ok ? '✓ copied!' : '⚠ failed';
-        setTimeout(() => { btn.textContent = '🔗 share'; }, 2200);
-      };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(url).then(() => flash(true), () => flash(false));
-      } else {
-        try {
-          const ta = document.createElement('textarea');
-          ta.value = url;
-          ta.style.cssText = 'position:fixed;opacity:0;pointer-events:none';
-          document.body.appendChild(ta); ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-          flash(true);
-        } catch (e) { flash(false); }
-      }
-    });
-
-    // ── Auto-play from URL (shared replay link) ────────────────────────────
-    const autoTL = replayFromHash();
-    if (autoTL && autoTL.length >= 2) {
-      setPanel('auto');
-      applyFrame(autoTL[0]);             // set initial state immediately
-
-      $('rp-skip').addEventListener('click', () => {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        timeline = autoTL;
-        const totalSec = (autoTL[autoTL.length - 1].t / 1000).toFixed(1);
-        $('rp-dcount').textContent = autoTL.length + ' frames · ' + totalSec + 's';
-        $('rp-bar').style.width = '100%';
-        $('rp-play').textContent = '▶ again';
-        $('rp-play').disabled = false;
-        setPanel('done');
-      });
-
-      // Short delay so the page finishes rendering before animation starts
-      setTimeout(() => {
-        runPlay(autoTL, $('rp-abar'), () => {
-          timeline = autoTL;
-          const totalSec = (autoTL[autoTL.length - 1].t / 1000).toFixed(1);
-          $('rp-dcount').textContent = autoTL.length + ' frames · ' + totalSec + 's';
-          $('rp-bar').style.width = '100%';
-          $('rp-play').textContent = '▶ again';
-          $('rp-play').disabled = false;
-          setPanel('done');
-        });
-      }, 600);
-    }
-
-  })();
-  </script>
-
   <script src="save-png.js"></script>
   <script src="url-state.js"></script>
   <script src="progress.js"></script>
+  <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>
 </body>

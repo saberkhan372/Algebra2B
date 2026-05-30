@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v7';
+const CACHE_VERSION = 'a2p-v8';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -32,6 +32,7 @@ const PRECACHE_URLS = [
   '/tools/related.js',
   '/tools/url-state.js',
   '/tools/save-png.js',
+  '/tools/replay.js',
   '/tools/math-fmt.js',
   '/tools/math-input.js',
   // All 50 tool pages (plus 2 orphaned prototypes kept for SW completeness)

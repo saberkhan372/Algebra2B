@@ -160,7 +160,25 @@ ctx.scale(DPR, DPR);
 
 ## Shared scripts — what each does
 
-All four scripts are injected into every tool page (in order above). They are self-contained IIFEs; none require configuration from the tool page.
+Five shared scripts exist; not all are on every page (see table below). They are self-contained IIFEs; none require configuration from the tool page.
+
+| Script | Every tool? | Purpose |
+|---|---|---|
+| `url-state.js` | Yes | URL hash state encode/decode |
+| `progress.js` | Yes | Visited badges, share/print buttons, `UrlState.auto()` |
+| `replay.js` | Slider tools only | Record/play/share slider sessions |
+| `related.js` | Yes | "TRY NEXT" injection |
+| `fullscreen.js` | Yes | Board mode, teacher quick-nav |
+
+**Script load order** (always maintain this sequence):
+```html
+<script src="save-png.js"></script>   <!-- canvas tools only -->
+<script src="url-state.js"></script>
+<script src="progress.js"></script>
+<script src="replay.js"></script>     <!-- tools with input[type=range][id] only -->
+<script src="related.js"></script>
+<script src="fullscreen.js"></script>
+```
 
 ### url-state.js
 - `UrlState.load()` — reads `#s=...` URL hash, returns plain object or null
@@ -186,6 +204,17 @@ Runs on tool pages AND homepage/unit pages. Detects context from `location.pathn
 
 **Exposed on `window.A2PG`:**
 - `A2PG.applyBadges()` — called by `index.html` after `buildSections()` to tag homepage cards
+
+### replay.js
+Included on the 19 tools that have `input[type="range"][id]` sliders. Silently exits on all other pages.
+
+- **Record:** `⏺ rec` starts a 50ms poll that captures slider state whenever values change
+- **Stop + normalise:** gaps > 2 s are capped; timeline stored as `[{t, v:[…]}, …]`
+- **Play:** `▶ play` animates through captured frames via `requestAnimationFrame`
+- **Share:** `🔗 share` encodes the timeline as `[[t, v0, v1, …], …]` → base64url → `#r=…` in the URL
+- **Auto-play:** if the page URL contains `#r=…`, the first frame is applied immediately and playback starts after 600 ms; `■ skip` jumps to the final state
+- Injects a REPLAY panel at the bottom of `.tool-sidebar` (above TRY NEXT)
+- Uses a separate `#r=` hash key — does not conflict with `UrlState`'s `#s=` key
 
 ### related.js
 - Embeds full 50-tool dataset (no API call)
@@ -266,12 +295,13 @@ var(--k-reference)  /* gray #5f5f5f */
 
 1. **TOOLS array** in `index.html` — add/update entry with all 9 fields (`id`, `prev`, `name`, `unit`, `topic`, `kind`, `diff`, `code`, `desc`, `href`).
 2. **Unit page** (`u1.html`…`u9.html`) — add/update the lesson row and link it live; add tool card to the grid.
-3. **Shared scripts** — last four `<script>` tags must be in order: `url-state.js`, `progress.js`, `related.js`, `fullscreen.js`.
+3. **Shared scripts** — last tags must be in order: `url-state.js`, `progress.js`, `replay.js` *(if sliders)*, `related.js`, `fullscreen.js`. Optionally `save-png.js` *(if canvas)* before `url-state.js`.
 4. **If canvas is draggable** — add `touch-action: none` to the canvas CSS rule.
-5. **Update `related.js`** — add the new tool to the `TOOLS` array embedded in that file (same 8 fields minus `prev` and `desc`).
-6. **PLAN.md** current state — update tool count and list.
-7. **sw.js** — add the new tool's path to `PRECACHE_URLS` and bump `CACHE_VERSION`.
-8. **Verify**: run the inline-script parse check from `.claude/design_constraints.md`.
+5. **If the tool has `input[type="range"][id]` sliders** — add `<script src="replay.js"></script>` between `progress.js` and `related.js`.
+6. **Update `related.js`** — add the new tool to the `TOOLS` array embedded in that file (same 8 fields minus `prev` and `desc`).
+7. **PLAN.md** current state — update tool count and list.
+8. **sw.js** — add the new tool's path to `PRECACHE_URLS` and bump `CACHE_VERSION`.
+9. **Verify**: run the inline-script parse check from `.claude/design_constraints.md`.
 
 ---
 
