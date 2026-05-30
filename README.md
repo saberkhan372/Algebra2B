@@ -25,6 +25,8 @@ Open `http://127.0.0.1:3333/`
 | `tools/` | 50 standalone interactive tool pages |
 | `tools/url-state.js` | URL hash state — encode slider positions; shareable pre-configured examples |
 | `tools/progress.js` | Visited badges, start-here banners, share + print buttons |
+| `tools/save-png.js` | `📷 save PNG` button on 31 canvas tools — downloads graph as image |
+| `tools/replay.js` | Record / play / share slider sessions as `#r=` replay URLs (19 slider tools) |
 | `tools/related.js` | "Try Next" section — 3 related tools injected into every info sidebar |
 | `tools/fullscreen.js` | Board mode (`⛶ board`), teacher quick-nav overlay (`⊞ tools`) |
 | `styles.css` | Full design system — CSS variables, layout, board/print/wide-screen rules |
@@ -56,6 +58,7 @@ Open `http://127.0.0.1:3333/`
 - **Search** — searches tool names AND descriptions; results highlight matched text
 - **Difficulty filter** — filter by ● easy / ●● medium / ●●● hard
 - **Share link** — copies canonical URL; encodes current slider state
+- **Save PNG** — download any canvas tool as an image for assignments
 
 ## Classroom / teacher features
 
@@ -63,6 +66,7 @@ Open `http://127.0.0.1:3333/`
 - **Quick-nav** (`⊞ tools`) — in board mode, opens full-screen tool picker grouped by unit
 - **Print key ideas** (`🖨 print`) — prints only sidebar content (HOW TO USE, TRY THIS, KEY IDEA)
 - **URL state** — slider positions encoded in URL hash; share a specific example with one click
+- **Replay recording** — `⏺ rec` captures a slider session; `🔗 share` generates a `#r=` URL students open to watch the walkthrough auto-play
 - **Wide-screen layout** — at ≥1400px sidebar grows for smartboard legibility
 - **Touch support** — all draggable canvases have `touch-action: none`
 
