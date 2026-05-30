@@ -166,13 +166,15 @@ Unit: `u1.html`
 
 ---
 
-## Recommended Build Order
+## Build Status
 
-| # | Tool | Priority | Why |
+| # | Tool | Status | Notes |
 |---|---|---|---|
-| 1 | Absolute Value Equation Stepper | 🔴 High | D7, no current tool, very specific step sequence, no-solution case |
-| 2 | One-Variable Inequality Solver | 🔴 High | D7, flip rule is the #1 error in this unit |
-| 3 | Point-Slope Form Trainer | 🟡 Medium | D6, no current tool, parallel/perp confuses students |
-| 4 | Function Notation Evaluator | 🟡 Medium | D8, extends piecewise grapher to evaluation practice |
-| 5 | Piecewise Grapher — boundary plug-in mode | 🟢 Small | D5, upgrade existing tool |
-| 6 | Linear Equations Explorer | 🟡 Medium | D1/D6, form conversion + VUXHOY |
+| 1 | Absolute Value Equation Stepper | ✅ built — `tools/abs-value-equations.html` | 6 presets; isolate → two-branch visual → solve each → check both; no-solution detector; "never distribute" sidebar warning |
+| 2 | One-Variable Inequality Solver | ✅ built — `tools/inequality-solver.html` | 6 presets; red ⚠ flip-alert card on every divide-by-negative step; number line SVG + interval notation output |
+| 3 | Point-Slope Form Trainer | ✅ built — `tools/point-slope.html` | Three tabs: point+slope (live graph, sign substitution step, SI conversion), two points (slope formula shown), parallel/perp (flip-and-negate with steps, fraction input, VUXHOY vertical line case) |
+| 4 | Function Notation Evaluator | ✅ built — `tools/function-notation.html` | Tab 1: regular f(x) — 4 presets, PEMDAS step breakdown, undefined detector. Tab 2: piecewise — student picks the right piece first (game mechanic, score tracking), then evaluates |
+| 5 | Piecewise Grapher — boundary plug-in mode | ⏳ pending | Small upgrade to `tools/piecewise-grapher.html` — add explicit "plug in boundary value" prompt matching D5 technique |
+| 6 | Linear Equations Explorer | ⏳ pending | Medium — form conversion (standard ↔ slope-intercept ↔ point-slope) + VUXHOY chip; D1/D6 coverage |
+
+All tools linked from `u1.html`. Unit 1 tool count: 8 → **12**. Global site count: 50 → **59**.

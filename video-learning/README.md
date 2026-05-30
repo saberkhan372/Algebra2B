@@ -18,7 +18,7 @@ Generated from local files under `teacher and student work`.
 - `batch-9-25-26-revisit-insights.md` - 25-26 revisit insights from U1/U2/U3 foundation lessons.
 - `batch-10-unit3-remaining-review-insights.md` - Unit 3 intercept form, word problems, powers of `i`, conjugates, literal equations, piecewise parabolas, and test-review insights.
 - `batch-11-site-audit-and-roadmap.md` - cross-cutting site audit: linked 2 orphaned tools, updated Adding Rationals subtract flow, added h-tooltip to Abs Value Grapher. Found items 3b–3g already implemented in code. Built Literal Equations, Domain Restriction Sorter, Coterminal Drill.
-- `batch-12-unit1-25-26-insights.md` - U1 (25-26) full analysis: slope, piecewise (plug-boundary technique), point-slope/parallel-perp, inequalities (flip rule), absolute value equations (two branches), function notation. Built Inequality Solver + Absolute Value Equation Stepper. Remaining: Point-Slope Trainer, Function Notation Evaluator, Linear Equations Explorer.
+- `batch-12-unit1-25-26-insights.md` - U1 (25-26) full analysis: slope, piecewise (plug-boundary technique), point-slope/parallel-perp, inequalities (flip rule), absolute value equations (two branches), function notation. Built 4 tools: Inequality Solver, Abs Value Equation Stepper, Point-Slope Form Trainer, Function Notation Evaluator. Pending: piecewise boundary-plug upgrade, Linear Equations Explorer.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
@@ -79,9 +79,29 @@ Generated from local files under `teacher and student work`.
 - U3-D10 - piecewise graphs with parabolas/absolute value plus rational/complex/literal-equation review.
 - Unit 3 Test Review - cumulative systems, piecewise, quadratics, factoring, rational expressions, radicals/complex numbers, quadratic formula, completing the square, projectile problems, literal equations, and transformations.
 
-### Transcribed in Batch 11 — Not Yet Analyzed
+### Transcribed in Batch 11 — Not Yet Analyzed (continued)
 
-The following 46 videos were transcribed as part of the batch-11 pass. A batch-12 analysis pass is planned, starting with the Unit 1 (25-26) lessons.
+These were generated during the batch-11 transcription run and are in `transcripts/` but have not yet been analyzed for tool insights:
+
+- U1-D1 Video (25-26) — ✅ analyzed in batch-12
+- U1-D4 through D8 Video (25-26) — ✅ analyzed in batch-12
+- Unit 1 Test Review Video (25-26) — transcribed, not analyzed
+- U2-D3 Video (Part 2) 25-26 — transcribed, not analyzed
+- U2-D4 Video (unlabeled/older) — transcribed, not analyzed
+- U2-D5 Video (PART 1) and (PART 2) — transcribed, not analyzed
+- U3 Review Video — transcribed, not analyzed
+- U3-D1 Video (24-25) — transcribed, not analyzed
+- U3-D2 Video, U3-D3 Video (24-25), U3-D4 video, U3-D5 Video (unlabeled) — pending transcription
+- U4-D5 Video — pending transcription
+- U1 older unlabeled versions (D2, D4, D5, D6, D7), U1 Summer Review — transcribed, not analyzed
+- U1 Review Video, U2 Review Video, U3 Review Video, U4 Review Video — transcribed (U3 done), rest pending
+- Unit 5–7, U9 study guide videos — pending transcription
+- A2B Final Review Video (23-24) — transcribed, not analyzed
+- Calculator/misc videos — transcribed, not analyzed
+
+### Transcribed in Batch 11 — Analysis Status
+
+46 videos transcribed in batch-11. Batch-12 completed the U1 (25-26) analysis. Remaining videos below are transcribed but not yet analyzed — batch-13 will cover U2 (25-26) and the review/study-guide videos.
 
 **Unit 1 (25-26) — current year:**
 - U1-D1 Video (25-26)
