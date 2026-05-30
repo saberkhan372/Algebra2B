@@ -194,6 +194,10 @@ Runs on tool pages AND homepage/unit pages. Detects context from `location.pathn
 - Injects `🔗 copy link` + `🖨 print` buttons at top of `.tool-sidebar`
 - Sets `data-print-title` on sidebar for `@media print` title display
 - Calls `UrlState.auto()` (after tool's own scripts have registered listeners)
+- **Auto-collapses `.how-to-box`** (HOW TO USE + TRY THIS) on the 25 tools that use it; starts closed; state saved in `localStorage` key `a2pg-htu`
+
+**On unit pages:**
+- **Auto-collapses `.lesson-stack`** into a "LESSON SCHEDULE (N days) ▸" header; starts closed; state saved in `localStorage` key `a2pg-ls`
 
 **On homepage / unit pages:**
 - Reads `a2pg-visited` and adds `✓` visited badge to matching `.tool-card` elements
@@ -207,6 +211,7 @@ Runs on tool pages AND homepage/unit pages. Detects context from `location.pathn
 
 ### replay.js
 Included on the 19 tools that have `input[type="range"][id]` sliders. Silently exits on all other pages.
+- REPLAY panel starts **collapsed** — shows `"replay ▸"` header; click to expand
 
 - **Record:** `⏺ rec` starts a 50ms poll that captures slider state whenever values change
 - **Stop + normalise:** gaps > 2 s are capped; timeline stored as `[{t, v:[…]}, …]`
@@ -288,6 +293,9 @@ var(--k-reference)  /* gray #5f5f5f */
 | `btn` / `btn accent` | Action buttons |
 | `lesson-row` | Row in a unit page lesson stack |
 | `tool-card` | Homepage grid card |
+| `sk-coll-hdr` | Collapsible section header — adds toggle arrow, cursor pointer |
+| `sk-coll-body` | Collapsible section body — `max-height` + `opacity` transition |
+| `sk-closed` | Applied to both hdr and body when collapsed; arrow rotates -90° |
 
 ---
 
