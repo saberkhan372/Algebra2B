@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inequality Solver — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex: 1; overflow-y: auto; padding: 8px 0; display: flex; flex-direction: column; gap: 10px; }
+
+    /* prob picker */
+    .prob-picker { display:flex; gap:6px; flex-wrap:wrap; }
+    .prob-btn {
+      padding:5px 12px; border-radius:16px; border:1.5px solid var(--ink-2);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:12px;
+      cursor:pointer; transition:all .12s;
+    }
+    .prob-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .prob-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+    /* equation card */
+    .eq-card {
+      padding:14px 18px; text-align:center;
+      background:var(--paper-2); border:2px solid var(--ink-2); border-radius:6px;
+    }
+    .eq-card-label { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); margin-bottom:6px; text-transform:uppercase; }
+    .eq-big { font-family:'JetBrains Mono',monospace; font-size:22px; color:var(--ink); }
+
+    /* step cards */
+    .step-card {
+      border:2px solid var(--ink-2); border-radius:6px; padding:10px 14px;
+      background:var(--paper); opacity:0.15; pointer-events:none;
+      transition:opacity 0.3s, background 0.3s;
+    }
+    .step-card.revealed { opacity:1; pointer-events:auto; }
+    .step-card.s1 { background:#fdf0e0; border-color:#c07820; }
+    .step-card.s2 { background:#e8f4ec; border-color:#2a8a4a; }
+    .step-card.s3 { background:#dde9f6; border-color:#2a6fb4; }
+    .step-card.s4 { background:#faeae4; border-color:#d94f2a; }
+    .step-card.sfinal { background:var(--highlight); border-color:#c8a000; }
+    .step-card.s-flip { background:#fdecea; border-color:var(--redline); }
+
+    .step-num  { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:3px; text-transform:uppercase; }
+    .step-lbl  { font-family:var(--f-body); font-size:13px; color:var(--ink-2); margin-bottom:6px; }
+    .step-lbl strong { color:var(--ink); }
+    .step-expr { font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--ink); line-height:1.8; }
+    .step-note { font-family:var(--f-body); font-size:12px; color:var(--ink-soft); margin-top:4px; }
+
+    /* flip alert */
+    .flip-alert {
+      display:inline-block; padding:4px 12px; border-radius:4px;
+      background:var(--redline); color:#fff;
+      font-family:'Permanent Marker',cursive; font-size:13px;
+      margin-bottom:6px;
+    }
+
+    /* number line */
+    .numline-wrap { margin:10px 0 4px; }
+    .numline-svg  { display:block; width:100%; max-width:400px; height:44px; margin:0 auto; }
+
+    /* answer chip */
+    .answer-chip {
+      display:inline-block; padding:6px 18px;
+      background:var(--accent); color:#fff; border-radius:6px;
+      font-family:'JetBrains Mono',monospace; font-size:19px; font-weight:700;
+      margin-top:4px;
+    }
+    .interval-chip {
+      display:inline-block; padding:4px 14px; border-radius:6px;
+      background:#2a6fb4; color:#fff;
+      font-family:'JetBrains Mono',monospace; font-size:15px;
+      margin-top:6px; margin-left:8px;
+    }
+
+    .next-btn {
+      margin-top:8px; padding:6px 18px;
+      background:var(--ink); color:var(--paper); border:none;
+      border-radius:4px; font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:opacity .15s;
+    }
+    .next-btn:hover { opacity:.8; }
+    .next-btn:disabled { opacity:.3; cursor:default; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Foundations</a> &nbsp;·&nbsp; D7</div>
+      <div class="tool-title f-display">Inequality Solver</div>
+      <div class="tool-tagline f-hand">⚠ Multiply or divide by a negative? Flip the symbol.</div>
+
+      <div class="sk-box" style="padding:10px; margin-top:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">PICK A PROBLEM</div>
+        <div class="prob-picker" id="prob-picker"></div>
+      </div>
+
+      <div class="trainer-stage" id="stage"></div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE ONE KEY RULE</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          When you <strong>multiply or divide both sides by a negative</strong> — flip the inequality symbol.<br><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">−3x &lt; 12<br>÷(−3) → flip!<br>x &gt; −4</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">OPEN vs CLOSED</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>&gt; or &lt;</strong> → open circle ○ (value not included)<br>
+          <strong>≥ or ≤</strong> → closed circle ● (value included)<br><br>
+          Arrow direction matches the symbol — but only when the variable is on the left.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">💡 VARIABLE ON THE LEFT</div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-2); line-height:1.7;">
+          Always end with x on the left side. Then the arrow on the number line points the same way as the symbol:<br>
+          x &gt; 3 → arrow points right<br>
+          x &lt; −1 → arrow points left
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="abs-value-equations.html">→ Absolute Value Equation Stepper</a>
+        <a class="related-link f-hand" href="inequality-explorer.html">→ Inequality Region Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── Problems ────────────────────────────────────────────────────────────
+    // steps: array of {lbl, expr, flip, note}
+    //   flip: true → show flip alert card
+    // result: {sym, bound, strict, interval, direction}
+    const PROBLEMS = [
+      {
+        id: 0,
+        label: '5x > −35',
+        display: '5x > −35',
+        steps: [
+          { lbl: 'Divide both sides by <strong>5</strong>', expr: 'x > −7', flip: false, note: 'Dividing by positive 5 — symbol stays the same.' },
+        ],
+        result: { sym: '>', bound: -7, strict: true, interval: '(−7, ∞)', direction: 'right' },
+      },
+      {
+        id: 1,
+        label: '−4x ≤ 20',
+        display: '−4x ≤ 20',
+        steps: [
+          { lbl: 'Divide both sides by <strong>−4</strong>', expr: 'x ≥ −5', flip: true, note: 'Divided by negative — the ≤ flipped to ≥.' },
+        ],
+        result: { sym: '≥', bound: -5, strict: false, interval: '[−5, ∞)', direction: 'right' },
+      },
+      {
+        id: 2,
+        label: '3x + 17 < 2',
+        display: '3x + 17 < 2',
+        steps: [
+          { lbl: 'Subtract 17 from both sides', expr: '3x < −15', flip: false, note: '' },
+          { lbl: 'Divide both sides by <strong>3</strong>', expr: 'x < −5', flip: false, note: 'Dividing by positive 3 — symbol stays.' },
+        ],
+        result: { sym: '<', bound: -5, strict: true, interval: '(−∞, −5)', direction: 'left' },
+      },
+      {
+        id: 3,
+        label: '−3x + 17 < 2',
+        display: '−3x + 17 < 2',
+        steps: [
+          { lbl: 'Subtract 17 from both sides', expr: '−3x < −15', flip: false, note: '' },
+          { lbl: 'Divide both sides by <strong>−3</strong>', expr: 'x > 5', flip: true, note: 'Divided by negative — the < flipped to >.' },
+        ],
+        result: { sym: '>', bound: 5, strict: true, interval: '(5, ∞)', direction: 'right' },
+      },
+      {
+        id: 4,
+        label: '(2x + 3) / −7 < 7',
+        display: '(2x + 3) / −7 < 7',
+        steps: [
+          { lbl: 'Multiply both sides by <strong>−7</strong>', expr: '2x + 3 > −49', flip: true, note: 'Multiplied by negative − the < flipped to >.' },
+          { lbl: 'Subtract 3 from both sides', expr: '2x > −52', flip: false, note: '' },
+          { lbl: 'Divide both sides by <strong>2</strong>', expr: 'x > −26', flip: false, note: 'Dividing by positive 2 — symbol stays.' },
+        ],
+        result: { sym: '>', bound: -26, strict: true, interval: '(−26, ∞)', direction: 'right' },
+      },
+      {
+        id: 5,
+        label: '18 − 4x ≥ −2',
+        display: '18 − 4x ≥ −2',
+        steps: [
+          { lbl: 'Subtract 18 from both sides', expr: '−4x ≥ −20', flip: false, note: '' },
+          { lbl: 'Divide both sides by <strong>−4</strong>', expr: 'x ≤ 5', flip: true, note: 'Divided by negative — the ≥ flipped to ≤.' },
+        ],
+        result: { sym: '≤', bound: 5, strict: false, interval: '(−∞, 5]', direction: 'left' },
+      },
+    ];
+
+    // ─── State ───────────────────────────────────────────────────────────────
+    let currentIdx = 0;
+    let stepIdx = 0;
+
+    // ─── Number line SVG ─────────────────────────────────────────────────────
+    function makeNumLine(bound, strict, direction) {
+      const W = 340, H = 44, mid = W / 2;
+      const bx = direction === 'right' ? 110 : 230;
+      const col = strict ? '#2a6fb4' : '#2a8a4a';
+
+      let arrow, shade;
+      if (direction === 'right') {
+        arrow = `<polygon points="${W-8},${H/2-5} ${W},${H/2} ${W-8},${H/2+5}" fill="${col}"/>`;
+        shade = `<rect x="${bx}" y="${H/2-5}" width="${W-bx-10}" height="10" fill="${col}" opacity="0.25"/>`;
+      } else {
+        arrow = `<polygon points="8,${H/2-5} 0,${H/2} 8,${H/2+5}" fill="${col}"/>`;
+        shade = `<rect x="10" y="${H/2-5}" width="${bx-10}" height="10" fill="${col}" opacity="0.25"/>`;
+      }
+
+      const bracket = strict ? '(' : '[';
+      const closeBracket = direction === 'right' ? '' :
+        `<text x="${bx+8}" y="${H/2+5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="${col}" font-weight="700">${strict ? ')' : ']'}</text>`;
+
+      return `<svg class="numline-svg" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+        <line x1="10" y1="${H/2}" x2="${W-10}" y2="${H/2}" stroke="#ccc" stroke-width="1.5"/>
+        ${arrow}
+        ${shade}
+        <circle cx="${bx}" cy="${H/2}" r="5" stroke="${col}" stroke-width="2" ${strict ? 'fill="white"' : `fill="${col}"`}/>
+        <text x="${bx}" y="${H/2-10}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="12" fill="${col}">${bound}</text>
+        <text x="${bx - (direction==='right' ? 8 : -8)}" y="${H/2+5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="14" fill="${col}" font-weight="700">${direction === 'right' ? bracket : (strict ? ')' : ']')}</text>
+        ${direction === 'right' ? `<text x="${W-22}" y="${H/2+5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="${col}">∞</text>` :
+          `<text x="18" y="${H/2+5}" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="13" fill="${col}">−∞</text>`}
+      </svg>`;
+    }
+
+    // ─── Render ───────────────────────────────────────────────────────────────
+    function renderPicker() {
+      document.getElementById('prob-picker').innerHTML = PROBLEMS.map((p, i) =>
+        `<button class="prob-btn${i === currentIdx ? ' active' : ''}" onclick="loadProblem(${i})">${p.label}</button>`
+      ).join('');
+    }
+
+    function renderStage() {
+      const prob = PROBLEMS[currentIdx];
+      const stage = document.getElementById('stage');
+      let html = '';
+
+      // Equation
+      html += `<div class="eq-card sk-box">
+        <div class="eq-card-label">Inequality</div>
+        <div class="eq-big">${prob.display}</div>
+      </div>`;
+
+      // Steps
+      prob.steps.forEach((step, i) => {
+        const revealed = i < stepIdx;
+        const isFlip = step.flip;
+        const cls = `step-card${revealed ? ` revealed ${isFlip ? 's-flip' : ['s1','s2','s3','s4'][i % 4]}` : ''}`;
+
+        let body = '';
+        if (isFlip && revealed) {
+          body = `<div class="flip-alert">⚠ flip the symbol!</div><br>`;
+        }
+        body += `<span class="step-expr">${step.expr}</span>`;
+
+        html += `<div class="${cls}">
+          <div class="step-num">step ${i + 1}</div>
+          <div class="step-lbl">${step.lbl}</div>
+          <div>${body}</div>
+          ${step.note ? `<div class="step-note">${step.note}</div>` : ''}
+        </div>`;
+      });
+
+      // Final: number line + interval notation
+      const allStepsDone = stepIdx >= prob.steps.length;
+      const done = stepIdx > prob.steps.length;
+
+      if (allStepsDone) {
+        const r = prob.result;
+        const finalCls = `step-card${done ? ' revealed sfinal' : ''}`;
+        html += `<div class="${finalCls}">
+          <div class="step-num">result</div>
+          <div class="step-lbl"><strong>Answer:</strong></div>
+          <span class="answer-chip">${r.sym.includes('≤') || r.sym.includes('≥') ? prob.steps[prob.steps.length-1].expr : prob.steps[prob.steps.length-1].expr}</span>
+          <span class="interval-chip">${r.interval}</span>
+          <div class="numline-wrap">${makeNumLine(r.bound, r.strict, r.direction)}</div>
+        </div>`;
+      }
+
+      const fullyDone = stepIdx > prob.steps.length;
+      html += `<button class="next-btn" onclick="nextStep()" ${fullyDone ? 'disabled' : ''}>
+        ${fullyDone ? '✓ complete' : 'Next step →'}
+      </button>`;
+
+      stage.innerHTML = html;
+    }
+
+    function nextStep() {
+      const prob = PROBLEMS[currentIdx];
+      if (stepIdx <= prob.steps.length) {
+        stepIdx++;
+        renderStage();
+        const cards = document.querySelectorAll('.step-card.revealed');
+        if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function loadProblem(idx) {
+      currentIdx = idx;
+      stepIdx = 1;
+      renderPicker();
+      renderStage();
+    }
+
+    loadProblem(0);
+  </script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+</body>
+</html>

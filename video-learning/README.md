@@ -17,7 +17,8 @@ Generated from local files under `teacher and student work`.
 - `batch-8-functions-transformations-unit2-insights.md` - Unit 2 functions, domain/range, calculator workflow, transformations, and test-review insights.
 - `batch-9-25-26-revisit-insights.md` - 25-26 revisit insights from U1/U2/U3 foundation lessons.
 - `batch-10-unit3-remaining-review-insights.md` - Unit 3 intercept form, word problems, powers of `i`, conjugates, literal equations, piecewise parabolas, and test-review insights.
-- `batch-11-site-audit-and-roadmap.md` - cross-cutting site audit: linked 2 orphaned tools, updated Adding Rationals subtract flow, added h-tooltip to Abs Value Grapher. Found items 3b–3g already implemented in code. Remaining work: 4 new tools (Literal Equations, Domain Restriction Sorter, Three-Form Navigator, Coterminal Drill) + batch-12 analysis.
+- `batch-11-site-audit-and-roadmap.md` - cross-cutting site audit: linked 2 orphaned tools, updated Adding Rationals subtract flow, added h-tooltip to Abs Value Grapher. Found items 3b–3g already implemented in code. Built Literal Equations, Domain Restriction Sorter, Coterminal Drill.
+- `batch-12-unit1-25-26-insights.md` - U1 (25-26) full analysis: slope, piecewise (plug-boundary technique), point-slope/parallel-perp, inequalities (flip rule), absolute value equations (two branches), function notation. Built Inequality Solver + Absolute Value Equation Stepper. Remaining: Point-Slope Trainer, Function Notation Evaluator, Linear Equations Explorer.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
