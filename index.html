@@ -417,9 +417,9 @@
               <span class="unit-section-dates">${info.dates}</span>
             </div>
             <span class="unit-section-count" id="count-${unit}">${tools.length} tools</span>
-            <span class="unit-section-arrow" id="arrow-${unit}">▾</span>
+            <span class="unit-section-arrow" id="arrow-${unit}">▸</span>
           </div>
-          <div class="tool-grid unit-grid" id="grid-${unit}"></div>
+          <div class="tool-grid unit-grid" id="grid-${unit}" style="display:none;"></div>
         `;
         container.appendChild(section);
         const grid = section.querySelector(`#grid-${unit}`);
@@ -493,6 +493,7 @@
 
     function applyFilter() {
       const q = document.getElementById('search-input').value.toLowerCase().trim();
+      const isFiltered = activeKind !== 'all' || activeUnit !== 'all' || activeDiff !== 'all' || q !== '';
       let total = 0;
       UNIT_ORDER.forEach(unit => {
         const section = document.querySelector(`.unit-section[data-unit="${unit}"]`);
@@ -512,6 +513,11 @@
           }
         });
         section.style.display = sectionVisible === 0 ? 'none' : '';
+        if (isFiltered && sectionVisible > 0) {
+          grid.style.display = '';
+          const arrow = document.getElementById('arrow-' + unit);
+          if (arrow) arrow.textContent = '▾';
+        }
         const countEl = document.getElementById('count-' + unit);
         if (countEl) countEl.textContent = sectionVisible + ' tool' + (sectionVisible !== 1 ? 's' : '');
       });

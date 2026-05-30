@@ -14,7 +14,7 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
 - **50 tools** across 8 units (U1–U7, U9). All units complete.
 - **8 unit pages**: `u1.html`–`u7.html` + `u9.html`. All counts/statuses accurate.
-- Homepage: unit-grouped collapsible sections, three filter rows (kind / unit / level).
+- Homepage: unit sections collapse by default; filter/search auto-expands matching units; three filter rows (kind / unit / level).
 
 ### Shared scripts in `tools/` (loaded by every tool page)
 

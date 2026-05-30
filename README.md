@@ -60,7 +60,7 @@ Open `http://127.0.0.1:3333/`
 - **Difficulty filter** — filter by ● easy / ●● medium / ●●● hard
 - **Share link** — copies canonical URL; encodes current slider state
 - **Save PNG** — download any canvas tool as an image for assignments
-- **Collapsible sections** — HOW TO USE, TRY THIS, lesson schedules, and sidebar info start collapsed; tap to expand; state saved in localStorage
+- **Collapsible sections** — unit sections on homepage, HOW TO USE, TRY THIS, lesson schedules, and sidebar info all start collapsed; tap to expand; state saved in localStorage
 
 ## Classroom / teacher features
 

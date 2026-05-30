@@ -29,7 +29,7 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 | `styles.css` | Full shared design system (includes board-mode, print, wide-screen rules) |
 | `404.html` | Friendly 404 page (GitHub Pages serves automatically) |
 | `offline.html` | Offline fallback (served by service worker) |
-| `sw.js` | Service worker v6 — precaches all 50 tools + shared scripts + error pages |
+| `sw.js` | Service worker v9 — precaches all 50 tools + shared scripts + error pages |
 | `tools/url-state.js` | URL hash state encoding/decoding + auto-wiring for range inputs |
 | `tools/progress.js` | Visited badges, start-here banners, share/print buttons |
 | `tools/related.js` | "TRY NEXT" section injection |

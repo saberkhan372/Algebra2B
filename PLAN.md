@@ -1,6 +1,6 @@
 # Algebra 2B Playgrounds — Build Plan
 
-Last updated: 2026-05-28  
+Last updated: 2026-05-29  
 Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site audit, and video-learning transcripts/contact sheets.
 
 ---
@@ -10,7 +10,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 **Site:** 8 unit pages (u1–u7 + u9), **50 tools** wired into the homepage grid.  
 **Curriculum:** All 8 units complete (Sept → May). Year is done.  
 **Unit pages:** U1–U7 + U9 fully wired. No coming-soon rows remain.  
-**Homepage:** Reorganized May 2026 — unit-grouped collapsible sections, dual filter rows (kind + unit chip), correct "all 50" count.  
+**Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip), correct "all 50" count.  
 **Video-learning:** Complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
 
 **Student & classroom improvements (May 2026) — all complete:**
@@ -24,11 +24,11 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Print key ideas — `🖨 print` button in every sidebar; `@media print` CSS
 - Difficulty filter row on homepage (●/●●/●●●); search includes descriptions + highlights
 - Unit progress bars in homepage sidebar
-- `404.html` + `offline.html`; service worker v6 with offline fallback
+- `404.html` + `offline.html`; service worker v9 with offline fallback
 - `📷 save PNG` button on 31 canvas tools — `tools/save-png.js`
 - **Replay recording** — `tools/replay.js` on 19 slider tools; `⏺ rec` captures sessions, `🔗 share` encodes full timeline as `#r=base64url`; shared URLs auto-play for students
 - **Concept map** — `concept-map.html`; 50 nodes in 8 concept threads, 10 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
-- **Collapsible sections** — HOW TO USE & TRY THIS (25 tool pages), lesson schedule (8 unit pages), REPLAY panel, and homepage sidebar sections all start collapsed; `.sk-coll-*` CSS pattern in `styles.css`; auto-wired by `progress.js` with no per-tool HTML edits; state saved in localStorage
+- **Collapsible sections** — HOW TO USE & TRY THIS (25 tool pages), lesson schedule (8 unit pages), REPLAY panel, homepage sidebar sections, and **all 8 homepage unit grids** start collapsed; `.sk-coll-*` CSS pattern in `styles.css`; unit grids auto-expand when any filter/search is active; state saved in localStorage
 
 **50 tools built/integrated:**
 - Absolute Value Grapher (U2)

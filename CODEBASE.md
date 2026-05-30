@@ -61,7 +61,7 @@ The homepage is driven by a single `const TOOLS = [...]` array in `index.html`. 
 }
 ```
 
-**When adding a new tool**, append an entry here. The homepage JS (`buildSections`) auto-populates all unit sections from this array.
+**When adding a new tool**, append an entry here. The homepage JS (`buildSections`) auto-populates all unit sections from this array. Unit grids start **collapsed** (`display:none`, arrow `▸`); `applyFilter` auto-expands sections with matches whenever any filter or search is active.
 
 ### Hover preview system
 
