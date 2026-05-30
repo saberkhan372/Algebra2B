@@ -80,6 +80,22 @@
       font-family: var(--f-body); font-size: 12px; color: #c8a000;
       padding: 2px 12px 4px; margin-top: -3px;
     }
+    /* boundary-point anchor row */
+    .anchor-row {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      padding: 3px 12px 5px 38px; margin-top: -4px;
+    }
+    .anchor-lbl {
+      font-family: 'Permanent Marker', cursive; font-size: 10px;
+      color: var(--ink-soft); text-transform: uppercase; letter-spacing: .03em;
+    }
+    .anchor-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 8px; border-radius: 4px; border: 1.5px solid;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      background: rgba(255,255,255,0.5);
+    }
+    .anchor-chip .arrow { color: var(--ink-2); font-size: 11px; }
   </style>
 </head>
 <body class="paper-grid">
@@ -133,6 +149,7 @@
           <li>Click <strong>≡ / ⌒</strong> to switch a piece between linear and parabola.</li>
           <li>Linear: set slope <strong>m</strong> and intercept <strong>b</strong>. Parabola: set <strong>a, h, k</strong> (vertex form).</li>
           <li><strong>( )</strong> = open · <strong>[ ]</strong> = closed endpoint.</li>
+          <li>The <strong>anchor pts</strong> chips show f(boundary) — plug in the boundary x to find your starting point instead of hunting for the y-intercept.</li>
           <li>Drag the x slider — the active piece lights up.</li>
         </ol>
       </div>
@@ -141,7 +158,7 @@
         <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
         <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
           <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
-          <span class="f-hand" style="font-size:13px;">Drag x to the boundary (x = 0). Which piece gets x = 0? Change the endpoint — does the graph change?</span>
+          <span class="f-hand" style="font-size:13px;">Look at the <strong>anchor pts</strong> for piece 1. Change its slope — do the anchor points update? This is how you find your starting point when the y-intercept is off-screen.</span>
         </div>
         <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
           <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
@@ -307,6 +324,30 @@
           warn.className = 'vert-warn';
           warn.textContent = `⚠ vertex at x = ${p.h} is outside ${fmtInterval(p)} — only part of the parabola is shown. Plug in boundary values to find the endpoints.`;
           el.appendChild(warn);
+        }
+
+        // Boundary anchor-point display
+        const hasLeft  = !p.lInf;
+        const hasRight = !p.rInf;
+        if (hasLeft || hasRight) {
+          const anchor = document.createElement('div');
+          anchor.className = 'anchor-row';
+          let chips = `<span class="anchor-lbl">anchor pts →</span>`;
+          if (hasLeft) {
+            const ly = Math.round(yAt(p, p.lBnd) * 100) / 100;
+            chips += `<span class="anchor-chip" style="border-color:${COLORS[i]}; color:${COLORS[i]};">
+              f(${p.lBnd}) <span class="arrow">→</span> <strong>(${p.lBnd}, ${ly})</strong>
+            </span>`;
+          }
+          if (hasRight && p.rBnd !== p.lBnd) {
+            const ry = Math.round(yAt(p, p.rBnd) * 100) / 100;
+            chips += `<span class="anchor-chip" style="border-color:${COLORS[i]}; color:${COLORS[i]};">
+              f(${p.rBnd}) <span class="arrow">→</span> <strong>(${p.rBnd}, ${ry})</strong>
+            </span>`;
+          }
+          chips += `<span class="f-hand" style="font-size:11px; color:var(--ink-soft);">← plug in boundary x to find your starting point</span>`;
+          anchor.innerHTML = chips;
+          el.appendChild(anchor);
         }
       });
 
