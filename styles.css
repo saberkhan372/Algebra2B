@@ -49,7 +49,7 @@ a:hover { text-decoration: underline; }
 /* Headers stay handwritten; .f-hand (body/reading text) now uses the clean font */
 .f-display { font-family: 'Caveat', cursive; font-weight: 700; }
 .f-hand    { font-family: var(--f-body); }
-.f-marker  { font-family: 'Permanent Marker', cursive; }
+.f-marker  { font-family: var(--f-body); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .f-type    { font-family: 'Special Elite', monospace; }
 .f-mono    { font-family: 'JetBrains Mono', monospace; }
 
