@@ -157,21 +157,43 @@
     <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
     <div class="nav-search">
       <span class="search-icon">🔎</span>
-      <input type="text" id="search-input" placeholder="search 60 tools..." autocomplete="off" />
+      <input type="text" id="search-input" placeholder="search 66 tools..." autocomplete="off" />
     </div>
     <div class="nav-links">
       <a href="index.html" class="active">home</a>
       <a href="map.html">map</a>
       <a href="concept-map.html">concepts</a>
+      <a href="study.html">study guide</a>
       <a href="shapes.html">shapes</a>
       <a href="about.html">about</a>
     </div>
   </nav>
 
+  <!-- First-visit welcome banner -->
+  <div id="welcome-banner" style="display:none; padding:10px 20px; background:var(--highlight); border-bottom:1.5px dashed var(--ink-2); display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+    <span style="font-family:'Caveat',cursive; font-size:18px; font-weight:700; color:var(--ink);">Welcome to A2 Playgrounds</span>
+    <span style="font-family:var(--f-body); font-size:13px; color:var(--ink-2);">— 66 interactive math tools for Algebra 2. Start anywhere:</span>
+    <a href="map.html" style="font-family:var(--f-body); font-size:13px; padding:3px 10px; border:1.5px solid var(--ink-2); border-radius:3px; text-decoration:none; color:var(--ink); background:var(--paper);">📋 course map</a>
+    <a href="study.html" style="font-family:var(--f-body); font-size:13px; padding:3px 10px; border:1.5px solid var(--ink-2); border-radius:3px; text-decoration:none; color:var(--ink); background:var(--paper);">📖 study guide</a>
+    <a href="concept-map.html" style="font-family:var(--f-body); font-size:13px; padding:3px 10px; border:1.5px solid var(--ink-2); border-radius:3px; text-decoration:none; color:var(--ink); background:var(--paper);">🔗 concept map</a>
+    <button onclick="dismissWelcome()" style="margin-left:auto; font-family:var(--f-body); font-size:12px; padding:3px 10px; border:1.5px solid var(--ink-soft); border-radius:3px; cursor:pointer; background:transparent; color:var(--ink-soft);">✕ dismiss</button>
+  </div>
+  <script>
+    (function () {
+      if (!localStorage.getItem('a2pg-welcomed')) {
+        document.getElementById('welcome-banner').style.display = 'flex';
+      }
+    })();
+    function dismissWelcome() {
+      localStorage.setItem('a2pg-welcomed', '1');
+      document.getElementById('welcome-banner').style.display = 'none';
+    }
+  </script>
+
   <!-- Pacing banner -->
   <div class="pacing-banner">
     <span>🎉 Year complete!</span>
-    <span class="unit-label">All 8 units · 60 tools</span>
+    <span class="unit-label">All 8 units · 66 tools</span>
     <span>— explore anything ↗</span>
   </div>
 

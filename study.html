@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Guide — A2 Playgrounds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Unit tab strip ──────────────────────────────────── */
+    .sg-tabs {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      padding: 14px 20px 10px;
+      border-bottom: 1.5px dashed var(--ink-2);
+      background: var(--paper-2);
+      position: sticky; top: 0; z-index: 10;
+    }
+    .sg-tab {
+      padding: 5px 14px; border-radius: 4px;
+      border: 2px solid transparent;
+      font-family: 'Permanent Marker', cursive; font-size: 13px;
+      cursor: pointer; background: var(--paper); color: var(--ink);
+      transition: background .15s, color .15s;
+    }
+    .sg-tab:hover { opacity: .85; }
+    .sg-tab.active { color: #fff; border-color: transparent; }
+    .sg-tab-print {
+      margin-left: auto; padding: 5px 14px; border-radius: 4px;
+      border: 2px solid var(--ink-2);
+      font-family: var(--f-body); font-size: 13px;
+      cursor: pointer; background: var(--paper); color: var(--ink-2);
+    }
+    .sg-tab-print:hover { background: var(--paper-2); }
+
+    /* ── Unit section ────────────────────────────────────── */
+    .sg-unit { display: none; padding: 0 0 40px; }
+    .sg-unit.active { display: block; }
+
+    .sg-header {
+      padding: 16px 24px 12px;
+      color: #fff;
+    }
+    .sg-header-eyebrow {
+      font-family: 'Permanent Marker', cursive; font-size: 11px;
+      opacity: .8; letter-spacing: .1em; margin-bottom: 4px;
+    }
+    .sg-header-title {
+      font-family: 'Caveat', cursive; font-size: 32px;
+      font-weight: 700; line-height: 1;
+    }
+    .sg-header-sub {
+      font-family: var(--f-body); font-size: 13px;
+      opacity: .85; margin-top: 4px;
+    }
+
+    .sg-body { padding: 0 24px; }
+
+    /* ── Key ideas ───────────────────────────────────────── */
+    .sg-section-label {
+      font-family: 'Permanent Marker', cursive; font-size: 12px;
+      color: var(--ink-soft); letter-spacing: .08em;
+      margin: 18px 0 8px; display: flex; align-items: center; gap: 10px;
+    }
+    .sg-section-label::after {
+      content: ''; flex: 1; height: 1.5px;
+      background: var(--ink-2); opacity: .2;
+    }
+
+    .idea-list {
+      list-style: none; margin: 0; padding: 0;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .idea-item {
+      display: flex; gap: 10px; align-items: baseline;
+      font-family: var(--f-body); font-size: 14px;
+      color: var(--ink-2); line-height: 1.45;
+    }
+    .idea-num {
+      font-family: 'Permanent Marker', cursive; font-size: 13px;
+      color: var(--ink-soft); flex-shrink: 0; min-width: 18px;
+    }
+    .idea-item strong { color: var(--ink); }
+
+    /* ── Formula grid ────────────────────────────────────── */
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 10px;
+    }
+    .formula-card {
+      border: 1.5px solid var(--ink-2);
+      border-radius: 5px;
+      padding: 10px 13px;
+      background: var(--paper);
+      box-shadow: 2px 2px 0 rgba(29,26,20,.06);
+    }
+    .formula-card .fc-name {
+      font-family: 'Permanent Marker', cursive; font-size: 10px;
+      color: var(--ink-soft); letter-spacing: .06em; margin-bottom: 5px;
+    }
+    .formula-card .fc-expr {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px;
+      color: var(--ink); line-height: 1.5; margin-bottom: 3px;
+    }
+    .formula-card .fc-note {
+      font-family: var(--f-body); font-size: 12px;
+      color: var(--ink-2); line-height: 1.4;
+    }
+    .formula-card .fc-warn {
+      font-family: var(--f-body); font-size: 11.5px;
+      color: #b84000; margin-top: 4px;
+    }
+
+    /* ── Practice tools strip ────────────────────────────── */
+    .tool-chips {
+      display: flex; flex-wrap: wrap; gap: 7px;
+    }
+    .tool-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 12px; border-radius: 4px;
+      border: 1.5px solid var(--ink-2);
+      font-family: var(--f-body); font-size: 13px;
+      color: var(--ink); text-decoration: none;
+      background: var(--paper); transition: background .1s;
+    }
+    .tool-chip:hover { background: var(--paper-2); text-decoration: none; }
+    .tool-chip .chip-code {
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--ink-soft);
+    }
+
+    /* ── Print ───────────────────────────────────────────── */
+    @media print {
+      .site-nav, .sg-tabs, .tool-chips { display: none !important; }
+      .sg-unit { display: block !important; }
+      body { background: #fff !important; }
+      .formula-card { break-inside: avoid; }
+    }
+
+    @media (max-width: 620px) {
+      .formula-grid { grid-template-columns: 1fr; }
+      .sg-body { padding: 0 14px; }
+      .sg-header { padding: 14px 14px 10px; }
+    }
+  </style>
+</head>
+<body class="paper-grid">
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="map.html">map</a>
+      <a href="study.html" style="font-weight:700;">study guide</a>
+      <a href="about.html">about</a>
+    </div>
+  </nav>
+
+  <!-- Unit tab strip -->
+  <div class="sg-tabs">
+    <button class="sg-tab active" style="background:#d94f2a;" onclick="showUnit(0,this)">U1</button>
+    <button class="sg-tab" style=""             onclick="showUnit(1,this)">U2</button>
+    <button class="sg-tab" style=""             onclick="showUnit(2,this)">U3</button>
+    <button class="sg-tab" style=""             onclick="showUnit(3,this)">U4</button>
+    <button class="sg-tab" style=""             onclick="showUnit(4,this)">U5</button>
+    <button class="sg-tab" style=""             onclick="showUnit(5,this)">U6</button>
+    <button class="sg-tab" style=""             onclick="showUnit(6,this)">U7</button>
+    <button class="sg-tab" style=""             onclick="showUnit(7,this)">U8</button>
+    <button class="sg-tab-print" onclick="window.print()">🖨 print</button>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U1 — Systems & Quadratics
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit active" id="sg-0">
+    <div class="sg-header" style="background:#d94f2a;">
+      <div class="sg-header-eyebrow">UNIT 1</div>
+      <div class="sg-header-title">Systems &amp; Quadratics</div>
+      <div class="sg-header-sub">Sept 2 – Sept 26 &nbsp;·&nbsp; 15 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span>A system's solution is the <strong>point where both graphs cross</strong> — it satisfies both equations simultaneously.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span><strong>Substitution</strong>: isolate one variable, plug into the other equation, solve, then back-substitute for the second variable.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span><strong>Elimination</strong>: multiply rows to align a coefficient, add/subtract to cancel a variable, solve, then back-substitute.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span>The <strong>discriminant</strong> b²−4ac tells you the number of solutions before you solve: &gt;0 → two real; =0 → one real; &lt;0 → two imaginary.</span></li>
+        <li class="idea-item"><span class="idea-num">⑤</span><span>For absolute value: <strong>|expr| = k</strong> splits into two equations: expr = k AND expr = −k.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">QUADRATIC FORMULA</div>
+          <div class="fc-expr">x = (−b ± √(b²−4ac)) / (2a)</div>
+          <div class="fc-note">Works for any ax²+bx+c = 0. The ± gives both roots.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">VERTEX COORDINATES</div>
+          <div class="fc-expr">h = −b/(2a)<br>k = f(h)</div>
+          <div class="fc-note">Plug h back into the original equation to get k.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">VERTEX FORM</div>
+          <div class="fc-expr">y = a(x−h)² + k</div>
+          <div class="fc-note">Vertex is at (h, k). Opens up if a &gt; 0, down if a &lt; 0.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">DISCRIMINANT</div>
+          <div class="fc-expr">Δ = b² − 4ac</div>
+          <div class="fc-note">Δ &gt; 0: two real roots &nbsp;·&nbsp; Δ = 0: one root &nbsp;·&nbsp; Δ &lt; 0: imaginary</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">ABSOLUTE VALUE EQUATION</div>
+          <div class="fc-expr">|expr| = k<br>→ expr = k  or  expr = −k</div>
+          <div class="fc-warn">⚠ If k &lt; 0, no solution — absolute value can't be negative.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">INEQUALITY — FLIP RULE</div>
+          <div class="fc-expr">Multiply or divide by a<br>negative → flip the sign</div>
+          <div class="fc-note">−2x &gt; 6 → x &lt; −3. Sign flips when dividing by −2.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/systems-explorer.html"><span class="chip-code">Se</span> Systems Explorer</a>
+        <a class="tool-chip" href="tools/substitution-stepper.html"><span class="chip-code">Sb</span> Substitution Stepper</a>
+        <a class="tool-chip" href="tools/elimination-race.html"><span class="chip-code">El</span> Elimination Race</a>
+        <a class="tool-chip" href="tools/factoring-lab.html"><span class="chip-code">Fq</span> Factoring Lab</a>
+        <a class="tool-chip" href="tools/quadratic-slider.html"><span class="chip-code">Qs</span> Quadratic Slider</a>
+        <a class="tool-chip" href="tools/ti84-plysmlt.html"><span class="chip-code">Ti</span> TI-84 PLYSMLT2</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U2 — Graphs & Exponents
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-1">
+    <div class="sg-header" style="background:#2a6fb4;">
+      <div class="sg-header-eyebrow">UNIT 2</div>
+      <div class="sg-header-title">Graphs &amp; Exponents</div>
+      <div class="sg-header-sub">Sept 29 – Oct 17 &nbsp;·&nbsp; 7 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span>Every transformation follows <strong>y = a·f(b(x−h)) + k</strong>. |a| stretches/reflects vertically, b compresses horizontally, (h,k) shifts.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span><strong>Exponent rules</strong> only apply when the base is the same — you can't combine x³ · y² with a product rule.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span><strong>Negative exponent</strong> = move the base to the other side of the fraction bar. x⁻³ = 1/x³. The sign does NOT stay negative.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span><strong>Difference of squares</strong>: a²−b² = (a+b)(a−b). Look for perfect square terms with a minus between them.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">PRODUCT RULE</div>
+          <div class="fc-expr">xᵃ · xᵇ = xᵃ⁺ᵇ</div>
+          <div class="fc-note">Same base → ADD exponents</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">QUOTIENT RULE</div>
+          <div class="fc-expr">xᵃ / xᵇ = xᵃ⁻ᵇ</div>
+          <div class="fc-note">Same base → SUBTRACT (top minus bottom)</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">POWER RULE</div>
+          <div class="fc-expr">(xᵃ)ᵇ = xᵃᵇ</div>
+          <div class="fc-note">Power of a power → MULTIPLY exponents</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">ZERO EXPONENT</div>
+          <div class="fc-expr">x⁰ = 1</div>
+          <div class="fc-note">Any nonzero base to the 0 power equals 1.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">NEGATIVE EXPONENT</div>
+          <div class="fc-expr">x⁻ⁿ = 1/xⁿ</div>
+          <div class="fc-warn">⚠ Result is a fraction, NOT a negative number.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">TRANSFORMATION TEMPLATE</div>
+          <div class="fc-expr">y = a·f(b(x−h)) + k</div>
+          <div class="fc-note">|a|: stretch; b: horiz. compress; h: right; k: up</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">DIFFERENCE OF SQUARES</div>
+          <div class="fc-expr">a² − b² = (a+b)(a−b)</div>
+          <div class="fc-note">Must be subtraction — sum of squares doesn't factor.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/exponent-rules.html"><span class="chip-code">Er</span> Exponent Rules Trainer</a>
+        <a class="tool-chip" href="tools/neg-exponent-flipper.html"><span class="chip-code">Nx</span> Negative Exponent Flipper</a>
+        <a class="tool-chip" href="tools/transformations.html"><span class="chip-code">Tx</span> Transformations Explorer</a>
+        <a class="tool-chip" href="tools/parent-function-atlas.html"><span class="chip-code">Pf</span> Parent Function Atlas</a>
+        <a class="tool-chip" href="tools/diff-of-squares.html"><span class="chip-code">DS</span> Difference of Squares</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U3 — Rationals & Complex
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-2">
+    <div class="sg-header" style="background:#8b4513;">
+      <div class="sg-header-eyebrow">UNIT 3</div>
+      <div class="sg-header-title">Rationals &amp; Complex</div>
+      <div class="sg-header-sub">Oct 20 – Nov 7 &nbsp;·&nbsp; 9 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span><strong>i = √(−1)</strong> and <strong>i² = −1</strong>. Powers of i cycle: i¹=i, i²=−1, i³=−i, i⁴=1, then repeat.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span>To <strong>complete the square</strong>: take half the x-coefficient, square it, add and subtract that value to force a perfect square trinomial.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span>A rational expression's <strong>domain</strong> excludes every value that makes the denominator equal 0 — find them before you simplify.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span><strong>Conjugate pairs</strong> (a+bi)(a−bi) = a²+b² — always a real number. Used when dividing complex numbers.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">POWERS OF i</div>
+          <div class="fc-expr">i¹=i &nbsp; i²=−1 &nbsp; i³=−i &nbsp; i⁴=1</div>
+          <div class="fc-note">Cycle repeats every 4. Divide the exponent by 4 — the remainder tells you which power.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPLEX ADDITION</div>
+          <div class="fc-expr">(a+bi)+(c+di) = (a+c)+(b+d)i</div>
+          <div class="fc-note">Group real parts together, imaginary parts together.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPLEX MULTIPLY (FOIL)</div>
+          <div class="fc-expr">Real: ac − bd<br>Imaginary: ad + bc</div>
+          <div class="fc-note">FOIL then replace i² with −1. That last term flips sign.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPLETE THE SQUARE</div>
+          <div class="fc-expr">x² + bx<br>→ (x + b/2)² − (b/2)²</div>
+          <div class="fc-note">Add (b/2)² to create the square, subtract it to keep balance.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">VERTEX FROM STANDARD FORM</div>
+          <div class="fc-expr">h = −b/(2a)<br>k = c − b²/(4a)</div>
+          <div class="fc-note">Or just plug h back into the equation to find k.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">CONJUGATE PRODUCT</div>
+          <div class="fc-expr">(a+bi)(a−bi) = a² + b²</div>
+          <div class="fc-note">Result is always real — i terms cancel. Key for dividing complex numbers.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/complex-arithmetic.html"><span class="chip-code">Ca</span> Complex Arithmetic Stepper</a>
+        <a class="tool-chip" href="tools/imaginary-sandbox.html"><span class="chip-code">Im</span> Imaginary Sandbox</a>
+        <a class="tool-chip" href="tools/complex-plane.html"><span class="chip-code">Cx</span> Complex Plane</a>
+        <a class="tool-chip" href="tools/complete-square.html"><span class="chip-code">Cs</span> Complete the Square</a>
+        <a class="tool-chip" href="tools/rationalizing-denominators.html"><span class="chip-code">Rd</span> Rationalizing Denominators</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U4 — Rational Exponents
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-3">
+    <div class="sg-header" style="background:#2a8a4a;">
+      <div class="sg-header-eyebrow">UNIT 4</div>
+      <div class="sg-header-title">Rational Exponents</div>
+      <div class="sg-header-sub">Nov 10 – Dec 5 &nbsp;·&nbsp; 7 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span>In x^(m/n), the <strong>denominator is the root</strong> and the <strong>numerator is the power</strong>: x^(m/n) = (ⁿ√x)ᵐ.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span><strong>Composition</strong>: (f∘g)(x) = f(g(x)) — evaluate g first, feed the result into f. Order matters: f∘g ≠ g∘f usually.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span>To find an <strong>inverse function</strong>: swap x and y in the equation, then solve for the new y.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span><strong>Radical equations</strong>: isolate the radical, raise both sides to the nth power, then <em>always</em> check for extraneous solutions.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">RATIONAL EXPONENT — ROOT FORM</div>
+          <div class="fc-expr">x^(1/n) = ⁿ√x</div>
+          <div class="fc-note">Denominator = the index of the radical.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">RATIONAL EXPONENT — FULL FORM</div>
+          <div class="fc-expr">x^(m/n) = (ⁿ√x)ᵐ = ⁿ√(xᵐ)</div>
+          <div class="fc-note">Root first (usually easier), then power. Or power first, then root — same answer.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPOSITION</div>
+          <div class="fc-expr">(f∘g)(x) = f( g(x) )</div>
+          <div class="fc-note">Right function goes in first. (f∘g) ≠ (g∘f) in general.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">INVERSE FUNCTION</div>
+          <div class="fc-expr">1. Write y = f(x)<br>2. Swap x and y<br>3. Solve for y → f⁻¹(x)</div>
+          <div class="fc-note">The graph of f⁻¹ is f reflected over y = x.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">RADICAL EQUATION STEPS</div>
+          <div class="fc-expr">isolate → raise both sides to n → solve → CHECK</div>
+          <div class="fc-warn">⚠ Extraneous solutions are common. Always sub back in.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">DOMAIN OF √(expr)</div>
+          <div class="fc-expr">expr ≥ 0</div>
+          <div class="fc-note">Set the radicand ≥ 0 and solve — that's the domain.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/rational-exponents.html"><span class="chip-code">Re</span> Rational Exponents Tower</a>
+        <a class="tool-chip" href="tools/composition.html"><span class="chip-code">Cm</span> Composition Machine</a>
+        <a class="tool-chip" href="tools/composition-inverse.html"><span class="chip-code">Ci</span> Composition &amp; Inverse Lab</a>
+        <a class="tool-chip" href="tools/inverse-function.html"><span class="chip-code">Iv</span> Inverse Function Revealer</a>
+        <a class="tool-chip" href="tools/radical-equations.html"><span class="chip-code">Rq</span> Radical Equation Solver</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U5 — Exponential & Log
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-4">
+    <div class="sg-header" style="background:#8f6c00;">
+      <div class="sg-header-eyebrow">UNIT 5</div>
+      <div class="sg-header-title">Exponential &amp; Log</div>
+      <div class="sg-header-sub">January – February &nbsp;·&nbsp; 7 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span><strong>log_b(x) = y ↔ b^y = x</strong>: logs and exponentials are inverses. Switch between them to solve.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span>To solve <strong>exponential equations</strong>: make the bases the same (equate exponents), OR take log of both sides.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span><strong>Growth</strong>: b &gt; 1. <strong>Decay</strong>: 0 &lt; b &lt; 1. The initial value a = y when x = 0.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span><strong>Log properties</strong> let you pull exponents out front — that's how you solve for a variable trapped in an exponent.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">LOG DEFINITION</div>
+          <div class="fc-expr">log_b(x) = y  ↔  bʸ = x</div>
+          <div class="fc-note">Read: "b to the y equals x." These forms are identical.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">EXPONENTIAL MODEL</div>
+          <div class="fc-expr">y = a · bˣ</div>
+          <div class="fc-note">a = starting value (x=0), b = growth/decay multiplier per step</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPOUND INTEREST</div>
+          <div class="fc-expr">A = P(1 + r/n)^(nt)</div>
+          <div class="fc-note">P = principal, r = annual rate, n = times/year, t = years</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">CONTINUOUS GROWTH</div>
+          <div class="fc-expr">A = Pe^(rt)</div>
+          <div class="fc-note">e ≈ 2.718. Use when compounding is continuous.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">LOG PRODUCT RULE</div>
+          <div class="fc-expr">log(xy) = log x + log y</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">LOG QUOTIENT RULE</div>
+          <div class="fc-expr">log(x/y) = log x − log y</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">LOG POWER RULE</div>
+          <div class="fc-expr">log(xⁿ) = n · log x</div>
+          <div class="fc-note">This is how you get the variable out of an exponent.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">CHANGE OF BASE</div>
+          <div class="fc-expr">log_b(x) = ln(x) / ln(b)</div>
+          <div class="fc-note">Use when your calculator doesn't have log_b directly.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/log-exp-mirror.html"><span class="chip-code">Lm</span> Log ↔ Exp Mirror</a>
+        <a class="tool-chip" href="tools/log-properties.html"><span class="chip-code">Lp</span> Log Properties Sandbox</a>
+        <a class="tool-chip" href="tools/log-converter.html"><span class="chip-code">Lg</span> Log ↔ Exp Converter</a>
+        <a class="tool-chip" href="tools/exponential-model-builder.html"><span class="chip-code">Em</span> Exponential Model Builder</a>
+        <a class="tool-chip" href="tools/exponential-equation-solver.html"><span class="chip-code">Ee</span> Exponential Equation Solver</a>
+        <a class="tool-chip" href="tools/growth-race.html"><span class="chip-code">Gr</span> Growth Race</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U6 — Rationals & Polynomials
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-5">
+    <div class="sg-header" style="background:#7a2a8a;">
+      <div class="sg-header-eyebrow">UNIT 6</div>
+      <div class="sg-header-title">Rationals &amp; Polynomials</div>
+      <div class="sg-header-sub">February – March &nbsp;·&nbsp; 8 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span>To <strong>simplify a rational</strong>: factor numerator AND denominator, cancel common factors, state excluded values for every canceled factor.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span><strong>Vertical asymptotes</strong> come from denominator factors that didn't cancel. <strong>Holes</strong> come from factors that did cancel.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span><strong>Horizontal asymptote</strong>: top degree &lt; bottom → y=0; equal degrees → ratio of leading coefficients; top &gt; bottom → no H.A. (slant asymptote).</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span>To <strong>add/subtract rationals</strong>: factor denominators, build the LCD, rewrite each fraction, combine numerators, simplify.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">SIMPLIFY RATIONAL</div>
+          <div class="fc-expr">factor → cancel → state x ≠ excluded values</div>
+          <div class="fc-warn">⚠ State the excluded values BEFORE canceling.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">VERTICAL ASYMPTOTE</div>
+          <div class="fc-expr">Set remaining denominator = 0</div>
+          <div class="fc-note">After full simplification — don't include factors that canceled (those are holes).</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">HOLE LOCATION</div>
+          <div class="fc-expr">x-val: set canceled factor = 0<br>y-val: sub x into simplified form</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">HORIZONTAL ASYMPTOTE</div>
+          <div class="fc-expr">deg(top) &lt; deg(bot) → y = 0<br>deg equal → y = a/b (leading coeffs)<br>deg(top) &gt; deg(bot) → none</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">ADD RATIONALS — LCD METHOD</div>
+          <div class="fc-expr">1. Factor denoms<br>2. LCD = all unique factors<br>3. Rewrite fractions<br>4. Combine numerators</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">POLYNOMIAL LONG DIVISION</div>
+          <div class="fc-expr">dividend = (divisor)(quotient) + remainder</div>
+          <div class="fc-note">Divide lead term → multiply → subtract → bring down → repeat</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/rational-simplifier.html"><span class="chip-code">Rs</span> Rational Simplifier</a>
+        <a class="tool-chip" href="tools/adding-rationals.html"><span class="chip-code">Ar</span> Adding Rationals</a>
+        <a class="tool-chip" href="tools/rational-behavior.html"><span class="chip-code">Rb</span> Rational Function Behavior</a>
+        <a class="tool-chip" href="tools/polynomial-division-stepper.html"><span class="chip-code">Pd</span> Polynomial Division</a>
+        <a class="tool-chip" href="tools/polynomial-roots.html"><span class="chip-code">Pr</span> Polynomial Root Sculptor</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U7 — Trigonometry
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-6">
+    <div class="sg-header" style="background:#1a8a8a;">
+      <div class="sg-header-eyebrow">UNIT 7</div>
+      <div class="sg-header-title">Trigonometry</div>
+      <div class="sg-header-sub">March – April &nbsp;·&nbsp; 7 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span>On the <strong>unit circle</strong>, the coordinates at angle θ are <strong>(cos θ, sin θ)</strong>. Know the 16 key angles.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span>Trig graph parameters follow the same a, b, h, k template: <strong>y = a·sin(b(x−h)) + k</strong>.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span><strong>SOH CAH TOA</strong> only works with right triangles. Label opposite/adjacent relative to the reference angle.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span><strong>Coterminal angles</strong> differ by 360° (or 2π). Negative angles go clockwise. Radians and degrees are related by π/180.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">SOH CAH TOA</div>
+          <div class="fc-expr">sin = opp/hyp<br>cos = adj/hyp<br>tan = opp/adj</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">UNIT CIRCLE</div>
+          <div class="fc-expr">point at angle θ = (cos θ, sin θ)</div>
+          <div class="fc-note">x-coordinate is cosine, y-coordinate is sine. Radius = 1.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">SINE / COSINE GRAPH</div>
+          <div class="fc-expr">y = a·sin(b(x−h)) + k</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">AMPLITUDE</div>
+          <div class="fc-expr">|a|</div>
+          <div class="fc-note">Distance from midline to max (or min). Always positive.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">PERIOD</div>
+          <div class="fc-expr">T = 2π / |b|</div>
+          <div class="fc-note">How long one full cycle takes. Larger b → shorter period.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">PHASE SHIFT</div>
+          <div class="fc-expr">h (to the right if h &gt; 0)</div>
+          <div class="fc-warn">⚠ In y=sin(bx−c), the shift is c/b not c.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">MIDLINE</div>
+          <div class="fc-expr">y = k</div>
+          <div class="fc-note">The horizontal center of the wave. Vertical shift amount.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">PYTHAGOREAN IDENTITY</div>
+          <div class="fc-expr">sin²θ + cos²θ = 1</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">DEGREE ↔ RADIAN</div>
+          <div class="fc-expr">π rad = 180°<br>multiply by π/180 to convert</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/unit-circle.html"><span class="chip-code">Uc</span> Unit Circle Walker</a>
+        <a class="tool-chip" href="tools/unit-circle-wave.html"><span class="chip-code">Uw</span> Unit Circle Wave Sync</a>
+        <a class="tool-chip" href="tools/sine-cosine-builder.html"><span class="chip-code">Sc</span> Sine/Cosine Graph Builder</a>
+        <a class="tool-chip" href="tools/trig-explorer.html"><span class="chip-code">Tx</span> Trig Function Explorer</a>
+        <a class="tool-chip" href="tools/soh-cah-toa.html"><span class="chip-code">St</span> SOH CAH TOA Solver</a>
+        <a class="tool-chip" href="tools/coterminal-radian.html"><span class="chip-code">Co</span> Coterminal &amp; Radians</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       U8 — Statistics, Probability & Conics
+  ═══════════════════════════════════════════════════════════ -->
+  <div class="sg-unit" id="sg-7">
+    <div class="sg-header" style="background:#5a6a7a;">
+      <div class="sg-header-eyebrow">UNIT 8</div>
+      <div class="sg-header-title">Statistics, Probability &amp; Conics</div>
+      <div class="sg-header-sub">April – May &nbsp;·&nbsp; 4 tools</div>
+    </div>
+    <div class="sg-body">
+
+      <div class="sg-section-label">KEY IDEAS</div>
+      <ul class="idea-list">
+        <li class="idea-item"><span class="idea-num">①</span><span><strong>IQR = Q3 − Q1</strong>. Outlier fences: below Q1 − 1.5·IQR or above Q3 + 1.5·IQR.</span></li>
+        <li class="idea-item"><span class="idea-num">②</span><span>P(A or B) = P(A) + P(B) − P(A and B). If mutually exclusive, P(A and B)=0 so you just add.</span></li>
+        <li class="idea-item"><span class="idea-num">③</span><span>In conic equations, <strong>(h, k)</strong> is always the center — or vertex for parabolas. The signs in (x−h)² and (y−k)² are always opposite to h and k.</span></li>
+        <li class="idea-item"><span class="idea-num">④</span><span>A <strong>circle</strong> has r² on the right. An <strong>ellipse</strong> has two different denominators and sums to 1. A <strong>hyperbola</strong> subtracts and sums to 1.</span></li>
+      </ul>
+
+      <div class="sg-section-label">FORMULA SHEET</div>
+      <div class="formula-grid">
+        <div class="formula-card">
+          <div class="fc-name">5-NUMBER SUMMARY</div>
+          <div class="fc-expr">min · Q1 · median · Q3 · max</div>
+          <div class="fc-note">Put data in order first. Median splits; Q1 and Q3 split each half.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">IQR &amp; OUTLIER FENCES</div>
+          <div class="fc-expr">IQR = Q3 − Q1<br>Lower: Q1 − 1.5·IQR<br>Upper: Q3 + 1.5·IQR</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">ADDITION RULE</div>
+          <div class="fc-expr">P(A∪B) = P(A) + P(B) − P(A∩B)</div>
+          <div class="fc-note">Subtract the overlap so you don't count it twice.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">COMPLEMENT RULE</div>
+          <div class="fc-expr">P(Aᶜ) = 1 − P(A)</div>
+          <div class="fc-note">P("not A") = 1 minus P(A). All probabilities sum to 1.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">CIRCLE</div>
+          <div class="fc-expr">(x−h)² + (y−k)² = r²</div>
+          <div class="fc-note">Center (h,k), radius r. Signs in equation are opposite to h and k.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">PARABOLA</div>
+          <div class="fc-expr">y = a(x−h)² + k</div>
+          <div class="fc-note">Vertex (h,k). Same as quadratic vertex form.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">ELLIPSE</div>
+          <div class="fc-expr">(x−h)²/a² + (y−k)²/b² = 1</div>
+          <div class="fc-note">Center (h,k). Longer axis = larger denominator.</div>
+        </div>
+        <div class="formula-card">
+          <div class="fc-name">HYPERBOLA</div>
+          <div class="fc-expr">(x−h)²/a² − (y−k)²/b² = 1</div>
+          <div class="fc-note">Subtraction (not addition). Opens left/right if x is first.</div>
+        </div>
+      </div>
+
+      <div class="sg-section-label">PRACTICE TOOLS</div>
+      <div class="tool-chips">
+        <a class="tool-chip" href="tools/box-plot-builder.html"><span class="chip-code">Bp</span> Box Plot Builder</a>
+        <a class="tool-chip" href="tools/probability-sandbox.html"><span class="chip-code">Pb</span> Probability Sandbox</a>
+        <a class="tool-chip" href="tools/conics.html"><span class="chip-code">Cn</span> Conic Sections Explorer</a>
+        <a class="tool-chip" href="tools/sampling-bias-lab.html"><span class="chip-code">Sl</span> Sampling Bias Lab</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  'use strict';
+
+  var UNIT_COLORS = ['#d94f2a','#2a6fb4','#8b4513','#2a8a4a','#8f6c00','#7a2a8a','#1a8a8a','#5a6a7a'];
+
+  // Colour the inactive tabs
+  var tabs = document.querySelectorAll('.sg-tab');
+  tabs.forEach(function (tab, i) {
+    if (i > 0) {
+      tab.style.background = UNIT_COLORS[i];
+      tab.style.color = '#fff';
+      tab.style.opacity = '.55';
+    }
+  });
+
+  function showUnit(idx, btn) {
+    document.querySelectorAll('.sg-unit').forEach(function (el) { el.classList.remove('active'); });
+    document.getElementById('sg-' + idx).classList.add('active');
+    tabs.forEach(function (t, i) {
+      t.classList.toggle('active', i === idx);
+      t.style.opacity = i === idx ? '1' : '.55';
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Read unit from URL hash: #u3 etc.
+  var hash = window.location.hash.replace('#','').toLowerCase();
+  if (hash && hash.length === 2 && hash[0] === 'u') {
+    var n = parseInt(hash[1], 10);
+    if (n >= 1 && n <= 8) showUnit(n - 1, tabs[n - 1]);
+  }
+  </script>
+</body>
+</html>
