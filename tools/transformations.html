@@ -47,6 +47,32 @@
     .bottom-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
     .parent-chk { font-family: var(--f-body); font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
 
+    /* coordinate table panel */
+    .coord-table-panel {
+      margin-top: 10px; padding: 10px 12px;
+      background: var(--paper-2); border: 1.5px solid var(--ink-2); border-radius: 4px;
+    }
+    .ct-formulas {
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+      display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 10px;
+      padding-bottom: 8px; border-bottom: 1px dashed var(--ink-2);
+    }
+    .ct-table {
+      width: 100%; border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    }
+    .ct-table th {
+      text-align: center; padding: 4px 8px;
+      font-family: var(--f-body); font-weight: 700; font-size: 11px;
+      letter-spacing: .06em; text-transform: uppercase;
+      border-bottom: 1.5px solid var(--ink-2); color: var(--ink-soft);
+    }
+    .ct-table td { text-align: center; padding: 5px 8px; }
+    .ct-table tr.ct-orig td { color: var(--ink-soft); }
+    .ct-table tr.ct-new  td { color: var(--accent); font-weight: 700; }
+    .ct-table td.ct-arrow { color: var(--ink-2); font-size: 15px; }
+    .ct-note { font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic; }
+
     /* sidebar formula card */
     .formula-card { text-align: center; padding: 10px 14px; border: 1.5px dashed var(--ink-2); border-radius: 4px; }
     .formula-card .f-big { font-family: 'JetBrains Mono', monospace; font-size: 15px; line-height: 2; }
@@ -183,6 +209,30 @@
         </label>
         <button class="btn small" style="margin-left:auto;" onclick="resetAll()">↺ reset</button>
         <button class="btn small" id="practice-toggle" onclick="togglePractice()">📝 write g(x)</button>
+        <button class="btn small" id="table-toggle" onclick="toggleTable()">📋 coord table</button>
+      </div>
+
+      <!-- coordinate table panel -->
+      <div id="coord-table-panel" class="coord-table-panel" style="display:none;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">COORDINATE TABLE</div>
+        <div class="ct-formulas" id="ct-formulas">
+          <span>x' = x + h</span>
+          <span>y' = a · y + k</span>
+        </div>
+        <table class="ct-table">
+          <thead>
+            <tr>
+              <th colspan="2">original</th>
+              <th></th>
+              <th colspan="2">transformed</th>
+            </tr>
+            <tr>
+              <th>x</th><th>y</th><th></th><th>x'</th><th>y'</th>
+            </tr>
+          </thead>
+          <tbody id="ct-body"></tbody>
+        </table>
+        <div class="ct-note" id="ct-note"></div>
       </div>
 
       <!-- practice: write g(x) mode -->
@@ -560,6 +610,71 @@
         desc:'Start with <strong>f(x) = x³</strong>.<br>Vertical compression by ½, shift left 3, shift up 2.' },
     ];
 
+    // ---- coordinate table ----
+    const PARENT_PTS = {
+      quad:  [[-2,4],[-1,1],[0,0],[1,1],[2,4]],
+      abs:   [[-2,2],[-1,1],[0,0],[1,1],[2,2]],
+      sqrt:  [[0,0],[1,1],[4,2],[9,3],[16,4]],
+      cubic: [[-2,-8],[-1,-1],[0,0],[1,1],[2,8]],
+      line:  [[-2,-2],[-1,-1],[0,0],[1,1],[2,2]],
+    };
+
+    let tableOpen = false;
+
+    function toggleTable() {
+      tableOpen = !tableOpen;
+      document.getElementById('coord-table-panel').style.display = tableOpen ? '' : 'none';
+      document.getElementById('table-toggle').textContent = tableOpen ? '× close table' : '📋 coord table';
+      if (tableOpen) updateTable();
+    }
+
+    function fmtT(v) {
+      // format for table display: round to 2 decimal places, clean up
+      const r = Math.round(v * 100) / 100;
+      return r % 1 === 0 ? String(r) : r.toFixed(2).replace(/\.?0+$/, '');
+    }
+
+    function updateTable() {
+      if (!tableOpen) return;
+      const {a, b, h, k} = P;
+      const pts = PARENT_PTS[fn] || [];
+
+      // Formula display
+      const bStr = b === 1 ? '' : b === -1 ? '−' : fmtT(b) + '·';
+      const xFormula = b === 1
+        ? `x' = x <span style="color:#2a8a4a">+ ${fmtT(h)}</span>`
+        : `x' = x ÷ <span style="color:#2a6fb4">${fmtT(Math.abs(b))}</span>${b < 0 ? ' (flip)' : ''} <span style="color:#2a8a4a">+ ${fmtT(h)}</span>`;
+      const yFormula = `y' = <span style="color:var(--accent)">${fmtT(a)}</span> · y <span style="color:#8b4513">+ ${fmtT(k)}</span>`;
+      document.getElementById('ct-formulas').innerHTML =
+        `<span>${xFormula}</span><span>${yFormula}</span>`;
+
+      // Table rows
+      const tbody = document.getElementById('ct-body');
+      tbody.innerHTML = '';
+      pts.forEach(([x, y]) => {
+        const xNew = b !== 0 ? x / b + h : h;
+        const yNew = a * y + k;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="ct-orig" style="color:var(--ink-soft)">(${fmtT(x)},</td>
+          <td class="ct-orig" style="color:var(--ink-soft)">${fmtT(y)})</td>
+          <td class="ct-arrow">→</td>
+          <td style="color:var(--accent); font-weight:700">(${fmtT(xNew)},</td>
+          <td style="color:var(--accent); font-weight:700">${fmtT(yNew)})</td>`;
+        tbody.appendChild(tr);
+      });
+
+      // Note when b ≠ 1
+      const note = document.getElementById('ct-note');
+      if (Math.abs(b) !== 1) {
+        note.textContent = `b = ${fmtT(b)}: horizontal stretch divides x by b before shifting. Notice how the x-spacing changes.`;
+      } else if (b === -1) {
+        note.textContent = 'b = −1: the graph reflects horizontally. x-coordinates flip sign before shifting.';
+      } else {
+        note.textContent = '';
+      }
+    }
+
     let practiceIdx = 0;
     let practiceOpen = false;
 
@@ -615,6 +730,7 @@
       document.getElementById(`val-${param}`).value = fmt(v);
       document.getElementById('annot').textContent = annotText(param);
       updateChips();
+      updateTable();
       draw();
     }
 
@@ -623,6 +739,7 @@
       document.querySelectorAll('[data-fn]').forEach(b => b.classList.toggle('active', b.dataset.fn === name));
       document.getElementById('annot').textContent = `Switched to parent: f(x) = ${FNDEFS[name].name}. Move sliders to transform it.`;
       updateChips();
+      updateTable();
       draw();
     }
 
