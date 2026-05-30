@@ -17,6 +17,7 @@ Generated from local files under `teacher and student work`.
 - `batch-8-functions-transformations-unit2-insights.md` - Unit 2 functions, domain/range, calculator workflow, transformations, and test-review insights.
 - `batch-9-25-26-revisit-insights.md` - 25-26 revisit insights from U1/U2/U3 foundation lessons.
 - `batch-10-unit3-remaining-review-insights.md` - Unit 3 intercept form, word problems, powers of `i`, conjugates, literal equations, piecewise parabolas, and test-review insights.
+- `batch-11-site-audit-and-roadmap.md` - cross-cutting site audit: linked 2 orphaned tools, updated Adding Rationals subtract flow, added h-tooltip to Abs Value Grapher. Found items 3b–3g already implemented in code. Remaining work: 4 new tools (Literal Equations, Domain Restriction Sorter, Three-Form Navigator, Coterminal Drill) + batch-12 analysis.
 - `pdf-text/` - extracted text from key lesson PDFs, including rational exponents and nth roots.
 - `contact-sheets/` - visual contact sheets for matching transcript moments to board/calculator work.
 
@@ -76,6 +77,51 @@ Generated from local files under `teacher and student work`.
 - U3-D9 - literal equations, factoring out target variables, deriving quadratic formula, and solving for `a` in quadratic forms.
 - U3-D10 - piecewise graphs with parabolas/absolute value plus rational/complex/literal-equation review.
 - Unit 3 Test Review - cumulative systems, piecewise, quadratics, factoring, rational expressions, radicals/complex numbers, quadratic formula, completing the square, projectile problems, literal equations, and transformations.
+
+### Transcribed in Batch 11 — Not Yet Analyzed
+
+The following 46 videos were transcribed as part of the batch-11 pass. A batch-12 analysis pass is planned, starting with the Unit 1 (25-26) lessons.
+
+**Unit 1 (25-26) — current year:**
+- U1-D1 Video (25-26)
+- U1-D4 Video (25-26)
+- U1-D5 Video (25-26)
+- U1-D6 Video (25-26)
+- U1-D7 Video (25-26)
+- U1-D8 Video (25-26)
+- Unit 1 Test Review Video (25-26)
+- U2-D3 Video (Part 2) 25-26
+- Unit 3 Post-Break Warm-up Video
+
+**Older/unlabeled lesson versions:**
+- U1 - D1 Summer Review Video
+- U1 - D2 Video, U1 - D4 Video, U1 - D5 video, U1 - D6 Video, U1 - D7 Video
+- U2 - D1 Video, U2 - D2 Video
+- U2-D3 Video, U2-D4 Video
+- U2-D5 Video (PART 1), U2-D5 Video (PART 2)
+- U3-D1 Video (24-25), U3-D3 Video (24-25)
+- U3-D2 Video, U3-D4 video, U3-D5 Video
+- U4-D5 Video
+
+**Review and study guide videos:**
+- U1 Review Video
+- U2 Review Video
+- U3 Review Video
+- U4 Review Video
+- Unit 3 Review Video
+- Unit 5 Study Guide Video
+- Unit 6 Study Guide Video (23-24)
+- Unit 6 Study Guide Extra Problems Video
+- Unit 7 Study Guide Video (23-24)
+- Unit 9 Review Video (Conics)
+- A2B Final Review Video (23-24)
+
+**Calculator and misc:**
+- U5 Calculator Help Video
+- PLYSMLT Video
+- Ln and PLYSMLT Calculator Help Video
+- Transformation vid
+- Copy of HW Submission Video
 
 ## Summary
 

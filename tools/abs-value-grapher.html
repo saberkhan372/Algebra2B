@@ -70,6 +70,10 @@
           <input type="range" id="slider-h" min="-6" max="6" step="0.1" value="0" />
           <input type="number" class="param-val f-mono dyn-val" id="val-h" step="any" value="0">
         </div>
+        <div id="h-why" class="f-hand" style="font-size:11px; color:var(--ink-2); margin-top:2px; display:none; padding:4px 8px; background:#fffbe6; border:1px solid #e0c840; border-radius:4px; max-width:320px;">
+          💡 <strong>Why does h shift the opposite way?</strong><br>
+          Plug in <span id="h-why-val" style="font-family:'JetBrains Mono',monospace; color:var(--accent);">x = 0</span> to make the inside equal zero — that's where the vertex lands.
+        </div>
         <div class="slider-group">
           <span class="param-name f-mono">k</span>
           <input type="range" id="slider-k" min="-6" max="6" step="0.1" value="0" />
@@ -295,6 +299,17 @@
       syncSliders(); updateEq(); draw();
     }
 
+    function updateHTooltip() {
+      const tip = document.getElementById('h-why');
+      const valEl = document.getElementById('h-why-val');
+      if (h === 0) { tip.style.display = 'none'; return; }
+      tip.style.display = 'block';
+      const inner = h >= 0
+        ? `x = ${Math.round(h*10)/10} makes |x − ${Math.round(h*10)/10}| = 0`
+        : `x = ${Math.round(h*10)/10} makes |x − (${Math.round(h*10)/10})| = 0`;
+      valEl.textContent = inner;
+    }
+
     ['a', 'h', 'k'].forEach(p => {
       document.getElementById(`slider-${p}`).addEventListener('input', function() {
         const v = parseFloat(this.value);
@@ -302,6 +317,7 @@
         if (p === 'h') h = v;
         if (p === 'k') k = v;
         document.getElementById(`val-${p}`).value = Math.round(v * 10) / 10;
+        if (p === 'h') updateHTooltip();
         updateEq(); draw();
       });
     });
@@ -312,6 +328,7 @@
         if (isNaN(v)) return;
         if (p==='a') a=v; if (p==='h') h=v; if (p==='k') k=v;
         rescaleSlider(p, v);
+        if (p === 'h') updateHTooltip();
         updateEq(); draw();
       });
     });

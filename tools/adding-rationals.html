@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Adding Rational Expressions — A2 Playgrounds</title>
+  <title>Adding &amp; Subtracting Rational Expressions — A2 Playgrounds</title>
   <link rel="stylesheet" href="../styles.css" />
   <style>
     html, body { height: 100%; overflow: hidden; }
@@ -112,8 +112,8 @@
   <div class="tool-page">
     <div class="tool-main">
       <div class="tool-breadcrumb"><a href="../u6.html">← U6 · Rational Expressions</a> &nbsp;·&nbsp; D5–D6</div>
-      <div class="tool-title f-display">Adding Rational Expressions</div>
-      <div class="tool-tagline f-hand">Build the LCD from its factors — then rewrite and combine.</div>
+      <div class="tool-title f-display">Adding &amp; Subtracting Rational Expressions</div>
+      <div class="tool-tagline f-hand">Subtracting? Distribute the negative first — then it's just addition.</div>
 
       <!-- input area -->
       <div class="sk-box" style="padding:10px; margin-top:10px;">
@@ -374,7 +374,31 @@
           </div>
         </div>`);
 
-      // ── Step 2: LCD Assembly ──
+      // ── Step 1b (subtract only): Distribute the negative FIRST ──
+      if (sign === -1) {
+        const negN2 = -n2v;
+        steps.insertAdjacentHTML('beforeend', `
+          <div class="step-card" style="background:#fdecea; border-color:var(--redline);">
+            <div class="step-lbl" style="color:var(--redline);">⚠ Step 2 — distribute the negative sign first</div>
+            <div class="step-body" style="line-height:1.9;">
+              Before building the LCD, distribute the <strong>−</strong> to every term in the second numerator.
+              <div class="step-eq" style="margin-top:6px;">
+                ${ifrac(fmtN(n1v), den1Str)}
+                <span class="op" style="color:var(--redline);">−</span>
+                ${ifrac(`(${fmtN(n2v)})`, den2Str)}
+                <span class="eq">=</span>
+                ${ifrac(fmtN(n1v), den1Str)}
+                <span class="op" style="color:#208040;">+</span>
+                ${ifrac(`<strong style="color:var(--redline);">${fmtN(negN2)}</strong>`, den2Str)}
+              </div>
+              <div class="f-hand" style="font-size:12px; color:#208040; margin-top:6px;">
+                ✓ Now it's just addition — the rest of the steps work the same way.
+              </div>
+            </div>
+          </div>`);
+      }
+
+      // ── Step 2 (or Step 3 when subtracting): LCD Assembly ──
       // Build chip rows for den1, den2, shared, lcd
       const den1Chips = den1.map(f => {
         const isShared = shared.some(s => sameRoot(s, f));
@@ -394,7 +418,7 @@
 
       steps.insertAdjacentHTML('beforeend', `
         <div class="step-card">
-          <div class="step-lbl">Step 2 — find the LCD</div>
+          <div class="step-lbl">Step ${sign === -1 ? '3' : '2'} — find the LCD</div>
           <div class="lcd-row">
             <span class="lcd-label">denom 1:</span>
             ${wrap(...den1Chips)}
@@ -443,27 +467,19 @@
 
       steps.insertAdjacentHTML('beforeend', `
         <div class="step-card">
-          <div class="step-lbl">Step 3 — rewrite each fraction with the LCD</div>
+          <div class="step-lbl">Step ${sign === -1 ? '4' : '3'} — rewrite each fraction with the LCD</div>
           ${rewriteHTML}
         </div>`);
 
       // ── Step 4: Combine ──
       const combined = polyAdd(newNum1, newNum2, sign);
 
-      // When subtracting, show the negative-distribution warning if newNum2 is a polynomial
+      // (Negative distribution is now shown as its own early step above)
       let distributeWarning = '';
-      if (sign === -1 && newNum2.length > 1) {
-        const negNum2 = newNum2.map(c => -c);
-        distributeWarning = `
-          <div style="margin-top:6px; background:#fdecea; border:1.5px solid var(--redline); border-radius:4px; padding:6px 10px; font-family: var(--f-body); font-size:13px; color:var(--ink-2);">
-            ⚠ Distribute the <strong>−</strong> to <em>every term</em>:<br>
-            <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">−(${fmtPoly(newNum2)}) = ${fmtPoly(negNum2)}</span>
-          </div>`;
-      }
 
       steps.insertAdjacentHTML('beforeend', `
         <div class="step-card">
-          <div class="step-lbl">Step 4 — ${currentOp === '+' ? 'add' : 'subtract'} the numerators</div>
+          <div class="step-lbl">Step ${sign === -1 ? '5' : '4'} — ${currentOp === '+' ? 'add' : 'add (after distributing the negative)'} the numerators</div>
           <div class="step-eq">
             ${ifrac(
               `<span>${fmtPoly(newNum1)}</span> <span class="op" style="font-size:16px">${currentOp}</span> <span>(${fmtPoly(newNum2)})</span>`,
@@ -481,7 +497,7 @@
 
       steps.insertAdjacentHTML('beforeend', `
         <div class="step-card result">
-          <div class="step-lbl">result (before simplifying)</div>
+          <div class="step-lbl">Step ${sign === -1 ? '6' : '5'} — result (before simplifying)</div>
           <div class="result-big">
             ${ifrac(`<strong>${fmtPoly(combined)}</strong>`, lcdStr)}
           </div>
@@ -500,7 +516,7 @@
           : `<strong>${remainNumStr}</strong>`;
         steps.insertAdjacentHTML('beforeend', `
           <div class="step-card" style="background:#e8f4ec; border-color:#2a8a4a;">
-            <div class="step-lbl" style="color:#2a8a4a;">💡 Step 6 — numerator factors! Simplify:</div>
+            <div class="step-lbl" style="color:#2a8a4a;">💡 Step ${sign === -1 ? '7' : '6'} — numerator factors! Simplify:</div>
             <div class="step-body" style="font-size:13px; line-height:1.9; font-family: var(--f-body);">
               Numerator <span style="font-family:'JetBrains Mono',monospace;">${fmtPoly(combined)}</span>
               = <span style="font-family:'JetBrains Mono',monospace;">${cancelStr} · (${remainNumStr})</span><br>
