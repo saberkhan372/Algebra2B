@@ -9,7 +9,7 @@
     html, body { height: 100%; overflow: hidden; }
 
     .cm-outer {
-      height: calc(100vh - 52px);
+      height: calc(100vh - 88px);
       overflow: auto;
       background: var(--paper);
       position: relative;
@@ -57,10 +57,27 @@
     .cm-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
     .cm-legend-line { width: 24px; height: 2px; background: currentColor; opacity: .45; flex-shrink: 0; border-top: 2px dashed currentColor; }
 
+    /* ── Instruction banner ──────────────────────────────── */
+    .cm-banner {
+      padding: 7px 20px;
+      background: var(--paper-2);
+      border-bottom: 1.5px dashed var(--ink-2);
+      font-family: var(--f-body);
+      font-size: 12px;
+      color: var(--ink-2);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 10px;
+      align-items: center;
+    }
+    .cm-banner strong { color: var(--ink); font-weight: 700; }
+    .cm-banner .bsep { opacity: 0.3; margin: 0 2px; }
+
     @media (max-width: 900px) {
       html, body { overflow: auto; }
       .cm-outer { overflow: auto; height: auto; }
       .cm-legend { display: none; }
+      .cm-banner { font-size: 11px; padding: 6px 14px; }
     }
   </style>
 </head>
@@ -77,6 +94,16 @@
       <a href="about.html">about</a>
     </div>
   </nav>
+
+  <div class="cm-banner">
+    <strong>Concept Map</strong>
+    <span class="bsep">·</span>
+    <span>8 concept threads &nbsp;·&nbsp; 63 tools</span>
+    <span class="bsep">·</span>
+    <span>hover a node to preview it &nbsp;·&nbsp; click to open the tool</span>
+    <span class="bsep">·</span>
+    <span>dashed lines show conceptual bridges between topics</span>
+  </div>
 
   <div class="cm-outer" id="cm-outer">
     <canvas id="cm-canvas"></canvas>

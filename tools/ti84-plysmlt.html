@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TI-84 &amp; PLYSMLT2 Guide — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { min-height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex:1; overflow-y:auto; padding:8px 0; display:flex; flex-direction:column; gap:12px; }
+
+    /* ── TI-84 screen mockup ── */
+    .ti-shell {
+      background:#2a2a32; border-radius:8px; padding:10px 10px 6px;
+      box-shadow:0 4px 14px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .ti-screen {
+      background:#b4c8a0;
+      border:2px solid #68784a;
+      border-radius:2px;
+      padding:9px 11px;
+      font-family:'JetBrains Mono',monospace;
+      font-size:13px; line-height:1.65;
+      color:#0d1a04;
+      min-height:120px;
+      white-space:pre;
+      position:relative;
+    }
+    .ti-screen-label {
+      font-family:var(--f-body); font-size:10px; color:#888;
+      text-align:center; padding:4px 0 2px; letter-spacing:.06em;
+    }
+
+    /* ── Key chips ── */
+    .key {
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:3px 9px; background:#1a1a1e; color:#fff;
+      border-radius:3px; font-family:'JetBrains Mono',monospace;
+      font-size:12px; font-weight:700; letter-spacing:.04em;
+      border:2px solid #444; box-shadow:0 2px 0 #000;
+      margin:0 2px; vertical-align:middle; white-space:nowrap;
+    }
+    .key.blue   { background:#1a4a8a; border-color:#2a6ab0; }
+    .key.green  { background:#1a6a2a; border-color:#2a8a3a; }
+    .key.orange { background:#b84000; border-color:#d05000; }
+    .key.sep    { background:transparent; border:none; box-shadow:none; color:var(--ink-soft); font-family:var(--f-body); font-size:12px; }
+
+    /* ── Step progress ── */
+    .step-pips { display:flex; gap:5px; margin-bottom:8px; }
+    .pip {
+      flex:1; height:5px; border-radius:3px;
+      background:var(--ink-soft); opacity:.25;
+      cursor:pointer; transition:opacity .2s, background .2s;
+    }
+    .pip.done   { background:var(--accent); opacity:.6; }
+    .pip.active { background:var(--accent); opacity:1; }
+
+    .step-content { animation:fadeIn .18s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(3px); } to { opacity:1; transform:none; } }
+
+    .step-title {
+      font-family:'Permanent Marker',cursive; font-size:16px; color:var(--ink);
+      margin-bottom:6px;
+    }
+    .step-step-num {
+      font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft);
+      margin-bottom:2px;
+    }
+    .press-row {
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+      padding:8px 12px; background:var(--paper-2);
+      border:1.5px solid var(--ink-2); border-radius:5px; margin:8px 0;
+    }
+    .press-label {
+      font-family:'Permanent Marker',cursive; font-size:11px;
+      color:var(--ink-soft); white-space:nowrap;
+    }
+    .step-note {
+      font-family:var(--f-body); font-size:14px; color:var(--ink-2); line-height:1.5;
+    }
+    .step-tip {
+      margin-top:8px; padding:7px 11px;
+      background:#fffbe6; border-left:3px solid #c8a000;
+      border-radius:3px; font-family:var(--f-body); font-size:13px; color:#6a4800;
+    }
+    .step-nav { display:flex; gap:8px; align-items:center; margin-top:10px; }
+
+    /* ── Try It ── */
+    .sys-grid {
+      display:grid; grid-template-columns:auto auto auto auto auto;
+      gap:6px 8px; align-items:center;
+      font-family:'JetBrains Mono',monospace; font-size:16px;
+    }
+    .coeff-inp {
+      width:52px; text-align:center;
+      border:2px solid var(--ink-2); border-radius:3px;
+      padding:5px 4px; font-family:'JetBrains Mono',monospace;
+      font-size:15px; background:var(--paper); color:var(--ink);
+    }
+    .plys-display {
+      background:#b4c8a0; border:2px solid #68784a; border-radius:2px;
+      padding:10px 14px; font-family:'JetBrains Mono',monospace;
+      font-size:13px; color:#0d1a04; white-space:pre; line-height:1.7;
+    }
+    .sol-chip {
+      display:inline-flex; gap:18px;
+      background:var(--highlight); border:2px solid var(--accent);
+      border-radius:5px; padding:10px 16px;
+      font-family:'JetBrains Mono',monospace; font-size:17px; color:var(--ink);
+    }
+
+    /* ── Examples ── */
+    .example-sys {
+      font-family:'JetBrains Mono',monospace; font-size:15px; line-height:1.9;
+      background:var(--paper-2); padding:10px 14px; border-radius:4px;
+      border:1.5px solid var(--ink-2);
+    }
+    .example-matrix {
+      background:#b4c8a0; border:2px solid #68784a; border-radius:2px;
+      padding:8px 12px; font-family:'JetBrains Mono',monospace;
+      font-size:13px; color:#0d1a04; white-space:pre; line-height:1.7;
+    }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Quadratics</a></div>
+      <div class="tool-title f-display">TI-84 &amp; PLYSMLT2 Guide</div>
+      <div class="tool-tagline f-hand">Enter any 2×2 system into PLYSMLT2 and read the solution — step by step.</div>
+
+      <!-- Tab buttons -->
+      <div style="display:flex; gap:8px; margin:10px 0; flex-wrap:wrap;">
+        <button class="sk-pill active" id="tab-btn-guide" onclick="showTab('guide')">📋 Step-by-Step</button>
+        <button class="sk-pill" id="tab-btn-tryit" onclick="showTab('tryit')">✏️ Try Your System</button>
+        <button class="sk-pill" id="tab-btn-examples" onclick="showTab('examples')">📝 Worked Examples</button>
+      </div>
+
+      <!-- ════════ TAB: GUIDE ════════ -->
+      <div id="tab-guide" class="trainer-stage">
+        <div class="step-pips" id="step-pips"></div>
+        <div class="step-content" id="step-content"></div>
+        <div class="step-nav">
+          <button class="btn small" id="btn-prev" onclick="stepNav(-1)">← back</button>
+          <span class="f-marker" style="font-size:11px; color:var(--ink-soft);" id="step-counter"></span>
+          <button class="btn small accent" id="btn-next" onclick="stepNav(1)">next →</button>
+        </div>
+      </div>
+
+      <!-- ════════ TAB: TRY IT ════════ -->
+      <div id="tab-tryit" style="display:none;">
+        <div class="sk-box" style="padding:14px; background:var(--paper);">
+          <div class="f-marker" style="font-size:11px; margin-bottom:10px;">ENTER YOUR 2×2 SYSTEM</div>
+          <div class="sys-grid">
+            <input class="coeff-inp" id="a11" type="number" placeholder="a" />
+            <span>x +</span>
+            <input class="coeff-inp" id="a12" type="number" placeholder="b" />
+            <span>y =</span>
+            <input class="coeff-inp" id="b1" type="number" placeholder="c" />
+
+            <input class="coeff-inp" id="a21" type="number" placeholder="d" />
+            <span>x +</span>
+            <input class="coeff-inp" id="a22" type="number" placeholder="e" />
+            <span>y =</span>
+            <input class="coeff-inp" id="b2" type="number" placeholder="f" />
+          </div>
+          <button class="btn accent" style="margin-top:12px;" onclick="runTryIt()">Generate PLYSMLT2 Setup →</button>
+        </div>
+        <div id="tryit-result" style="display:none; margin-top:12px;"></div>
+      </div>
+
+      <!-- ════════ TAB: EXAMPLES ════════ -->
+      <div id="tab-examples" style="display:none;">
+        <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+          <button class="sk-pill active" id="ex0" onclick="loadEx(0)">Example 1</button>
+          <button class="sk-pill"        id="ex1" onclick="loadEx(1)">Example 2</button>
+          <button class="sk-pill"        id="ex2" onclick="loadEx(2)">Example 3 ★</button>
+        </div>
+        <div id="example-content"></div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.5; padding-left:18px; margin:0;">
+          <li>Work through the guide steps.</li>
+          <li>Use "Try Your System" to generate the exact setup for your problem.</li>
+          <li>Check worked examples 1–3.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">PLYSMLT2 AT A GLANCE</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.9; color:var(--ink-2);">
+          <span class="key">APPS</span> → PLYSMLT2<br>
+          → <strong>2: SimultEqn</strong><br>
+          → Set # of eqns to <strong>2</strong><br>
+          → <span class="key green">GRAPH</span> (= F5 = OK)<br>
+          → Enter a₁₁, a₁₂, b₁<br>
+          → Enter a₂₁, a₂₂, b₂<br>
+          → <span class="key green">GRAPH</span> → SOLVE<br>
+          → Read x₁ (= x), x₂ (= y)
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SUBSCRIPT KEY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">a₁₁</span> — x-coeff in eq 1<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">a₁₂</span> — y-coeff in eq 1<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">b₁</span>  — right side of eq 1<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">a₂₁</span> — x-coeff in eq 2<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">a₂₂</span> — y-coeff in eq 2<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">b₂</span>  — right side of eq 2
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">TOP 3 MISTAKES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          ① Using <span class="key orange">−</span> (subtract) instead of <span class="key orange">(-)</span> (negative) for negative coefficients<br>
+          ② Entering b₁/b₂ as the wrong row<br>
+          ③ Forgetting a coefficient (e.g. y with no number = coefficient 1)
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="systems-explorer.html">→ Systems Explorer</a>
+        <a class="related-link f-hand" href="substitution-stepper.html">→ Substitution Stepper</a>
+        <a class="related-link f-hand" href="elimination-race.html">→ Elimination Race</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  'use strict';
+
+  // ── Guide steps ──────────────────────────────────────────────────────────────
+  const STEPS = [
+    {
+      title: 'Press [APPS]',
+      keys: [['APPS','']],
+      screen:
+`APPLICATIONS
+
+▶ 6:PLYSMLT2
+  7:Inequality
+  (scroll if needed)
+  `,
+      screenLabel: 'APPS menu',
+      note: 'Press the <strong>APPS</strong> button — it\'s in the top row between MATH and VARS. Scroll down until you find <strong>PLYSMLT2</strong> (it may be #6 or #7 depending on your calculator version).',
+      tip: null,
+    },
+    {
+      title: 'Open PLYSMLT2',
+      keys: [['6',''], ['or','sep'], ['ENTER','green']],
+      screen:
+`PLYSMLT2  v2.00
+─────────────
+ 1:PolySmlt
+▶2:SimultEqn
+ 3:About
+`,
+      screenLabel: 'PLYSMLT2 main menu',
+      note: 'Press the number next to PLYSMLT2 (usually 6), or press ENTER when it\'s highlighted. The PLYSMLT2 menu appears. You want <strong>2: SimultEqn</strong> — Simultaneous Equations.',
+      tip: null,
+    },
+    {
+      title: 'Select Simultaneous Equations',
+      keys: [['2','']],
+      screen:
+`SIMULTANEOUS EQN
+─────────────
+ NUMBER OF
+ EQUATIONS?
+
+      ▶ 2
+
+[F4]=CHNG  [F5]=OK`,
+      screenLabel: 'Setup screen',
+      note: 'Press <strong>2</strong>. The screen asks how many equations. For a 2×2 system it should already say 2. Leave it at 2 and press <strong>F5</strong> (the GRAPH key) to confirm.',
+      tip: null,
+    },
+    {
+      title: 'Confirm with F5 = GRAPH',
+      keys: [['GRAPH','green'], ['= F5 = OK','sep']],
+      screen:
+`EXAMPLE SYSTEM:
+
+  x  + 2y = 5
+  3x −  y = 1
+
+(we\'ll enter this next)`,
+      screenLabel: 'About to enter coefficients',
+      note: 'The <strong>GRAPH</strong> button acts as the F5 = OK button inside PLYSMLT2 apps. After pressing it, the coefficient-entry grid appears. We\'ll enter the example system <strong>x + 2y = 5</strong> and <strong>3x − y = 1</strong>.',
+      tip: null,
+    },
+    {
+      title: 'Enter Row 1 Coefficients',
+      keys: [['1',''], ['ENTER','green'], ['2',''], ['ENTER','green'], ['5',''], ['ENTER','green']],
+      screen:
+`[A]       SimultEqn
+─────────────────
+a1,1= 1  ✓
+a1,2= 2  ✓
+b1=   5  ✓
+a2,1= ▌
+a2,2=
+b2=`,
+      screenLabel: 'Equation 1 entered',
+      note: 'For equation 1 (<strong>x + 2y = 5</strong>): type <strong>1</strong> ENTER (x-coefficient), <strong>2</strong> ENTER (y-coefficient), <strong>5</strong> ENTER (right-hand side). The cursor drops to row 2.',
+      tip: 'If the coefficient is 1 (like "x" with no number), still type 1. If it\'s −1, type (-) then 1.',
+    },
+    {
+      title: 'Enter Row 2 Coefficients',
+      keys: [['3',''], ['ENTER','green'], ['(-)','orange'], ['1',''], ['ENTER','green'], ['1',''], ['ENTER','green']],
+      screen:
+`[A]       SimultEqn
+─────────────────
+a1,1= 1
+a1,2= 2
+b1=   5
+a2,1= 3  ✓
+a2,2=-1  ✓
+b2=   1  ✓`,
+      screenLabel: 'All coefficients entered',
+      note: 'For equation 2 (<strong>3x − y = 1</strong>): type <strong>3</strong> ENTER, then <strong>(−)1</strong> ENTER for −1 (the y-coefficient), then <strong>1</strong> ENTER for the right side.',
+      tip: '⚠️ Use the <strong>(-)</strong> key (bottom-left of the number pad) for negative numbers — NOT the blue minus/subtract key. Using the wrong one causes an error.',
+    },
+    {
+      title: 'Solve — Press GRAPH Again',
+      keys: [['GRAPH','green'], ['= F5 = SOLVE','sep']],
+      screen:
+`SIMULTANEOUS EQN
+─────────────────
+  x1 =  1
+  x2 =  2
+
+
+[F1]=COEF  [F5]=SOLVE`,
+      screenLabel: 'Solution!',
+      note: 'Press <strong>GRAPH</strong> (F5) to solve. The solution appears: <strong>x₁ = 1</strong> and <strong>x₂ = 2</strong>, which means <strong>x = 1, y = 2</strong>. To change the coefficients and solve a new system, press F1 (the Y= button).',
+      tip: '✓ Check: 1 + 2(2) = 5 ✓ and 3(1) − 2 = 1 ✓. Always verify at least one equation!',
+    },
+  ];
+
+  let curStep = 0;
+
+  // ── Tab navigation ───────────────────────────────────────────────────────────
+  function showTab(name) {
+    ['guide','tryit','examples'].forEach(t => {
+      const el = document.getElementById('tab-' + t);
+      const btn = document.getElementById('tab-btn-' + t);
+      if (el)  el.style.display  = t === name ? '' : 'none';
+      if (btn) btn.classList.toggle('active', t === name);
+    });
+  }
+
+  // ── Step guide ───────────────────────────────────────────────────────────────
+  function renderPips() {
+    const cont = document.getElementById('step-pips');
+    cont.innerHTML = '';
+    STEPS.forEach((_, i) => {
+      const pip = document.createElement('div');
+      pip.className = 'pip' + (i < curStep ? ' done' : i === curStep ? ' active' : '');
+      pip.title = STEPS[i].title;
+      pip.onclick = () => { curStep = i; renderStep(); };
+      cont.appendChild(pip);
+    });
+  }
+
+  function renderStep() {
+    const s = STEPS[curStep];
+    const keyHtml = s.keys.map(([label, cls]) =>
+      `<span class="key ${cls}">${label}</span>`
+    ).join(' ');
+
+    document.getElementById('step-content').innerHTML = `
+      <div class="step-step-num">STEP ${curStep + 1} OF ${STEPS.length}</div>
+      <div class="step-title">${s.title}</div>
+      <div class="press-row">
+        <span class="press-label">PRESS:</span>
+        ${keyHtml}
+      </div>
+      <div class="ti-shell">
+        <div class="ti-screen">${escHtml(s.screen)}</div>
+        <div class="ti-screen-label">${s.screenLabel}</div>
+      </div>
+      <div class="step-note" style="margin-top:10px;">${s.note}</div>
+      ${s.tip ? `<div class="step-tip">${s.tip}</div>` : ''}
+    `;
+
+    document.getElementById('step-counter').textContent =
+      `STEP ${curStep + 1} / ${STEPS.length}`;
+    document.getElementById('btn-prev').disabled = curStep === 0;
+    document.getElementById('btn-next').textContent =
+      curStep === STEPS.length - 1 ? 'done ✓' : 'next →';
+    renderPips();
+  }
+
+  function stepNav(dir) {
+    curStep = Math.max(0, Math.min(STEPS.length - 1, curStep + dir));
+    renderStep();
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // ── Try It ───────────────────────────────────────────────────────────────────
+  function runTryIt() {
+    const a = +document.getElementById('a11').value || 0;
+    const b = +document.getElementById('a12').value || 0;
+    const e = +document.getElementById('b1').value  || 0;
+    const c = +document.getElementById('a21').value || 0;
+    const d = +document.getElementById('a22').value || 0;
+    const f = +document.getElementById('b2').value  || 0;
+
+    const det = a * d - b * c;
+    const res = document.getElementById('tryit-result');
+
+    if (det === 0) {
+      res.style.display = 'block';
+      res.innerHTML = `<div class="sk-box" style="padding:12px; color:var(--redline);">
+        <strong>Determinant = 0</strong> — this system has no unique solution (either no solution or infinitely many). Check your coefficients.
+      </div>`;
+      return;
+    }
+
+    const x = (e * d - b * f) / det;
+    const y = (a * f - e * c) / det;
+
+    const fmt = n => {
+      if (Number.isInteger(n)) return String(n);
+      const frac = toFraction(n);
+      return frac || n.toFixed(4);
+    };
+
+    function toFraction(n) {
+      const tol = 1e-9;
+      for (let denom = 1; denom <= 100; denom++) {
+        const num = Math.round(n * denom);
+        if (Math.abs(num / denom - n) < tol) return denom === 1 ? String(num) : `${num}/${denom}`;
+      }
+      return null;
+    }
+
+    const matrixLine = (a11, a12, b) => {
+      const s12 = a12 >= 0 ? `  a1,2=${String(a12).padStart(3)}` : ` a1,2=${String(a12).padStart(3)}`;
+      return `a1,1=${String(a11).padStart(3)}  a1,2=${String(a12).padStart(3)}  b1=${String(b).padStart(4)}`;
+    };
+
+    res.style.display = 'block';
+    res.innerHTML = `
+      <div class="sk-box" style="padding:14px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">PLYSMLT2 — WHAT TO TYPE</div>
+        <div class="ti-shell" style="margin-bottom:10px;">
+          <div class="ti-screen">[A]       SimultEqn
+─────────────────
+a1,1=${String(a).padStart(3)}  a1,2=${String(b).padStart(3)}  b1=${String(e).padStart(4)}
+a2,1=${String(c).padStart(3)}  a2,2=${String(d).padStart(3)}  b2=${String(f).padStart(4)}</div>
+          <div class="ti-screen-label">Enter these numbers in order, pressing ENTER after each</div>
+        </div>
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">ENTRY ORDER</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:13px; line-height:2; color:var(--ink-2);">
+          Row 1: <strong>${a}</strong> ENTER &nbsp; <strong>${b}</strong> ENTER &nbsp; <strong>${e}</strong> ENTER<br>
+          Row 2: <strong>${c}</strong> ENTER &nbsp; <strong>${d}</strong> ENTER &nbsp; <strong>${f}</strong> ENTER<br>
+          ${[a,b,c,d].some(v => v < 0) ? '<span style="color:#b84000;">⚠ Use the <strong>(-)</strong> key for any negative numbers!</span>' : ''}
+        </div>
+        <div class="f-marker" style="font-size:11px; margin:10px 0 6px;">CALCULATOR SOLUTION</div>
+        <div class="sol-chip">
+          <span>x₁ = <strong>${fmt(x)}</strong></span>
+          <span>x₂ = <strong>${fmt(y)}</strong></span>
+        </div>
+        <div style="font-family:var(--f-body); font-size:12px; color:var(--ink-soft); margin-top:6px;">x₁ = x &nbsp;·&nbsp; x₂ = y (the first and second unknowns)</div>
+      </div>`;
+  }
+
+  // ── Worked examples ───────────────────────────────────────────────────────────
+  const EXAMPLES = [
+    {
+      sys: ['x + 2y = 5', '3x − y = 1'],
+      a11:1, a12:2, b1:5, a21:3, a22:-1, b2:1,
+      x1:1, x2:2,
+      note: 'Clean integer solution. Both coefficients are positive except a₂₂ = −1.',
+    },
+    {
+      sys: ['2x + y = 8', 'x − y = 1'],
+      a11:2, a12:1, b1:8, a21:1, a22:-1, b2:1,
+      x1:3, x2:2,
+      note: 'Another clean system. Notice a₂₂ = −1 requires the (-) key.',
+    },
+    {
+      sys: ['3x + 2y = 7', '5x − 4y = 3'],
+      a11:3, a12:2, b1:7, a21:5, a22:-4, b2:3,
+      x1:1.4, x2:1.4,
+      note: 'Non-integer solution. The calculator gives decimals — you can leave them as decimals or convert to fractions.',
+    },
+  ];
+
+  function loadEx(idx) {
+    [0,1,2].forEach(i => document.getElementById('ex'+i).classList.toggle('active', i===idx));
+    const ex = EXAMPLES[idx];
+    document.getElementById('example-content').innerHTML = `
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div class="sk-box" style="padding:12px; background:var(--paper);">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE SYSTEM</div>
+          <div class="example-sys">${ex.sys[0]}\n${ex.sys[1]}</div>
+        </div>
+
+        <div class="sk-box" style="padding:12px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">STEP 1–3</div>
+          <div class="f-hand" style="font-size:14px; color:var(--ink-2); line-height:1.7;">
+            <span class="key">APPS</span> → PLYSMLT2 → 2 → <span class="key green">GRAPH</span>
+          </div>
+        </div>
+
+        <div class="sk-box" style="padding:12px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">STEP 4 — ENTER MATRIX</div>
+          <div class="ti-shell">
+            <div class="ti-screen">[A]       SimultEqn
+─────────────────
+a1,1=${String(ex.a11).padStart(3)}  a1,2=${String(ex.a12).padStart(3)}  b1=${String(ex.b1).padStart(4)}
+a2,1=${String(ex.a21).padStart(3)}  a2,2=${String(ex.a22).padStart(3)}  b2=${String(ex.b2).padStart(4)}</div>
+            <div class="ti-screen-label">Coefficient matrix</div>
+          </div>
+          <div style="font-family:var(--f-body); font-size:13px; color:var(--ink-soft); margin-top:6px;">
+            Row 1: ${ex.a11} ENTER, ${ex.a12} ENTER, ${ex.b1} ENTER<br>
+            Row 2: ${ex.a21} ENTER, ${ex.a22} ENTER (use (-) key!), ${ex.b2} ENTER
+          </div>
+        </div>
+
+        <div class="sk-box" style="padding:12px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">STEP 5 — SOLVE</div>
+          <div style="margin-bottom:8px; font-family:var(--f-body); font-size:14px;">Press <span class="key green">GRAPH</span> (F5). The calculator shows:</div>
+          <div class="ti-shell" style="margin-bottom:10px;">
+            <div class="ti-screen">  x1 = ${ex.x1}
+  x2 = ${ex.x2}</div>
+            <div class="ti-screen-label">Solution</div>
+          </div>
+          <div class="sol-chip">
+            <span>x = <strong>${ex.x1}</strong></span>
+            <span>y = <strong>${ex.x2}</strong></span>
+          </div>
+          <div class="step-tip" style="margin-top:8px;">${ex.note}</div>
+        </div>
+      </div>`;
+  }
+
+  // Init
+  renderStep();
+  loadEx(0);
+  </script>
+  <script src="url-state.js"></script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Complex Number Arithmetic Stepper — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex:1; overflow-y:auto; padding:8px 0; display:flex; flex-direction:column; gap:12px; }
+
+    /* op selector */
+    .op-row { display:flex; gap:8px; flex-wrap:wrap; }
+    .op-btn { padding:5px 14px; border-radius:4px; border:2px solid var(--ink-2);
+      font-family:'Permanent Marker',cursive; font-size:12px; cursor:pointer;
+      background:var(--paper-2); color:var(--ink); transition:background .15s; }
+    .op-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+    /* problem display */
+    .prob-expr { font-family:'JetBrains Mono',monospace; font-size:26px; line-height:1; }
+
+    /* steps */
+    .step-block { padding:12px 16px; border-radius:4px; }
+    .step-block.locked { opacity:.35; pointer-events:none; }
+    .step-block.active { border-color:var(--accent); }
+    .step-block.done   { opacity:.7; }
+
+    .step-q { font-family:var(--f-body); font-size:15px; margin-bottom:8px; color:var(--ink-2); }
+    .step-q strong { color:var(--ink); }
+    .step-answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .step-input {
+      border:2px solid var(--ink); border-radius:4px;
+      padding:5px 10px; font-family:'JetBrains Mono',monospace; font-size:18px;
+      background:var(--paper); color:var(--ink); width:90px; text-align:center;
+    }
+    .step-input.ok  { border-color:var(--green); background:#d4edda; }
+    .step-input.err { border-color:var(--redline); background:#f8d7da; }
+    .step-fb { font-family:'Permanent Marker',cursive; font-size:14px; }
+    .step-fb.good { color:var(--green); }
+    .step-fb.bad  { color:var(--redline); }
+    .step-reveal { font-family:'JetBrains Mono',monospace; font-size:14px;
+      padding:4px 10px; background:var(--paper-2); border-radius:3px; display:none; }
+
+    /* FOIL layout */
+    .foil-box {
+      background:var(--paper-2); border:1.5px solid var(--ink-2);
+      border-radius:4px; padding:10px 14px;
+      font-family:'JetBrains Mono',monospace; font-size:14px; line-height:2;
+    }
+    .foil-term { color:var(--accent); font-weight:700; }
+    .foil-i2  { color:#b84000; }
+
+    .solved-banner { padding:14px; background:var(--highlight); transform:rotate(-0.4deg); display:none; }
+    .solved-banner .f-display { font-size:32px; color:var(--accent); }
+
+    .prob-picker { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
+    /* rule chip */
+    .rule-chip {
+      display:inline-block; font-family:var(--f-body); font-size:11px;
+      padding:2px 7px; border-radius:3px; font-weight:700;
+      background:var(--paper-2); border:1px solid var(--ink-soft);
+      color:var(--ink-2); vertical-align:middle;
+    }
+    .rule-add  { color:#1a6a2a; background:#d4f0da; border-color:#2a8a3a55; }
+    .rule-sub  { color:#b84000; background:#fde8d8; border-color:#d0500055; }
+    .rule-mul  { color:#1a4a8a; background:#d8e8fc; border-color:#2a6ab055; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u3.html">← U3</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u3.html">← U3 · Rationals &amp; Complex</a> &nbsp;·&nbsp; D4</div>
+      <div class="tool-title f-display">Complex Arithmetic Stepper</div>
+      <div class="tool-tagline f-hand">Add, subtract, and multiply complex numbers step by step. Every i² substitution shown.</div>
+
+      <div class="trainer-stage">
+        <!-- Operation selector -->
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span class="f-marker" style="font-size:12px;">OPERATION:</span>
+          <div class="op-row">
+            <button class="op-btn active" id="op-add" onclick="setOp('add')">+ Add</button>
+            <button class="op-btn" id="op-sub" onclick="setOp('sub')">− Subtract</button>
+            <button class="op-btn" id="op-mul" onclick="setOp('mul')">× Multiply</button>
+          </div>
+        </div>
+
+        <!-- Problem picker -->
+        <div class="prob-picker">
+          <span class="f-marker" style="font-size:12px; align-self:center;">PROBLEM:</span>
+          <button class="sk-pill active" id="pb0" onclick="loadProb(0)">P1</button>
+          <button class="sk-pill" id="pb1" onclick="loadProb(1)">P2</button>
+          <button class="sk-pill" id="pb2" onclick="loadProb(2)">P3 ★</button>
+          <button class="btn small" onclick="reload()">↺ restart</button>
+        </div>
+
+        <div class="problem-card sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="prob-label f-marker" style="font-size:12px; color:var(--ink-soft); margin-bottom:6px;">SIMPLIFY:</div>
+          <div class="prob-expr" id="prob-expr"></div>
+        </div>
+
+        <div id="foil-area"></div>
+        <div id="steps-area"></div>
+
+        <div class="solved-banner sk-box" id="solved-banner">
+          <div class="prob-label f-marker" style="font-size:11px;">RESULT</div>
+          <div class="f-display" id="solved-expr"></div>
+          <div style="margin-top:8px; font-family:var(--f-body); font-size:14px; color:var(--ink-2);" id="solved-note"></div>
+          <button class="btn accent" style="margin-top:12px;" onclick="nextProb()">next problem →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Choose Add, Subtract, or Multiply.</li>
+          <li>Fill in each step box.</li>
+          <li>Hit Enter or "check".</li>
+          <li>Use "hint" if stuck.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE KEY RULES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+          <span style="color:var(--accent); font-weight:700;">i = √(−1)</span><br>
+          <span style="color:var(--accent); font-weight:700;">i² = −1</span> ← the big one<br>
+          <span style="color:var(--ink-soft);">i³ = −i</span><br>
+          <span style="color:var(--ink-soft);">i⁴ = 1</span>
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">ADD / SUBTRACT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          Group like terms:<br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink);">
+            (a+bi)+(c+di)<br>
+            = (a+c) + (b+d)i
+          </span><br>
+          Real parts together. Imaginary parts together.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">MULTIPLY (FOIL)</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--ink);">
+            (a+bi)(c+di)<br>
+            = ac + adi + bci + bdi²<br>
+            = ac + adi + bci − bd<br>
+            = (ac−bd) + (ad+bc)i
+          </span><br>
+          Substitute <strong>i²=−1</strong> then combine.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">CONJUGATES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          (a+bi)(a−bi) = a²+b²<br>
+          The imaginary parts cancel! This is used for dividing complex numbers.
+        </div>
+      </div>
+
+      <div class="share-box sk-box" style="padding:10px; background:var(--highlight); transform:rotate(-0.5deg);">
+        <div class="f-marker" style="font-size:11px;">💬 SHARE WITH MR. K</div>
+        <div class="f-hand" style="font-size:12px; margin-top:4px;">Which step trips you up most? Show the screenshot.</div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="imaginary-sandbox.html">→ Imaginary Number Sandbox</a>
+        <a class="related-link f-hand" href="complex-plane.html">→ Complex Plane Explorer</a>
+        <a class="related-link f-hand" href="complete-square.html">→ Complete the Square</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="math-fmt.js"></script>
+  <script src="math-input.js"></script>
+  <script>
+  'use strict';
+
+  // ── Problem bank ─────────────────────────────────────────────────────────────
+  // Each problem: { op, expr, steps: [{q, ans:[], reveal}], result, note }
+  const BANK = {
+    add: [
+      {
+        expr: '(3 + 2i) + (1 + 4i)',
+        a:3, b:2, c:1, d:4,
+        steps: [
+          { q: 'Add the <strong>real parts</strong>: 3 + 1 = ?', ans:['4'], reveal:'3 + 1 = 4' },
+          { q: 'Add the <strong>imaginary coefficients</strong>: 2 + 4 = ?', ans:['6'], reveal:'2 + 4 = 6' },
+        ],
+        result: '4 + 6i',
+        note: 'Both parts are positive — a clean addition.',
+      },
+      {
+        expr: '(5 − 3i) + (−1 + 2i)',
+        a:5, b:-3, c:-1, d:2,
+        steps: [
+          { q: 'Add the <strong>real parts</strong>: 5 + (−1) = ?', ans:['4'], reveal:'5 + (−1) = 4' },
+          { q: 'Add the <strong>imaginary coefficients</strong>: −3 + 2 = ?', ans:['-1','−1'], reveal:'−3 + 2 = −1' },
+        ],
+        result: '4 − i',
+        note: 'When the imaginary coefficient is −1, write it as −i, not −1i.',
+      },
+      {
+        expr: '(2 + 7i) + (4 − 7i)',
+        a:2, b:7, c:4, d:-7,
+        steps: [
+          { q: 'Add the <strong>real parts</strong>: 2 + 4 = ?', ans:['6'], reveal:'2 + 4 = 6' },
+          { q: 'Add the <strong>imaginary coefficients</strong>: 7 + (−7) = ?', ans:['0'], reveal:'7 + (−7) = 0 — they cancel!' },
+        ],
+        result: '6',
+        note: 'The imaginary parts cancelled completely — the sum is a real number. This happens with conjugate pairs!',
+      },
+    ],
+    sub: [
+      {
+        expr: '(5 + 2i) − (3 + 4i)',
+        a:5, b:2, c:3, d:4,
+        steps: [
+          { q: '<strong>Distribute the minus</strong>: (5+2i) − (3+4i) = 5 + 2i − 3 − 4i. Combine real parts: 5 − 3 = ?', ans:['2'], reveal:'5 − 3 = 2' },
+          { q: 'Combine imaginary parts: 2i − 4i = ? (enter the coefficient)', ans:['-2','−2'], reveal:'2 − 4 = −2, so −2i' },
+        ],
+        result: '2 − 2i',
+        note: 'The key step is distributing the minus into both parts of (3+4i).',
+      },
+      {
+        expr: '(4 − i) − (2 − 5i)',
+        a:4, b:-1, c:2, d:-5,
+        steps: [
+          { q: '<strong>Distribute the minus</strong>: (4−i) − (2−5i) = 4 − i − 2 + 5i. Combine real parts: 4 − 2 = ?', ans:['2'], reveal:'4 − 2 = 2' },
+          { q: 'Combine imaginary parts: −i + 5i = ? (enter the coefficient)', ans:['4'], reveal:'−1 + 5 = 4, so 4i' },
+        ],
+        result: '2 + 4i',
+        note: 'Subtracting a negative imaginary part flips it to positive — double negatives!',
+      },
+      {
+        expr: '(6 + 3i) − (6 − 3i)',
+        a:6, b:3, c:6, d:-3,
+        steps: [
+          { q: '<strong>Distribute the minus</strong>: (6+3i) − (6−3i) = 6+3i−6+3i. Combine real parts: 6 − 6 = ?', ans:['0'], reveal:'6 − 6 = 0 — the real parts cancel!' },
+          { q: 'Combine imaginary parts: 3i + 3i = ? (coefficient)', ans:['6'], reveal:'3 + 3 = 6, so 6i' },
+        ],
+        result: '6i',
+        note: 'Subtracting a number from itself zeroes the real part — the result is purely imaginary.',
+      },
+    ],
+    mul: [
+      {
+        expr: '(2 + i)(3 + 2i)',
+        a:2, b:1, c:3, d:2,
+        steps: [
+          { q: 'FOIL step 1 — compute the <strong>real part (ac − bd)</strong>: (2)(3) − (1)(2) = ?', ans:['4'], reveal:'2·3 − 1·2 = 6 − 2 = 4' },
+          { q: 'FOIL step 2 — compute the <strong>imaginary coefficient (ad + bc)</strong>: (2)(2) + (1)(3) = ?', ans:['7'], reveal:'2·2 + 1·3 = 4 + 3 = 7' },
+        ],
+        result: '4 + 7i',
+        note: 'Formulas: Real = ac − bd, Imaginary = ad + bc.',
+      },
+      {
+        expr: '(3 − 2i)(4 + i)',
+        a:3, b:-2, c:4, d:1,
+        steps: [
+          { q: 'Compute the <strong>real part (ac − bd)</strong>: (3)(4) − (−2)(1) = ?', ans:['14'], reveal:'3·4 − (−2)·1 = 12 − (−2) = 12 + 2 = 14' },
+          { q: 'Compute the <strong>imaginary coefficient (ad + bc)</strong>: (3)(1) + (−2)(4) = ?', ans:['-5','−5'], reveal:'3·1 + (−2)·4 = 3 − 8 = −5' },
+        ],
+        result: '14 − 5i',
+        note: 'Watch the signs — b is negative here, so bd and bc carry negatives.',
+      },
+      {
+        expr: '(1 + 2i)(1 − 2i)',
+        a:1, b:2, c:1, d:-2,
+        steps: [
+          { q: 'Compute the <strong>real part (ac − bd)</strong>: (1)(1) − (2)(−2) = ?', ans:['5'], reveal:'1·1 − 2·(−2) = 1 − (−4) = 1 + 4 = 5' },
+          { q: 'Compute the <strong>imaginary coefficient (ad + bc)</strong>: (1)(−2) + (2)(1) = ?', ans:['0'], reveal:'1·(−2) + 2·1 = −2 + 2 = 0' },
+        ],
+        result: '5',
+        note: '(1+2i) and (1−2i) are complex conjugates. Their product is always a real number: a² + b² = 1 + 4 = 5.',
+      },
+    ],
+  };
+
+  let curOp = 'add', curProb = 0, curStep = 0;
+
+  function norm(s) { return s.replace(/\s+/g,'').replace(/−/g,'-').toLowerCase(); }
+
+  function setOp(op) {
+    curOp = op; curProb = 0; curStep = 0;
+    ['add','sub','mul'].forEach(o => {
+      document.getElementById('op-'+o).classList.toggle('active', o === op);
+    });
+    updatePickers();
+    loadProb(0);
+  }
+
+  function updatePickers() {
+    const probs = BANK[curOp];
+    ['pb0','pb1','pb2'].forEach((id, i) => {
+      const btn = document.getElementById(id);
+      btn.style.display = i < probs.length ? '' : 'none';
+    });
+  }
+
+  function loadProb(idx) {
+    curProb = idx; curStep = 0;
+    document.querySelectorAll('[id^=pb]').forEach((b,i) => b.classList.toggle('active', i===idx));
+    const p = BANK[curOp][idx];
+    document.getElementById('prob-expr').textContent = p.expr;
+    document.getElementById('solved-banner').style.display = 'none';
+    renderFoilHint();
+    renderSteps();
+  }
+
+  function renderFoilHint() {
+    const foilArea = document.getElementById('foil-area');
+    if (curOp !== 'mul') { foilArea.innerHTML = ''; return; }
+    const p = BANK[curOp][curProb];
+    const bSign = p.b >= 0 ? '+' : '−';
+    const bAbs  = Math.abs(p.b);
+    const dSign = p.d >= 0 ? '+' : '−';
+    const dAbs  = Math.abs(p.d);
+    const bd = p.b * p.d;
+    const bdSign = bd >= 0 ? '+' : '−';
+    foilArea.innerHTML = `
+      <div class="foil-box">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">FOIL LAYOUT</div>
+        <div style="font-size:13px; line-height:2;">
+          (${p.a} ${bSign} ${bAbs}i)(${p.c} ${dSign} ${dAbs}i)<br>
+          = <span class="foil-term">${p.a}·${p.c}</span> + <span class="foil-term">${p.a}·${dSign === '+' ? '' : '(−'+dAbs+')'}${dSign === '+' ? dAbs+'i' : 'i'}</span> + <span class="foil-term">${bSign === '+' ? bAbs : '(−'+bAbs+')'}i·${p.c}</span> + <span class="foil-term">${bSign === '+' ? bAbs : '(−'+bAbs+')'}i·${dSign === '+' ? dAbs : '(−'+dAbs+')'}i</span><br>
+          <span style="color:var(--ink-soft); font-size:12px;">└ last two terms produce an <span class="foil-i2">i²</span> — replace with <span class="foil-i2">−1</span></span>
+        </div>
+      </div>`;
+  }
+
+  function renderSteps() {
+    const p = BANK[curOp][curProb];
+    const area = document.getElementById('steps-area');
+    area.innerHTML = '';
+    p.steps.forEach((step, i) => {
+      const isDone = i < curStep, isActive = i === curStep, isLocked = i > curStep;
+      const div = document.createElement('div');
+      div.className = `step-block sk-box ${isActive?'active':isDone?'done':'locked'}`;
+      div.innerHTML = `
+        <div class="step-q"><strong>Step ${i+1}:</strong> ${step.q}</div>
+        ${isDone ? `<div class="step-reveal" style="display:block;">${step.reveal} ✓</div>` : ''}
+        ${isActive ? `
+          <div class="step-answer-row">
+            <input class="step-input math-input" id="si${i}" type="text" placeholder="?" onkeydown="if(event.key==='Enter')checkStep(${i})" />
+            <button class="btn small accent" onclick="checkStep(${i})">check →</button>
+            <button class="btn small" onclick="showHint(${i})">hint</button>
+            <span class="step-fb" id="sf${i}"></span>
+          </div>
+          <div class="step-reveal" id="sr${i}">${step.reveal}</div>` : ''}
+      `;
+      area.appendChild(div);
+    });
+  }
+
+  function checkStep(i) {
+    const inp = document.getElementById(`si${i}`);
+    const fb  = document.getElementById(`sf${i}`);
+    const val = norm(inp.value);
+    const ok  = BANK[curOp][curProb].steps[i].ans.some(a => norm(a) === val);
+    if (ok) {
+      inp.classList.add('ok'); fb.textContent = '✓'; fb.className = 'step-fb good';
+      setTimeout(() => {
+        curStep = i + 1;
+        if (curStep >= BANK[curOp][curProb].steps.length) showSolved();
+        else { renderSteps(); document.querySelector('.step-block.active .step-input')?.focus(); }
+      }, 600);
+    } else {
+      inp.classList.add('err'); fb.textContent = '✗ try again'; fb.className = 'step-fb bad';
+      setTimeout(() => { inp.classList.remove('err'); fb.textContent = ''; }, 1000);
+    }
+  }
+
+  function showHint(i) {
+    const r = document.getElementById(`sr${i}`);
+    if (r) r.style.display = 'block';
+  }
+
+  function showSolved() {
+    const p = BANK[curOp][curProb];
+    const banner = document.getElementById('solved-banner');
+    banner.style.display = 'block';
+    document.getElementById('solved-expr').textContent = p.result;
+    document.getElementById('solved-note').textContent = p.note;
+    banner.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function reload() { loadProb(curProb); }
+  function nextProb() {
+    const len = BANK[curOp].length;
+    loadProb((curProb + 1) % len);
+  }
+
+  updatePickers();
+  loadProb(0);
+  </script>
+  <script src="url-state.js"></script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
+</body>
+</html>

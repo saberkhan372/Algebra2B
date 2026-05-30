@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Exponent Rules Trainer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex:1; overflow-y:auto; padding:8px 0; display:flex; flex-direction:column; gap:10px; }
+
+    /* rules reference */
+    .rules-grid {
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;
+    }
+    .rule-card {
+      border:1.5px solid var(--ink-2); border-radius:4px;
+      padding:8px 10px; background:var(--paper-2);
+    }
+    .rule-card .rule-name {
+      font-family:'Permanent Marker',cursive; font-size:11px;
+      color:var(--ink-soft); margin-bottom:4px;
+    }
+    .rule-card .rule-expr {
+      font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--ink);
+    }
+    .rule-card .rule-words {
+      font-family:var(--f-body); font-size:11.5px; color:var(--ink-2); margin-top:3px;
+    }
+
+    /* problem card */
+    .prob-display {
+      padding:14px 18px; border-radius:4px; text-align:center;
+      position:relative;
+    }
+    .prob-expr-big {
+      font-family:'JetBrains Mono',monospace; font-size:34px; color:var(--ink); line-height:1;
+    }
+    .prob-num-badge {
+      position:absolute; top:8px; right:10px;
+      font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft);
+    }
+
+    /* answer row */
+    .answer-section { padding:12px 16px; border-radius:4px; }
+
+    .rule-selector {
+      display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;
+    }
+    .rule-btn {
+      padding:4px 12px; border-radius:3px; border:1.5px solid var(--ink-2);
+      font-family:var(--f-body); font-size:13px; cursor:pointer;
+      background:var(--paper-2); color:var(--ink); transition:background .12s;
+    }
+    .rule-btn:hover { background:var(--paper); }
+    .rule-btn.selected { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .rule-btn.wrong   { background:#f8d7da; border-color:var(--redline); color:var(--redline); }
+    .rule-btn.correct { background:#d4edda; border-color:var(--green); color:#1a6a2a; }
+
+    .answer-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:4px; }
+    .ans-input {
+      border:2px solid var(--ink); border-radius:4px;
+      padding:5px 10px; font-family:'JetBrains Mono',monospace; font-size:18px;
+      background:var(--paper); color:var(--ink); width:140px; text-align:center;
+    }
+    .ans-input.ok  { border-color:var(--green); background:#d4edda; }
+    .ans-input.err { border-color:var(--redline); background:#f8d7da; }
+    .ans-fb { font-family:'Permanent Marker',cursive; font-size:14px; }
+    .ans-fb.good { color:var(--green); }
+    .ans-fb.bad  { color:var(--redline); }
+    .ans-reveal {
+      font-family:var(--f-body); font-size:13px; padding:6px 10px;
+      background:var(--paper-2); border-radius:3px;
+      border-left:3px solid var(--accent); display:none;
+    }
+
+    /* score */
+    .score-bar {
+      display:flex; gap:12px; align-items:center; padding:8px 14px;
+      background:var(--paper-2); border-radius:4px; border:1.5px solid var(--ink-2);
+    }
+    .score-num {
+      font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;
+    }
+    .score-num.green-num { color:var(--green); }
+    .score-label { font-family:var(--f-body); font-size:12px; color:var(--ink-soft); }
+    .progress-track {
+      flex:1; height:8px; background:var(--ink-soft); border-radius:4px; overflow:hidden; opacity:.3;
+    }
+    .progress-fill { height:100%; background:var(--accent); border-radius:4px; transition:width .3s; }
+
+    /* done state */
+    .all-done {
+      padding:20px; background:var(--highlight); transform:rotate(-0.3deg);
+      border-radius:4px; display:none; text-align:center;
+    }
+
+    /* step hint */
+    .step-work {
+      font-family:'JetBrains Mono',monospace; font-size:13px;
+      padding:5px 10px; background:#fffbe6; border:1.5px solid #c8a000;
+      border-radius:3px; display:none; margin-top:6px;
+    }
+
+    @media (max-width:620px) { .rules-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u2.html">← U2</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u2.html">← U2 · Graphs &amp; Exponents</a> &nbsp;·&nbsp; D5</div>
+      <div class="tool-title f-display">Exponent Rules Trainer</div>
+      <div class="tool-tagline f-hand">All five rules — product, quotient, power, zero, negative. Identify the rule, then simplify.</div>
+
+      <div class="trainer-stage">
+        <!-- Quick reference (collapsible) -->
+        <details open>
+          <summary style="font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-soft); cursor:pointer; padding:4px 0;">
+            RULES REFERENCE ▾
+          </summary>
+          <div class="rules-grid" style="margin-top:8px;">
+            <div class="rule-card">
+              <div class="rule-name">PRODUCT RULE</div>
+              <div class="rule-expr">xᵃ · xᵇ = xᵃ⁺ᵇ</div>
+              <div class="rule-words">Same base → add exponents</div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-name">QUOTIENT RULE</div>
+              <div class="rule-expr">xᵃ / xᵇ = xᵃ⁻ᵇ</div>
+              <div class="rule-words">Same base → subtract (top−bottom)</div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-name">POWER RULE</div>
+              <div class="rule-expr">(xᵃ)ᵇ = xᵃᵇ</div>
+              <div class="rule-words">Power of a power → multiply</div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-name">ZERO EXPONENT</div>
+              <div class="rule-expr">x⁰ = 1</div>
+              <div class="rule-words">Any nonzero base to the 0 = 1</div>
+            </div>
+            <div class="rule-card">
+              <div class="rule-name">NEGATIVE EXPONENT</div>
+              <div class="rule-expr">x⁻ⁿ = 1/xⁿ</div>
+              <div class="rule-words">Negative → flip to denominator</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Score bar -->
+        <div class="score-bar">
+          <div><div class="score-num green-num" id="score-correct">0</div><div class="score-label">correct</div></div>
+          <div><div class="score-num" id="score-total">/ 12</div><div class="score-label">total</div></div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          <button class="btn small" onclick="restart()">↺ restart</button>
+        </div>
+
+        <!-- Problem display -->
+        <div class="prob-display sk-box-thick" style="background:var(--paper);">
+          <div class="tape"></div>
+          <div class="prob-num-badge" id="prob-num-badge">1 / 12</div>
+          <div class="f-marker" style="font-size:11px; color:var(--ink-soft); margin-bottom:6px;">SIMPLIFY:</div>
+          <div class="prob-expr-big" id="prob-expr"></div>
+        </div>
+
+        <!-- Answer section -->
+        <div class="answer-section sk-box" id="answer-section">
+          <!-- Rule selector -->
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">WHICH RULE APPLIES?</div>
+          <div class="rule-selector" id="rule-selector"></div>
+
+          <!-- Answer input -->
+          <div class="f-marker" style="font-size:11px; margin:10px 0 6px;">SIMPLIFIED ANSWER:</div>
+          <div class="answer-row">
+            <input class="ans-input math-input" id="ans-input" type="text" placeholder="e.g. x^5" onkeydown="if(event.key==='Enter')checkAnswer()" />
+            <button class="btn small accent" onclick="checkAnswer()">check →</button>
+            <button class="btn small" onclick="showReveal()">hint</button>
+            <span class="ans-fb" id="ans-fb"></span>
+          </div>
+          <div class="step-work" id="step-work"></div>
+          <div class="ans-reveal" id="ans-reveal"></div>
+        </div>
+
+        <!-- All done -->
+        <div class="all-done sk-box" id="all-done">
+          <div class="f-display" style="font-size:32px; color:var(--accent);">All 12 done!</div>
+          <div style="font-family:var(--f-body); font-size:16px; margin:8px 0;" id="final-score"></div>
+          <button class="btn accent" style="margin-top:8px;" onclick="restart()">↺ try again</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="how-to-box sk-box-dashed">
+        <div class="f-marker" style="font-size:12px; margin-bottom:4px;">HOW TO USE</div>
+        <ol class="f-hand" style="font-size:14px; line-height:1.4; padding-left:18px; margin:0;">
+          <li>Read the expression.</li>
+          <li>Click the rule that applies.</li>
+          <li>Type the simplified answer.</li>
+          <li>Hit Enter or "check".</li>
+          <li>Use "hint" if stuck.</li>
+        </ol>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">ANSWER FORMAT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+          Type exponents with <strong>^</strong>:<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">x^7</span> for x⁷<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">1/x^3</span> for 1/x³<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">1</span> for zero exp.<br>
+          <span style="font-family:'JetBrains Mono',monospace; color:var(--ink);">1/16</span> for 2⁻⁴
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">WHEN TO FLIP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          A negative exponent does NOT make the answer negative.<br><br>
+          x⁻³ = 1/x³ ← positive 3 in denominator<br><br>
+          The answer is a fraction, not a negative number.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:6px;">QUOTIENT TRAP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.5; color:var(--ink-2);">
+          x³/x⁷ = x^(3−7) = x⁻⁴<br>
+          Don't stop there — write it as 1/x⁴.
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="neg-exponent-flipper.html">→ Negative Exponent Flipper</a>
+        <a class="related-link f-hand" href="rational-exponents.html">→ Rational Exponents Tower</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="math-fmt.js"></script>
+  <script src="math-input.js"></script>
+  <script>
+  'use strict';
+
+  const RULES = ['product','quotient','power','zero','negative'];
+  const RULE_LABELS = { product:'Product Rule', quotient:'Quotient Rule', power:'Power Rule', zero:'Zero Exponent', negative:'Negative Exponent' };
+
+  const PROBS = [
+    // Product
+    { rule:'product',  expr:'x³ · x⁴',     ans:['x^7','x7'],                  reveal:'x^(3+4) = x^7',            step:'Add exponents: 3 + 4 = 7' },
+    { rule:'product',  expr:'y⁵ · y²',     ans:['y^7','y7'],                  reveal:'y^(5+2) = y^7',            step:'Add exponents: 5 + 2 = 7' },
+    // Quotient
+    { rule:'quotient', expr:'x⁸ / x³',     ans:['x^5','x5'],                  reveal:'x^(8−3) = x^5',            step:'Subtract: 8 − 3 = 5' },
+    { rule:'quotient', expr:'z⁶ / z²',     ans:['z^4','z4'],                  reveal:'z^(6−2) = z^4',            step:'Subtract: 6 − 2 = 4' },
+    // Power
+    { rule:'power',    expr:'(x²)³',        ans:['x^6','x6'],                  reveal:'x^(2×3) = x^6',            step:'Multiply exponents: 2 × 3 = 6' },
+    { rule:'power',    expr:'(y³)⁴',        ans:['y^12','y12'],                reveal:'y^(3×4) = y^12',           step:'Multiply: 3 × 4 = 12' },
+    // Zero
+    { rule:'zero',     expr:'5⁰',           ans:['1'],                         reveal:'5^0 = 1',                  step:'Anything to the 0 = 1' },
+    { rule:'zero',     expr:'(3x)⁰',        ans:['1'],                         reveal:'(3x)^0 = 1',               step:'Any nonzero expression to the 0 = 1' },
+    // Negative
+    { rule:'negative', expr:'x⁻³',          ans:['1/x^3','1/x3'],              reveal:'x^(−3) = 1/x^3',           step:'Flip: move base to denominator, exponent becomes positive' },
+    { rule:'negative', expr:'2⁻⁴',          ans:['1/16'],                      reveal:'2^(−4) = 1/2^4 = 1/16',   step:'2^4 = 16, then flip → 1/16' },
+    // Combined — quotient giving negative result
+    { rule:'quotient', expr:'x³ / x⁷',     ans:['1/x^4','1/x4','x^-4'],      reveal:'x^(3−7) = x^(−4) = 1/x^4', step:'3−7 = −4, negative exponent → flip' },
+    // Combined — product with negative
+    { rule:'product',  expr:'x⁻² · x⁵',   ans:['x^3','x3'],                  reveal:'x^(−2+5) = x^3',           step:'Add: −2 + 5 = 3' },
+  ];
+
+  let order = [], cur = 0, correct = 0, ruleChosen = null, ruleCorrect = false;
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function restart() {
+    order = shuffle([...Array(PROBS.length).keys()]);
+    cur = 0; correct = 0; ruleChosen = null; ruleCorrect = false;
+    document.getElementById('all-done').style.display = 'none';
+    document.getElementById('answer-section').style.display = '';
+    updateScore();
+    renderProb();
+  }
+
+  function updateScore() {
+    document.getElementById('score-correct').textContent = correct;
+    document.getElementById('progress-fill').style.width = (cur / PROBS.length * 100) + '%';
+    document.getElementById('prob-num-badge').textContent = `${Math.min(cur + 1, PROBS.length)} / ${PROBS.length}`;
+  }
+
+  function renderProb() {
+    if (cur >= PROBS.length) { showDone(); return; }
+    const p = PROBS[order[cur]];
+    document.getElementById('prob-expr').textContent = p.expr;
+    document.getElementById('ans-input').value = '';
+    document.getElementById('ans-input').className = 'ans-input math-input';
+    document.getElementById('ans-fb').textContent = '';
+    document.getElementById('ans-fb').className = 'ans-fb';
+    document.getElementById('ans-reveal').style.display = 'none';
+    document.getElementById('ans-reveal').textContent = '';
+    document.getElementById('step-work').style.display = 'none';
+    ruleChosen = null; ruleCorrect = false;
+
+    const sel = document.getElementById('rule-selector');
+    sel.innerHTML = '';
+    RULES.forEach(r => {
+      const btn = document.createElement('button');
+      btn.className = 'rule-btn';
+      btn.textContent = RULE_LABELS[r];
+      btn.onclick = () => chooseRule(r, btn);
+      sel.appendChild(btn);
+    });
+
+    updateScore();
+    document.getElementById('ans-input').focus();
+  }
+
+  function chooseRule(rule, btn) {
+    const p = PROBS[order[cur]];
+    document.querySelectorAll('.rule-btn').forEach(b => {
+      b.classList.remove('selected','wrong','correct');
+    });
+    if (rule === p.rule) {
+      btn.classList.add('correct');
+      ruleCorrect = true;
+    } else {
+      btn.classList.add('wrong');
+      // Show the correct one
+      document.querySelectorAll('.rule-btn').forEach(b => {
+        if (b.textContent === RULE_LABELS[p.rule]) b.classList.add('correct');
+      });
+      ruleCorrect = false;
+    }
+    ruleChosen = rule;
+    document.getElementById('ans-input').focus();
+  }
+
+  function norm(s) {
+    return s.replace(/\s+/g,'').replace(/−/g,'-').replace(/×/g,'*').toLowerCase()
+            .replace(/\^(\d+)/g, (_, n) => '^'+n);
+  }
+
+  function checkAnswer() {
+    const p = PROBS[order[cur]];
+    const val = norm(document.getElementById('ans-input').value);
+    const inp = document.getElementById('ans-input');
+    const fb  = document.getElementById('ans-fb');
+    const ok  = p.ans.some(a => norm(a) === val);
+
+    if (ok) {
+      inp.classList.add('ok');
+      fb.textContent = '✓ correct!'; fb.className = 'ans-fb good';
+      if (ruleCorrect !== false) correct++;
+      setTimeout(advance, 700);
+    } else {
+      inp.classList.add('err');
+      fb.textContent = '✗ try again'; fb.className = 'ans-fb bad';
+      setTimeout(() => { inp.classList.remove('err'); fb.textContent = ''; }, 1100);
+    }
+  }
+
+  function showReveal() {
+    const p = PROBS[order[cur]];
+    const sw = document.getElementById('step-work');
+    const rv = document.getElementById('ans-reveal');
+    sw.textContent = '⭐ ' + p.step;
+    sw.style.display = 'block';
+    rv.textContent = 'Answer: ' + p.reveal;
+    rv.style.display = 'block';
+  }
+
+  function advance() {
+    cur++;
+    updateScore();
+    if (cur >= PROBS.length) showDone();
+    else renderProb();
+  }
+
+  function showDone() {
+    document.getElementById('answer-section').style.display = 'none';
+    document.getElementById('all-done').style.display = 'block';
+    document.getElementById('prob-expr').textContent = '';
+    document.getElementById('final-score').textContent =
+      `${correct} / ${PROBS.length} — ${Math.round(correct/PROBS.length*100)}%`;
+  }
+
+  restart();
+  </script>
+  <script src="url-state.js"></script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
+</body>
+</html>

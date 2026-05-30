@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v18';
+const CACHE_VERSION = 'a2p-v19';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -104,7 +104,10 @@ const PRECACHE_URLS = [
   '/tools/radical-equations.html',
   '/tools/drt-trainer.html',
   '/zoo.html',
-  '/shapes.html'
+  '/shapes.html',
+  '/tools/ti84-plysmlt.html',
+  '/tools/exponent-rules.html',
+  '/tools/complex-arithmetic.html'
 ];
 
 // ── Install: cache everything ──
