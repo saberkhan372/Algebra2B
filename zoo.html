@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Shape Zoo — A2 Playgrounds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── Page layout ─────────────────────────────── */
+    .zoo-page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 20px 80px;
+    }
+
+    /* ── Opening ─────────────────────────────────── */
+    .zoo-hero {
+      padding: 40px 0 32px;
+      border-bottom: 2px dashed var(--ink-2);
+      margin-bottom: 40px;
+    }
+    .zoo-eyebrow {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 11px; color: var(--ink-soft);
+      letter-spacing: 0.12em; margin-bottom: 8px;
+    }
+    .zoo-title {
+      font-family: 'Caveat', cursive;
+      font-size: 56px; font-weight: 700;
+      color: var(--ink); line-height: 1;
+      margin-bottom: 12px;
+    }
+    .zoo-subtitle {
+      font-family: var(--f-body);
+      font-size: 16px; color: var(--ink-2);
+      line-height: 1.6; max-width: 560px;
+    }
+    .the-question {
+      margin-top: 24px;
+      padding: 14px 18px;
+      background: var(--highlight);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      color: var(--ink);
+    }
+
+    /* ── Creature card ───────────────────────────── */
+    .creature {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 20px;
+      margin-bottom: 48px;
+      align-items: start;
+    }
+    @media (max-width: 540px) {
+      .creature { grid-template-columns: 1fr; }
+      .creature-sketch { margin: 0 auto; }
+    }
+
+    .creature-sketch {
+      flex-shrink: 0;
+      background: var(--paper-2);
+      border: 1.5px solid var(--ink-2);
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+    }
+    .creature-sketch svg {
+      display: block;
+      width: 80px; height: 60px;
+    }
+
+    .creature-body {}
+    .creature-number {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 10px; color: var(--ink-soft);
+      letter-spacing: 0.1em; margin-bottom: 2px;
+    }
+    .creature-name {
+      font-family: 'Caveat', cursive;
+      font-size: 30px; font-weight: 700;
+      color: var(--ink); line-height: 1;
+    }
+    .creature-species {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 11px; color: var(--accent);
+      margin-bottom: 10px; margin-top: 2px;
+    }
+    .creature-text {
+      font-family: var(--f-body);
+      font-size: 14px; color: var(--ink-2);
+      line-height: 1.75;
+    }
+    .creature-text p { margin: 0 0 10px; }
+    .creature-text p:last-child { margin-bottom: 0; }
+
+    /* The recurring question */
+    .the-q {
+      margin: 12px 0 10px;
+      padding: 8px 12px;
+      background: color-mix(in srgb, var(--accent) 8%, var(--paper));
+      border-left: 3px solid var(--accent);
+      border-radius: 0 4px 4px 0;
+      font-family: var(--f-body);
+      font-size: 13px;
+      color: var(--ink);
+    }
+    .the-q strong { color: var(--accent); }
+
+    /* Signature chips */
+    .sig-row {
+      display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0;
+    }
+    .sig-chip {
+      padding: 2px 8px; border-radius: 3px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      border: 1.5px solid var(--ink-2);
+      background: var(--paper-2); color: var(--ink-2);
+    }
+
+    /* Tool links */
+    .tool-links {
+      margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .tool-link {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1.5px solid var(--ink-2);
+      border-radius: 3px;
+      font-family: var(--f-body); font-size: 12px;
+      color: var(--ink-2); text-decoration: none;
+      background: var(--paper);
+      transition: all .12s;
+    }
+    .tool-link:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, var(--paper));
+    }
+
+    /* Divider between creatures */
+    .creature-divider {
+      border: none;
+      border-top: 1px dashed var(--ink-2);
+      margin: 0 0 48px;
+      opacity: 0.4;
+    }
+
+    /* ── Closing section ─────────────────────────── */
+    .zoo-closing {
+      border-top: 2px dashed var(--ink-2);
+      padding-top: 40px;
+      margin-top: 16px;
+    }
+    .closing-text {
+      font-family: var(--f-body);
+      font-size: 15px; color: var(--ink-2);
+      line-height: 1.8;
+    }
+    .closing-text p { margin: 0 0 16px; }
+    .closing-final {
+      margin-top: 28px;
+      padding: 18px 22px;
+      background: var(--highlight);
+      border: 2px solid var(--ink-2);
+      border-radius: 6px;
+      font-family: 'Caveat', cursive;
+      font-size: 24px;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    /* ── SVG sketch styles ───────────────────────── */
+    .sk { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .sk-curve { stroke: var(--accent); stroke-width: 2.2; }
+    .sk-axis  { stroke: rgba(29,26,20,0.2); stroke-width: 1; }
+    .sk-asym  { stroke: rgba(29,26,20,0.25); stroke-width: 1; stroke-dasharray: 3,3; }
+    .sk-dot   { fill: var(--accent); stroke: none; }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links">
+      <a href="index.html">all tools</a>
+      <a href="map.html">map</a>
+      <a href="concept-map.html">concepts</a>
+      <a href="zoo.html" class="active">zoo</a>
+      <a href="about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="zoo-page">
+
+    <!-- ── Opening ────────────────────────────────── -->
+    <div class="zoo-hero">
+      <div class="zoo-eyebrow">ALGEBRA 2 · A FIELD GUIDE</div>
+      <div class="zoo-title">The Shape Zoo</div>
+      <div class="zoo-subtitle">
+        Every function in Algebra 2 has a personality. Once you know the personality,
+        you can read the equation without graphing it — the way you recognize a friend
+        from across the room before you can see their face.
+        <br><br>
+        Here's the zoo.
+      </div>
+      <div class="the-question">
+        And here's the secret running through all of it:<br>
+        every question in algebra is asking one thing —<br>
+        <em>given the output, what was the input?</em>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 1. LINEAR                                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="50" x2="70" y2="10" class="sk sk-curve"/>
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = mx + b</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 01</div>
+        <div class="creature-name">The Steady Walker</div>
+        <div class="creature-species">The Linear Function</div>
+        <div class="creature-text">
+          <p>Never changes pace. Same slope everywhere. No peaks, no valleys, no drama. Just a constant rate, forever — uphill or downhill or perfectly flat. It's the simplest creature in the zoo, but don't underestimate it. Most of the real world runs on it.</p>
+          <p>If you know the slope and one point, you know everything. If you know two points, you know everything. That's a very short signature.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">range: all reals</span>
+          <span class="sig-chip">no asymptotes</span>
+          <span class="sig-chip">1 zero</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> given y, find x. That's x = (y − b) / m. Always exactly one answer. The linear function is the only creature where the question is this clean.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/linear-equations.html">Linear Equations Explorer</a>
+          <a class="tool-link" href="tools/systems-explorer.html">Systems Explorer</a>
+          <a class="tool-link" href="tools/substitution-stepper.html">Substitution Stepper</a>
+          <a class="tool-link" href="tools/drt-trainer.html">Distance · Rate · Time</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 2. QUADRATIC                                    -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <path d="M 12 52 Q 40 4 68 52" class="sk sk-curve"/>
+          <circle cx="40" cy="14" r="3" class="sk-dot"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = a(x−h)² + k</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 02</div>
+        <div class="creature-name">The Bouncer</div>
+        <div class="creature-species">The Parabola</div>
+        <div class="creature-text">
+          <p>Thrown upward, hits a peak, falls back down. Or flipped: dips to a bottom, rises again. Perfectly symmetric — mirror the left side and it exactly matches the right. The most common shape in physics (every thrown object, every falling thing, every "maximum profit" problem).</p>
+          <p>The vertex is everything. The <em>a</em> value tells you which way and how narrow. The discriminant — that b²−4ac inside the quadratic formula — is the bouncer's mood ring: positive means two crossings, zero means one, negative means it never touches zero at all.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">range: [k, ∞) or (−∞, k]</span>
+          <span class="sig-chip">vertex (h, k)</span>
+          <span class="sig-chip">0, 1, or 2 zeros</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> where does it hit zero? That's what the quadratic formula answers — and completing the square, and factoring. Three methods, same question. When the answer is imaginary, the parabola never touches the x-axis. The zero exists, just not in the real world.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/quadratic-slider.html">Quadratic Slider Studio</a>
+          <a class="tool-link" href="tools/quadratic-forms-explorer.html">Quadratic Forms Explorer</a>
+          <a class="tool-link" href="tools/complete-square.html">Complete the Square</a>
+          <a class="tool-link" href="tools/quadratic-word-problems.html">Word Problems</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 3. ABSOLUTE VALUE                               -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <polyline points="12,52 40,16 68,52" class="sk sk-curve"/>
+          <circle cx="40" cy="16" r="3" class="sk-dot"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = a|x−h| + k</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 03</div>
+        <div class="creature-name">The V-Shape</div>
+        <div class="creature-species">The Absolute Value Function</div>
+        <div class="creature-text">
+          <p>Always positive. Folds the number line in half at its vertex. Whatever was negative gets flipped — the distance from zero, not the signed value. Walk left and the output goes up just as fast as walking right.</p>
+          <p>The vertex is the bottom of the fold. The two arms have equal slopes, just pointing opposite directions.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">range: [k, ∞)</span>
+          <span class="sig-chip">vertex (h, k)</span>
+          <span class="sig-chip">two branches</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> what two inputs give this output? The V has two branches — so there are always two candidates. That's the split: "inside is positive" or "inside is negative." Isolate first, then split. (One branch might be extraneous — always check.)</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/abs-value-grapher.html">Absolute Value Grapher</a>
+          <a class="tool-link" href="tools/abs-value-equations.html">Equation Stepper</a>
+          <a class="tool-link" href="tools/inequality-solver.html">Inequality Solver</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 4. RADICAL                                      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <path d="M 22 48 Q 26 28 70 10" class="sk sk-curve"/>
+          <circle cx="22" cy="48" r="3" class="sk-dot"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = a√(x−h) + k</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 04</div>
+        <div class="creature-name">The Half-Curve</div>
+        <div class="creature-species">The Radical Function</div>
+        <div class="creature-text">
+          <p>Only starts once the inside isn't negative. Before the starting point, it simply doesn't exist — not zero, not defined. After the start it grows, but slowly, slower and slower, leveling toward but never reaching the same pace as the linear walker.</p>
+          <p>The starting point (h, k) is everything. The domain begins there. Everything to the left is forbidden.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: x ≥ h</span>
+          <span class="sig-chip">range: y ≥ k</span>
+          <span class="sig-chip">starts at (h, k)</span>
+          <span class="sig-chip">always positive</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> what's the inverse of squaring? The answer is almost √x — except squaring destroys information (both 3 and −3 square to 9), so the inverse can only recover one branch. That's why extraneous solutions appear when you square both sides. You let the other branch back in. Then you have to check.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/cubic-radical.html">Cubic &amp; Radical Grapher</a>
+          <a class="tool-link" href="tools/domain-restriction.html">Domain Restriction Sorter</a>
+          <a class="tool-link" href="tools/radical-equations.html">Radical Equation Solver</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 5. EXPONENTIAL                                  -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <line x1="10" y1="48" x2="70" y2="48" class="sk sk-asym"/>
+          <path d="M 10 46 Q 38 44 55 20 Q 62 10 70 5" class="sk sk-curve"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = a · bˣ</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 05</div>
+        <div class="creature-name">The Hockey Stick</div>
+        <div class="creature-species">The Exponential Function</div>
+        <div class="creature-text">
+          <p>Slow at first. Then suddenly unstoppable. Growth compounds on itself — each step is proportional to where you already are, not fixed like the steady walker. This is the shape of every population, every interest account, every virus, every nuclear chain reaction.</p>
+          <p>The horizontal asymptote is the floor it never falls through. The base <em>b</em> tells you how fast: greater than 1 means growth, between 0 and 1 means decay, and base 1 is a flat line (not exponential at all).</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">range: above the asymptote</span>
+          <span class="sig-chip">y-intercept: a</span>
+          <span class="sig-chip">never crosses asymptote</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> given the output, what was the exponent? That question is so important and so common that it gets its own function. That function is the logarithm. The exponential and the logarithm are twins — inverses of each other — and the question between them is always: given y = bˣ, solve for x.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/exponential-explorer.html">Exponential Explorer</a>
+          <a class="tool-link" href="tools/exponential-model-builder.html">Model Builder</a>
+          <a class="tool-link" href="tools/growth-race.html">Growth Race</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 6. LOGARITHM                                    -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <line x1="18" y1="5"  x2="18" y2="55" class="sk sk-asym"/>
+          <path d="M 20 52 Q 26 20 40 12 Q 54 6 70 4" class="sk sk-curve"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = log_b(x)</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 06</div>
+        <div class="creature-name">The Leveler</div>
+        <div class="creature-species">The Logarithm</div>
+        <div class="creature-text">
+          <p>Starts by growing fast, then gradually slows to almost nothing — the exact opposite personality of its twin. It takes enormous inputs to push the output up even a little bit. That's the point: the log compresses big numbers into manageable ones. The Richter scale, decibels, pH — all logarithmic.</p>
+          <p>Vertical asymptote on the left: the log of zero is undefined, the log of a negative number doesn't exist. Domain starts just to the right of that wall.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: x &gt; h</span>
+          <span class="sig-chip">range: all reals</span>
+          <span class="sig-chip">vertical asymptote</span>
+          <span class="sig-chip">x-intercept at base⁰ = 1</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> the logarithm <em>is</em> the answer to the exponential's question. log_b(y) = x means "b to what power gives y?" Every single logarithm problem is that question in disguise. When you see log, ask: what exponent makes this true?</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/log-converter.html">Log ↔ Exp Converter</a>
+          <a class="tool-link" href="tools/log-exp-mirror.html">Mirror Explorer</a>
+          <a class="tool-link" href="tools/log-properties.html">Log Properties</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 7. RATIONAL                                     -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-asym"/>
+          <line x1="10" y1="20" x2="70" y2="20" class="sk sk-asym"/>
+          <path d="M 10 24 Q 24 22 35 8"   class="sk sk-curve"/>
+          <path d="M 45 52 Q 56 38 70 36"  class="sk sk-curve"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = p(x)/q(x)</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 07</div>
+        <div class="creature-name">The One With Walls</div>
+        <div class="creature-species">The Rational Function</div>
+        <div class="creature-text">
+          <p>Has forbidden zones — inputs that make the denominator zero. Approaches invisible walls it can never cross. Near a vertical asymptote, the function races toward infinity. Near a horizontal asymptote, it slows and levels off, approaching but never arriving.</p>
+          <p>Some walls are real (vertical asymptotes). Some are illusions that cancel out (holes — the function is actually undefined there, but from a distance it looks fine). The distinction matters.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">V.A. where denom = 0</span>
+          <span class="sig-chip">H.A. from degrees</span>
+          <span class="sig-chip">holes where factors cancel</span>
+          <span class="sig-chip">excluded values</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> where are the walls, and why? And: given an output, what input gets there? That's solving rational equations — which requires clearing denominators, which can create extraneous solutions near the walls. Always check.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/rational-behavior.html">Rational Function Behavior</a>
+          <a class="tool-link" href="tools/rational-simplifier.html">Rational Simplifier</a>
+          <a class="tool-link" href="tools/rational-equations.html">Solving Rational Equations</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 8. POLYNOMIAL                                   -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <path d="M 10 10 Q 22 50 32 30 Q 42 10 52 32 Q 60 50 70 20" class="sk sk-curve"/>
+          <circle cx="22" cy="46" r="2.5" class="sk-dot"/>
+          <circle cx="52" cy="30" r="2.5" class="sk-dot"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = aₙxⁿ + … + a₀</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 08</div>
+        <div class="creature-name">The Rollercoaster</div>
+        <div class="creature-species">The Polynomial</div>
+        <div class="creature-text">
+          <p>Can go anywhere, turn as many times as it wants — up to degree minus one turns. No asymptotes. No forbidden zones. Just smooth curves crossing and bouncing off the x-axis wherever its roots land.</p>
+          <p>Multiplicity is personality: an odd multiplicity root means the curve crosses through; an even multiplicity root means it bounces off. The leading coefficient determines which direction the ends point. Complex roots always come in pairs and leave no trace on the real graph — the parabola floats above.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">max turns: degree − 1</span>
+          <span class="sig-chip">cross or bounce at roots</span>
+          <span class="sig-chip">complex roots in pairs</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> where does it cross zero? Factoring, long division, synthetic division, the rational root theorem — all different ways to hunt for zeros. Once you find the factors, the zeros appear. The parabola (degree 2) is just the simplest case of a polynomial, and the quadratic formula is the polynomial's most famous zero-hunter.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/polynomial-sketch.html">Polynomial Sketch Pad</a>
+          <a class="tool-link" href="tools/polynomial-roots.html">Polynomial Root Sculptor</a>
+          <a class="tool-link" href="tools/polynomial-division-stepper.html">Division Stepper</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 9. TRIG                                         -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <path d="M 10 30 Q 17 8 24 30 Q 31 52 38 30 Q 45 8 52 30 Q 59 52 66 30" class="sk sk-curve"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">y = a·sin(b(x−h)) + k</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 09</div>
+        <div class="creature-name">The Repeater</div>
+        <div class="creature-species">The Trig Function</div>
+        <div class="creature-text">
+          <p>Goes forever. Never stops. The exact same cycle, repeated endlessly with no variation — like a clock, a pendulum, a sound wave, a season. Bounded: no matter what you put in, the output stays between its maximum and minimum. The only creature in the zoo that is both infinite and constrained.</p>
+          <p>Amplitude says how tall. Period says how long one cycle takes. Midline says where it oscillates around. Phase shift says where in the cycle it starts.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">domain: all reals</span>
+          <span class="sig-chip">range: [k−|a|, k+|a|]</span>
+          <span class="sig-chip">period: 2π/b</span>
+          <span class="sig-chip">repeats forever</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> where are you in the cycle? The unit circle is the answer — every angle maps to a point, and sine and cosine are just the coordinates of that point. Once you see that, the wave makes sense: you're tracing the y-coordinate as an angle sweeps around a circle. The wave is the circle, unrolled.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/unit-circle.html">Unit Circle Walker</a>
+          <a class="tool-link" href="tools/unit-circle-wave.html">Wave Sync</a>
+          <a class="tool-link" href="tools/trig-explorer.html">Trig Function Explorer</a>
+        </div>
+      </div>
+    </div>
+    <hr class="creature-divider">
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- 10. CONICS                                      -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="creature">
+      <div class="creature-sketch">
+        <svg viewBox="0 0 80 60" class="sk">
+          <line x1="10" y1="30" x2="70" y2="30" class="sk sk-axis"/>
+          <line x1="40" y1="5"  x2="40" y2="55" class="sk sk-axis"/>
+          <ellipse cx="40" cy="30" rx="26" ry="18" class="sk sk-curve"/>
+          <circle cx="40" cy="30" r="2.5" class="sk-dot"/>
+        </svg>
+        <div style="font-family:'Permanent Marker',cursive; font-size:9px; color:var(--ink-soft); margin-top:4px;">one cone, four shapes</div>
+      </div>
+      <div class="creature-body">
+        <div class="creature-number">CREATURE 10</div>
+        <div class="creature-name">The Cross-Sections</div>
+        <div class="creature-species">The Conic Sections</div>
+        <div class="creature-text">
+          <p>Four completely different-looking curves that all come from slicing the same double cone at different angles. Slice straight across: circle. Tilt the knife: ellipse. Cut parallel to the cone's side: parabola. Go steep: hyperbola. One source, four creatures.</p>
+          <p>They all share the same language: (h, k) is the center or vertex, and signs in the equation tell you the shape. Plus between squared terms means ellipse. Minus means hyperbola. One term squared means parabola.</p>
+        </div>
+        <div class="sig-row">
+          <span class="sig-chip">center/vertex (h, k)</span>
+          <span class="sig-chip">+ sign → ellipse/circle</span>
+          <span class="sig-chip">− sign → hyperbola</span>
+          <span class="sig-chip">one squared → parabola</span>
+        </div>
+        <div class="the-q"><strong>The question:</strong> what cross-section did you take? Read the equation: count the squared terms, check the sign between them, identify h and k, read the signature. You've already spent a whole year with the parabola. The cone was there from the beginning.</div>
+        <div class="tool-links">
+          <a class="tool-link" href="tools/conics.html">Conic Sections Explorer</a>
+          <a class="tool-link" href="tools/quadratic-forms-explorer.html">Quadratic Forms Explorer</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- CLOSING                                         -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div class="zoo-closing">
+      <div class="f-display" style="font-size:36px; margin-bottom:20px;">They're all related.</div>
+      <div class="closing-text">
+        <p>The logarithm and the exponential are exact mirrors of each other — reflect one over y = x and you get the other.</p>
+        <p>The parabola is a conic section. It was always a slice of a cone, even in September when you first met it as y = ax² + bx + c.</p>
+        <p>The absolute value function has two branches, just like the radical equation has two candidates — and both require a check for the same reason. Squaring and absolute value both destroy sign information. The inverse has to guess, and sometimes it guesses wrong.</p>
+        <p>The asymptote of the rational function and the domain restriction of the radical are the same idea: <em>some inputs are forbidden</em>, and the reason matters. Division by zero. Negatives under a square root. Impossible angles in an inverse trig. The same wall, different rooms.</p>
+        <p>The derivative of the exponential function is itself. But that's a story for Calculus.</p>
+      </div>
+
+      <div class="closing-final">
+        By the end of this year, you can look at any equation and ask:<br>
+        <em>What kind of creature is this? What's its personality?</em><br><br>
+        And whatever question the problem is asking — find the zero, find the inverse, find the intersection — it's always the same move underneath:<br><br>
+        <strong>given the output, what was the input?</strong><br><br>
+        That's algebra.
+      </div>
+
+      <div style="margin-top:32px; display:flex; gap:12px; flex-wrap:wrap;">
+        <a href="index.html" class="btn accent">← all 63 tools</a>
+        <a href="map.html" class="btn">course roadmap →</a>
+        <a href="concept-map.html" class="btn">concept map →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="tools/progress.js"></script>
+</body>
+</html>
