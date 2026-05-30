@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v10';
+const CACHE_VERSION = 'a2p-v11';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -90,7 +90,14 @@ const PRECACHE_URLS = [
   '/tools/transformations.html',
   '/tools/trig-explorer.html',
   '/tools/unit-circle-wave.html',
-  '/tools/unit-circle.html'
+  '/tools/unit-circle.html',
+  '/tools/abs-value-equations.html',
+  '/tools/coterminal-radian.html',
+  '/tools/domain-restriction.html',
+  '/tools/function-notation.html',
+  '/tools/inequality-solver.html',
+  '/tools/literal-equations.html',
+  '/tools/point-slope.html'
 ];
 
 // ── Install: cache everything ──
