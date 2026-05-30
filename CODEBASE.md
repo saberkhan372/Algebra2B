@@ -6,7 +6,7 @@ This document explains the repository structure, conventions, and patterns for a
 
 ## What the project is
 
-**Algebra 2 Playgrounds** is a fully static, zero-dependency, GitHub Pages site of 50 interactive math tools for an Algebra 2 classroom. There is no build step, no bundler, no framework, and no backend. Everything is plain HTML, CSS, and vanilla JavaScript.
+**Algebra 2 Playgrounds** is a fully static, zero-dependency, GitHub Pages site of 59 interactive math tools for an Algebra 2 classroom. There is no build step, no bundler, no framework, and no backend. Everything is plain HTML, CSS, and vanilla JavaScript.
 
 **Live site:** `https://saberkhan372.github.io/Algebra2B/`  
 **Local path:** `/Users/saberkhan/Documents/coding/Algebra2B`  
@@ -27,8 +27,8 @@ Algebra2B/
 ├── u9.html                 ← Statistics & Probability unit page
 ├── styles.css              ← Entire design system (board/print/wide-screen rules included)
 ├── manifest.json           ← PWA manifest
-├── sw.js                   ← Service worker v6 — precaches all 50 tools + scripts
-├── tools/                  ← 50 standalone tool pages + 4 shared scripts
+├── sw.js                   ← Service worker — precaches all 59 tools + scripts
+├── tools/                  ← 59 standalone tool pages + 4 shared scripts
 ├── tools/url-state.js      ← URL hash state: UrlState.load/save/auto/copyBtn
 ├── tools/progress.js       ← Visited badges, start-here, share button, print button
 ├── tools/related.js        ← "TRY NEXT" section — 3 related tools per tool
@@ -222,7 +222,7 @@ Included on the 19 tools that have `input[type="range"][id]` sliders. Silently e
 - Uses a separate `#r=` hash key — does not conflict with `UrlState`'s `#s=` key
 
 ### related.js
-- Embeds full 50-tool dataset (no API call)
+- Embeds full 59-tool dataset (no API call)
 - Detects current tool from URL, finds 3 related tools: same-unit different-kind first (explorers preferred), then same-topic cross-unit
 - Injects `TRY NEXT` section at bottom of `.tool-sidebar`
 - Handles both `/foo.html` and `/foo` URL formats
@@ -232,7 +232,7 @@ Included on the 19 tools that have `input[type="range"][id]` sliders. Silently e
 - **Enter board mode:** hides nav + chrome, expands canvas to 100vh, adds `body.board-mode` class for CSS scaling
 - **Info sidebars** (Key Ideas, HOW TO USE, TRY THIS) → hidden in board mode
 - **Control sidebars** (sliders, equations, family pickers) → kept visible. Detection selector: `input[type="range"], input[type="number"], canvas, select, .slider-grid, #slider-area, .family-grid, .piece-controls, #controls-area`
-- Injects `⊞ tools` button (shown in board mode, top-left) → opens full-screen panel listing all 50 tools grouped by unit as large tap targets
+- Injects `⊞ tools` button (shown in board mode, top-left) → opens full-screen panel listing all 59 tools grouped by unit as large tap targets
 - Syncs with native Fullscreen API; `Escape` exits board mode
 
 ---
@@ -347,5 +347,4 @@ Do NOT ask Codex to invent: pedagogical framing, Try This questions, Key Ideas c
 - **Kind colors** — use `--k-*` CSS vars, not hardcoded hex.
 - **related.js TOOLS list** — this embedded list must be kept in sync with `index.html`'s TOOLS array when tools are added or removed.
 - **sw.js cache version** — bump `CACHE_VERSION` whenever you add/change a file that should be precached, or returning visitors will see stale content.
-- **Orphan tool files** — `tools/exponential-equations.html` and `tools/sincos-grapher.html` are deprecated prototypes. Don't link to them.
 - **URL state + sliders** — `UrlState.auto()` only wires inputs that have BOTH `type="range"` AND an `id` attribute. New tools with sliders must give their inputs explicit IDs for URL state to work.
