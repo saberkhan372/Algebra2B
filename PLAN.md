@@ -27,6 +27,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - `404.html` + `offline.html`; service worker v6 with offline fallback
 - `📷 save PNG` button on 31 canvas tools — `tools/save-png.js`
 - **Replay recording** — `tools/replay.js` on 19 slider tools; `⏺ rec` captures sessions, `🔗 share` encodes full timeline as `#r=base64url`; shared URLs auto-play for students
+- **Concept map** — `concept-map.html`; 50 nodes in 8 concept threads, 10 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
 
 **50 tools built/integrated:**
 - Absolute Value Grapher (U2)

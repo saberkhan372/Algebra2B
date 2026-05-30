@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concept Map — A2 Playgrounds</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+
+    .cm-outer {
+      height: calc(100vh - 52px);
+      overflow: auto;
+      background: var(--paper);
+      position: relative;
+    }
+
+    #cm-canvas {
+      display: block;
+      cursor: default;
+    }
+
+    /* ── Tooltip ─────────────────────────────────────── */
+    .cm-tip {
+      position: absolute;
+      pointer-events: none;
+      display: none;
+      z-index: 10;
+      background: var(--paper);
+      border: 2px solid var(--ink-2);
+      border-radius: 6px;
+      padding: 10px 13px;
+      min-width: 200px;
+      max-width: 260px;
+      box-shadow: 3px 4px 0 rgba(0,0,0,.15);
+    }
+    .cm-tip-name  { font-family: var(--f-display); font-size: 16px; color: var(--ink); line-height: 1.15; margin-bottom: 4px; }
+    .cm-tip-meta  { font-family: var(--f-body); font-size: 11px; color: var(--ink-soft); margin-bottom: 5px; display: flex; gap: 6px; flex-wrap: wrap; }
+    .cm-tip-badge { padding: 1px 6px; border-radius: 3px; border: 1.5px solid; font-weight: 700; }
+    .cm-tip-desc  { font-family: var(--f-body); font-size: 12px; color: var(--ink-2); line-height: 1.4; margin-bottom: 6px; }
+    .cm-tip-links { border-top: 1px dashed var(--ink-soft); padding-top: 5px; margin-top: 2px; }
+    .cm-tip-link  { font-family: var(--f-body); font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+    .cm-tip-cta   { font-family: var(--f-body); font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 6px; }
+
+    /* ── Legend ──────────────────────────────────────── */
+    .cm-legend {
+      position: absolute;
+      bottom: 14px;
+      right: 16px;
+      background: var(--paper);
+      border: 1.5px solid var(--ink-soft);
+      border-radius: 5px;
+      padding: 8px 12px;
+      pointer-events: none;
+    }
+    .cm-legend-row { display: flex; align-items: center; gap: 7px; margin-bottom: 3px; font-family: var(--f-body); font-size: 11px; color: var(--ink-2); }
+    .cm-legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .cm-legend-line { width: 24px; height: 2px; background: currentColor; opacity: .45; flex-shrink: 0; border-top: 2px dashed currentColor; }
+
+    @media (max-width: 900px) {
+      html, body { overflow: auto; }
+      .cm-outer { overflow: auto; height: auto; }
+      .cm-legend { display: none; }
+    }
+  </style>
+</head>
+<body class="paper-dots">
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-search"><span class="search-icon">🔎</span><input type="text" placeholder="search tools..." /></div>
+    <div class="nav-links">
+      <a href="index.html">home</a>
+      <a href="map.html">map</a>
+      <a href="concept-map.html" style="font-weight:700;">concepts</a>
+      <a href="about.html">about</a>
+    </div>
+  </nav>
+
+  <div class="cm-outer" id="cm-outer">
+    <canvas id="cm-canvas"></canvas>
+    <div class="cm-tip" id="cm-tip"></div>
+
+    <div class="cm-legend">
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#d94f2a;border:2px solid #d94f2a;"></div>Systems &amp; Inequalities</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#2a6fb4;border:2px solid #2a6fb4;"></div>Quadratics</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#7c4db5;border:2px solid #7c4db5;"></div>Functions</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#8b4513;border:2px solid #8b4513;"></div>Exponents &amp; Complex</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#8f6c00;border:2px solid #8f6c00;"></div>Exponential &amp; Log</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#277343;border:2px solid #277343;"></div>Rationals &amp; Polynomials</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#1a8a8a;border:2px solid #1a8a8a;"></div>Trigonometry</div>
+      <div class="cm-legend-row"><div class="cm-legend-dot" style="background:#5a6a7a;border:2px solid #5a6a7a;"></div>Statistics</div>
+      <div style="border-top:1px dashed var(--ink-soft);margin:6px 0;"></div>
+      <div class="cm-legend-row" style="color:var(--ink-soft);">
+        <div style="width:24px;flex-shrink:0;border-top:2px dashed var(--ink-soft);"></div>conceptual bridge
+      </div>
+      <div class="cm-legend-row" style="color:var(--ink-soft);">
+        <div style="width:12px;height:12px;border-radius:50%;background:var(--ink-soft);flex-shrink:0;"></div>visited ✓
+      </div>
+    </div>
+  </div>
+
+  <script>
+  'use strict';
+
+  // ── Canvas dimensions ───────────────────────────────────────────────────────
+  const CW = 1520, CH = 810;
+  const NR = 21;          // node radius
+  const X0 = 225;         // x of first node in each thread
+  const DX = 130;         // horizontal spacing between nodes
+  const LABEL_X = 195;    // right edge of thread label (right-aligned text)
+
+  // ── Thread definitions ──────────────────────────────────────────────────────
+  // Each tool: { id (matches TOOLS array), code (2-char display), name, href, desc }
+  const THREADS = [
+    {
+      label: 'SYSTEMS &\nINEQUALITIES', color: '#d94f2a', y: 88,
+      tools: [
+        { id: 'sysexp', code: 'Se', name: 'Systems Explorer',           href: 'tools/systems-explorer.html',    desc: 'Drag two lines — watch the intersection move live.' },
+        { id: 'subs',   code: 'Su', name: 'Substitution Stepper',       href: 'tools/substitution-stepper.html', desc: 'Walk through substitution step by step.' },
+        { id: 'elim',   code: 'El', name: 'Elimination Race',           href: 'tools/elimination-race.html',    desc: 'Solve systems by elimination — race against yourself.' },
+        { id: 'piece',  code: 'Pw', name: 'Piecewise Grapher',          href: 'tools/piecewise-grapher.html',   desc: 'Build piecewise rules and watch endpoints behave.' },
+        { id: 'ineqx',  code: 'Iq', name: 'Inequality Region Explorer', href: 'tools/inequality-explorer.html', desc: 'Shade the solution region live. Click to test any point.' },
+      ]
+    },
+    {
+      label: 'QUADRATICS', color: '#2a6fb4', y: 188,
+      tools: [
+        { id: 'fact',  code: 'Fa', name: 'Factoring Lab',              href: 'tools/factoring-lab.html',           desc: 'See what happens when you change the factors.' },
+        { id: 'quad',  code: 'Qs', name: 'Quadratic Slider Studio',    href: 'tools/quadratic-slider.html',        desc: 'Slide a, h, k and watch the parabola move.' },
+        { id: 'qfe',   code: 'QE', name: 'Quadratic Forms Explorer',   href: 'tools/quadratic-forms-explorer.html', desc: 'Same parabola, three forms — standard, vertex, factored.' },
+        { id: 'qstd',  code: 'Qd', name: 'Quadratic Standard Form',    href: 'tools/quadratic-standard.html',      desc: 'Slide a, b, c and connect vertex, discriminant, and roots.' },
+        { id: 'comp',  code: 'Ct', name: 'Complete the Square',        href: 'tools/complete-square.html',         desc: 'Step through completing the square. Each step explained.' },
+        { id: 'qwpx',  code: 'Qw', name: 'Quadratic Word Problems',    href: 'tools/quadratic-word-problems.html', desc: 'Projectile motion — vertex, max height, landing time.' },
+      ]
+    },
+    {
+      label: 'FUNCTIONS &\nTRANSFORMATIONS', color: '#7c4db5', y: 288,
+      tools: [
+        { id: 'xray',  code: 'Xr', name: 'Function X-Ray',           href: 'tools/function-xray.html',          desc: '9 families — slide parameters, see asymptotes and zeros.' },
+        { id: 'absv',  code: 'Av', name: 'Absolute Value Grapher',   href: 'tools/abs-value-grapher.html',      desc: 'Drag the V. Watch y = a|x−h|+k update.' },
+        { id: 'atlas', code: 'Pa', name: 'Parent Function Atlas',    href: 'tools/parent-function-atlas.html',  desc: 'Five families with a/h/k sliders. Domain, range, zeros live.' },
+        { id: 'trans', code: 'Tf', name: 'Transformations Explorer', href: 'tools/transformations.html',        desc: 'Move a, b, h, k across parent functions.' },
+        { id: 'cubic', code: 'Cr', name: 'Cubic & Radical Grapher',  href: 'tools/cubic-radical.html',          desc: 'Compare cubic inflection points with radical starting points.' },
+        { id: 'fcomp', code: 'Cm', name: 'Composition Machine',      href: 'tools/composition.html',            desc: 'Send x through f and g in order. Swap and compare.' },
+        { id: 'cinv',  code: 'Ci', name: 'Composition & Inverse Lab',href: 'tools/composition-inverse.html',    desc: 'Compose f and g two ways — watch f∘g and g∘f diverge.' },
+        { id: 'inv',   code: 'Iv', name: 'Inverse Function Revealer',href: 'tools/inverse-function.html',       desc: 'Reflect f and f⁻¹ over y = x and test one-to-one functions.' },
+      ]
+    },
+    {
+      label: 'EXPONENTS &\nCOMPLEX', color: '#8b4513', y: 388,
+      tools: [
+        { id: 'negx',   code: 'Nx', name: 'Negative Exponent Flipper',  href: 'tools/neg-exponent-flipper.html',  desc: 'See x⁻² flip into 1/x². No tricks, just the definition.' },
+        { id: 'dos',    code: 'D2', name: 'Difference of Squares',       href: 'tools/diff-of-squares.html',       desc: 'Spot and factor a²−b² before the timer. Quick drill.' },
+        { id: 'doc',    code: 'D3', name: 'Difference of Cubes',         href: 'tools/diff-of-cubes.html',         desc: 'The a³±b³ formulas with visual proof and worked examples.' },
+        { id: 'ratd',   code: 'Rd', name: 'Rationalizing Denominators',  href: 'tools/rationalizing-denominators.html', desc: 'Monomial radical, binomial radical, imaginary denominator.' },
+        { id: 'ratx',   code: 'Rx', name: 'Rational Exponents Tower',    href: 'tools/rational-exponents.html',    desc: 'Match x^(m/n) to radical form. Stack correct answers.' },
+        { id: 'imag',   code: 'Im', name: 'Imaginary Number Sandbox',    href: 'tools/imaginary-sandbox.html',     desc: 'Plot complex numbers. See what multiplying by i does.' },
+        { id: 'cplane', code: 'Cp', name: 'Complex Number Explorer',     href: 'tools/complex-plane.html',         desc: 'Drag a+bi — see modulus, argument, conjugate live.' },
+      ]
+    },
+    {
+      label: 'EXPONENTIAL\n& LOG', color: '#8f6c00', y: 488,
+      tools: [
+        { id: 'expo',      code: 'Ef', name: 'Exponential Explorer',      href: 'tools/exponential-explorer.html',      desc: 'Asymptote first, then anchor two points. Growth vs decay.' },
+        { id: 'emb',       code: 'Em', name: 'Exponential Model Builder', href: 'tools/exponential-model-builder.html',  desc: 'Drag P, r, t, n into the right formula.' },
+        { id: 'logcv',     code: 'Lc', name: 'Log ↔ Exp Converter',      href: 'tools/log-converter.html',              desc: 'Translate bˣ = y into log form and back.' },
+        { id: 'logmirror', code: 'Lm', name: 'Log ↔ Exp Mirror',         href: 'tools/log-exp-mirror.html',             desc: 'y=bˣ and y=log_b(x) reflected over y = x on one canvas.' },
+        { id: 'logp',      code: 'Lp', name: 'Log Properties Sandbox',   href: 'tools/log-properties.html',             desc: 'Expand, condense, and simplify logs step by step.' },
+        { id: 'expeq',     code: 'Eq', name: 'Exponential Equation Solver',href: 'tools/exponential-equation-solver.html',desc: 'Same-base, log-both-sides, or ln — step by step.' },
+        { id: 'growrace',  code: 'Gr', name: 'Growth Race',              href: 'tools/growth-race.html',                desc: 'log, √x, x, x², 2^x on one canvas. Live leaderboard.' },
+      ]
+    },
+    {
+      label: 'RATIONALS &\nPOLYNOMIALS', color: '#277343', y: 588,
+      tools: [
+        { id: 'rex',   code: 'Rg', name: 'Rational Expression Builder', href: 'tools/rational-expressions.html',       desc: 'Build a rational expression — graph, domain, holes.' },
+        { id: 'rsimp', code: 'Rs', name: 'Rational Simplifier',         href: 'tools/rational-simplifier.html',        desc: 'Factor, cancel, and state excluded values.' },
+        { id: 'addr',  code: 'Ar', name: 'Adding Rationals',            href: 'tools/adding-rationals.html',           desc: 'Build the LCD from factor chips, rewrite, combine.' },
+        { id: 'rmul',  code: 'Rm', name: 'Rational Mult/Div Stepper',   href: 'tools/rational-multdiv.html',           desc: 'KCF first, factor, cancel, lock domain restrictions.' },
+        { id: 'req',   code: 'Rq', name: 'Solving Rational Equations',  href: 'tools/rational-equations.html',         desc: 'LCD multiply-through, solve, check extraneous.' },
+        { id: 'rfb',   code: 'Rf', name: 'Rational Function Behavior',  href: 'tools/rational-behavior.html',          desc: 'Toggle factors — holes, V.A.s, asymptote rules emerge.' },
+        { id: 'poly',  code: 'Sk', name: 'Polynomial Sketch Pad',       href: 'tools/polynomial-sketch.html',          desc: 'Set roots and multiplicities — cross, bounce, end behavior.' },
+        { id: 'pdiv',  code: 'Dv', name: 'Polynomial Division Stepper', href: 'tools/polynomial-division-stepper.html',desc: 'Long division and synthetic — divide, multiply, subtract.' },
+        { id: 'polyr', code: 'Pr', name: 'Polynomial Root Sculptor',    href: 'tools/polynomial-roots.html',           desc: 'Drag roots, cycle multiplicity — sculpt the curve.' },
+      ]
+    },
+    {
+      label: 'TRIGONOMETRY', color: '#1a8a8a', y: 683,
+      tools: [
+        { id: 'soht',   code: 'St', name: 'SOH CAH TOA Solver',        href: 'tools/soh-cah-toa.html',          desc: 'Click the reference angle — solve the triangle.' },
+        { id: 'unitc',  code: 'Uc', name: 'Unit Circle Walker',        href: 'tools/unit-circle.html',          desc: 'Drag around the unit circle — watch sine trace a wave.' },
+        { id: 'ucwave', code: 'Uw', name: 'Unit Circle Wave Sync',     href: 'tools/unit-circle-wave.html',     desc: 'Circle height connected to wave height by a dashed line.' },
+        { id: 'trigb',  code: 'Sg', name: 'Sine/Cosine Graph Builder', href: 'tools/sine-cosine-builder.html',  desc: 'Build amplitude, period, phase shift, and midline.' },
+        { id: 'trigx',  code: 'Tg', name: 'Trig Function Explorer',    href: 'tools/trig-explorer.html',        desc: 'Slide a, b, h, k — amplitude, period, phase shift chips.' },
+      ]
+    },
+    {
+      label: 'STATISTICS', color: '#5a6a7a', y: 758,
+      tools: [
+        { id: 'bxplt', code: 'Bp', name: 'Box Plot Builder',        href: 'tools/box-plot-builder.html',    desc: '5-number summary, IQR, outlier fences, skew shape.' },
+        { id: 'probx', code: 'Pb', name: 'Probability Sandbox',     href: 'tools/probability-sandbox.html', desc: 'Experimental probability converges to theoretical.' },
+        { id: 'smpbx', code: 'Sl', name: 'Sampling Bias Lab',       href: 'tools/sampling-bias-lab.html',   desc: 'Watch biased sample means drift from the population mean.' },
+      ]
+    },
+  ];
+
+  // ── Cross-thread conceptual bridges ────────────────────────────────────────
+  // { a: toolId, b: toolId, label: 'why connected', color: optional }
+  const BRIDGES = [
+    { a: 'fact',      b: 'dos',       label: 'a²−b² is a special factorable form' },
+    { a: 'fact',      b: 'doc',       label: 'a³±b³ is a special factorable form' },
+    { a: 'comp',      b: 'imag',      label: 'D < 0 while completing the square → imaginary roots' },
+    { a: 'ratx',      b: 'cubic',     label: 'x^(m/n) = nth-root radical — same curve, different notation' },
+    { a: 'logmirror', b: 'inv',       label: 'log and exp are inverses — the y=x reflection proves it' },
+    { a: 'fcomp',     b: 'logmirror', label: 'log(bˣ) = x — composition identity for inverse functions' },
+    { a: 'cplane',    b: 'unitc',     label: 'complex modulus = distance from origin = unit circle radius' },
+    { a: 'trans',     b: 'trigx',     label: 'a·f(b(x−h))+k rules apply identically to trig graphs' },
+    { a: 'rfb',       b: 'xray',      label: 'rational function is one of the 9 families in X-Ray' },
+    { a: 'poly',      b: 'quad',      label: 'a degree-2 polynomial IS the parabola' },
+  ];
+
+  // ── Build flat node map: id → {x, y, color, ...tool} ──────────────────────
+  const NODES = {};
+  THREADS.forEach(function (th) {
+    th.tools.forEach(function (tool, ni) {
+      NODES[tool.id] = Object.assign({}, tool, {
+        x: X0 + ni * DX,
+        y: th.y,
+        color: th.color,
+        threadLabel: th.label
+      });
+    });
+  });
+
+  // Build bridge lookup: toolId → [{other node, label}]
+  const BRIDGE_MAP = {};
+  BRIDGES.forEach(function (br) {
+    if (!BRIDGE_MAP[br.a]) BRIDGE_MAP[br.a] = [];
+    if (!BRIDGE_MAP[br.b]) BRIDGE_MAP[br.b] = [];
+    BRIDGE_MAP[br.a].push({ peer: br.b, label: br.label });
+    BRIDGE_MAP[br.b].push({ peer: br.a, label: br.label });
+  });
+
+  // ── Visited tools ──────────────────────────────────────────────────────────
+  var visitedSet = new Set();
+  try {
+    var raw = localStorage.getItem('a2pg-visited');
+    if (raw) visitedSet = new Set(JSON.parse(raw));
+  } catch (e) {}
+
+  function isVisited(href) {
+    return visitedSet.has(href) || visitedSet.has('/' + href);
+  }
+
+  // ── Canvas setup ───────────────────────────────────────────────────────────
+  var canvas = document.getElementById('cm-canvas');
+  var DPR    = window.devicePixelRatio || 1;
+  canvas.width  = CW * DPR;
+  canvas.height = CH * DPR;
+  canvas.style.width  = CW + 'px';
+  canvas.style.height = CH + 'px';
+  var ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  var hoverId   = null;   // hovered node id
+  var hovBridge = null;   // hovered bridge {a, b, label}
+
+  // ── Draw helpers ───────────────────────────────────────────────────────────
+  function hexAlpha(hex, a) {
+    var r = parseInt(hex.slice(1,3),16);
+    var g = parseInt(hex.slice(3,5),16);
+    var b = parseInt(hex.slice(5,7),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  function bridgePath(x1, y1, x2, y2) {
+    // Quadratic bezier bowing gently to the right of the farther node
+    var cpx = (x1 + x2) / 2 + Math.abs(y2 - y1) * 0.28;
+    var cpy = (y1 + y2) / 2;
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(cpx, cpy, x2, y2);
+  }
+
+  // ── Main draw ──────────────────────────────────────────────────────────────
+  function draw() {
+    ctx.clearRect(0, 0, CW, CH);
+
+    // 1 — Bridges (behind everything)
+    BRIDGES.forEach(function (br) {
+      var na = NODES[br.a], nb = NODES[br.b];
+      if (!na || !nb) return;
+      var isHov = hoverId && (hoverId === br.a || hoverId === br.b);
+      ctx.save();
+      ctx.setLineDash([6, 5]);
+      ctx.lineWidth   = isHov ? 2.2 : 1.3;
+      ctx.strokeStyle = isHov ? 'rgba(80,60,30,.75)' : 'rgba(80,60,30,.22)';
+      ctx.beginPath();
+      bridgePath(na.x, na.y, nb.x, nb.y);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // 2 — Thread lines
+    THREADS.forEach(function (th) {
+      if (th.tools.length < 2) return;
+      var first = NODES[th.tools[0].id];
+      var last  = NODES[th.tools[th.tools.length - 1].id];
+      ctx.save();
+      ctx.strokeStyle = hexAlpha(th.color, 0.35);
+      ctx.lineWidth   = 4;
+      ctx.lineCap     = 'round';
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(first.x, first.y);
+      ctx.lineTo(last.x, last.y);
+      ctx.stroke();
+      ctx.restore();
+    });
+
+    // 3 — Thread labels (right-aligned, left of nodes)
+    THREADS.forEach(function (th) {
+      var lines = th.label.split('\n');
+      ctx.save();
+      ctx.font         = 'bold 10px "Lexend", sans-serif';
+      ctx.fillStyle    = hexAlpha(th.color, 0.9);
+      ctx.textAlign    = 'right';
+      ctx.textBaseline = 'middle';
+      var lineH = 13;
+      var startY = th.y - (lines.length - 1) * lineH / 2;
+      lines.forEach(function (line, li) {
+        ctx.fillText(line, LABEL_X, startY + li * lineH);
+      });
+      ctx.restore();
+    });
+
+    // 4 — Nodes
+    Object.keys(NODES).forEach(function (id) {
+      var n   = NODES[id];
+      var vis = isVisited(n.href);
+      var hov = id === hoverId;
+
+      // Bridge highlight: are any of this node's bridges hovered?
+      var brdgActive = BRIDGE_MAP[id] && hoverId && BRIDGE_MAP[id].some(function (b) { return b.peer === hoverId; });
+
+      var r = hov ? NR + 3 : (brdgActive ? NR + 1 : NR);
+
+      ctx.save();
+
+      // Shadow for hovered node
+      if (hov) {
+        ctx.shadowColor = hexAlpha(n.color, 0.45);
+        ctx.shadowBlur  = 10;
+      }
+
+      // Fill
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+      ctx.fillStyle = vis
+        ? n.color
+        : (hov ? hexAlpha(n.color, 0.25) : hexAlpha(n.color, 0.12));
+      ctx.fill();
+
+      // Stroke
+      ctx.strokeStyle = n.color;
+      ctx.lineWidth   = hov ? 2.5 : (brdgActive ? 2 : 1.8);
+      ctx.stroke();
+
+      ctx.shadowBlur = 0;
+
+      // Code text
+      ctx.font         = 'bold 11px "JetBrains Mono", monospace';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle    = vis ? '#fff' : (hov ? n.color : hexAlpha(n.color, 0.85));
+      ctx.fillText(n.code, n.x, n.y);
+
+      // Visited checkmark
+      if (vis) {
+        ctx.font      = 'bold 8px "Lexend", sans-serif';
+        ctx.fillStyle = '#fff';
+        ctx.fillText('✓', n.x + r - 6, n.y - r + 6);
+      }
+
+      ctx.restore();
+    });
+  }
+
+  // ── Interaction ─────────────────────────────────────────────────────────────
+  var tip  = document.getElementById('cm-tip');
+  var wrap = document.getElementById('cm-outer');
+
+  function nodeAt(cx, cy) {
+    var found = null;
+    Object.keys(NODES).forEach(function (id) {
+      var n = NODES[id];
+      var dx = cx - n.x, dy = cy - n.y;
+      if (Math.sqrt(dx*dx + dy*dy) <= NR + 4) found = id;
+    });
+    return found;
+  }
+
+  function canvasXY(e) {
+    var rect = canvas.getBoundingClientRect();
+    var scaleX = CW / rect.width;
+    var scaleY = CH / rect.height;
+    return [
+      (e.clientX - rect.left) * scaleX,
+      (e.clientY - rect.top)  * scaleY
+    ];
+  }
+
+  function showTip(id, clientX, clientY) {
+    var n = NODES[id];
+    var bridges = BRIDGE_MAP[id] || [];
+
+    var html = '<div class="cm-tip-name">' + n.name + '</div>';
+
+    var unitColors = { U1:'#d94f2a',U2:'#2a6fb4',U3:'#8b4513',U4:'#2a8a4a',U5:'#8f6c00',U6:'#7a2a8a',U7:'#1a8a8a',U9:'#5a6a7a' };
+    var uc = unitColors[n.threadLabel] || n.color;
+    html += '<div class="cm-tip-meta">';
+    html += '<span class="cm-tip-badge" style="color:' + n.color + ';border-color:' + n.color + '60;">' + n.threadLabel.replace('\n', ' ') + '</span>';
+    html += '</div>';
+
+    html += '<div class="cm-tip-desc">' + n.desc + '</div>';
+
+    if (bridges.length) {
+      html += '<div class="cm-tip-links">';
+      bridges.forEach(function (br) {
+        var peer = NODES[br.peer];
+        if (peer) {
+          html += '<div class="cm-tip-link">&#8594; <strong>' + peer.name + '</strong>: ' + br.label + '</div>';
+        }
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="cm-tip-cta">&#8594; open tool</div>';
+
+    tip.innerHTML = html;
+    tip.style.display = 'block';
+
+    // Position tooltip near cursor, keep on screen
+    var wrapRect = wrap.getBoundingClientRect();
+    var tx = clientX - wrapRect.left + wrap.scrollLeft + 18;
+    var ty = clientY - wrapRect.top  + wrap.scrollTop  + 18;
+    var tipW = 260, tipH = tip.offsetHeight || 150;
+
+    if (tx + tipW > wrap.scrollLeft + wrapRect.width - 10)  tx = clientX - wrapRect.left + wrap.scrollLeft - tipW - 12;
+    if (ty + tipH > wrap.scrollTop  + wrapRect.height - 10) ty = clientY - wrapRect.top  + wrap.scrollTop  - tipH - 12;
+
+    tip.style.left = Math.max(4, tx) + 'px';
+    tip.style.top  = Math.max(4, ty) + 'px';
+  }
+
+  canvas.addEventListener('mousemove', function (e) {
+    var xy   = canvasXY(e);
+    var id   = nodeAt(xy[0], xy[1]);
+    var prev = hoverId;
+    hoverId  = id;
+    if (id !== prev) {
+      draw();
+      if (id) {
+        canvas.style.cursor = 'pointer';
+        showTip(id, e.clientX, e.clientY);
+      } else {
+        canvas.style.cursor = 'default';
+        tip.style.display = 'none';
+      }
+    } else if (id) {
+      showTip(id, e.clientX, e.clientY);
+    }
+  });
+
+  canvas.addEventListener('mouseleave', function () {
+    hoverId = null;
+    tip.style.display = 'none';
+    draw();
+  });
+
+  canvas.addEventListener('click', function (e) {
+    var xy = canvasXY(e);
+    var id = nodeAt(xy[0], xy[1]);
+    if (id) window.location.href = NODES[id].href;
+  });
+
+  // Touch support
+  canvas.addEventListener('touchend', function (e) {
+    e.preventDefault();
+    var t = e.changedTouches[0];
+    var xy = canvasXY(t);
+    var id = nodeAt(xy[0], xy[1]);
+    if (id) window.location.href = NODES[id].href;
+  }, { passive: false });
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  document.fonts.ready.then(draw);
+
+  </script>
+</body>
+</html>

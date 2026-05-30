@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v8';
+const CACHE_VERSION = 'a2p-v9';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -14,6 +14,7 @@ const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/about.html',
+  '/concept-map.html',
   '/map.html',
   '/404.html',
   '/offline.html',
