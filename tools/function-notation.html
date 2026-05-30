@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Function Notation Evaluator — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* tabs */
+    .mode-tabs { display:flex; gap:0; border-bottom:2px solid var(--ink); margin-bottom:14px; }
+    .mode-tab {
+      padding:6px 20px; border:none; background:transparent;
+      font-family:'Permanent Marker',cursive; font-size:14px;
+      cursor:pointer; color:var(--ink-soft); border-bottom:3px solid transparent; margin-bottom:-2px;
+      transition:all .15s;
+    }
+    .mode-tab.active { color:var(--ink); border-bottom-color:var(--accent); }
+    .mode-tab:hover:not(.active) { background:var(--paper-2); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:block; }
+
+    /* function display */
+    .fn-def-row {
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+      font-family:'JetBrains Mono',monospace; font-size:18px; margin-bottom:10px;
+    }
+    .fn-name { color:#2a6fb4; font-weight:700; }
+    .fn-eq   { color:var(--ink-2); }
+    .fn-rule { color:var(--ink); }
+
+    /* input row */
+    .eval-row {
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:10px 0;
+    }
+    .eval-label { font-family:'JetBrains Mono',monospace; font-size:18px; color:#2a6fb4; }
+    .eval-input {
+      width:70px; font-family:'JetBrains Mono',monospace; font-size:18px;
+      padding:5px 8px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); text-align:center;
+    }
+    .eval-input:focus { border-color:var(--accent); outline:none; }
+    .eval-btn {
+      padding:6px 16px; background:var(--ink); color:var(--paper); border:none;
+      border-radius:4px; font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:opacity .15s;
+    }
+    .eval-btn:hover { opacity:.8; }
+
+    /* step cards */
+    .eval-steps { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+    .eval-step {
+      padding:10px 14px; border:2px solid var(--ink-2); border-radius:6px;
+      background:var(--paper);
+    }
+    .eval-step.s-sub  { background:#fdf0e0; border-color:#c07820; }
+    .eval-step.s-simp { background:#e8f4ec; border-color:#2a8a4a; }
+    .eval-step.s-ans  { background:var(--highlight); border-color:#c8a000; }
+    .eval-step.s-undef{ background:#fdecea; border-color:var(--redline); }
+
+    .step-lbl2 { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:4px; text-transform:uppercase; }
+    .step-expr2 { font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--ink); line-height:1.8; }
+    .step-expr2 .sub-in { color:var(--accent); font-weight:700; }
+
+    /* answer chip */
+    .ans-chip {
+      display:inline-block; padding:5px 16px; border-radius:6px;
+      background:var(--accent); color:#fff;
+      font-family:'JetBrains Mono',monospace; font-size:20px; font-weight:700;
+    }
+    .undef-chip {
+      display:inline-block; padding:5px 14px; border-radius:6px;
+      background:var(--redline); color:#fff;
+      font-family:'Permanent Marker',cursive; font-size:16px;
+    }
+
+    /* preset buttons */
+    .preset-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+    .preset-btn {
+      padding:4px 10px; border-radius:14px; border:1.5px solid var(--ink-2);
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:12px;
+      cursor:pointer; transition:all .12s;
+    }
+    .preset-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .preset-btn.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+    /* piecewise tab */
+    .pw-fn-display {
+      font-family:'JetBrains Mono',monospace; font-size:14px; line-height:2.2;
+      padding:10px 14px; background:var(--paper-2); border:2px solid var(--ink-2);
+      border-radius:6px; margin-bottom:10px;
+    }
+    .pw-piece { display:flex; align-items:center; gap:10px; }
+    .pw-rule  { color:var(--ink); min-width:140px; }
+    .pw-cond  { color:var(--ink-2); font-size:13px; }
+
+    /* which-piece selector */
+    .piece-btns { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+    .piece-pick-btn {
+      padding:6px 14px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:13px;
+      cursor:pointer; transition:all .12s;
+    }
+    .piece-pick-btn:hover { border-color:var(--accent); }
+    .piece-pick-btn.correct  { border-color:#2a8a4a; background:#e8f4ec; color:#2a8a4a; }
+    .piece-pick-btn.wrong    { border-color:var(--redline); background:#fdecea; animation:shake .25s; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+    /* score */
+    .score-chip {
+      display:inline-block; padding:3px 10px; border-radius:12px;
+      background:#e8f4ec; border:1.5px solid #2a8a4a;
+      font-family:'Permanent Marker',cursive; font-size:13px; color:#2a8a4a;
+    }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Foundations</a> &nbsp;·&nbsp; D8</div>
+      <div class="tool-title f-display">Function Notation Evaluator</div>
+      <div class="tool-tagline f-hand">f(x) is just a name — whatever goes in the parentheses replaces every x.</div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="regular-panel">Regular f(x)</button>
+        <button class="mode-tab" data-mode="piecewise-panel">Piecewise f(x)</button>
+      </div>
+
+      <!-- ── TAB 1: Regular functions ── -->
+      <div class="mode-panel active" id="regular-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:8px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">PICK A FUNCTION</div>
+          <div class="preset-row" id="reg-presets"></div>
+        </div>
+
+        <div class="sk-box" style="padding:12px;" id="reg-fn-box"></div>
+
+        <div class="eval-steps" id="reg-steps"></div>
+      </div>
+
+      <!-- ── TAB 2: Piecewise ── -->
+      <div class="mode-panel" id="piecewise-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <div class="f-marker" style="font-size:11px;">PROBLEMS</div>
+            <div class="preset-row" id="pw-presets"></div>
+            <div id="pw-score"></div>
+          </div>
+        </div>
+
+        <div id="pw-stage"></div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">f(x) IS y</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <span style="font-family:'JetBrains Mono',monospace;">f(x)</span> is just a name for a function. It means "plug x in and get a result."<br><br>
+          <span style="font-family:'JetBrains Mono',monospace;">f(5)</span> means plug 5 in for x.<br>
+          <span style="font-family:'JetBrains Mono',monospace;">f(−3)</span> means plug −3 in for x.<br><br>
+          <strong>Always use parentheses</strong> when substituting, especially with negatives.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">⚠ SIGN TRAP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <span style="font-family:'JetBrains Mono',monospace;">(−3)² = 9</span> ✓<br>
+          <span style="font-family:'JetBrains Mono',monospace;">−3² = −9</span> — that's different!<br><br>
+          The parentheses matter when you square a negative.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea; border-color:var(--redline);">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">UNDEFINED</div>
+        <div class="f-hand" style="font-size:13px; color:var(--ink-2); line-height:1.7;">
+          If plugging in x makes the denominator zero, the function is <strong>undefined</strong> at that x.<br>
+          (Not "no solution" — undefined.)
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">PIECEWISE KEY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          <strong>Step 1</strong>: Find which interval your input falls in.<br>
+          <strong>Step 2</strong>: Use <em>only that piece's</em> formula.<br>
+          <strong>Step 3</strong>: Plug in and evaluate.
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="piecewise-grapher.html">→ Piecewise Function Grapher</a>
+        <a class="related-link f-hand" href="function-xray.html">→ Function X-Ray</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Tab switching ────────────────────────────────────────────────────────
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab,.mode-panel').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.mode).classList.add('active');
+      });
+    });
+
+    // ── Regular Functions ────────────────────────────────────────────────────
+    const REG_FNS = [
+      {
+        id: 0, label: 'f(x) = x² + 3x',
+        name: 'f', rule: 'x² + 3x',
+        eval: x => x*x + 3*x,
+        showSteps: (x, fx) => [
+          { cls:'s-sub',  lbl:'Substitute x = ' + fmt(x),
+            expr: `f(<span class="sub-in">${fmt(x)}</span>) = (<span class="sub-in">${fmt(x)}</span>)² + 3(<span class="sub-in">${fmt(x)}</span>)` },
+          { cls:'s-simp', lbl:'Evaluate the exponent first (PEMDAS)',
+            expr: `= ${fmt(x*x)} + ${fmt(3*x)}` },
+          { cls:'s-ans',  lbl:'Add', expr: null, answer: fx },
+        ],
+        testVals: [5, -7, 0, 3],
+        undefined: null,
+      },
+      {
+        id: 1, label: 'g(x) = x² − 13',
+        name: 'g', rule: 'x² − 13',
+        eval: x => x*x - 13,
+        showSteps: (x, fx) => [
+          { cls:'s-sub',  lbl:'Substitute x = ' + fmt(x),
+            expr: `g(<span class="sub-in">${fmt(x)}</span>) = (<span class="sub-in">${fmt(x)}</span>)² − 13` },
+          { cls:'s-simp', lbl:'Square the input',
+            expr: `= ${fmt(x*x)} − 13` },
+          { cls:'s-ans',  lbl:'Subtract', expr: null, answer: fx },
+        ],
+        testVals: [5, -7, 0, -2],
+        undefined: null,
+      },
+      {
+        id: 2, label: 'f(x) = −6(x + 3)',
+        name: 'f', rule: '−6(x + 3)',
+        eval: x => -6*(x+3),
+        showSteps: (x, fx) => [
+          { cls:'s-sub',  lbl:'Substitute x = ' + fmt(x),
+            expr: `f(<span class="sub-in">${fmt(x)}</span>) = −6(<span class="sub-in">${fmt(x)}</span> + 3)` },
+          { cls:'s-simp', lbl:'Add inside the parentheses',
+            expr: `= −6(${fmt(x+3)})` },
+          { cls:'s-ans',  lbl:'Multiply', expr: null, answer: fx },
+        ],
+        testVals: [16, -8, 0, 4],
+        undefined: null,
+      },
+      {
+        id: 3, label: 'f(x) = 24 / (x − 2)',
+        name: 'f', rule: '24 / (x − 2)',
+        eval: x => x === 2 ? null : 24/(x-2),
+        showSteps: (x, fx) => {
+          if (fx === null) return [
+            { cls:'s-sub',  lbl:'Substitute x = ' + fmt(x),
+              expr: `f(<span class="sub-in">${fmt(x)}</span>) = 24 / (<span class="sub-in">${fmt(x)}</span> − 2)` },
+            { cls:'s-undef', lbl:'Denominator = 0!',
+              expr: `= 24 / 0`, answer: null, undef: true },
+          ];
+          const den = x - 2;
+          const gcdVal = gcd(24, Math.abs(den));
+          const numS = 24/gcdVal, denS = den/gcdVal;
+          return [
+            { cls:'s-sub',  lbl:'Substitute x = ' + fmt(x),
+              expr: `f(<span class="sub-in">${fmt(x)}</span>) = 24 / (<span class="sub-in">${fmt(x)}</span> − 2)` },
+            { cls:'s-simp', lbl:'Simplify the denominator',
+              expr: `= 24 / ${fmt(den)}` },
+            { cls:'s-ans',  lbl:'Simplify the fraction', expr: null, answer: fx, fracAns: gcdVal > 1 ? `${numS}/${denS}` : null },
+          ];
+        },
+        testVals: [11, 2, 0, 8],
+        undefined: 2,
+      },
+    ];
+
+    let regIdx = 0;
+    let lastRegInput = null;
+
+    function gcd(a, b) { while(b){[a,b]=[b,a%b];} return a||1; }
+    function fmt(n) {
+      if (n === null) return '?';
+      if (Number.isInteger(n)) return String(n);
+      // Try fraction representation
+      const g = gcd(Math.round(Math.abs(n)*1000), 1000);
+      return n.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
+    }
+    function fmtNice(n) {
+      if (n === null || !isFinite(n)) return '?';
+      if (Number.isInteger(n)) return String(n);
+      // Check if it's a simple fraction with denom ≤ 20
+      for (let d = 2; d <= 20; d++) {
+        const num = Math.round(n * d);
+        if (Math.abs(num/d - n) < 0.0001) return `${num}/${d}`;
+      }
+      return n.toFixed(3);
+    }
+
+    function renderRegPresets() {
+      document.getElementById('reg-presets').innerHTML = REG_FNS.map((f,i) =>
+        `<button class="preset-btn${i===regIdx?' active':''}" onclick="loadRegFn(${i})">${f.label}</button>`
+      ).join('');
+    }
+
+    function renderRegFn() {
+      const fn = REG_FNS[regIdx];
+      const box = document.getElementById('reg-fn-box');
+      box.innerHTML = `
+        <div class="fn-def-row">
+          <span class="fn-name">${fn.name}(x)</span>
+          <span class="fn-eq">=</span>
+          <span class="fn-rule">${fn.rule}</span>
+        </div>
+        <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-bottom:8px;">Try these: ${fn.testVals.map(v =>
+          `<button class="preset-btn" onclick="evalRegFn(${v})" style="margin:2px;">${fn.name}(${v})</button>`
+        ).join('')}</div>
+        <div class="eval-row">
+          <span class="eval-label" id="reg-fn-lbl">${fn.name}(</span>
+          <input class="eval-input" id="reg-input" type="number" placeholder="x"
+            oninput="" onkeydown="if(event.key==='Enter') evalFromInput()">
+          <span class="eval-label">)</span>
+          <span class="eval-label">=</span>
+          <span class="eval-label" style="color:var(--ink-2);">?</span>
+          <button class="eval-btn" onclick="evalFromInput()">Evaluate →</button>
+        </div>`;
+      document.getElementById('reg-steps').innerHTML = '';
+    }
+
+    function evalFromInput() {
+      const v = parseFloat(document.getElementById('reg-input').value);
+      if (isNaN(v)) return;
+      evalRegFn(v);
+    }
+
+    function evalRegFn(x) {
+      const fn = REG_FNS[regIdx];
+      document.getElementById('reg-input').value = x;
+      const fx = fn.eval(x);
+      const steps = fn.showSteps(x, fx);
+      const stepsEl = document.getElementById('reg-steps');
+
+      let html = steps.map((s, i) => {
+        let body = '';
+        if (s.undef) {
+          body = `<span class="step-expr2">${s.expr}</span>
+            <br><span class="undef-chip" style="margin-top:6px;">Undefined</span>
+            <div style="font-family:var(--f-body); font-size:12px; color:var(--ink-soft); margin-top:4px;">
+              You can't divide by 0. This function is undefined at x = ${fmt(x)}.
+            </div>`;
+        } else if (s.answer !== undefined && s.answer !== null) {
+          const nice = fmtNice(s.answer);
+          body = `<span class="step-expr2">${s.expr || `= ${nice}`}</span>
+            <br><span class="ans-chip" style="margin-top:6px;">${fn.name}(${fmt(x)}) = ${nice}</span>`;
+        } else {
+          body = `<span class="step-expr2">${s.expr}</span>`;
+        }
+        return `<div class="eval-step ${s.cls}">
+          <div class="step-lbl2">step ${i+1} — ${s.lbl}</div>
+          <div>${body}</div>
+        </div>`;
+      }).join('');
+
+      stepsEl.innerHTML = html;
+    }
+
+    function loadRegFn(idx) {
+      regIdx = idx;
+      renderRegPresets();
+      renderRegFn();
+    }
+
+    // ── Piecewise Functions ──────────────────────────────────────────────────
+    const PW_FNS = [
+      {
+        id: 0,
+        label: 'Prob 1',
+        display: [
+          { rule: '−2x − 4',    cond: 'x ≤ −4',      condFn: x => x <= -4 },
+          { rule: '−½x + 3',    cond: '−4 < x ≤ 6',  condFn: x => x > -4 && x <= 6 },
+          { rule: '5',          cond: 'x > 6',        condFn: x => x > 6 },
+        ],
+        evals: [
+          { ask: 'f(0)',   x: 0,   pieceIdx: 1, eval: x => -0.5*x+3,  ans: '3' },
+          { ask: 'f(6)',   x: 6,   pieceIdx: 1, eval: x => -0.5*x+3,  ans: '0' },
+          { ask: 'f(−5)',  x: -5,  pieceIdx: 0, eval: x => -2*x-4,    ans: '6' },
+          { ask: 'f(99)',  x: 99,  pieceIdx: 2, eval: x => 5,          ans: '5' },
+        ],
+      },
+      {
+        id: 1,
+        label: 'Prob 2',
+        display: [
+          { rule: 'x + 6',      cond: 'x < 0',       condFn: x => x < 0 },
+          { rule: 'x² − 1',     cond: 'x ≥ 0',       condFn: x => x >= 0 },
+        ],
+        evals: [
+          { ask: 'f(3)',   x: 3,   pieceIdx: 1, eval: x => x*x-1,  ans: '8' },
+          { ask: 'f(−4)',  x: -4,  pieceIdx: 0, eval: x => x+6,    ans: '2' },
+          { ask: 'f(0)',   x: 0,   pieceIdx: 1, eval: x => x*x-1,  ans: '−1' },
+          { ask: 'f(−1)',  x: -1,  pieceIdx: 0, eval: x => x+6,    ans: '5' },
+        ],
+      },
+    ];
+
+    let pwIdx = 0;
+    let pwEvalIdx = 0;
+    let pwPhase = 'pick-piece'; // 'pick-piece' | 'show-eval'
+    let pwScore = 0, pwAttempted = 0;
+
+    function renderPwPresets() {
+      document.getElementById('pw-presets').innerHTML = PW_FNS.map((f,i) =>
+        `<button class="preset-btn${i===pwIdx?' active':''}" onclick="loadPwFn(${i})">${f.label}</button>`
+      ).join('');
+      const sc = document.getElementById('pw-score');
+      sc.innerHTML = pwAttempted > 0 ? `<span class="score-chip">✓ ${pwScore} / ${pwAttempted}</span>` : '';
+    }
+
+    function renderPwStage() {
+      const fn = PW_FNS[pwIdx];
+      const ev = fn.evals[pwEvalIdx % fn.evals.length];
+      const stage = document.getElementById('pw-stage');
+      let html = '';
+
+      // Function display
+      html += `<div class="sk-box pw-fn-display">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">f(x) = </div>`;
+      fn.display.forEach((p, i) => {
+        html += `<div class="pw-piece">
+          <span class="pw-rule" style="color:${['#2a6fb4','#d94f2a','#2a8a4a'][i]}">${p.rule}</span>
+          <span class="pw-cond">when ${p.cond}</span>
+        </div>`;
+      });
+      html += `</div>`;
+
+      // Question
+      html += `<div class="sk-box" style="padding:10px; margin-bottom:8px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">EVALUATE</div>
+        <div style="font-family:'JetBrains Mono',monospace; font-size:20px; color:var(--ink);">
+          Find <strong>${ev.ask}</strong>
+        </div>
+      </div>`;
+
+      if (pwPhase === 'pick-piece') {
+        html += `<div class="sk-box" style="padding:10px;">
+          <div class="f-hand" style="font-size:13px; color:var(--ink-2); margin-bottom:8px;">
+            <strong>Step 1:</strong> x = ${ev.x} — which piece applies?
+          </div>
+          <div class="piece-btns">`;
+        fn.display.forEach((p, i) => {
+          html += `<button class="piece-pick-btn" id="piece-btn-${i}" onclick="pickPiece(${i})">
+            when ${p.cond}
+          </button>`;
+        });
+        html += `</div></div>`;
+      }
+
+      if (pwPhase === 'show-eval') {
+        const p = fn.display[ev.pieceIdx];
+        const rawAns = ev.eval(ev.x);
+        html += `<div class="eval-step s-sub" style="margin-top:0;">
+          <div class="step-lbl2">step 1 — correct piece</div>
+          <div style="font-family:var(--f-body); font-size:13px; color:var(--ink-2); margin-bottom:4px;">
+            x = ${ev.x} falls in <strong>${p.cond}</strong> → use <span style="font-family:'JetBrains Mono',monospace; color:${['#2a6fb4','#d94f2a','#2a8a4a'][ev.pieceIdx]}">${p.rule}</span>
+          </div>
+        </div>
+        <div class="eval-step s-simp">
+          <div class="step-lbl2">step 2 — substitute x = ${ev.x}</div>
+          <span class="step-expr2">${ev.ask.replace('f', 'f')} = ${p.rule.replace(/x/g, `(<span class="sub-in">${ev.x}</span>)`)}</span>
+        </div>
+        <div class="eval-step s-ans">
+          <div class="step-lbl2">step 3 — evaluate</div>
+          <span class="ans-chip">${ev.ask} = ${ev.ans}</span>
+        </div>
+        <button class="eval-btn" style="margin-top:8px; background:var(--accent);" onclick="nextPwEval()">Next →</button>`;
+      }
+
+      stage.innerHTML = html;
+    }
+
+    function pickPiece(idx) {
+      const fn = PW_FNS[pwIdx];
+      const ev = fn.evals[pwEvalIdx % fn.evals.length];
+      pwAttempted++;
+      if (idx === ev.pieceIdx) {
+        pwScore++;
+        pwPhase = 'show-eval';
+        renderPwPresets();
+        renderPwStage();
+      } else {
+        const btn = document.getElementById(`piece-btn-${idx}`);
+        btn.classList.add('wrong');
+        setTimeout(() => btn && btn.classList.remove('wrong'), 500);
+        renderPwPresets();
+      }
+    }
+
+    function nextPwEval() {
+      pwEvalIdx++;
+      pwPhase = 'pick-piece';
+      renderPwStage();
+    }
+
+    function loadPwFn(idx) {
+      pwIdx = idx;
+      pwEvalIdx = 0;
+      pwPhase = 'pick-piece';
+      renderPwPresets();
+      renderPwStage();
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    loadRegFn(0);
+    loadPwFn(0);
+  </script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+</body>
+</html>
