@@ -1,6 +1,6 @@
 # Project Memory
 
-Last updated: 2026-05-30
+Last updated: 2026-05-30 (batch-13 complete)
 
 ## What This Project Is
 
@@ -10,9 +10,9 @@ Live site: `https://saberkhan372.github.io/Algebra2B/`
 Local path: `/Users/saberkhan/Documents/coding/Algebra2B`  
 Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
-## Current State (as of 2026-05-29)
+## Current State (as of 2026-05-30)
 
-- **59 tools** across 8 units (U1–U7, U9). All units complete.
+- **62 tools** across 8 units (U1–U7, U9). All units complete.
 - **8 unit pages**: `u1.html`–`u7.html` + `u9.html`. All counts/statuses accurate.
 - Homepage: unit sections collapse by default; filter/search auto-expands matching units; three filter rows (kind / unit / level).
 
@@ -35,8 +35,9 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
 ### Student-facing improvements added May 2026
 
-- **Board mode** — fullscreen canvas, `⊞ tools` panel lists all 59 tools grouped by unit
-- **9 new tools from batch-11/12 video-insight passes**: Inequality Solver (u1/D7), Abs Value Equation Stepper (u1/D7), Point-Slope Form Trainer (u1/D6), Function Notation Evaluator (u1/D8), Literal Equation Isolator (u3/D9), Domain Restriction Sorter (u4/D4), Coterminal & Radians (u7/D2), Exponential Equations Stepper (u5/D6, was orphaned), Sincos Grapher (u7/D3–4, was orphaned)
+- **Board mode** — fullscreen canvas, `⊞ tools` panel lists all 62 tools grouped by unit
+- **12 new tools from batch-11/12/13 video-insight passes**: Inequality Solver (u1/D7), Abs Value Equation Stepper (u1/D7), Point-Slope Form Trainer (u1/D6), Function Notation Evaluator (u1/D8), Literal Equation Isolator (u3/D9), Domain Restriction Sorter (u4/D4), Coterminal & Radians (u7/D2), Exponential Equations Stepper (u5/D6), Sincos Grapher (u7/D3–4), Linear Equations Explorer (u1/D1), **Conic Sections Explorer (u9/D4–D8)**, **Radical Equation Solver (u4/D5)**
+- **Batch-13 sidebar upgrades**: Inverse Function Revealer (domain/range swap chip), Composition Machine (∘ ≠ · warning), SOH CAH TOA (rationalize-denominator note), Substitution Stepper (messy middle steps note)
 - **Visited badges** — ✓ badge on cards you've opened (localStorage, no logins)
 - **Start here** — orange banner on the best entry-point card per unit
 - **Try Next** — 3 related tools at bottom of every info sidebar

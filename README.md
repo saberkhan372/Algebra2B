@@ -1,6 +1,6 @@
 # Algebra 2 Playgrounds
 
-Interactive classroom tools for Algebra 2 — 59 tools across 8 units, built for Mr. K's students at TNDV.
+Interactive classroom tools for Algebra 2 — 62 tools across 8 units, built for Mr. K's students at TNDV.
 
 **Live site:** `https://saberkhan372.github.io/Algebra2B/`
 
@@ -16,14 +16,14 @@ Open `http://127.0.0.1:3333/`
 
 | Path | What it is |
 |---|---|
-| `index.html` | Homepage — unit sections, kind / unit / level filter rows, progress summary, 59-tool grid |
+| `index.html` | Homepage — unit sections, kind / unit / level filter rows, progress summary, 62-tool grid |
 | `map.html` | Visual course roadmap — scrollable unit cards |
 | `concept-map.html` | Concept subway map — 50 nodes in 8 threads, 10 cross-thread bridges; hover tooltips, click to open tool |
 | `about.html` | Teacher letter, FAQ, credits |
 | `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks and tool cards |
 | `404.html` | Friendly 404 page (GitHub Pages serves automatically for broken links) |
 | `offline.html` | Offline fallback page (served by service worker when network unavailable) |
-| `tools/` | 59 standalone interactive tool pages |
+| `tools/` | 62 standalone interactive tool pages |
 | `tools/url-state.js` | URL hash state — encode slider positions; shareable pre-configured examples |
 | `tools/progress.js` | Visited badges, start-here banners, share + print buttons |
 | `tools/save-png.js` | `📷 save PNG` button on 31 canvas tools — downloads graph as image |
@@ -31,7 +31,7 @@ Open `http://127.0.0.1:3333/`
 | `tools/related.js` | "Try Next" section — 3 related tools injected into every info sidebar |
 | `tools/fullscreen.js` | Board mode (`⛶ board`), teacher quick-nav overlay (`⊞ tools`) |
 | `styles.css` | Full design system — CSS variables, layout, board/print/wide-screen rules |
-| `manifest.json`, `sw.js` | PWA support — precaches all 59 tools + scripts for offline use |
+| `manifest.json`, `sw.js` | PWA support — precaches all 62 tools + scripts for offline use |
 | `PLAN.md` | Working build plan, completed work log, agent lanes |
 | `CODEBASE.md` | Codebase guide for agents — read before touching anything |
 | `video-learning/` | Whisper transcripts, PDF extracts, contact sheets, synthesis notes |
@@ -48,7 +48,7 @@ Open `http://127.0.0.1:3333/`
 | U5 | Exponential & Log | 8 |
 | U6 | Rationals & Polynomials | 8 |
 | U7 | Trigonometry | 7 |
-| U9 | Statistics & Probability | 3 |
+| U9 | Statistics, Probability & Conics | 4 |
 
 ## Student features
 

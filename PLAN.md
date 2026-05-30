@@ -1,13 +1,13 @@
 # Algebra 2B Playgrounds — Build Plan
 
-Last updated: 2026-05-30  
+Last updated: 2026-05-30 (batch-13 pass complete)  
 Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site audit, and video-learning transcripts/contact sheets.
 
 ---
 
 ## Current state
 
-**Site:** 8 unit pages (u1–u7 + u9), **59 tools** wired into the homepage grid.  
+**Site:** 8 unit pages (u1–u7 + u9), **62 tools** wired into the homepage grid.  
 **Curriculum:** All 8 units complete (Sept → May). Year is done.  
 **Unit pages:** U1–U7 + U9 fully wired. No coming-soon rows remain.  
 **Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip).  
@@ -24,7 +24,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Print key ideas — `🖨 print` button in every sidebar; `@media print` CSS
 - Difficulty filter row on homepage (●/●●/●●●); search includes descriptions + highlights
 - Unit progress bars in homepage sidebar
-- `404.html` + `offline.html`; service worker v9 with offline fallback
+- `404.html` + `offline.html`; service worker v14 with offline fallback
 - `📷 save PNG` button on 31 canvas tools — `tools/save-png.js`
 - **Replay recording** — `tools/replay.js` on 19 slider tools; `⏺ rec` captures sessions, `🔗 share` encodes full timeline as `#r=base64url`; shared URLs auto-play for students
 - **Concept map** — `concept-map.html`; 50 nodes in 8 concept threads, 10 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
@@ -81,6 +81,17 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Composition & Inverse Lab (U4) — compose f and g, watch f∘g and g∘f diverge; flip to Inverse mode: drag point on f, see mirror on f⁻¹ over y=x
 - Growth Race (U5) — log, √x, x, x², 2^x on one canvas; drag cursor, watch live leaderboard flip; 2^x falls behind x² then explodes past it
 
+**3 tools added in batch-13 video-insight pass (May 2026):**
+- Linear Equations Explorer (U1, D1) — all three forms + live rise/run graph; VUXHOY for vertical/horizontal lines; verify a point is on the line
+- Conic Sections Explorer (U9, D4–D8) — 4-mode canvas tool (parabola/circle/ellipse/hyperbola) with live chips, orientation toggles, foci, asymptotes + box method; Identify game with 8 equations
+- Radical Equation Solver (U4, D5) — 5 presets; isolate → square → solve → mandatory check-back; extraneous solutions get red ✗ chip and strikethrough
+
+**Sidebar upgrades (batch-13):**
+- Inverse Function Revealer — domain/range swap chip
+- Composition Machine — ∘ ≠ · warning box
+- SOH CAH TOA — "Mr. K Requires This" rationalize-denominator box
+- Substitution Stepper — "Messy middle steps are normal" note
+
 **9 tools added in batch-11/12 video-insight pass (May–June 2026):**
 - Exponential Equations Stepper (U5) — 3 decision lanes: same base / log both sides / x on both sides; was already built, now linked from u5 D6
 - Sine / Cosine Graph Builder — "From the Circle" mode (U7) — traces the wave from unit circle coordinates; was already built, now linked from u7 D3–4
@@ -92,7 +103,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Point-Slope Form Trainer (U1, D6) — three modes: point+slope (live graph), two points (slope formula shown), parallel/perp (flip-and-negate with steps)
 - Function Notation Evaluator (U1, D8) — regular f(x) with PEMDAS breakdown + undefined detector; piecewise tab with "pick the piece first" game mechanic
 
-**No missing tools from the planned curriculum** — all originally planned 50 tools are live, plus 9 additional from video-insight passes.
+**No missing tools from the planned curriculum** — all originally planned 50 tools are live, plus 12 additional from video-insight passes (batches 11–13).
 
 **Explorer roadmap (in priority order):**
 1. ✓ Parent Function Atlas — built
