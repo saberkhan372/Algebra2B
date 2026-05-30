@@ -754,7 +754,20 @@
 </script>
   <script src="save-png.js"></script>
   <script src="url-state.js"></script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Amp 2, Period π', desc:'Set amplitude a = 2 and b = 2 (period = 2π/b = π).',
+      validate: function(){ return sv('sl-a', 2, 0.3) && sv('sl-b', 2, 0.3); } },
+    { id:2, label:'Midline y = −1', desc:'Shift the midline down to y = −1 by setting k = −1.',
+      validate: function(){ return sv('sl-k', -1, 0.3); } },
+    { id:3, label:'Phase shift π/2', desc:'Set h ≈ 1.57 (π/2) for a quarter-period shift to the right.',
+      validate: function(){ return sv('sl-h', Math.PI/2, 0.35); } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

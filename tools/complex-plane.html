@@ -780,7 +780,24 @@
   </script>
   <script src="save-png.js"></script>
   <script src="url-state.js"></script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Pure imaginary', desc:'Set Re = 0 so the number sits on the imaginary axis.',
+      validate: function(){ return Math.abs(+document.getElementById('re-slider').value) < 0.1; } },
+    { id:2, label:'Real only', desc:'Set Im = 0 so the number sits on the real axis.',
+      validate: function(){ return Math.abs(+document.getElementById('im-slider').value) < 0.1; } },
+    { id:3, label:'Modulus 5', desc:'Place the point so |z| = 5 (try 3 + 4i or 0 + 5i).',
+      validate: function(){
+        var r=+document.getElementById('re-slider').value,
+            i=+document.getElementById('im-slider').value;
+        return Math.abs(Math.sqrt(r*r+i*i) - 5) < 0.4;
+      } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

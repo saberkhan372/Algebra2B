@@ -622,7 +622,20 @@
     window.addEventListener('resize', () => draw());
   })();
   </script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Base 2', desc:'Set the base slider to exactly 2.',
+      validate: function(){ return sv('sl-b', 2, 0.12); } },
+    { id:2, label:'Base e', desc:'Set the base near e ≈ 2.72.',
+      validate: function(){ return sv('sl-b', Math.E, 0.2); } },
+    { id:3, label:'Decay (b < 1)', desc:'Set the base below 1 to get a decreasing exponential.',
+      validate: function(){ return +document.getElementById('sl-b').value < 1 - 0.05; } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

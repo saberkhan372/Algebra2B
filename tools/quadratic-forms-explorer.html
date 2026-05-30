@@ -682,7 +682,23 @@
     window.addEventListener('resize', () => draw());
   })();
   </script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Vertex (3, −4)', desc:'Set the vertex form so h = 3 and k = −4.',
+      validate: function(){ return sv('sl-h', 3, 0.2) && sv('sl-k', -4, 0.2); } },
+    { id:2, label:'Open down, k > 0', desc:'Make a < 0 (opens down) and k > 0 (vertex above x-axis).',
+      validate: function(){
+        return +document.getElementById('sl-a').value < -0.1 &&
+               +document.getElementById('sl-k').value > 0.1;
+      } },
+    { id:3, label:'Double root at 0', desc:'Set h = 0 and k = 0 — the only root is x = 0.',
+      validate: function(){ return sv('sl-h', 0, 0.2) && sv('sl-k', 0, 0.2); } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

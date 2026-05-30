@@ -676,7 +676,20 @@
   </script>
   <script src="save-png.js"></script>
   <script src="url-state.js"></script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'x = 2', desc:'Set the input value x = 2 and observe f∘g(2).',
+      validate: function(){ return sv('x-sl', 2, 0.2); } },
+    { id:2, label:'x = −1', desc:'Move the input to x = −1.',
+      validate: function(){ return sv('x-sl', -1, 0.2); } },
+    { id:3, label:'a = 3', desc:'Set the scalar a = 3.',
+      validate: function(){ return sv('a-sl', 3, 0.2); } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

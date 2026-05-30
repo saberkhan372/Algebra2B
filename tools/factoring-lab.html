@@ -436,7 +436,30 @@
     document.getElementById('sl-c').closest('.coeff-group')
       .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Roots 2 & 3', desc:'Set the factors so the roots are x = 2 and x = 3 (try a=1, b=−5, c=6).',
+      validate: function(){ return sv('sl-b', -5, 0.2) && sv('sl-c', 6, 0.2); } },
+    { id:2, label:'Perfect square', desc:'Make the two roots equal — same value for both factors.',
+      validate: function(){
+        var a=+document.getElementById('sl-a').value,
+            b=+document.getElementById('sl-b').value,
+            c=+document.getElementById('sl-c').value;
+        return Math.abs(b*b - 4*a*c) < 0.3;
+      } },
+    { id:3, label:'No real roots', desc:'Set coefficients so b²−4ac < 0 — the parabola misses the x-axis.',
+      validate: function(){
+        var a=+document.getElementById('sl-a').value,
+            b=+document.getElementById('sl-b').value,
+            c=+document.getElementById('sl-c').value;
+        return b*b - 4*a*c < -0.5;
+      } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>

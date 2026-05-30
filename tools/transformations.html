@@ -689,7 +689,24 @@
       .insertAdjacentElement('afterend', UrlState.copyBtn());
   </script>
   <script src="save-png.js"></script>
-  <script src="progress.js"></script>
+    <script>
+  var sv=function(id,v,t){var e=document.getElementById(id);return e?Math.abs(+e.value-v)<(t||0.26):false;};
+  window.TOOL_CHALLENGES = [
+    { id:1, label:'Stretch by 2', desc:'Set a = 2 to vertically stretch the parent function.',
+      validate: function(){ return sv('sl-a', 2, 0.2); } },
+    { id:2, label:'Shift right 3', desc:'Set h = 3 to shift the graph 3 units to the right.',
+      validate: function(){ return sv('sl-h', 3, 0.2); } },
+    { id:3, label:'Reflect & up 1', desc:'Set a = −1 (reflect) and k = 1 (shift up 1).',
+      validate: function(){
+        return +document.getElementById('sl-a').value < -0.9 &&
+               +document.getElementById('sl-a').value > -1.1 &&
+               sv('sl-k', 1, 0.2);
+      } },
+  ];
+  </script>
+  <script src="challenge.js"></script>
+  <script src="tour.js"></script>
+<script src="progress.js"></script>
   <script src="replay.js"></script>
   <script src="related.js"></script>
   <script src="fullscreen.js"></script>
