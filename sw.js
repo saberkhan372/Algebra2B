@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v12';
+const CACHE_VERSION = 'a2p-v14';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -98,7 +98,9 @@ const PRECACHE_URLS = [
   '/tools/inequality-solver.html',
   '/tools/literal-equations.html',
   '/tools/point-slope.html',
-  '/tools/linear-equations.html'
+  '/tools/linear-equations.html',
+  '/tools/conics.html',
+  '/tools/radical-equations.html'
 ];
 
 // ── Install: cache everything ──

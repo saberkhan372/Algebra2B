@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Radical Equation Solver — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* Problem picker */
+    .prob-picker { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px; }
+    .prob-btn {
+      padding:6px 14px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); font-family:'Permanent Marker',cursive; font-size:12px;
+      cursor:pointer; transition:all .12s;
+    }
+    .prob-btn.active { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+    .prob-btn:hover:not(.active) { border-color:var(--accent); }
+
+    /* Equation display */
+    .eq-card {
+      padding:14px 18px; text-align:center; margin-bottom:10px;
+    }
+    .eq-card-label { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:4px; }
+    .eq-big {
+      font-family:'JetBrains Mono',monospace; font-size:22px; color:var(--ink);
+      line-height:1.4;
+    }
+    .eq-warning {
+      font-family:var(--f-body); font-size:12px; color:var(--redline);
+      margin-top:6px; font-style:italic;
+    }
+
+    /* Step cards */
+    .step-card {
+      border-radius:6px; border:2px solid var(--ink-2); padding:12px 14px;
+      margin-bottom:10px; opacity:0; pointer-events:none;
+      transition:opacity .25s;
+    }
+    .step-card.revealed { opacity:1; pointer-events:auto; }
+    .s-isolate { background:#fdf0e0; border-color:#c07820; }
+    .s-square  { background:#dde9f6; border-color:#2a6fb4; }
+    .s-solve   { background:#e8f4ec; border-color:#2a8a4a; }
+    .s-check   { background:var(--paper-2); border-color:var(--ink-2); }
+    .s-final   { background:var(--highlight); border-color:#c8a000; }
+
+    .step-num  { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); margin-bottom:3px; text-transform:uppercase; }
+    .step-lbl  { font-family:var(--f-body); font-size:13px; color:var(--ink-2); margin-bottom:8px; }
+    .step-lbl strong { color:var(--ink); }
+    .step-expr { font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--ink); line-height:1.9; }
+    .step-note { font-family:var(--f-body); font-size:12px; color:var(--ink-soft); margin-top:6px; font-style:italic; }
+
+    /* Check chips */
+    .check-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+    .check-item {
+      flex:1; min-width:180px; padding:10px 12px;
+      border:2px solid; border-radius:6px;
+      font-family:'JetBrains Mono',monospace; font-size:12px;
+      line-height:1.7;
+    }
+    .check-item.valid { background:#e8f4ec; border-color:#2a8a4a; color:#1a5a2a; }
+    .check-item.extraneous {
+      background:#fdecea; border-color:var(--redline); color:#8a1a1a;
+      text-decoration-line: none;
+    }
+    .extran-label {
+      display:inline-block; margin-top:6px; padding:2px 8px;
+      background:var(--redline); color:#fff; border-radius:3px;
+      font-family:'Permanent Marker',cursive; font-size:11px;
+    }
+    .valid-label {
+      display:inline-block; margin-top:6px; padding:2px 8px;
+      background:#2a8a4a; color:#fff; border-radius:3px;
+      font-family:'Permanent Marker',cursive; font-size:11px;
+    }
+
+    /* Answer chips */
+    .answer-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+    .answer-chip {
+      padding:6px 16px; border-radius:4px; font-family:'JetBrains Mono',monospace;
+      font-size:16px; border:2px solid;
+    }
+    .answer-chip.valid-ans { background:#e8f4ec; border-color:#2a8a4a; color:#1a5a2a; }
+    .answer-chip.extran-ans {
+      background:#fdecea; border-color:var(--redline); color:#8a1a1a;
+      text-decoration:line-through;
+    }
+    .no-sol-chip {
+      display:inline-block; padding:6px 16px; background:#fdecea;
+      border:2px solid var(--redline); border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--redline);
+    }
+
+    /* Reveal button */
+    .reveal-btn {
+      width:100%; padding:10px; margin-top:4px;
+      background:var(--accent); color:#fff; border:none; border-radius:4px;
+      font-family:'Permanent Marker',cursive; font-size:14px;
+      cursor:pointer; transition:background .12s;
+    }
+    .reveal-btn:hover { background:#c03f1c; }
+    .reveal-btn:disabled { background:var(--ink-soft); cursor:default; }
+
+    /* Radical styling */
+    .rad { font-family:'JetBrains Mono',monospace; }
+    .rad::before { content:'√'; }
+
+    /* Warning banner */
+    .warn-banner {
+      padding:8px 12px; background:#fdecea; border:2px solid var(--redline);
+      border-radius:6px; margin:8px 0;
+      font-family:var(--f-body); font-size:13px; color:var(--redline);
+    }
+  </style>
+</head>
+<body class="paper-grid">
+  <nav class="site-nav">
+    <a href="../index.html" class="nav-logo">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u4.html">← U4</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u4.html">← U4 · Rational Exponents &amp; Radicals</a> &nbsp;·&nbsp; D5</div>
+      <div class="tool-title f-display">Radical Equation Solver</div>
+      <div class="tool-tagline f-hand">Isolate → square → solve → check. The check step is not optional.</div>
+
+      <div class="prob-picker" id="prob-picker"></div>
+
+      <div id="stage"></div>
+
+      <button class="reveal-btn" id="reveal-btn" onclick="revealNext()">Show next step →</button>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:#fdecea; border-color:var(--redline);">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:4px;">⚠ WHY CHECK IS MANDATORY</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          Squaring both sides can <strong>introduce fake solutions</strong>. If you squared both sides to solve, you <em>must</em> plug each answer back into the <strong>original equation</strong>.<br><br>
+          If it doesn't work → it's <strong>extraneous</strong>. Cross it out.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE 4 STEPS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.9; color:var(--ink-2);">
+          <span style="color:#c07820;">①</span> <strong>Isolate</strong> the radical alone on one side.<br>
+          <span style="color:#2a6fb4;">②</span> <strong>Square</strong> both sides to remove the radical.<br>
+          <span style="color:#2a8a4a;">③</span> <strong>Solve</strong> the resulting equation.<br>
+          <span style="color:var(--redline);">④</span> <strong>Check</strong> in the <em>original</em> — not the squared version!
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">MR. K SAYS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.6; color:var(--ink-2);">
+          "If you don't check your answer, you're <em>risking</em> it. We tried x = 1 in the original equation and it didn't work, so we cross it out."<br><br>
+          This is super important — it might be on the test.
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">On problem 3, why does x = 2 fail the check? What does squaring do to negative values?</span>
+        </div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">On problem 4, plug x = 0 into the original. What goes wrong?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q3.</span>
+          <span class="f-hand" style="font-size:13px;">Problem 5 has two answers that both work. Why? What's special about x² under the radical?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="domain-restriction.html">→ Domain Restriction Sorter</a>
+        <a class="related-link f-hand" href="cubic-radical.html">→ Cubic &amp; Radical Grapher</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── Problem bank ──────────────────────────────────────────────────────────
+  // Each problem has: label, display, steps[], checks[], finalAnswers[]
+  const PROBLEMS = [
+    {
+      label: '①  √x = 3',
+      display: '√x = 3',
+      steps: [
+        {
+          cls: 's-isolate',
+          num: 'step 1 — isolate the radical',
+          lbl: 'The radical <strong>√x</strong> is already alone. No isolating needed.',
+          body: '<span class="step-expr">√x = 3 &nbsp;✓ already isolated</span>',
+          note: 'Move on to squaring.',
+        },
+        {
+          cls: 's-square',
+          num: 'step 2 — square both sides',
+          lbl: 'Square both sides to remove the radical:',
+          body: '<span class="step-expr">(√x)² = 3²<br>x = 9</span>',
+          note: 'Squaring cancels the square root on the left.',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 3 — solve',
+          lbl: 'The equation is already solved:',
+          body: '<span class="step-expr">x = 9</span>',
+          note: '',
+        },
+      ],
+      checks: [
+        { val: '9', work: '√9 = 3  →  3 = 3', valid: true },
+      ],
+      finalAnswers: [{ val: 'x = 9', valid: true }],
+      note: '',
+    },
+
+    {
+      label: '②  √(x+5) = 4',
+      display: '√(x + 5) = 4',
+      steps: [
+        {
+          cls: 's-isolate',
+          num: 'step 1 — isolate the radical',
+          lbl: 'The radical is already isolated.',
+          body: '<span class="step-expr">√(x + 5) = 4 &nbsp;✓</span>',
+          note: '',
+        },
+        {
+          cls: 's-square',
+          num: 'step 2 — square both sides',
+          lbl: 'Square both sides:',
+          body: '<span class="step-expr">(√(x+5))² = 4²<br>x + 5 = 16</span>',
+          note: '',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 3 — solve',
+          lbl: 'Solve the linear equation:',
+          body: '<span class="step-expr">x + 5 = 16<br>x = 11</span>',
+          note: '',
+        },
+      ],
+      checks: [
+        { val: '11', work: '√(11 + 5) = √16 = 4  →  4 = 4', valid: true },
+      ],
+      finalAnswers: [{ val: 'x = 11', valid: true }],
+      note: '',
+    },
+
+    {
+      label: '③  √(2x−3) = x−3',
+      display: '√(2x − 3) = x − 3',
+      steps: [
+        {
+          cls: 's-isolate',
+          num: 'step 1 — isolate the radical',
+          lbl: 'The radical is already isolated.',
+          body: '<span class="step-expr">√(2x − 3) = x − 3 &nbsp;✓</span>',
+          note: 'The right side has x in it — this will create a quadratic when we square.',
+        },
+        {
+          cls: 's-square',
+          num: 'step 2 — square both sides',
+          lbl: 'Square both sides — the right side is a binomial, so FOIL:',
+          body: '<span class="step-expr">(√(2x−3))² = (x−3)²<br>2x − 3 = x² − 6x + 9<br>0 = x² − 8x + 12</span>',
+          note: 'Move everything to one side.',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 3 — solve the quadratic',
+          lbl: 'Factor and solve:',
+          body: '<span class="step-expr">x² − 8x + 12 = 0<br>(x − 2)(x − 6) = 0<br>x = 2  or  x = 6</span>',
+          note: 'Two candidates — both must be checked!',
+        },
+      ],
+      checks: [
+        { val: '2', work: 'Original: √(2·2−3) = √1 = 1\nRight side: 2 − 3 = −1\n1 ≠ −1', valid: false },
+        { val: '6', work: 'Original: √(2·6−3) = √9 = 3\nRight side: 6 − 3 = 3\n3 = 3', valid: true },
+      ],
+      finalAnswers: [
+        { val: 'x = 2', valid: false },
+        { val: 'x = 6', valid: true },
+      ],
+      note: 'x = 2 is extraneous — squaring made (−1)² = 1 look like it matched.',
+    },
+
+    {
+      label: '④  √(3x+4)+2 = x',
+      display: '√(3x + 4) + 2 = x',
+      steps: [
+        {
+          cls: 's-isolate',
+          num: 'step 1 — isolate the radical',
+          lbl: 'Subtract 2 from both sides to get the radical alone:',
+          body: '<span class="step-expr">√(3x + 4) + 2 = x<br>√(3x + 4) = x − 2</span>',
+          note: 'Now the radical is isolated.',
+        },
+        {
+          cls: 's-square',
+          num: 'step 2 — square both sides',
+          lbl: 'Square both sides — FOIL the right side:',
+          body: '<span class="step-expr">(√(3x+4))² = (x−2)²<br>3x + 4 = x² − 4x + 4<br>0 = x² − 7x</span>',
+          note: '',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 3 — solve the quadratic',
+          lbl: 'Factor by pulling out x:',
+          body: '<span class="step-expr">x² − 7x = 0<br>x(x − 7) = 0<br>x = 0  or  x = 7</span>',
+          note: 'Two candidates — both must be checked!',
+        },
+      ],
+      checks: [
+        { val: '0', work: 'Original: √(3·0+4) + 2 = √4 + 2 = 4\nRight side: x = 0\n4 ≠ 0', valid: false },
+        { val: '7', work: 'Original: √(3·7+4) + 2 = √25 + 2 = 7\nRight side: x = 7\n7 = 7', valid: true },
+      ],
+      finalAnswers: [
+        { val: 'x = 0', valid: false },
+        { val: 'x = 7', valid: true },
+      ],
+      note: 'x = 0 is extraneous — it made the right side (x−2) = −2 before squaring.',
+    },
+
+    {
+      label: '⑤  √(x²−5) = 2',
+      display: '√(x² − 5) = 2',
+      steps: [
+        {
+          cls: 's-isolate',
+          num: 'step 1 — isolate the radical',
+          lbl: 'The radical is already isolated.',
+          body: '<span class="step-expr">√(x² − 5) = 2 &nbsp;✓</span>',
+          note: '',
+        },
+        {
+          cls: 's-square',
+          num: 'step 2 — square both sides',
+          lbl: 'Square both sides:',
+          body: '<span class="step-expr">(√(x²−5))² = 2²<br>x² − 5 = 4<br>x² = 9</span>',
+          note: '',
+        },
+        {
+          cls: 's-solve',
+          num: 'step 3 — solve',
+          lbl: 'Take the square root — remember ±:',
+          body: '<span class="step-expr">x² = 9<br>x = 3  or  x = −3</span>',
+          note: 'Both values are candidates. This time check both — you might be surprised.',
+        },
+      ],
+      checks: [
+        { val: '3',  work: 'Original: √(9 − 5) = √4 = 2  →  2 = 2', valid: true },
+        { val: '−3', work: 'Original: √(9 − 5) = √4 = 2  →  2 = 2', valid: true },
+      ],
+      finalAnswers: [
+        { val: 'x = 3',  valid: true },
+        { val: 'x = −3', valid: true },
+      ],
+      note: 'Both work! The even power x² made both values give the same result under the radical.',
+    },
+  ];
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let currentIdx = 0;
+  let stepIdx = 0;   // how many steps revealed (0 = just the equation shown)
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  function renderPicker() {
+    document.getElementById('prob-picker').innerHTML = PROBLEMS.map((p, i) =>
+      `<button class="prob-btn${i === currentIdx ? ' active' : ''}" onclick="loadProblem(${i})">${p.label}</button>`
+    ).join('');
+  }
+
+  function buildHTML(prob, revealedCount) {
+    // revealedCount: 0 = only equation, 1..n = steps, n+1 = check, n+2 = final
+    const totalSteps   = prob.steps.length;
+    const checkPhase   = totalSteps + 1;
+    const finalPhase   = totalSteps + 2;
+
+    let html = '';
+
+    // Equation card (always visible)
+    html += `<div class="eq-card sk-box">
+      <div class="eq-card-label">Equation</div>
+      <div class="eq-big">${prob.display}</div>
+      <div class="eq-warning">⚠ Remember the original — you'll need it for the check step.</div>
+    </div>`;
+
+    // Step cards
+    prob.steps.forEach((step, i) => {
+      const revealed = revealedCount > i;
+      html += `<div class="step-card ${step.cls}${revealed ? ' revealed' : ''}">
+        <div class="step-num">${step.num}</div>
+        <div class="step-lbl">${step.lbl}</div>
+        <div>${step.body}</div>
+        ${step.note ? `<div class="step-note">${step.note}</div>` : ''}
+      </div>`;
+    });
+
+    // Check step
+    const checkRevealed = revealedCount >= checkPhase;
+    const checkHtml = prob.checks.map(c => `
+      <div class="check-item ${c.valid ? 'valid' : 'extraneous'}">
+        <strong>x = ${c.val}</strong><br>
+        <span style="white-space:pre-line">${c.work}</span><br>
+        <span class="${c.valid ? 'valid-label' : 'extran-label'}">${c.valid ? '✓ valid' : '✗ extraneous'}</span>
+      </div>`).join('');
+
+    html += `<div class="step-card s-check${checkRevealed ? ' revealed' : ''}">
+      <div class="step-num">step ${totalSteps + 1} — check in the original</div>
+      <div class="step-lbl">Plug <strong>each</strong> candidate back into the <strong>original equation</strong>:</div>
+      <div class="check-row">${checkHtml}</div>
+      <div class="step-note">Always check in the original — the squared version can't catch extraneous solutions.</div>
+    </div>`;
+
+    // Final answer
+    const finalRevealed = revealedCount >= finalPhase;
+    const hasExtraneous = prob.finalAnswers.some(a => !a.valid);
+    const ansHtml = prob.finalAnswers.map(a =>
+      `<span class="answer-chip ${a.valid ? 'valid-ans' : 'extran-ans'}">${a.val}${!a.valid ? ' ✗' : ''}</span>`
+    ).join('');
+
+    html += `<div class="step-card s-final${finalRevealed ? ' revealed' : ''}">
+      <div class="step-num">answer</div>
+      <div class="step-lbl">${hasExtraneous ? 'After eliminating extraneous solutions:' : 'Both solutions check out:'}</div>
+      <div class="answer-row">${ansHtml}</div>
+      ${prob.note ? `<div class="step-note" style="margin-top:8px;">${prob.note}</div>` : ''}
+    </div>`;
+
+    return html;
+  }
+
+  function totalPhases(prob) {
+    return prob.steps.length + 2; // steps + check + final
+  }
+
+  function render() {
+    const prob = PROBLEMS[currentIdx];
+    document.getElementById('stage').innerHTML = buildHTML(prob, stepIdx);
+    const btn = document.getElementById('reveal-btn');
+    if (stepIdx >= totalPhases(prob)) {
+      btn.textContent = 'All steps shown ✓';
+      btn.disabled = true;
+    } else {
+      btn.textContent = stepIdx === 0 ? 'Show step 1 →' : 'Show next step →';
+      btn.disabled = false;
+    }
+    renderPicker();
+  }
+
+  function revealNext() {
+    if (stepIdx < totalPhases(PROBLEMS[currentIdx])) {
+      stepIdx++;
+      render();
+    }
+  }
+
+  function loadProblem(idx) {
+    currentIdx = idx;
+    stepIdx = 0;
+    render();
+    document.getElementById('stage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // Init
+  render();
+  </script>
+  <script src="url-state.js"></script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+  <script src="fullscreen.js"></script>
+</body>
+</html>

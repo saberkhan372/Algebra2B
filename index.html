@@ -359,10 +359,12 @@
       { id: 'fnote',   prev: 'functions',   name: 'Function Notation Evaluator',      unit: 'U1', topic: 'Functions',    kind: 'practice',   diff: 1, code: 'Fn', desc: 'Plug any value into f(x) — see each PEMDAS step. Piecewise mode: pick the correct piece first, then evaluate.', href: 'tools/function-notation.html' },
       { id: 'liteq',   prev: 'algebra',     name: 'Literal Equation Isolator',        unit: 'U3', topic: 'Equations',    kind: 'practice',   diff: 2, code: 'Le', desc: 'Target appears once: isolate directly. Appears in multiple terms: factor it out and divide by the group.', href: 'tools/literal-equations.html' },
       { id: 'domr',    prev: 'radical',     name: 'Domain Restriction Sorter',        unit: 'U4', topic: 'Domain',       kind: 'practice',   diff: 2, code: 'Dr', desc: 'Classify the restriction rule (√ alone, denominator, or √ in denom), solve the inequality, read the interval notation.', href: 'tools/domain-restriction.html' },
+      { id: 'radeq',   prev: 'radical',     name: 'Radical Equation Solver',           unit: 'U4', topic: 'Radicals',     kind: 'practice',   diff: 2, code: 'Rq', desc: 'Isolate → square → solve → mandatory check-back. Catches extraneous solutions with a red ✗.', href: 'tools/radical-equations.html' },
       { id: 'expstep', prev: 'exponential', name: 'Exponential Equations Stepper',    unit: 'U5', topic: 'Exponentials', kind: 'practice',   diff: 2, code: 'Eq', desc: 'Three decision lanes: same base, log both sides, or x on both sides. Work each step before the next unlocks.', href: 'tools/exponential-equations.html' },
       { id: 'cotrad',  prev: 'unitcircle',  name: 'Coterminal Angles & Radians',      unit: 'U7', topic: 'Trigonometry', kind: 'practice',   diff: 2, code: 'Co', desc: 'Drill coterminal angles in [0°, 360°), then convert degrees ↔ radians with dimensional-analysis unit cancellation shown.', href: 'tools/coterminal-radian.html' },
       { id: 'scgraph', prev: 'sine',        name: 'Sine / Cosine Graph Builder',      unit: 'U7', topic: 'Trigonometry', kind: 'visualizer', diff: 2, code: 'Sg', desc: 'Start from the unit circle — y-coordinates trace sine, x-coordinates trace cosine. Then shape amplitude, period, and shift.', href: 'tools/sincos-grapher.html' },
       { id: 'lineq',   prev: 'linear',      name: 'Linear Equations Explorer',        unit: 'U1', topic: 'Linear',       kind: 'explorer',   diff: 1, code: 'Lx', desc: 'All three forms + live rise/run graph. VUXHOY for vertical/horizontal lines. Verify a point is on the line.', href: 'tools/linear-equations.html' },
+      { id: 'conics',  prev: 'conics',      name: 'Conic Sections Explorer',           unit: 'U9', topic: 'Conics',        kind: 'explorer',   diff: 2, code: 'Cn', desc: 'Explore parabolas, circles, ellipses, and hyperbolas — slide h, k, and axes; identify conics from their equations.', href: 'tools/conics.html' },
     ];
 
     const UNIT_INFO = {
@@ -539,7 +541,7 @@
     applyFilter();
 
     // ── Progress summary (item 11) ───────────────────────────────────────
-    const UNIT_TOTALS = { U1:8, U2:6, U3:8, U4:5, U5:7, U6:8, U7:5, U9:3 };
+    const UNIT_TOTALS = { U1:8, U2:6, U3:8, U4:6, U5:7, U6:8, U7:5, U9:4 };
     const UNIT_NAMES  = {
       U1:'Systems & Quadratics', U2:'Graphs & Exponents',
       U3:'Rationals & Complex',  U4:'Rational Exponents',
@@ -1340,6 +1342,24 @@
             ctx.fillStyle='#f6f1e4'; ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();
             ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.stroke();
           });
+        },
+
+        conics(ctx, W, H, t) {
+          bg(ctx, W, H);
+          const cx = W/2, cy = H/2, sc = Math.min(W, H) * 0.11;
+          const a = sc * (1.5 + 0.3 * Math.sin(t * 0.5));
+          const b = sc * (0.9 + 0.2 * Math.sin(t * 0.7));
+          ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2;
+          ctx.beginPath();
+          for (let th = 0; th <= Math.PI*2 + 0.01; th += 0.05) {
+            const x = cx + a * Math.cos(th), y = cy + b * Math.sin(th);
+            th === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+          ctx.fillStyle = '#d94f2a';
+          ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI*2); ctx.fill();
+          ctx.font = "10px 'JetBrains Mono',monospace"; ctx.fillStyle = 'rgba(29,26,20,0.55)'; ctx.textAlign = 'center';
+          ctx.fillText('(h, k)', cx + 10, cy - 6);
         },
 
       }; // end PREVIEW_RENDERERS
