@@ -124,6 +124,7 @@
         { id: 'ineqsol',code: 'Is', name: 'Inequality Solver',          href: 'tools/inequality-solver.html',   desc: 'Step-by-step — flip alert fires every time you divide by a negative.' },
         { id: 'psform', code: 'Ps', name: 'Point-Slope Form Trainer',   href: 'tools/point-slope.html',         desc: 'Enter point + slope, two points, or find parallel/perp slope.' },
         { id: 'lineq',  code: 'Lx', name: 'Linear Equations Explorer',  href: 'tools/linear-equations.html',   desc: 'All three forms + rise/run graph. VUXHOY for special lines. Verify a solution.' },
+        { id: 'drt',    code: 'Dt', name: 'Distance · Rate · Time',     href: 'tools/drt-trainer.html',         desc: 'Draw a picture → D=R×T table → equations → solve. Plane/wind, boats, tickets.' },
       ]
     },
     {
@@ -151,6 +152,7 @@
         { id: 'absveq', code: 'Ae', name: 'Abs Value Equation Stepper', href: 'tools/abs-value-equations.html', desc: 'Isolate → two branches → solve each → check both. No-solution case included.' },
         { id: 'fnote',  code: 'Fn', name: 'Function Notation Evaluator',href: 'tools/function-notation.html',   desc: 'Plug any value into f(x) — see each substitution step. Piecewise mode.' },
         { id: 'domr',   code: 'Dr', name: 'Domain Restriction Sorter',  href: 'tools/domain-restriction.html', desc: 'Classify the restriction rule, solve the inequality, read interval notation.' },
+        { id: 'radeq',  code: 'Rq', name: 'Radical Equation Solver',    href: 'tools/radical-equations.html',  desc: 'Isolate → square → solve → check. Extraneous solutions caught with red ✗.' },
       ]
     },
     {
@@ -206,11 +208,12 @@
       ]
     },
     {
-      label: 'STATISTICS', color: '#5a6a7a', y: 758,
+      label: 'STATISTICS\n& CONICS', color: '#5a6a7a', y: 758,
       tools: [
-        { id: 'bxplt', code: 'Bp', name: 'Box Plot Builder',        href: 'tools/box-plot-builder.html',    desc: '5-number summary, IQR, outlier fences, skew shape.' },
-        { id: 'probx', code: 'Pb', name: 'Probability Sandbox',     href: 'tools/probability-sandbox.html', desc: 'Experimental probability converges to theoretical.' },
-        { id: 'smpbx', code: 'Sl', name: 'Sampling Bias Lab',       href: 'tools/sampling-bias-lab.html',   desc: 'Watch biased sample means drift from the population mean.' },
+        { id: 'bxplt',  code: 'Bp', name: 'Box Plot Builder',          href: 'tools/box-plot-builder.html',    desc: '5-number summary, IQR, outlier fences, skew shape.' },
+        { id: 'probx',  code: 'Pb', name: 'Probability Sandbox',       href: 'tools/probability-sandbox.html', desc: 'Experimental probability converges to theoretical.' },
+        { id: 'smpbx',  code: 'Sl', name: 'Sampling Bias Lab',         href: 'tools/sampling-bias-lab.html',   desc: 'Watch biased sample means drift from the population mean.' },
+        { id: 'conics', code: 'Cn', name: 'Conic Sections Explorer',   href: 'tools/conics.html',              desc: 'Parabola, circle, ellipse, hyperbola — h/k always opposite the signs.' },
       ]
     },
   ];
@@ -235,6 +238,9 @@
     { a: 'cotrad',   b: 'unitc',     label: 'coterminal angles and radians are defined on the unit circle' },
     { a: 'expstep',  b: 'expeq',     label: 'two approaches to solving exponential equations — same goal' },
     { a: 'lineq',    b: 'sysexp',    label: 'a system solution is the point where two linear equations meet' },
+    { a: 'drt',      b: 'subs',      label: 'DRT word problems produce a linear system — solve by substitution or elimination' },
+    { a: 'radeq',    b: 'domr',      label: 'extraneous solutions violate the domain restriction — same underlying concept' },
+    { a: 'conics',   b: 'qfe',       label: 'a conic parabola y=a(x−h)²+k is the same curve as quadratic vertex form' },
   ];
 
   // ── Build flat node map: id → {x, y, color, ...tool} ──────────────────────
