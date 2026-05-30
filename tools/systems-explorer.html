@@ -83,6 +83,44 @@
     .eq-bar { padding: 7px 12px; background: var(--paper-2); border-bottom: 1.5px solid var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 13px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; min-height: 34px; }
     .hint-bar { padding: 4px 12px; font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); background: var(--paper-2); border-top: 1px solid var(--ink-soft); flex-shrink: 0; text-align: center; }
 
+    /* ── Challenge mode ─────────────────────────────────────────────── */
+    .ch-pills { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:8px; }
+    .ch-pill {
+      padding:3px 10px; border-radius:12px; border:1.5px solid var(--ink-soft);
+      font-family:var(--f-body); font-size:12px; cursor:pointer;
+      background:transparent; color:var(--ink-2);
+      transition:background .12s, border-color .12s;
+    }
+    .ch-pill:hover  { background:var(--paper-3); }
+    .ch-pill.active { background:#e0782018; border-color:#e07820; color:#e07820; font-weight:700; }
+    .ch-goal-box {
+      font-family:var(--f-body); font-size:13px; color:var(--ink); line-height:1.45;
+      padding:7px 10px; border-radius:4px; border-left:3px solid #e07820;
+      background:#e0782010; margin-bottom:6px;
+    }
+    .ch-success-bar {
+      background:#1a7a6e; color:#fff; text-align:center; padding:7px 10px;
+      border-radius:4px; font-family:var(--f-body); font-size:13px; font-weight:700;
+      display:none; animation:ch-pop .25s ease;
+    }
+    .ch-success-bar.show { display:block; }
+    @keyframes ch-pop { from{transform:scale(.92);opacity:0} to{transform:scale(1);opacity:1} }
+
+    /* ── Guided tour ─────────────────────────────────────────────── */
+    .tour-bg   { position:fixed; inset:0; background:rgba(20,15,5,.5); z-index:900; }
+    .tour-card {
+      position:fixed; z-index:901; background:#faf7f0;
+      border:2.5px solid #3a3020; border-radius:8px;
+      padding:14px 16px; width:230px;
+      box-shadow:3px 4px 0 rgba(0,0,0,.22);
+    }
+    .tour-num  { font-family:var(--f-body); font-size:10px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px; }
+    .tour-text { font-family:var(--f-body); font-size:14px; color:var(--ink); line-height:1.5; margin-bottom:12px; }
+    .tour-row  { display:flex; justify-content:space-between; align-items:center; }
+    .tour-skip { font-size:12px; color:var(--ink-soft); background:none; border:none; cursor:pointer; padding:0; }
+    .tour-skip:hover { color:var(--ink); }
+    .tour-next { padding:5px 14px; background:var(--accent); color:#fff; border:none; border-radius:20px; font-family:var(--f-body); font-size:13px; font-weight:700; cursor:pointer; }
+
     @media (max-width: 900px) {
       .tool-page { flex-direction: column; }
       .tool-sidebar { max-width: 100%; width: 100% !important; flex-shrink: 0; }
@@ -164,11 +202,42 @@
       </div>
 
       <!-- Mr. K says -->
-      <div style="padding:9px 13px; flex:1;">
+      <div style="padding:9px 13px;">
         <div class="sec-lbl">mr. k says</div>
         <div class="insight-box">
           <div class="insight-lbl">key idea</div>
           <div class="insight-txt" id="insight">The solution is the one point that makes BOTH equations true at the same time — where both lines cross.</div>
+        </div>
+      </div>
+
+      <!-- Challenge Mode (collapsed) -->
+      <div style="border-top:1.5px solid var(--ink-soft);">
+        <div id="ch-hdr" class="sec-lbl sk-coll-hdr"
+             style="padding:9px 13px 7px; cursor:pointer; user-select:none;
+                    display:flex; justify-content:space-between; margin:0;">
+          CHALLENGE MODE <span id="ch-arr">▸</span>
+        </div>
+        <div id="ch-body" style="display:none; padding:0 13px 10px;">
+          <div class="ch-pills" id="ch-pills"></div>
+          <div class="ch-goal-box" id="ch-goal" style="display:none;"></div>
+          <div class="ch-success-bar" id="ch-success">🎉 Challenge complete!</div>
+          <button class="btn small" id="ch-clear" onclick="clearChallenge()"
+                  style="margin-top:6px; display:none;">clear challenge</button>
+        </div>
+      </div>
+
+      <!-- Guided Tour (collapsed) -->
+      <div style="border-top:1.5px solid var(--ink-soft); flex:1;">
+        <div id="tr-hdr" class="sec-lbl sk-coll-hdr"
+             style="padding:9px 13px 7px; cursor:pointer; user-select:none;
+                    display:flex; justify-content:space-between; margin:0;">
+          GUIDED TOUR <span id="tr-arr">▸</span>
+        </div>
+        <div id="tr-body" style="display:none; padding:0 13px 10px;">
+          <p style="font-family:var(--f-body); font-size:13px; color:var(--ink-2); margin:0 0 8px; line-height:1.4;">
+            A 3-step walkthrough of this tool's key features.
+          </p>
+          <button class="btn small" onclick="startTour()">▶ start tour</button>
         </div>
       </div>
 
@@ -385,7 +454,8 @@
     ctx.fillText(lbl, px + (x >= 0 ? 10 : -10), py - 12);
   }
 
-  function draw() {
+  function draw(t) {
+    t = t || 0;
     const W = canvas.width / DPR, H = canvas.height / DPR;
     VIEW = computeView(W, H);
 
@@ -418,6 +488,7 @@
       ctx.fillText('no crossing — parallel lines', W/2, mpY);
     }
 
+    if (window.drawChallengeTarget) drawChallengeTarget(W, H, t);
     drawTestPoint(W, H);
     ctx.restore();
   }
@@ -511,7 +582,8 @@
 
   function update() {
     updateUI();
-    draw();
+    if (window.checkChallenge) checkChallenge();
+    draw(0);
   }
 
   // ── Slider bindings ───────────────────────────────────────────────────────
@@ -619,6 +691,204 @@
   window.addEventListener('resize', resize);
   update();
   resize();
+  </script>
+
+  <script>
+  // ═══════════════════════════════════════════════════════════════════
+  // CHALLENGE MODE
+  // ═══════════════════════════════════════════════════════════════════
+  const CHALLENGES = [
+    { id:1, label:'Hit (3, −1)', type:'point',    target:{x:3,  y:-1}, desc:'Adjust both lines so they intersect at exactly (3, −1).' },
+    { id:2, label:'Hit (−2, 1)', type:'point',    target:{x:-2, y:1},  desc:'Find slopes and intercepts that produce an intersection at (−2, 1).' },
+    { id:3, label:'Origin',      type:'point',    target:{x:0,  y:0},  desc:'Make the lines cross at the origin (0, 0).' },
+    { id:4, label:'Parallel',    type:'parallel',                       desc:'Give both lines the same slope but different y-intercepts — no crossing!' },
+    { id:5, label:'Same line',   type:'infinite',                       desc:'Make both equations describe the exact same line — infinite solutions!' },
+  ];
+
+  let activeChallenge = null;
+  let challengeSolved = false;
+  let animFrameId     = null;
+
+  function animLoop(t) {
+    draw(t);
+    animFrameId = (activeChallenge && !challengeSolved)
+      ? requestAnimationFrame(animLoop) : null;
+  }
+  function startAnimLoop() { if (!animFrameId) animFrameId = requestAnimationFrame(animLoop); }
+  function stopAnimLoop()  { if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; } }
+
+  function setChallenge(id) {
+    activeChallenge = id ? (CHALLENGES.find(c => c.id === id) || null) : null;
+    challengeSolved = false;
+    document.querySelectorAll('.ch-pill').forEach(p =>
+      p.classList.toggle('active', !!(activeChallenge && +p.dataset.id === id)));
+    const goalEl    = document.getElementById('ch-goal');
+    const successEl = document.getElementById('ch-success');
+    const clearBtn  = document.getElementById('ch-clear');
+    if (activeChallenge) {
+      goalEl.textContent = activeChallenge.desc; goalEl.style.display = '';
+      successEl.classList.remove('show'); clearBtn.style.display = '';
+      startAnimLoop();
+      checkChallenge(); // detect if current state already satisfies
+    } else {
+      goalEl.style.display = 'none'; successEl.classList.remove('show');
+      clearBtn.style.display = 'none'; stopAnimLoop(); draw(0);
+    }
+  }
+
+  function clearChallenge() { setChallenge(null); }
+
+  function checkChallenge() {
+    if (!activeChallenge || challengeSolved) return;
+    const sc = systemCase(), sol = intersection();
+    let ok = false;
+    if      (activeChallenge.type === 'point'    && sol)
+      ok = Math.abs(sol.x - activeChallenge.target.x) < 0.26 &&
+           Math.abs(sol.y - activeChallenge.target.y) < 0.26;
+    else if (activeChallenge.type === 'parallel') ok = sc === 'parallel';
+    else if (activeChallenge.type === 'infinite') ok = sc === 'infinite';
+    if (ok) {
+      challengeSolved = true;
+      document.getElementById('ch-success').classList.add('show');
+      stopAnimLoop(); draw(0);
+    }
+  }
+
+  function drawChallengeTarget(W, H, t) {
+    if (challengeSolved) {
+      ctx.save();
+      ctx.fillStyle = 'rgba(26,122,110,0.08)'; ctx.fillRect(0, 0, W, H);
+      ctx.font = 'bold 15px "Patrick Hand",cursive';
+      ctx.fillStyle = '#1a7a6e'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.fillText('✓ Challenge complete!', W / 2, 10);
+      ctx.restore(); return;
+    }
+    if (!activeChallenge || activeChallenge.type !== 'point') return;
+    const { x, y } = activeChallenge.target;
+    const [px, py] = w2c(x, y, W, H);
+    const pulse = (Math.sin(t / 500) + 1) / 2;
+    const ORANGE = '#e07820';
+    ctx.save();
+    // Pulsing ring
+    ctx.beginPath(); ctx.arc(px, py, 16 + pulse * 5, 0, TAU);
+    ctx.strokeStyle = `rgba(224,120,32,${0.2 + pulse * 0.35})`;
+    ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.stroke(); ctx.setLineDash([]);
+    // Ghost dot
+    ctx.beginPath(); ctx.arc(px, py, 8, 0, TAU);
+    ctx.fillStyle = 'rgba(224,120,32,0.15)'; ctx.fill();
+    ctx.strokeStyle = ORANGE; ctx.lineWidth = 2.5; ctx.stroke();
+    // Crosshair ticks
+    ctx.strokeStyle = ORANGE + 'bb'; ctx.lineWidth = 1.5;
+    [[px-16,py,px-10,py],[px+10,py,px+16,py],[px,py-16,px,py-10],[px,py+10,px,py+16]]
+      .forEach(([x1,y1,x2,y2]) => { ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); });
+    // Label
+    ctx.font = 'bold 11px "JetBrains Mono",monospace';
+    ctx.fillStyle = ORANGE; ctx.textAlign = x >= 0 ? 'left' : 'right';
+    ctx.textBaseline = 'bottom';
+    ctx.fillText(`target (${x}, ${y})`, px + (x >= 0 ? 14 : -14), py - 10);
+    ctx.restore();
+  }
+
+  // Build pills
+  (function () {
+    const container = document.getElementById('ch-pills');
+    CHALLENGES.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'ch-pill'; btn.dataset.id = c.id; btn.textContent = c.label;
+      btn.addEventListener('click', () => setChallenge(activeChallenge && activeChallenge.id === c.id ? null : c.id));
+      container.appendChild(btn);
+    });
+  })();
+
+  // Load challenge from URL ?c=N (for teacher-shared links)
+  (function () {
+    const id = +new URLSearchParams(location.search).get('c');
+    if (id) {
+      const body = document.getElementById('ch-body');
+      const arr  = document.getElementById('ch-arr');
+      body.style.display = ''; arr.textContent = '▾';
+      try { localStorage.setItem('a2pg-ch-systems', '1'); } catch(e) {}
+      setChallenge(id);
+    }
+  })();
+
+  // ═══════════════════════════════════════════════════════════════════
+  // GUIDED TOUR
+  // ═══════════════════════════════════════════════════════════════════
+  const TOUR_KEY   = 'a2pg-tour-systems';
+  const TOUR_STEPS = [
+    { el:'strip1',     pos:'right',  text:'These sliders control the <strong>blue line</strong>. Drag <em>m₁</em> to tilt it, or <em>b₁</em> to slide it up and down.' },
+    { el:'sys-canvas', pos:'center', text:'The <strong>green dot</strong> is the solution — the one point both lines share. Drag a line and watch it move in real time.' },
+    { el:'sub-steps',  pos:'right',  text:'These <strong>substitution steps</strong> update live as you drag. They show exactly how to solve the system algebraically.' },
+  ];
+  let tourIdx = -1;
+
+  function startTour() { tourIdx = 0; renderTour(); }
+
+  function renderTour() {
+    ['tour-bg','tour-card'].forEach(id => { const el=document.getElementById(id); if(el) el.remove(); });
+    if (tourIdx < 0) return;
+    const step = TOUR_STEPS[tourIdx];
+    const anchor = document.getElementById(step.el);
+    const rect = anchor ? anchor.getBoundingClientRect() : {left:0,top:0,width:400,height:200,right:400};
+
+    const bg = document.createElement('div');
+    bg.id = 'tour-bg'; bg.className = 'tour-bg';
+    bg.addEventListener('click', endTour);
+    document.body.appendChild(bg);
+
+    const card = document.createElement('div');
+    card.id = 'tour-card'; card.className = 'tour-card';
+    const isLast = tourIdx === TOUR_STEPS.length - 1;
+    card.innerHTML =
+      `<div class="tour-num">Step ${tourIdx+1} of ${TOUR_STEPS.length}</div>` +
+      `<div class="tour-text">${step.text}</div>` +
+      `<div class="tour-row">` +
+        `<button class="tour-skip" onclick="endTour()">skip</button>` +
+        `<button class="tour-next" onclick="${isLast ? 'endTour()' : 'nextTour()'}">${isLast ? 'Got it ✓' : 'Next →'}</button>` +
+      `</div>`;
+    document.body.appendChild(card);
+
+    const CW = 246, CH = 140;
+    let top, left;
+    if (step.pos === 'right') {
+      top  = rect.top  + rect.height / 2 - CH / 2;
+      left = rect.right + 16;
+    } else {
+      top  = rect.top  + rect.height / 2 - CH / 2;
+      left = rect.left + rect.width  / 2 - CW / 2;
+    }
+    top  = Math.max(8, Math.min(top,  window.innerHeight - CH - 8));
+    left = Math.max(8, Math.min(left, window.innerWidth  - CW - 8));
+    card.style.top = top + 'px'; card.style.left = left + 'px';
+  }
+
+  function nextTour() { tourIdx++; renderTour(); }
+  function endTour()  { tourIdx = -1; renderTour(); try { localStorage.setItem(TOUR_KEY, '1'); } catch(e) {} }
+
+  // Auto-play tour on first visit
+  try { if (!localStorage.getItem(TOUR_KEY)) setTimeout(startTour, 900); } catch(e) {}
+
+  // ═══════════════════════════════════════════════════════════════════
+  // COLLAPSIBLE SECTION TOGGLES
+  // ═══════════════════════════════════════════════════════════════════
+  function initColl(hdrId, bodyId, arrId, storeKey) {
+    const hdr = document.getElementById(hdrId);
+    const body = document.getElementById(bodyId);
+    const arr  = document.getElementById(arrId);
+    let open;
+    try { open = localStorage.getItem(storeKey) === '1'; } catch(e) { open = false; }
+    body.style.display = open ? '' : 'none';
+    arr.textContent = open ? '▾' : '▸';
+    hdr.addEventListener('click', () => {
+      open = !open;
+      body.style.display = open ? '' : 'none';
+      arr.textContent = open ? '▾' : '▸';
+      try { localStorage.setItem(storeKey, open ? '1' : '0'); } catch(e) {}
+    });
+  }
+  initColl('ch-hdr', 'ch-body', 'ch-arr', 'a2pg-ch-systems');
+  initColl('tr-hdr', 'tr-body', 'tr-arr', 'a2pg-tr-systems');
   </script>
 
   <script src="save-png.js"></script>
