@@ -20,7 +20,7 @@ metadata:
 - `video-learning/` — transcripts, batch insight notes, contact sheets, PDF extracts
 
 **62 tools currently built (as of 2026-05-30):**
-U1 (12): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher, Function X-Ray, Inequality Region Explorer, Systems Explorer, Inequality Solver, Abs Value Equation Stepper, Point-Slope Form Trainer, Function Notation Evaluator, Linear Equations Explorer
+U1 (14): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher, Function X-Ray, Inequality Region Explorer, Systems Explorer, Inequality Solver, Abs Value Equation Stepper, Point-Slope Form Trainer, Function Notation Evaluator, Linear Equations Explorer, **Distance · Rate · Time Trainer**
 U2 (6): Abs Value Grapher, Transformations Explorer, Neg Exponent Flipper, Diff of Squares, Diff of Cubes, Parent Function Atlas
 U3 (9): Imaginary Number Sandbox, Quadratic Standard Form, Rational Expression Builder, Complete the Square Trainer, Quadratic Word Problems Trainer, Rationalizing Denominators, Quadratic Forms Explorer, Complex Number Explorer, Literal Equation Isolator
 U4 (6): Rational Exponents Tower, Cubic & Radical Grapher, Composition Machine, Inverse Function Revealer, Composition & Inverse Lab, Domain Restriction Sorter, **Radical Equation Solver**
@@ -29,7 +29,9 @@ U6 (8): Rational Simplifier, Adding Rational Expressions, Rational Mult/Div Step
 U7 (7): SOH CAH TOA Triangle Solver, Unit Circle Walker, Sine/Cosine Graph Builder, Trig Explorer, Unit Circle Wave Sync, Sine/Cosine Graph Builder (from circle), Coterminal Angles & Radian Conversion
 U9 (4): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab, **Conic Sections Explorer**
 
-**No missing tools** — all 62 tools live. No coming-soon rows on any unit page.
+**No missing tools** — all 63 tools live. No coming-soon rows on any unit page.
+
+**shapes.html** — The Graph Shapes: 10 interactive canvases with live equation editor + sliders + hover x/y readout. Linked from main nav as "shapes". Covers: Linear, Parabola, Abs Value, Radical, Exponential, Log, Rational, Polynomial, Trig, Conics.
 
 **Explorer tools** (built 2026-05-28):
 - `tools/parent-function-atlas.html` — 5 families: x², |x|, √x, 2ˣ, 1/x with a/h/k sliders; live feature chips (domain, range, zeros, y-intercept, asymptotes); dashed asymptote lines, colored intercept dots
@@ -46,7 +48,7 @@ U9 (4): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab, **Conic 
 
 **PLAN.md tracks all build phases** — see it for priority order, who builds what, and design constraints.
 
-**How to apply:** Always check PLAN.md for current tool count and batch-insight pass notes before building. Tool count is 62 as of 2026-05-30 (batch-13 complete).
+**How to apply:** Always check PLAN.md for current tool count and batch-insight pass notes before building. Tool count is 63 as of 2026-05-30 (batch-14 complete).
 
 **Why:** Classroom supplement giving students visual/interactive exposure to concepts. No logins, no tracking, no cost.
 

@@ -27,7 +27,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - `404.html` + `offline.html`; service worker v14 with offline fallback
 - `📷 save PNG` button on 31 canvas tools — `tools/save-png.js`
 - **Replay recording** — `tools/replay.js` on 19 slider tools; `⏺ rec` captures sessions, `🔗 share` encodes full timeline as `#r=base64url`; shared URLs auto-play for students
-- **Concept map** — `concept-map.html`; 50 nodes in 8 concept threads, 10 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
+- **Concept map** — `concept-map.html`; 63 nodes in 8 concept threads, 20 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
 - **Collapsible sections** — HOW TO USE & TRY THIS (25 tool pages), lesson schedule (8 unit pages), REPLAY panel, homepage sidebar sections, and **all 8 homepage unit grids** start collapsed; `.sk-coll-*` CSS pattern in `styles.css`; unit grids auto-expand when any filter/search is active; state saved in localStorage
 
 **59 tools built/integrated:**
@@ -81,6 +81,15 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Composition & Inverse Lab (U4) — compose f and g, watch f∘g and g∘f diverge; flip to Inverse mode: drag point on f, see mirror on f⁻¹ over y=x
 - Growth Race (U5) — log, √x, x, x², 2^x on one canvas; drag cursor, watch live leaderboard flip; 2^x falls behind x² then explodes past it
 
+**1 tool + site pages added in batch-14 video-insight pass (May 2026):**
+- Distance · Rate · Time Trainer (U1, D2–3) — 5 preset word problems (plane/wind, boat/current, two cars meeting, catch-up, ticket); draw → define → D=R×T table → equations → solve
+- shapes.html — "The Graph Shapes": 10 interactive canvases (one per function family) with live equation editor, color-coded sliders, and hover x/y readout
+
+**Sidebar upgrades (batch-14):**
+- Polynomial Sketch Pad — "max turns = degree − 1" / "max zeros = degree" rules box
+- Composition & Inverse Lab — "must show BOTH f(g(x))=x AND g(f(x))=x — textbook definition" note
+- Substitution Stepper — P5 no-solution problem (parallel lines collapse to 2=7)
+
 **3 tools added in batch-13 video-insight pass (May 2026):**
 - Linear Equations Explorer (U1, D1) — all three forms + live rise/run graph; VUXHOY for vertical/horizontal lines; verify a point is on the line
 - Conic Sections Explorer (U9, D4–D8) — 4-mode canvas tool (parabola/circle/ellipse/hyperbola) with live chips, orientation toggles, foci, asymptotes + box method; Identify game with 8 equations
@@ -103,7 +112,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Point-Slope Form Trainer (U1, D6) — three modes: point+slope (live graph), two points (slope formula shown), parallel/perp (flip-and-negate with steps)
 - Function Notation Evaluator (U1, D8) — regular f(x) with PEMDAS breakdown + undefined detector; piecewise tab with "pick the piece first" game mechanic
 
-**No missing tools from the planned curriculum** — all originally planned 50 tools are live, plus 12 additional from video-insight passes (batches 11–13).
+**No missing tools from the planned curriculum** — all originally planned 50 tools are live, plus 13 additional from video-insight passes (batches 11–14).
 
 **Explorer roadmap (in priority order):**
 1. ✓ Parent Function Atlas — built

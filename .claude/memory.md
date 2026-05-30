@@ -35,9 +35,11 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
 ### Student-facing improvements added May 2026
 
-- **Board mode** — fullscreen canvas, `⊞ tools` panel lists all 62 tools grouped by unit
-- **12 new tools from batch-11/12/13 video-insight passes**: Inequality Solver (u1/D7), Abs Value Equation Stepper (u1/D7), Point-Slope Form Trainer (u1/D6), Function Notation Evaluator (u1/D8), Literal Equation Isolator (u3/D9), Domain Restriction Sorter (u4/D4), Coterminal & Radians (u7/D2), Exponential Equations Stepper (u5/D6), Sincos Grapher (u7/D3–4), Linear Equations Explorer (u1/D1), **Conic Sections Explorer (u9/D4–D8)**, **Radical Equation Solver (u4/D5)**
+- **Board mode** — fullscreen canvas, `⊞ tools` panel lists all 63 tools grouped by unit
+- **13 new tools from batch-11/12/13/14 video-insight passes**: Inequality Solver (u1/D7), Abs Value Equation Stepper (u1/D7), Point-Slope Form Trainer (u1/D6), Function Notation Evaluator (u1/D8), Literal Equation Isolator (u3/D9), Domain Restriction Sorter (u4/D4), Coterminal & Radians (u7/D2), Exponential Equations Stepper (u5/D6), Sincos Grapher (u7/D3–4), Linear Equations Explorer (u1/D1), Conic Sections Explorer (u9/D4–D8), Radical Equation Solver (u4/D5), **Distance · Rate · Time Trainer (u1/D2–3)**
 - **Batch-13 sidebar upgrades**: Inverse Function Revealer (domain/range swap chip), Composition Machine (∘ ≠ · warning), SOH CAH TOA (rationalize-denominator note), Substitution Stepper (messy middle steps note)
+- **Batch-14 sidebar upgrades**: Polynomial Sketch Pad (degree rules box), Composition & Inverse Lab (both-ways requirement), Substitution Stepper (no-solution P5)
+- **shapes.html** — The Graph Shapes: 10 interactive canvases (one per function family) with live equation display, color-coded sliders, hover x/y readout; linked from main nav as "shapes"
 - **Visited badges** — ✓ badge on cards you've opened (localStorage, no logins)
 - **Start here** — orange banner on the best entry-point card per unit
 - **Try Next** — 3 related tools at bottom of every info sidebar

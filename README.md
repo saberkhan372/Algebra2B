@@ -18,7 +18,8 @@ Open `http://127.0.0.1:3333/`
 |---|---|
 | `index.html` | Homepage — unit sections, kind / unit / level filter rows, progress summary, 62-tool grid |
 | `map.html` | Visual course roadmap — scrollable unit cards |
-| `concept-map.html` | Concept subway map — 50 nodes in 8 threads, 10 cross-thread bridges; hover tooltips, click to open tool |
+| `concept-map.html` | Concept subway map — 63 nodes in 8 threads, 20 cross-thread bridges; hover tooltips, click to open tool |
+| `shapes.html` | The Graph Shapes — 10 interactive canvases (one per function family) with live equation editor + sliders |
 | `about.html` | Teacher letter, FAQ, credits |
 | `u1.html` – `u7.html`, `u9.html` | Unit landing pages with lesson stacks and tool cards |
 | `404.html` | Friendly 404 page (GitHub Pages serves automatically for broken links) |

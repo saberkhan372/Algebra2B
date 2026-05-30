@@ -40,4 +40,4 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 
 ## Tool Count
 
-62 tools live as of 2026-05-30. The original 50-tool plan is complete. 12 additional tools were added from batch-11/12/13 video-insight passes. Batch-13 added: Linear Equations Explorer (U1), Conic Sections Explorer (U9), Radical Equation Solver (U4). Future additions from teacher requests or continued video-learning analysis.
+63 tools live as of 2026-05-30. The original 50-tool plan is complete. 13 additional tools from batch-11/12/13/14 video-insight passes. Batch-14 added: Distance · Rate · Time Trainer (U1). Also ships: shapes.html (The Graph Shapes — 10 interactive canvases with sliders). Future additions from teacher requests or continued video-learning analysis.
