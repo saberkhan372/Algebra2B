@@ -6,157 +6,118 @@
   <title>The Graph Shapes — A2 Playgrounds</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    .shapes-page {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
-    }
+    .shapes-page { max-width: 860px; margin: 0 auto; padding: 0 20px 80px; }
 
     /* Hero */
-    .shapes-hero {
-      padding: 40px 0 32px;
-      border-bottom: 2px dashed var(--ink-2);
-      margin-bottom: 44px;
-    }
-    .shapes-eyebrow {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 11px; color: var(--ink-soft);
-      letter-spacing: 0.12em; margin-bottom: 8px;
-    }
-    .shapes-title {
-      font-family: 'Caveat', cursive;
-      font-size: 56px; font-weight: 700;
-      color: var(--ink); line-height: 1; margin-bottom: 12px;
-    }
-    .shapes-subtitle {
-      font-family: var(--f-body);
-      font-size: 15px; color: var(--ink-2);
-      line-height: 1.7; max-width: 580px;
-    }
-    .the-question-hero {
-      margin-top: 22px;
-      padding: 13px 18px;
-      background: var(--highlight);
-      border-left: 4px solid var(--accent);
-      border-radius: 0 4px 4px 0;
-      font-family: 'Caveat', cursive;
-      font-size: 21px; color: var(--ink);
-    }
+    .shapes-hero { padding: 40px 0 32px; border-bottom: 2px dashed var(--ink-2); margin-bottom: 44px; }
+    .shapes-eyebrow { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); letter-spacing:.12em; margin-bottom:8px; }
+    .shapes-title { font-family:'Caveat',cursive; font-size:56px; font-weight:700; color:var(--ink); line-height:1; margin-bottom:12px; }
+    .shapes-subtitle { font-family:var(--f-body); font-size:15px; color:var(--ink-2); line-height:1.7; max-width:580px; }
+    .the-question-hero { margin-top:22px; padding:13px 18px; background:var(--highlight); border-left:4px solid var(--accent); border-radius:0 4px 4px 0; font-family:'Caveat',cursive; font-size:21px; color:var(--ink); }
 
     /* Shape entry */
-    .shape-entry { margin-bottom: 56px; }
+    .shape-entry { margin-bottom:56px; }
+    .shape-header { display:flex; align-items:baseline; flex-wrap:wrap; gap:10px; margin-bottom:10px; }
+    .shape-number { font-family:'Permanent Marker',cursive; font-size:10px; color:var(--ink-soft); letter-spacing:.1em; }
+    .shape-name { font-family:'Caveat',cursive; font-size:30px; font-weight:700; color:var(--ink); line-height:1; }
+    .shape-species { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--accent); }
 
-    .shape-header {
-      display: flex; align-items: baseline;
-      flex-wrap: wrap; gap: 10px;
-      margin-bottom: 10px;
-    }
-    .shape-number {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 10px; color: var(--ink-soft);
-      letter-spacing: 0.1em;
-    }
-    .shape-name {
-      font-family: 'Caveat', cursive;
-      font-size: 30px; font-weight: 700;
-      color: var(--ink); line-height: 1;
-    }
-    .shape-species {
-      font-family: 'Permanent Marker', cursive;
-      font-size: 11px; color: var(--accent);
-    }
-
-    /* ── Canvas ── */
+    /* ── Graph + Controls wrapper ── */
     .graph-wrap {
-      position: relative;
-      width: 100%;
+      display: flex;
       border: 1.5px solid var(--ink-2);
       border-radius: 6px;
       overflow: hidden;
-      background: var(--paper-2);
       margin-bottom: 14px;
+    }
+    .canvas-col {
+      flex: 1 1 0;
+      min-width: 0;
       cursor: crosshair;
+      background: var(--paper-2);
+      position: relative;
     }
-    .graph-canvas {
-      display: block;
-      width: 100%;
-      touch-action: none;
+    .graph-canvas { display:block; width:100%; touch-action:none; }
+
+    /* ── Controls column ── */
+    .controls-col {
+      flex: 0 0 200px;
+      border-left: 1px solid var(--ink-2);
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+      padding: 10px 12px;
+      gap: 6px;
     }
-    .coord-hint {
-      position: absolute;
-      bottom: 8px; left: 10px;
+
+    /* Equation display */
+    .eq-display {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; color: var(--ink-soft);
-      pointer-events: none;
-      transition: opacity .15s;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--paper-2);
+      border: 1px solid var(--ink-2);
+      border-radius: 4px;
+      padding: 7px 9px;
+      min-height: 38px;
+      word-break: break-all;
     }
-    .graph-wrap:hover .coord-hint { opacity: 0; }
+
+    /* Slider rows */
+    .sliders-area { display:flex; flex-direction:column; gap:5px; flex:1; }
+    .slider-row { display:flex; align-items:center; gap:6px; }
+    .s-lbl {
+      font-family:'Permanent Marker',cursive;
+      font-size:12px; width:18px; flex-shrink:0; text-align:center;
+    }
+    .s-range {
+      flex:1; height:4px; cursor:pointer;
+      accent-color: var(--accent);
+    }
+    .s-val {
+      font-family:'JetBrains Mono',monospace;
+      font-size:11px; color:var(--ink-soft);
+      width:32px; text-align:right; flex-shrink:0;
+    }
+
+    /* Reset button */
+    .reset-btn {
+      margin-top:2px; padding:3px 0;
+      font-family:'Permanent Marker',cursive;
+      font-size:10px; color:var(--ink-soft);
+      background:none; border:none; cursor:pointer;
+      text-align:center; letter-spacing:.06em;
+      transition:color .1s;
+    }
+    .reset-btn:hover { color:var(--accent); }
+
+    /* Mobile: stack vertically */
+    @media (max-width:600px) {
+      .graph-wrap { flex-direction:column; }
+      .controls-col { flex:none; border-left:none; border-top:1px solid var(--ink-2); flex-direction:row; flex-wrap:wrap; align-items:flex-start; gap:8px; }
+      .eq-display { flex:1 1 100%; }
+      .sliders-area { flex:1 1 auto; }
+    }
 
     /* Body text */
-    .shape-text {
-      font-family: var(--f-body);
-      font-size: 14px; color: var(--ink-2);
-      line-height: 1.75;
-    }
-    .shape-text p { margin: 0 0 10px; }
-    .shape-text p:last-child { margin-bottom: 0; }
-
-    /* Signature chips */
-    .sig-row {
-      display: flex; gap: 6px; flex-wrap: wrap; margin: 10px 0;
-    }
-    .sig-chip {
-      padding: 2px 8px; border-radius: 3px;
-      font-family: 'JetBrains Mono', monospace; font-size: 11px;
-      border: 1.5px solid var(--ink-2);
-      background: var(--paper-2); color: var(--ink-2);
-    }
-
-    /* The question */
-    .the-q {
-      margin: 12px 0 10px;
-      padding: 8px 12px;
-      background: color-mix(in srgb, var(--accent) 8%, var(--paper));
-      border-left: 3px solid var(--accent);
-      border-radius: 0 4px 4px 0;
-      font-family: var(--f-body);
-      font-size: 13px; color: var(--ink);
-    }
-    .the-q strong { color: var(--accent); }
-
-    /* Tool links */
-    .tool-links { margin-top: 10px; display: flex; gap: 6px; flex-wrap: wrap; }
-    .tool-link {
-      display: inline-block; padding: 3px 10px;
-      border: 1.5px solid var(--ink-2); border-radius: 3px;
-      font-family: var(--f-body); font-size: 12px;
-      color: var(--ink-2); text-decoration: none;
-      background: var(--paper); transition: all .12s;
-    }
-    .tool-link:hover { border-color: var(--accent); color: var(--accent); }
-
-    .shape-divider {
-      border: none; border-top: 1px dashed var(--ink-2);
-      margin: 0 0 52px; opacity: 0.4;
-    }
+    .shape-text { font-family:var(--f-body); font-size:14px; color:var(--ink-2); line-height:1.75; }
+    .shape-text p { margin:0 0 10px; }
+    .shape-text p:last-child { margin-bottom:0; }
+    .sig-row { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
+    .sig-chip { padding:2px 8px; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:11px; border:1.5px solid var(--ink-2); background:var(--paper-2); color:var(--ink-2); }
+    .the-q { margin:12px 0 10px; padding:8px 12px; background:color-mix(in srgb,var(--accent) 8%,var(--paper)); border-left:3px solid var(--accent); border-radius:0 4px 4px 0; font-family:var(--f-body); font-size:13px; color:var(--ink); }
+    .the-q strong { color:var(--accent); }
+    .tool-links { margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; }
+    .tool-link { display:inline-block; padding:3px 10px; border:1.5px solid var(--ink-2); border-radius:3px; font-family:var(--f-body); font-size:12px; color:var(--ink-2); text-decoration:none; background:var(--paper); transition:all .12s; }
+    .tool-link:hover { border-color:var(--accent); color:var(--accent); }
+    .shape-divider { border:none; border-top:1px dashed var(--ink-2); margin:0 0 52px; opacity:.4; }
 
     /* Closing */
-    .shapes-closing {
-      border-top: 2px dashed var(--ink-2);
-      padding-top: 40px; margin-top: 12px;
-    }
-    .closing-text {
-      font-family: var(--f-body);
-      font-size: 15px; color: var(--ink-2); line-height: 1.8;
-    }
-    .closing-text p { margin: 0 0 16px; }
-    .closing-final {
-      margin-top: 28px; padding: 18px 22px;
-      background: var(--highlight);
-      border: 2px solid var(--ink-2); border-radius: 6px;
-      font-family: 'Caveat', cursive;
-      font-size: 24px; color: var(--ink); line-height: 1.5;
-    }
+    .shapes-closing { border-top:2px dashed var(--ink-2); padding-top:40px; margin-top:12px; }
+    .closing-text { font-family:var(--f-body); font-size:15px; color:var(--ink-2); line-height:1.8; }
+    .closing-text p { margin:0 0 16px; }
+    .closing-final { margin-top:28px; padding:18px 22px; background:var(--highlight); border:2px solid var(--ink-2); border-radius:6px; font-family:'Caveat',cursive; font-size:24px; color:var(--ink); line-height:1.5; }
   </style>
 </head>
 <body class="paper-dots">
@@ -174,15 +135,13 @@
 
   <div class="shapes-page">
 
-    <!-- Hero -->
     <div class="shapes-hero">
       <div class="shapes-eyebrow">ALGEBRA 2 · A VISUAL GUIDE</div>
       <div class="shapes-title">The Graph Shapes</div>
       <div class="shapes-subtitle">
         Every function in Algebra 2 has a personality. Once you know the personality,
-        you can read the equation without graphing it — the way you recognize a friend
-        from across the room before you can see their face.<br><br>
-        Hover over any graph to read x and y values.
+        you can read the equation without graphing it.<br><br>
+        Use the sliders to change the parameters. Hover the graph to read x and y values.
       </div>
       <div class="the-question-hero">
         And here's the secret running through all of it:<br>
@@ -196,23 +155,20 @@
       <div class="shape-header">
         <span class="shape-number">01</span>
         <span class="shape-name">The Steady Walker</span>
-        <span class="shape-species">The Linear Function &nbsp;·&nbsp; y = mx + b</span>
+        <span class="shape-species">The Linear Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-linear" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-linear" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-linear"></div>
       </div>
       <div class="shape-text">
-        <p>Never changes pace. Same slope everywhere. No peaks, no valleys, no drama. Just a constant rate, forever — uphill or downhill or perfectly flat. It's the simplest shape in the book, but don't underestimate it. Most of the real world runs on it.</p>
+        <p>Never changes pace. Same slope everywhere. No peaks, no valleys, no drama. Just a constant rate, forever. It's the simplest shape in the book, but most of the real world runs on it.</p>
         <p>If you know the slope and one point, you know everything. That's a very short signature.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">range: all reals</span>
-        <span class="sig-chip">no asymptotes</span>
-        <span class="sig-chip">exactly 1 zero</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">range: all reals</span><span class="sig-chip">no asymptotes</span><span class="sig-chip">exactly 1 zero</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> given y, find x. That's x = (y − b) / m. Always exactly one answer. The linear function is the only shape where the question is this clean.</div>
+      <div class="the-q"><strong>The question:</strong> given y, find x. That's x = (y − b) / m. Always exactly one answer. The only shape where the question is this clean.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/linear-equations.html">Linear Equations Explorer</a>
         <a class="tool-link" href="tools/systems-explorer.html">Systems Explorer</a>
@@ -227,28 +183,24 @@
       <div class="shape-header">
         <span class="shape-number">02</span>
         <span class="shape-name">The Bouncer</span>
-        <span class="shape-species">The Parabola &nbsp;·&nbsp; y = a(x−h)² + k</span>
+        <span class="shape-species">The Parabola</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-quad" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-quad" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-quad"></div>
       </div>
       <div class="shape-text">
-        <p>Thrown upward, hits a peak, falls back down. Or flipped: dips to a bottom, rises again. Perfectly symmetric — mirror the left side and it exactly matches the right. The most common shape in physics.</p>
-        <p>The vertex is everything. The <em>a</em> value tells you which way and how narrow. The discriminant (b²−4ac) is the bouncer's mood ring: positive means two crossings, zero means one, negative means it never touches zero.</p>
+        <p>Thrown upward, hits a peak, falls back down. Perfectly symmetric — mirror the left side and it exactly matches the right. The most common shape in physics.</p>
+        <p>The vertex is everything. The discriminant (b²−4ac) is the mood ring: positive = two crossings, zero = one, negative = never touches zero.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">range: [k, ∞) or (−∞, k]</span>
-        <span class="sig-chip">vertex (h, k)</span>
-        <span class="sig-chip">0, 1, or 2 zeros</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">range: [k, ∞) or (−∞, k]</span><span class="sig-chip">vertex (h, k)</span><span class="sig-chip">0, 1, or 2 zeros</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> where does it hit zero? That's what the quadratic formula answers — and completing the square, and factoring. Three methods, same question. When the answer is imaginary, the parabola never touches the x-axis.</div>
+      <div class="the-q"><strong>The question:</strong> where does it hit zero? That's what the quadratic formula answers — and completing the square, and factoring. Three methods, same question.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/quadratic-slider.html">Quadratic Slider Studio</a>
         <a class="tool-link" href="tools/quadratic-forms-explorer.html">Quadratic Forms Explorer</a>
         <a class="tool-link" href="tools/complete-square.html">Complete the Square</a>
-        <a class="tool-link" href="tools/quadratic-word-problems.html">Word Problems</a>
       </div>
     </div>
     <hr class="shape-divider">
@@ -258,26 +210,22 @@
       <div class="shape-header">
         <span class="shape-number">03</span>
         <span class="shape-name">The V-Shape</span>
-        <span class="shape-species">The Absolute Value Function &nbsp;·&nbsp; y = a|x−h| + k</span>
+        <span class="shape-species">The Absolute Value Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-abs" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-abs" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-abs"></div>
       </div>
       <div class="shape-text">
-        <p>Always positive. Folds the number line in half at its vertex. Whatever was negative gets reflected — the distance from zero, not the signed value. Walk left and the output rises just as fast as walking right.</p>
+        <p>Always positive. Folds the number line in half at its vertex. Whatever was negative gets reflected. Walk left and the output rises just as fast as walking right.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">range: [k, ∞)</span>
-        <span class="sig-chip">vertex (h, k)</span>
-        <span class="sig-chip">two branches</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">range: [k, ∞)</span><span class="sig-chip">vertex (h, k)</span><span class="sig-chip">two branches</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> what two inputs give this output? The V has two branches — so there are always two candidates. That's the split: isolate first, then split into positive and negative cases. Always check both.</div>
+      <div class="the-q"><strong>The question:</strong> what two inputs give this output? The V has two branches — isolate first, then split into positive and negative cases. Always check both.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/abs-value-grapher.html">Absolute Value Grapher</a>
         <a class="tool-link" href="tools/abs-value-equations.html">Equation Stepper</a>
-        <a class="tool-link" href="tools/inequality-solver.html">Inequality Solver</a>
       </div>
     </div>
     <hr class="shape-divider">
@@ -287,26 +235,22 @@
       <div class="shape-header">
         <span class="shape-number">04</span>
         <span class="shape-name">The Half-Curve</span>
-        <span class="shape-species">The Radical Function &nbsp;·&nbsp; y = a√(x−h) + k</span>
+        <span class="shape-species">The Radical Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-radical" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-radical" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-radical"></div>
       </div>
       <div class="shape-text">
-        <p>Only starts once the inside isn't negative. Before the starting point, it simply doesn't exist — not zero, not defined. After the start it grows, but slowly, slower and slower forever.</p>
+        <p>Only starts once the inside isn't negative. Before the starting point, it simply doesn't exist. After it grows — but slowly, slower and slower forever.</p>
         <p>The starting point (h, k) is everything. The domain begins there. Everything to the left is forbidden.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: x ≥ h</span>
-        <span class="sig-chip">range: y ≥ k</span>
-        <span class="sig-chip">starts at (h, k)</span>
-        <span class="sig-chip">always increasing</span>
+        <span class="sig-chip">domain: x ≥ h</span><span class="sig-chip">range: y ≥ k</span><span class="sig-chip">starts at (h, k)</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> what's the inverse of squaring? The answer is almost √x — except squaring destroys information (both 3 and −3 square to 9), so the inverse can only recover one branch. That's why extraneous solutions appear when you square both sides.</div>
+      <div class="the-q"><strong>The question:</strong> what's the inverse of squaring? Almost √x — except squaring destroys information, so the inverse can only recover one branch. That's where extraneous solutions come from.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/cubic-radical.html">Cubic &amp; Radical Grapher</a>
-        <a class="tool-link" href="tools/domain-restriction.html">Domain Restriction Sorter</a>
         <a class="tool-link" href="tools/radical-equations.html">Radical Equation Solver</a>
       </div>
     </div>
@@ -317,23 +261,19 @@
       <div class="shape-header">
         <span class="shape-number">05</span>
         <span class="shape-name">The Hockey Stick</span>
-        <span class="shape-species">The Exponential Function &nbsp;·&nbsp; y = a · bˣ</span>
+        <span class="shape-species">The Exponential Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-exp" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-exp" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-exp"></div>
       </div>
       <div class="shape-text">
-        <p>Slow at first, then suddenly unstoppable. Growth compounds on itself — each step is proportional to where you already are, not fixed like the linear function. This is the shape of every population, every interest account, every virus.</p>
-        <p>The horizontal asymptote is the floor it never falls through. Base b greater than 1 means growth. Between 0 and 1 means decay. Base 1 is a flat line — not exponential at all.</p>
+        <p>Slow at first, then suddenly unstoppable. Growth compounds on itself. This is the shape of every population, every interest account, every virus. The horizontal asymptote is the floor it never falls through.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">range: above asymptote</span>
-        <span class="sig-chip">y-intercept: a</span>
-        <span class="sig-chip">never crosses asymptote</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">range: above asymptote</span><span class="sig-chip">never crosses asymptote</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> given the output, what was the exponent? That question is so important it gets its own function: the logarithm. The exponential and the logarithm are twins — inverses of each other. Given y = bˣ, solve for x.</div>
+      <div class="the-q"><strong>The question:</strong> given the output, what was the exponent? That question is so important it gets its own function: the logarithm.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/exponential-explorer.html">Exponential Explorer</a>
         <a class="tool-link" href="tools/exponential-model-builder.html">Model Builder</a>
@@ -347,23 +287,19 @@
       <div class="shape-header">
         <span class="shape-number">06</span>
         <span class="shape-name">The Leveler</span>
-        <span class="shape-species">The Logarithm &nbsp;·&nbsp; y = log_b(x)</span>
+        <span class="shape-species">The Logarithm</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-log" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-log" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-log"></div>
       </div>
       <div class="shape-text">
-        <p>Starts by growing fast, then gradually slows to almost nothing — the exact opposite personality of its twin. It takes enormous inputs to push the output up even a little. The Richter scale, decibels, pH — all logarithmic.</p>
-        <p>Vertical asymptote on the left: the log of zero is undefined. Domain starts just to the right of that wall.</p>
+        <p>Starts by growing fast, then gradually slows to almost nothing — the exact opposite personality of its twin the exponential. Vertical asymptote on the left: the log of zero is undefined.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: x &gt; 0</span>
-        <span class="sig-chip">range: all reals</span>
-        <span class="sig-chip">vertical asymptote at x = 0</span>
-        <span class="sig-chip">x-intercept at x = 1</span>
+        <span class="sig-chip">domain: x &gt; h</span><span class="sig-chip">range: all reals</span><span class="sig-chip">vertical asymptote at x = h</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> the logarithm <em>is</em> the answer to the exponential's question. log_b(y) = x means "b to what power gives y?" Every log problem is that question in disguise.</div>
+      <div class="the-q"><strong>The question:</strong> the logarithm <em>is</em> the answer to the exponential's question. log_b(y) = x means "b to what power gives y?" Every log problem is that in disguise.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/log-converter.html">Log ↔ Exp Converter</a>
         <a class="tool-link" href="tools/log-exp-mirror.html">Mirror Explorer</a>
@@ -377,26 +313,21 @@
       <div class="shape-header">
         <span class="shape-number">07</span>
         <span class="shape-name">The One With Walls</span>
-        <span class="shape-species">The Rational Function &nbsp;·&nbsp; y = p(x) / q(x)</span>
+        <span class="shape-species">The Rational Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-rational" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-rational" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-rational"></div>
       </div>
       <div class="shape-text">
-        <p>Has forbidden zones — inputs that make the denominator zero. Approaches invisible walls it can never cross. Near a vertical asymptote, the function races toward infinity. Near a horizontal asymptote, it slows and levels off, approaching but never arriving.</p>
-        <p>Some walls are real (vertical asymptotes). Some are illusions that cancel out (holes). The distinction matters.</p>
+        <p>Has forbidden zones — inputs that make the denominator zero. Approaches invisible walls it can never cross. Races toward infinity near a vertical asymptote. Levels off near the horizontal one, approaching but never arriving.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">V.A. where denom = 0</span>
-        <span class="sig-chip">H.A. from degrees</span>
-        <span class="sig-chip">holes where factors cancel</span>
-        <span class="sig-chip">excluded values</span>
+        <span class="sig-chip">V.A. where denom = 0</span><span class="sig-chip">H.A. from degrees</span><span class="sig-chip">holes where factors cancel</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> where are the walls, and why? Given an output, what input gets there? Solving rational equations requires clearing denominators — and that can create extraneous solutions near the walls. Always check.</div>
+      <div class="the-q"><strong>The question:</strong> where are the walls, and why? Solving rational equations requires clearing denominators — and that can create extraneous solutions near the walls. Always check.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/rational-behavior.html">Rational Function Behavior</a>
-        <a class="tool-link" href="tools/rational-simplifier.html">Rational Simplifier</a>
         <a class="tool-link" href="tools/rational-equations.html">Solving Rational Equations</a>
       </div>
     </div>
@@ -407,23 +338,19 @@
       <div class="shape-header">
         <span class="shape-number">08</span>
         <span class="shape-name">The Rollercoaster</span>
-        <span class="shape-species">The Polynomial &nbsp;·&nbsp; y = aₙxⁿ + … + a₀</span>
+        <span class="shape-species">The Polynomial</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-poly" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-poly" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-poly"></div>
       </div>
       <div class="shape-text">
-        <p>Can go anywhere, turn as many times as it wants — up to degree minus one turns. No asymptotes. No forbidden zones. Just smooth curves crossing and bouncing off the x-axis wherever its roots land.</p>
-        <p>Odd multiplicity root: the curve crosses through. Even multiplicity: it bounces. Complex roots always come in pairs and leave no trace on the real graph.</p>
+        <p>Can go anywhere, turn as many times as it wants — up to degree minus one turns. No asymptotes. No forbidden zones. Crosses zero at its roots, or bounces if the root has even multiplicity. Complex roots always come in pairs.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">max turns: degree − 1</span>
-        <span class="sig-chip">cross or bounce at roots</span>
-        <span class="sig-chip">complex roots in pairs</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">max turns: degree − 1</span><span class="sig-chip">cross or bounce at roots</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> where does it cross zero? Factoring, long division, synthetic division — all different tools hunting for the same thing. The parabola (degree 2) is the simplest polynomial, and the quadratic formula is the polynomial's most famous zero-hunter.</div>
+      <div class="the-q"><strong>The question:</strong> where does it cross zero? Factoring, long division, synthetic division — all different tools hunting for the same thing.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/polynomial-sketch.html">Polynomial Sketch Pad</a>
         <a class="tool-link" href="tools/polynomial-roots.html">Polynomial Root Sculptor</a>
@@ -437,23 +364,19 @@
       <div class="shape-header">
         <span class="shape-number">09</span>
         <span class="shape-name">The Repeater</span>
-        <span class="shape-species">The Trig Function &nbsp;·&nbsp; y = a · sin(b(x−h)) + k</span>
+        <span class="shape-species">The Trig Function</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-trig" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-trig" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-trig"></div>
       </div>
       <div class="shape-text">
-        <p>Goes forever. Never stops. The exact same cycle, repeated endlessly with no variation. Bounded: no matter what you put in, the output stays between its maximum and minimum. The only shape that is both infinite and constrained.</p>
-        <p>Amplitude says how tall. Period says how long one cycle takes. Midline says where it oscillates around. Phase shift says where in the cycle it starts.</p>
+        <p>Goes forever. Never stops. The exact same cycle, repeated endlessly. Bounded: no matter what you put in, the output stays between its max and min. The only shape that is both infinite and constrained.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">domain: all reals</span>
-        <span class="sig-chip">range: [k−|a|, k+|a|]</span>
-        <span class="sig-chip">period: 2π / b</span>
-        <span class="sig-chip">repeats forever</span>
+        <span class="sig-chip">domain: all reals</span><span class="sig-chip">range: [k−|a|, k+|a|]</span><span class="sig-chip">period: 2π / b</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> where are you in the cycle? The unit circle is the answer — every angle maps to a point, and sine and cosine are just the coordinates of that point. The wave is the circle, unrolled.</div>
+      <div class="the-q"><strong>The question:</strong> where are you in the cycle? The unit circle is the answer. Sine and cosine are just the y and x coordinates of a point traveling around a circle. The wave is the circle, unrolled.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/unit-circle.html">Unit Circle Walker</a>
         <a class="tool-link" href="tools/unit-circle-wave.html">Wave Sync</a>
@@ -467,42 +390,38 @@
       <div class="shape-header">
         <span class="shape-number">10</span>
         <span class="shape-name">The Cross-Sections</span>
-        <span class="shape-species">The Conic Sections &nbsp;·&nbsp; one cone, four shapes</span>
+        <span class="shape-species">The Conic Sections</span>
       </div>
       <div class="graph-wrap">
-        <canvas id="gc-conics" class="graph-canvas"></canvas>
-        <div class="coord-hint">hover to read values</div>
+        <div class="canvas-col"><canvas id="gc-conics" class="graph-canvas"></canvas></div>
+        <div class="controls-col" id="ctrl-gc-conics"></div>
       </div>
       <div class="shape-text">
-        <p>Four completely different-looking curves that all come from slicing the same double cone at different angles. Slice straight across: circle. Tilt the knife: ellipse. Cut parallel to the side: parabola. Go steep: hyperbola.</p>
-        <p>They all share the same language: (h, k) is the center or vertex, and the sign between squared terms tells you the shape. Plus → ellipse or circle. Minus → hyperbola. Only one variable squared → parabola.</p>
+        <p>Four completely different-looking curves that all come from slicing the same double cone at different angles. Circle. Ellipse. Parabola. Hyperbola. One source, four shapes.</p>
+        <p>They all share the same language: (h, k) is the center or vertex. Plus between squared terms means ellipse. Minus means hyperbola. One variable squared means parabola.</p>
       </div>
       <div class="sig-row">
-        <span class="sig-chip">center/vertex (h, k)</span>
-        <span class="sig-chip">+ sign → ellipse / circle</span>
-        <span class="sig-chip">− sign → hyperbola</span>
-        <span class="sig-chip">one squared → parabola</span>
+        <span class="sig-chip">center/vertex (h, k)</span><span class="sig-chip">+ → ellipse/circle</span><span class="sig-chip">− → hyperbola</span><span class="sig-chip">one squared → parabola</span>
       </div>
-      <div class="the-q"><strong>The question:</strong> what cross-section did you take? Read the equation: count squared terms, check the sign, identify h and k. You've already spent a whole year with the parabola. The cone was there from the beginning.</div>
+      <div class="the-q"><strong>The question:</strong> what cross-section did you take? Read the equation, count squared terms, check the sign, identify h and k. The parabola was a conic all along.</div>
       <div class="tool-links">
         <a class="tool-link" href="tools/conics.html">Conic Sections Explorer</a>
         <a class="tool-link" href="tools/quadratic-forms-explorer.html">Quadratic Forms Explorer</a>
       </div>
     </div>
 
-    <!-- ════ CLOSING ════ -->
+    <!-- Closing -->
     <div class="shapes-closing">
       <div class="f-display" style="font-size:34px; margin-bottom:18px;">They're all related.</div>
       <div class="closing-text">
         <p>The logarithm and the exponential are exact mirrors of each other — reflect one over y = x and you get the other.</p>
         <p>The parabola is a conic section. It was always a slice of a cone, even in September when you first met it as y = ax² + bx + c.</p>
-        <p>The absolute value function has two branches, just like the radical equation has two candidates — and both require a check for the same reason. Squaring and absolute value both destroy sign information. The inverse has to guess, and sometimes it guesses wrong.</p>
-        <p>The asymptote of the rational function and the domain restriction of the radical are the same idea: <em>some inputs are forbidden</em>. Division by zero. Negatives under a square root. The same wall, different rooms.</p>
+        <p>The asymptote of the rational function and the domain restriction of the radical are the same idea: <em>some inputs are forbidden</em>. The same wall, different rooms.</p>
       </div>
       <div class="closing-final">
         By the end of this year, you can look at any equation and ask:<br>
         <em>What kind of shape is this? What's its personality?</em><br><br>
-        And whatever question the problem is asking — find the zero, find the inverse, find the intersection — it's always the same move underneath:<br><br>
+        And whatever question the problem is asking — it's always the same move:<br><br>
         <strong>given the output, what was the input?</strong><br><br>
         That's algebra.
       </div>
@@ -515,273 +434,454 @@
   </div>
 
   <script>
-  // ── Shared canvas infrastructure ──────────────────────────────────────────
+  'use strict';
+  // ── Helpers ───────────────────────────────────────────────────────────────
   const BG       = '#f6f1e4';
   const GRID_COL = 'rgba(29,26,20,0.06)';
-  const AXIS_COL = 'rgba(29,26,20,0.35)';
+  const AXIS_COL = 'rgba(29,26,20,0.32)';
   const ASYM_COL = 'rgba(29,26,20,0.22)';
-  const TICK_COL = 'rgba(29,26,20,0.45)';
+  const TICK_COL = 'rgba(29,26,20,0.42)';
   const LABEL_F  = "10px 'JetBrains Mono',monospace";
 
-  function fmt(n) {
+  function fmtHov(n) { // for hover readout
     if (!isFinite(n)) return '—';
     const r = Math.round(n * 100) / 100;
-    return (r === 0 ? '0' : r.toFixed(2).replace(/\.?0+$/, ''));
+    return r.toFixed(2).replace(/\.?0+$/, '') || '0';
+  }
+  function fmtN(v) { // equation display
+    const r = Math.round(v * 10) / 10;
+    return (r % 1 === 0 ? r : r.toFixed(1)).toString();
+  }
+  function fmtCoeff(v) { // 1→'', -1→'−', 2→'2', -2→'−2'
+    const r = Math.round(v * 10) / 10;
+    if (r === 1) return '';
+    if (r === -1) return '−';
+    return r < 0 ? '−' + fmtN(-r) : fmtN(r);
+  }
+  function shiftStr(h, vname) { // "(x − 2)" inner part
+    const r = Math.round(h * 10) / 10;
+    if (r === 0) return vname;
+    return r > 0 ? `${vname} − ${fmtN(r)}` : `${vname} + ${fmtN(-r)}`;
+  }
+  function offsetStr(k) { // " + 3" or " − 2" or ""
+    const r = Math.round(k * 10) / 10;
+    if (r === 0) return '';
+    return r > 0 ? ` + ${fmtN(r)}` : ` − ${fmtN(-r)}`;
   }
 
-  function initGraph(id, spec) {
-    const el = document.getElementById(id);
-    if (!el) return;
+  // ── Canvas draw infrastructure ────────────────────────────────────────────
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.arcTo(x+w,y,x+w,y+r,r);
+    ctx.lineTo(x+w,y+h-r); ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx.lineTo(x+r,y+h); ctx.arcTo(x,y+h,x,y+h-r,r);
+    ctx.lineTo(x,y+r); ctx.arcTo(x,y,x+r,y,r);
+    ctx.closePath();
+  }
+
+  function drawGraph(canvas, spec, hoverX) {
     const DPR = window.devicePixelRatio || 1;
-    let W = 0, H = 0, mouseX = null;
+    const W = canvas.offsetWidth, H = canvas.offsetHeight;
+    canvas.width  = W * DPR;
+    canvas.height = H * DPR;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(DPR, DPR);
 
-    // world ↔ pixel
-    function wx(mx) { return (mx - spec.xMin) / (spec.xMax - spec.xMin) * W; }
-    function wy(my) { return H - (my - spec.yMin) / (spec.yMax - spec.yMin) * H; }
-    function px2math(px) { return spec.xMin + (px / W) * (spec.xMax - spec.xMin); }
-    function py2math(py) { return spec.yMin + (1 - py / H) * (spec.yMax - spec.yMin); }
+    // coords
+    const wx = mx => (mx - spec.xMin) / (spec.xMax - spec.xMin) * W;
+    const wy = my => H - (my - spec.yMin) / (spec.yMax - spec.yMin) * H;
+    const px2m = px => spec.xMin + (px / W) * (spec.xMax - spec.xMin);
 
-    function draw() {
-      el.width  = W * DPR;
-      el.height = H * DPR;
-      const ctx = el.getContext('2d');
-      ctx.scale(DPR, DPR);
+    // Background
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
-      // Background
-      ctx.fillStyle = BG;
-      ctx.fillRect(0, 0, W, H);
+    // Grid
+    const step = spec.step || 1;
+    ctx.strokeStyle = GRID_COL; ctx.lineWidth = 1;
+    for (let x = Math.ceil(spec.xMin/step)*step; x <= spec.xMax; x += step) {
+      ctx.beginPath(); ctx.moveTo(wx(x),0); ctx.lineTo(wx(x),H); ctx.stroke();
+    }
+    for (let y = Math.ceil(spec.yMin/step)*step; y <= spec.yMax; y += step) {
+      ctx.beginPath(); ctx.moveTo(0,wy(y)); ctx.lineTo(W,wy(y)); ctx.stroke();
+    }
 
-      // Grid + tick labels
-      const xStep = spec.step || 1;
-      const yStep = spec.step || 1;
-      ctx.strokeStyle = GRID_COL; ctx.lineWidth = 1;
-      for (let x = Math.ceil(spec.xMin); x <= spec.xMax; x += xStep) {
-        ctx.beginPath(); ctx.moveTo(wx(x), 0); ctx.lineTo(wx(x), H); ctx.stroke();
+    // Axes
+    ctx.strokeStyle = AXIS_COL; ctx.lineWidth = 1.5;
+    if (spec.yMin < 0 && spec.yMax > 0) { ctx.beginPath(); ctx.moveTo(0,wy(0)); ctx.lineTo(W,wy(0)); ctx.stroke(); }
+    if (spec.xMin < 0 && spec.xMax > 0) { ctx.beginPath(); ctx.moveTo(wx(0),0); ctx.lineTo(wx(0),H); ctx.stroke(); }
+
+    // Tick labels
+    ctx.fillStyle = TICK_COL; ctx.font = LABEL_F;
+    const axY = Math.max(4, Math.min(wy(0)+12, H-4));
+    const axX = Math.max(4, Math.min(wx(0)-4, W-22));
+    for (let x = Math.ceil(spec.xMin/step)*step; x <= spec.xMax; x += step) {
+      if (x === 0) continue;
+      ctx.textAlign = 'center'; ctx.fillText(x, wx(x), axY);
+    }
+    for (let y = Math.ceil(spec.yMin/step)*step; y <= spec.yMax; y += step) {
+      if (y === 0) continue;
+      ctx.textAlign = 'right'; ctx.fillText(y, axX, wy(y)+3);
+    }
+
+    // Asymptotes
+    ctx.setLineDash([5,4]); ctx.strokeStyle = ASYM_COL; ctx.lineWidth = 1.2;
+    (spec.vasym || []).forEach(x => { ctx.beginPath(); ctx.moveTo(wx(x),0); ctx.lineTo(wx(x),H); ctx.stroke(); });
+    (spec.hasym || []).forEach(y => { ctx.beginPath(); ctx.moveTo(0,wy(y)); ctx.lineTo(W,wy(y)); ctx.stroke(); });
+    ctx.setLineDash([]);
+
+    // Curves
+    ctx.lineWidth = 2.5;
+    const segs = spec.segments || [{ fn: spec.fn, domain: spec.domain }];
+    segs.forEach(seg => {
+      ctx.strokeStyle = spec.color;
+      ctx.beginPath(); let started = false;
+      const steps = W * 2;
+      for (let i = 0; i <= steps; i++) {
+        const mx = spec.xMin + (i/steps)*(spec.xMax-spec.xMin);
+        if (seg.domain && !seg.domain(mx)) { started = false; continue; }
+        const my = seg.fn(mx);
+        if (!isFinite(my) || my > spec.yMax+1 || my < spec.yMin-1) { started = false; continue; }
+        if (!started) { ctx.moveTo(wx(mx),wy(my)); started=true; } else ctx.lineTo(wx(mx),wy(my));
       }
-      for (let y = Math.ceil(spec.yMin); y <= spec.yMax; y += yStep) {
-        ctx.beginPath(); ctx.moveTo(0, wy(y)); ctx.lineTo(W, wy(y)); ctx.stroke();
-      }
+      ctx.stroke();
+    });
 
-      // Axes
-      ctx.strokeStyle = AXIS_COL; ctx.lineWidth = 1.5;
-      if (spec.yMin < 0 && spec.yMax > 0) {
-        ctx.beginPath(); ctx.moveTo(0, wy(0)); ctx.lineTo(W, wy(0)); ctx.stroke();
-      }
-      if (spec.xMin < 0 && spec.xMax > 0) {
-        ctx.beginPath(); ctx.moveTo(wx(0), 0); ctx.lineTo(wx(0), H); ctx.stroke();
-      }
+    // Start dot
+    if (spec.startDot) {
+      const [sx,sy] = spec.startDot;
+      ctx.fillStyle = spec.color;
+      ctx.beginPath(); ctx.arc(wx(sx),wy(sy),5,0,Math.PI*2); ctx.fill();
+    }
 
-      // Tick labels
-      ctx.fillStyle = TICK_COL; ctx.font = LABEL_F;
-      const axisY = Math.max(2, Math.min(wy(0) + 12, H - 4));
-      const axisX = Math.max(2, Math.min(wx(0) - 4, W - 20));
-      for (let x = Math.ceil(spec.xMin); x <= spec.xMax; x += xStep) {
-        if (x === 0) continue;
-        ctx.textAlign = 'center';
-        ctx.fillText(x, wx(x), axisY);
-      }
-      for (let y = Math.ceil(spec.yMin); y <= spec.yMax; y += yStep) {
-        if (y === 0) continue;
-        ctx.textAlign = 'right';
-        ctx.fillText(y, axisX, wy(y) + 3);
-      }
-
-      // Asymptotes
-      ctx.setLineDash([5, 4]);
-      ctx.strokeStyle = ASYM_COL; ctx.lineWidth = 1.2;
-      (spec.vasym || []).forEach(x => {
-        ctx.beginPath(); ctx.moveTo(wx(x), 0); ctx.lineTo(wx(x), H); ctx.stroke();
-      });
-      (spec.hasym || []).forEach(y => {
-        ctx.beginPath(); ctx.moveTo(0, wy(y)); ctx.lineTo(W, wy(y)); ctx.stroke();
-      });
-      ctx.setLineDash([]);
-
-      // Curve(s)
-      ctx.lineWidth = 2.5;
-      (spec.segments || [{ fn: spec.fn, domain: spec.domain }]).forEach(seg => {
-        ctx.strokeStyle = spec.color;
-        ctx.beginPath();
-        let started = false;
-        const steps = W * 2;
-        for (let i = 0; i <= steps; i++) {
-          const mx = spec.xMin + (i / steps) * (spec.xMax - spec.xMin);
-          if (seg.domain && !seg.domain(mx)) { started = false; continue; }
-          const my = seg.fn(mx);
-          if (!isFinite(my) || my > spec.yMax + 1 || my < spec.yMin - 1) { started = false; continue; }
+    // Hover
+    if (hoverX !== null) {
+      const mx = px2m(hoverX);
+      const activeSeg = segs.find(s => !s.domain || s.domain(mx));
+      if (activeSeg) {
+        const my = activeSeg.fn(mx);
+        if (isFinite(my) && my >= spec.yMin-0.5 && my <= spec.yMax+0.5) {
           const px = wx(mx), py = wy(my);
-          if (!started) { ctx.moveTo(px, py); started = true; }
-          else ctx.lineTo(px, py);
+          // guide line
+          ctx.strokeStyle = 'rgba(29,26,20,0.12)'; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+          ctx.beginPath(); ctx.moveTo(px,0); ctx.lineTo(px,H); ctx.stroke(); ctx.setLineDash([]);
+          // dot
+          ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(px,py,5.5,0,Math.PI*2); ctx.fill();
+          ctx.fillStyle=spec.color; ctx.beginPath(); ctx.arc(px,py,4,0,Math.PI*2); ctx.fill();
+          // coord box
+          const label = `x=${fmtHov(mx)}   y=${fmtHov(my)}`;
+          ctx.font = "11px 'JetBrains Mono',monospace";
+          const tw = ctx.measureText(label).width;
+          const bx = px > W/2 ? 8 : W-tw-16;
+          const by = py < H*0.6 ? H-28 : 8;
+          ctx.fillStyle='rgba(246,241,228,0.93)'; roundRect(ctx,bx-5,by,tw+10,22,3); ctx.fill();
+          ctx.strokeStyle=spec.color; ctx.lineWidth=1.2; roundRect(ctx,bx-5,by,tw+10,22,3); ctx.stroke();
+          ctx.fillStyle=spec.color; ctx.textAlign='left'; ctx.fillText(label,bx,by+15);
         }
-        ctx.stroke();
+      }
+    }
+  }
+
+  // ── Build controls HTML ───────────────────────────────────────────────────
+  function buildControls(colEl, spec) {
+    const paramDefs = spec.paramDefs;
+    // Equation
+    const eqDiv = document.createElement('div');
+    eqDiv.className = 'eq-display';
+    eqDiv.id = spec.id + '-eq';
+    eqDiv.innerHTML = spec.eqHtml(spec.params);
+    colEl.appendChild(eqDiv);
+
+    // Sliders
+    const sliderArea = document.createElement('div');
+    sliderArea.className = 'sliders-area';
+    paramDefs.forEach(pd => {
+      const row = document.createElement('div');
+      row.className = 'slider-row';
+      row.innerHTML = `
+        <span class="s-lbl" style="color:${pd.color||'var(--accent)'}">${pd.label}</span>
+        <input type="range" class="s-range" id="${spec.id}-s-${pd.key}"
+          min="${pd.min}" max="${pd.max}" step="${pd.step}"
+          value="${spec.params[pd.key]}"
+          style="accent-color:${pd.color||'var(--accent)'}">
+        <span class="s-val" id="${spec.id}-sv-${pd.key}">${fmtN(spec.params[pd.key])}</span>`;
+      sliderArea.appendChild(row);
+    });
+    colEl.appendChild(sliderArea);
+
+    // Reset
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'reset-btn';
+    resetBtn.textContent = '↺ reset';
+    resetBtn.onclick = () => {
+      paramDefs.forEach(pd => {
+        spec.params[pd.key] = pd.default;
+        document.getElementById(spec.id+'-s-'+pd.key).value = pd.default;
+        document.getElementById(spec.id+'-sv-'+pd.key).textContent = fmtN(pd.default);
       });
+      spec.dirty = true;
+    };
+    colEl.appendChild(resetBtn);
+  }
 
-      // Start dot (radical, log)
-      if (spec.startDot) {
-        const [sdx, sdy] = spec.startDot;
-        ctx.fillStyle = spec.color;
-        ctx.beginPath(); ctx.arc(wx(sdx), wy(sdy), 5, 0, Math.PI * 2); ctx.fill();
-      }
+  // ── Main init ─────────────────────────────────────────────────────────────
+  function initShape(spec) {
+    const canvas = document.getElementById(spec.id);
+    const col    = document.getElementById('ctrl-'+spec.id);
+    if (!canvas || !col) return;
 
-      // Hover overlay
-      if (mouseX !== null) {
-        const mx = px2math(mouseX);
-        // Find the segment whose domain includes mx
-        const activeSeg = (spec.segments || [{ fn: spec.fn, domain: spec.domain }])
-          .find(s => !s.domain || s.domain(mx));
-        if (activeSeg) {
-          const my = activeSeg.fn(mx);
-          if (isFinite(my) && my >= spec.yMin - 0.5 && my <= spec.yMax + 0.5) {
-            const px = wx(mx), py = wy(my);
-            // Vertical guide
-            ctx.strokeStyle = 'rgba(29,26,20,0.15)'; ctx.lineWidth = 1;
-            ctx.setLineDash([3, 3]);
-            ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
-            ctx.setLineDash([]);
-            // Dot
-            ctx.fillStyle = '#fff';
-            ctx.beginPath(); ctx.arc(px, py, 5.5, 0, Math.PI * 2); ctx.fill();
-            ctx.fillStyle = spec.color;
-            ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI * 2); ctx.fill();
-            // Coordinate box
-            const label = `x = ${fmt(mx)}   y = ${fmt(my)}`;
-            ctx.font = "11px 'JetBrains Mono',monospace";
-            const tw = ctx.measureText(label).width;
-            const bx = px > W / 2 ? 8 : W - tw - 16;
-            const by = py < H / 2 ? H - 28 : 8;
-            ctx.fillStyle = 'rgba(246,241,228,0.92)';
-            ctx.beginPath();
-            roundRect(ctx, bx - 6, by, tw + 12, 22, 3);
-            ctx.fill();
-            ctx.strokeStyle = spec.color; ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            roundRect(ctx, bx - 6, by, tw + 12, 22, 3);
-            ctx.stroke();
-            ctx.fillStyle = spec.color;
-            ctx.textAlign = 'left';
-            ctx.fillText(label, bx, by + 15);
-          }
-        }
-      }
-    }
+    // Build controls
+    buildControls(col, spec);
 
-    function roundRect(ctx, x, y, w, h, r) {
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r);
-      ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
-      ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r);
-      ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r);
-    }
+    // Wire sliders
+    spec.paramDefs.forEach(pd => {
+      const input = document.getElementById(spec.id+'-s-'+pd.key);
+      const valEl = document.getElementById(spec.id+'-sv-'+pd.key);
+      input.addEventListener('input', () => {
+        spec.params[pd.key] = parseFloat(input.value);
+        valEl.textContent = fmtN(spec.params[pd.key]);
+        document.getElementById(spec.id+'-eq').innerHTML = spec.eqHtml(spec.params);
+        // update dynamic spec props (vasym, hasym, startDot)
+        if (spec.updateDynamic) spec.updateDynamic(spec.params, spec);
+        spec.dirty = true;
+      });
+    });
+
+    // Canvas sizing + hover
+    const DPR = window.devicePixelRatio || 1;
+    let mouseX = null;
+    let W = 0, H = 0;
 
     function resize() {
-      W = el.offsetWidth;
-      H = Math.max(160, Math.round(W * 0.33));
-      el.style.height = H + 'px';
-      draw();
+      W = canvas.offsetWidth;
+      H = Math.max(150, Math.round(W * 0.36));
+      canvas.style.height = H + 'px';
+      spec.dirty = true;
     }
 
-    el.addEventListener('mousemove', e => {
-      const rect = el.getBoundingClientRect();
+    canvas.addEventListener('mousemove', e => {
+      const rect = canvas.getBoundingClientRect();
       mouseX = (e.clientX - rect.left) * (W / rect.width);
-      draw();
+      spec.dirty = true;
     });
-    el.addEventListener('mouseleave', () => { mouseX = null; draw(); });
-    el.addEventListener('touchmove', e => {
+    canvas.addEventListener('mouseleave', () => { mouseX = null; spec.dirty = true; });
+    canvas.addEventListener('touchmove', e => {
       e.preventDefault();
-      const rect = el.getBoundingClientRect();
+      const rect = canvas.getBoundingClientRect();
       mouseX = (e.touches[0].clientX - rect.left) * (W / rect.width);
-      draw();
+      spec.dirty = true;
     }, { passive: false });
-    el.addEventListener('touchend', () => { mouseX = null; draw(); });
+    canvas.addEventListener('touchend', () => { mouseX = null; spec.dirty = true; });
     window.addEventListener('resize', resize);
+
+    // RAF render loop
+    function loop() {
+      if (spec.dirty) {
+        spec.dirty = false;
+        // Rebuild segments from current params
+        const built = spec.buildSpec(spec.params);
+        Object.assign(spec, built);
+        drawGraph(canvas, spec, mouseX);
+      }
+      requestAnimationFrame(loop);
+    }
+
     resize();
+    loop();
   }
 
-  // ── Curve specs ──────────────────────────────────────────────────────────
+  // ── Shape specs ───────────────────────────────────────────────────────────
   window.addEventListener('load', () => {
 
-    // 01 Linear: y = 0.7x
-    initGraph('gc-linear', {
+    // ── 01 Linear ────────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-linear',
       xMin: -6, xMax: 6, yMin: -4, yMax: 4, step: 1,
       color: '#d94f2a',
-      fn: x => 0.7 * x, domain: () => true,
+      params: { m: 0.7, b: 0 },
+      paramDefs: [
+        { key:'m', label:'m', min:-3, max:3, step:.1, default:0.7, color:'#d94f2a' },
+        { key:'b', label:'b', min:-4, max:4, step:.1, default:0,   color:'#2a6fb4' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.m)||'0'}x</b>${offsetStr(p.b)}`,
+      buildSpec: p => ({ fn: x => p.m*x + p.b, domain: () => true }),
+      dirty: true,
     });
 
-    // 02 Quadratic: y = 0.4x²
-    initGraph('gc-quad', {
-      xMin: -5, xMax: 5, yMin: -1, yMax: 6, step: 1,
+    // ── 02 Quadratic ─────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-quad',
+      xMin: -5, xMax: 5, yMin: -2, yMax: 7, step: 1,
       color: '#2a6fb4',
-      fn: x => 0.4 * x * x, domain: () => true,
+      params: { a: 0.5, h: 0, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-3,  max:3,  step:.1, default:0.5, color:'#d94f2a' },
+        { key:'h', label:'h', min:-4,  max:4,  step:.1, default:0,   color:'#2a6fb4' },
+        { key:'k', label:'k', min:-3,  max:6,  step:.1, default:0,   color:'#2a8a4a' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)²<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({ fn: x => p.a*(x-p.h)**2 + p.k, domain: () => true }),
+      dirty: true,
     });
 
-    // 03 Absolute value: y = |x|
-    initGraph('gc-abs', {
-      xMin: -5, xMax: 5, yMin: -1, yMax: 5, step: 1,
+    // ── 03 Absolute Value ─────────────────────────────────────────────────
+    initShape({
+      id: 'gc-abs',
+      xMin: -5, xMax: 5, yMin: -1, yMax: 6, step: 1,
       color: '#d94f2a',
-      fn: x => Math.abs(x), domain: () => true,
+      params: { a: 1, h: 0, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-3, max:3, step:.1, default:1,  color:'#d94f2a' },
+        { key:'h', label:'h', min:-4, max:4, step:.1, default:0,  color:'#2a6fb4' },
+        { key:'k', label:'k', min:-2, max:5, step:.1, default:0,  color:'#2a8a4a' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>|<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>|<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({ fn: x => p.a*Math.abs(x-p.h) + p.k, domain: () => true }),
+      dirty: true,
     });
 
-    // 04 Radical: y = √x  (domain x ≥ 0)
-    initGraph('gc-radical', {
-      xMin: -1, xMax: 9, yMin: -0.5, yMax: 4, step: 1,
+    // ── 04 Radical ───────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-radical',
+      xMin: -2, xMax: 9, yMin: -1, yMax: 5, step: 1,
       color: '#2a8a4a',
-      fn: x => Math.sqrt(x), domain: x => x >= 0,
-      startDot: [0, 0],
+      params: { a: 1, h: 0, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-3, max:3,  step:.1, default:1, color:'#d94f2a' },
+        { key:'h', label:'h', min:-2, max:7,  step:.1, default:0, color:'#2a6fb4' },
+        { key:'k', label:'k', min:-3, max:4,  step:.1, default:0, color:'#2a8a4a' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>√(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({
+        fn: x => p.a * Math.sqrt(x - p.h) + p.k,
+        domain: x => x >= p.h,
+        startDot: [p.h, p.k],
+      }),
+      dirty: true,
     });
 
-    // 05 Exponential: y = 2^x  (rescaled to stay in view)
-    initGraph('gc-exp', {
-      xMin: -4, xMax: 4, yMin: -0.5, yMax: 6, step: 1,
+    // ── 05 Exponential ───────────────────────────────────────────────────
+    initShape({
+      id: 'gc-exp',
+      xMin: -4, xMax: 4, yMin: -0.5, yMax: 7, step: 1,
       color: '#8f6c00',
-      hasym: [0],
-      fn: x => Math.pow(2, x), domain: () => true,
+      params: { a: 1, b: 2, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-3,  max:3,  step:.1,  default:1, color:'#d94f2a' },
+        { key:'b', label:'b', min:.2,  max:4,  step:.05, default:2, color:'#8f6c00' },
+        { key:'k', label:'k', min:-3,  max:4,  step:.1,  default:0, color:'#2a8a4a' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtN(p.a)}</b>·<b style="color:#8f6c00">${fmtN(p.b)}</b>ˣ<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({
+        fn: x => p.a * Math.pow(p.b, x) + p.k,
+        domain: () => true,
+        hasym: [p.k],
+      }),
+      dirty: true,
     });
 
-    // 06 Log: y = log2(x)
-    initGraph('gc-log', {
-      xMin: -0.5, xMax: 9, yMin: -3, yMax: 4, step: 1,
+    // ── 06 Log ───────────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-log',
+      xMin: -0.5, xMax: 9, yMin: -3, yMax: 5, step: 1,
       color: '#8f6c00',
-      vasym: [0],
-      fn: x => Math.log2(x), domain: x => x > 0.01,
+      params: { a: 1, b: 2, h: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-3, max:3,  step:.1,  default:1, color:'#d94f2a' },
+        { key:'b', label:'b', min:1.1,max:4,  step:.05, default:2, color:'#8f6c00' },
+        { key:'h', label:'h', min:-1, max:7,  step:.1,  default:0, color:'#2a6fb4' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>log<sub><b style="color:#8f6c00">${fmtN(p.b)}</b></sub>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)`,
+      buildSpec: p => ({
+        fn: x => p.a * Math.log(x - p.h) / Math.log(p.b),
+        domain: x => x > p.h + 0.01,
+        vasym: [p.h],
+      }),
+      dirty: true,
     });
 
-    // 07 Rational: y = 1/x  (two segments, gap at x=0)
-    initGraph('gc-rational', {
+    // ── 07 Rational ──────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-rational',
       xMin: -5, xMax: 5, yMin: -5, yMax: 5, step: 1,
       color: '#7a2a8a',
-      vasym: [0], hasym: [0],
-      segments: [
-        { fn: x => 1 / x, domain: x => x < -0.05 },
-        { fn: x => 1 / x, domain: x => x >  0.05 },
+      params: { a: 1, h: 0, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:-6, max:6,  step:.5, default:1, color:'#d94f2a' },
+        { key:'h', label:'h', min:-4, max:4,  step:.5, default:0, color:'#2a6fb4' },
+        { key:'k', label:'k', min:-4, max:4,  step:.5, default:0, color:'#2a8a4a' },
       ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtN(p.a)}</b>/(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({
+        segments: [
+          { fn: x => p.a/(x-p.h)+p.k, domain: x => x < p.h-0.05 },
+          { fn: x => p.a/(x-p.h)+p.k, domain: x => x > p.h+0.05 },
+        ],
+        vasym: [p.h],
+        hasym: [p.k],
+      }),
+      dirty: true,
     });
 
-    // 08 Polynomial: y = x³ − 3x
-    initGraph('gc-poly', {
-      xMin: -3, xMax: 3, yMin: -4, yMax: 4, step: 1,
+    // ── 08 Polynomial ────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-poly',
+      xMin: -4, xMax: 4, yMin: -5, yMax: 5, step: 1,
       color: '#7a2a8a',
-      fn: x => x * x * x - 3 * x, domain: () => true,
-    });
-
-    // 09 Trig: y = sin(x)
-    initGraph('gc-trig', {
-      xMin: -7, xMax: 7, yMin: -1.6, yMax: 1.6, step: 2,
-      color: '#1a8a8a',
-      fn: x => Math.sin(x), domain: () => true,
-    });
-
-    // 10 Conics: show an ellipse top + bottom halves
-    initGraph('gc-conics', {
-      xMin: -5, xMax: 5, yMin: -3.5, yMax: 3.5, step: 1,
-      color: '#5a6a7a',
-      // top half
-      segments: [
-        { fn: x => 2.5 * Math.sqrt(Math.max(0, 1 - (x * x) / 16)), domain: x => Math.abs(x) <= 4 },
-        { fn: x => -2.5 * Math.sqrt(Math.max(0, 1 - (x * x) / 16)), domain: x => Math.abs(x) <= 4 },
+      params: { a: 1, b: 3 },
+      paramDefs: [
+        { key:'a', label:'a', min:-2, max:2, step:.1, default:1, color:'#d94f2a' },
+        { key:'b', label:'b', min:0,  max:6, step:.1, default:3, color:'#7a2a8a' },
       ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>(x³ − <b style="color:#7a2a8a">${fmtN(p.b)}</b>x)`,
+      buildSpec: p => ({
+        fn: x => p.a*(x**3 - p.b*x),
+        domain: () => true,
+      }),
+      dirty: true,
     });
 
-  });
+    // ── 09 Trig ──────────────────────────────────────────────────────────
+    initShape({
+      id: 'gc-trig',
+      xMin: -7, xMax: 7, yMin: -3.5, yMax: 3.5, step: 2,
+      color: '#1a8a8a',
+      params: { a: 1, b: 1, h: 0, k: 0 },
+      paramDefs: [
+        { key:'a', label:'a', min:.1, max:3,  step:.1,  default:1, color:'#d94f2a' },
+        { key:'b', label:'b', min:.1, max:3,  step:.05, default:1, color:'#8f6c00' },
+        { key:'h', label:'h', min:-3, max:3,  step:.1,  default:0, color:'#2a6fb4' },
+        { key:'k', label:'k', min:-2, max:2,  step:.1,  default:0, color:'#2a8a4a' },
+      ],
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtN(p.a)}</b>·sin(<b style="color:#8f6c00">${fmtN(p.b)}</b>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>))<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      buildSpec: p => ({
+        fn: x => p.a * Math.sin(p.b * (x - p.h)) + p.k,
+        domain: () => true,
+        hasym: p.k !== 0 ? [p.k] : [],
+      }),
+      dirty: true,
+    });
+
+    // ── 10 Conics (Ellipse) ──────────────────────────────────────────────
+    initShape({
+      id: 'gc-conics',
+      xMin: -5.5, xMax: 5.5, yMin: -4, yMax: 4, step: 1,
+      color: '#5a6a7a',
+      params: { a: 4, b: 2.5 },
+      paramDefs: [
+        { key:'a', label:'a', min:.5, max:5, step:.1, default:4,   color:'#d94f2a' },
+        { key:'b', label:'b', min:.5, max:4, step:.1, default:2.5, color:'#2a6fb4' },
+      ],
+      eqHtml: p => `x²/<b style="color:#d94f2a">${fmtN(p.a*p.a)}</b> + y²/<b style="color:#2a6fb4">${fmtN(p.b*p.b)}</b> = 1`,
+      buildSpec: p => ({
+        segments: [
+          { fn: x => p.b*Math.sqrt(Math.max(0,1-(x*x)/(p.a*p.a))), domain: x => Math.abs(x)<=p.a },
+          { fn: x => -p.b*Math.sqrt(Math.max(0,1-(x*x)/(p.a*p.a))), domain: x => Math.abs(x)<=p.a },
+        ],
+      }),
+      dirty: true,
+    });
+
+  }); // end load
   </script>
   <script src="tools/progress.js"></script>
 </body>
