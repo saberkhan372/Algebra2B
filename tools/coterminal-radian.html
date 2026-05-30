@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coterminal Angles &amp; Radian Conversion — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* tabs */
+    .mode-tabs { display:flex; gap:0; border-bottom:2px solid var(--ink); margin-bottom:14px; flex-wrap:wrap; }
+    .mode-tab {
+      padding:6px 20px; border:none; background:transparent;
+      font-family:'Permanent Marker',cursive; font-size:14px;
+      cursor:pointer; color:var(--ink-soft); border-bottom:3px solid transparent;
+      margin-bottom:-2px; transition:all .15s;
+    }
+    .mode-tab.active { color:var(--ink); border-bottom-color:var(--accent); }
+    .mode-tab:hover:not(.active) { background:var(--paper-2); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:block; }
+
+    /* angle canvas */
+    .angle-canvas-wrap { display:flex; justify-content:center; margin:10px 0; }
+    .angle-canvas { border:2px solid var(--ink-2); border-radius:50%; background:var(--paper-2); }
+
+    /* input area */
+    .drill-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:12px 0; }
+    .angle-input {
+      font-family:'JetBrains Mono',monospace; font-size:18px;
+      padding:6px 10px; width:90px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); text-align:center;
+    }
+    .angle-input:focus { border-color:var(--accent); outline:none; }
+    .angle-input.correct { border-color:#2a8a4a; background:#e8f4ec; }
+    .angle-input.wrong   { border-color:var(--redline); background:#fdecea; animation:shake .25s; }
+    @keyframes shake {
+      0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)}
+    }
+    .unit-lbl { font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--ink-2); }
+    .check-btn {
+      padding:6px 18px; background:var(--ink); color:var(--paper); border:none;
+      border-radius:4px; font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:opacity .15s;
+    }
+    .check-btn:hover { opacity:.8; }
+    .next-btn {
+      padding:6px 16px; background:var(--accent); color:#fff; border:none;
+      border-radius:4px; font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:opacity .15s;
+    }
+    .next-btn:hover { opacity:.85; }
+    .feedback-row { font-family:var(--f-body); font-size:13px; min-height:20px; }
+    .fb-ok  { color:#2a8a4a; font-weight:700; }
+    .fb-err { color:var(--redline); }
+
+    /* solution reveal card */
+    .soln-card {
+      padding:10px 14px; border-radius:6px; border:2px solid #2a8a4a;
+      background:#e8f4ec; margin-top:8px; font-family:var(--f-body); font-size:13px;
+      display:none;
+    }
+    .soln-card.show { display:block; }
+    .soln-expr { font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--ink); line-height:1.9; }
+
+    /* converter */
+    .conv-grid { display:grid; grid-template-columns:1fr auto 1fr; gap:10px; align-items:center; margin:12px 0; }
+    .conv-box {
+      padding:12px; border:2px solid var(--ink-2); border-radius:6px;
+      background:var(--paper-2); text-align:center;
+    }
+    .conv-box-lbl { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); margin-bottom:6px; }
+    .conv-val { font-family:'JetBrains Mono',monospace; font-size:20px; color:var(--ink); }
+    .conv-arrow { font-size:22px; text-align:center; color:var(--accent); user-select:none; }
+    .conv-setup {
+      margin-top:8px; padding:10px 14px; border-radius:6px;
+      border:2px dashed var(--ink-2); background:var(--paper);
+      font-family:'JetBrains Mono',monospace; font-size:14px; line-height:2.0;
+    }
+    .cancel-line {
+      display:inline-block; text-decoration:line-through; color:var(--ink-2);
+    }
+    .slider-row { display:flex; align-items:center; gap:10px; margin-top:10px; }
+    .slider-row label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-2); min-width:70px; }
+    .angle-slider { flex:1; }
+    .slider-result { font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--accent); min-width:80px; }
+
+    /* score */
+    .score-chip {
+      display:inline-block; padding:3px 10px; border-radius:12px;
+      background:#e8f4ec; border:1.5px solid #2a8a4a;
+      font-family:'Permanent Marker',cursive; font-size:13px; color:#2a8a4a;
+    }
+
+    /* standard position diagram in converter */
+    .std-pos-wrap { display:flex; justify-content:center; margin:8px 0; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u7.html">← U7</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u7.html">← U7 · Trigonometry</a> &nbsp;·&nbsp; D2</div>
+      <div class="tool-title f-display">Coterminal &amp; Radians</div>
+      <div class="tool-tagline f-hand">Same terminal side. Different ways to say the same angle.</div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="coterminal-panel">Coterminal Angles</button>
+        <button class="mode-tab" data-mode="converter-panel">Degree ↔ Radian</button>
+      </div>
+
+      <!-- ── TAB 1: Coterminal Angles ── -->
+      <div class="mode-panel active" id="coterminal-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:10px;">
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <div class="f-hand" style="font-size:13px; color:var(--ink-2);">
+              Add or subtract <strong>360°</strong> (or <strong>2π</strong>) until you land in the target range.
+            </div>
+            <div id="score-wrap"></div>
+          </div>
+        </div>
+
+        <div class="angle-canvas-wrap">
+          <canvas id="coterminal-canvas" class="angle-canvas" width="200" height="200"></canvas>
+        </div>
+
+        <div id="coterminal-question" class="sk-box" style="padding:12px;"></div>
+      </div>
+
+      <!-- ── TAB 2: Degree ↔ Radian ── -->
+      <div class="mode-panel" id="converter-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:10px;">
+          <div class="f-hand" style="font-size:13px; color:var(--ink-2);">
+            Multiply by the right unit fraction — watch the unwanted units cancel.
+          </div>
+        </div>
+
+        <div class="slider-row sk-box" style="padding:10px;">
+          <label>Degrees →</label>
+          <input type="range" id="deg-slider" class="angle-slider" min="-360" max="720" step="15" value="90" oninput="updateConverter()">
+          <span class="slider-result" id="deg-display">90°</span>
+        </div>
+
+        <div class="conv-grid" style="margin-top:14px;">
+          <div class="conv-box">
+            <div class="conv-box-lbl">DEGREES</div>
+            <div class="conv-val" id="conv-deg">90°</div>
+          </div>
+          <div class="conv-arrow">⟷</div>
+          <div class="conv-box">
+            <div class="conv-box-lbl">RADIANS</div>
+            <div class="conv-val" id="conv-rad">π/2</div>
+          </div>
+        </div>
+
+        <div class="conv-setup sk-box" id="conv-setup-box">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="std-pos-wrap" style="margin-top:12px;">
+          <canvas id="converter-canvas" width="180" height="180" style="border:2px solid var(--ink-2); border-radius:50%; background:var(--paper-2);"></canvas>
+        </div>
+
+        <div class="sk-box" style="padding:10px; margin-top:10px; background:var(--paper-2);">
+          <div class="f-marker" style="font-size:11px; margin-bottom:6px;">COMMON ANGLES</div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:12px; line-height:2; color:var(--ink-2);">
+            30° = π/6 &nbsp;&nbsp; 45° = π/4 &nbsp;&nbsp; 60° = π/3<br>
+            90° = π/2 &nbsp;&nbsp; 180° = π &nbsp;&nbsp; 270° = 3π/2 &nbsp;&nbsp; 360° = 2π
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">COTERMINAL RULE</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          Two angles are <strong>coterminal</strong> if they share a terminal side.<br><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">θ + 360°k  (k = any integer)<br>θ + 2πk   (in radians)</span><br><br>
+          Positive k → add 360° (counterclockwise laps).<br>
+          Negative k → subtract 360° (clockwise laps).
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">CONVERSION SETUP</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>Degrees → Radians:</strong><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">deg × (π / 180°)</span><br>
+          degrees cancel → radians stay.<br><br>
+          <strong>Radians → Degrees:</strong><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">rad × (180° / π)</span><br>
+          rad cancel → degrees stay.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">🧭 STANDARD POSITION</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          Initial side: <strong>positive x-axis</strong>.<br>
+          Counterclockwise = <strong>positive</strong>.<br>
+          Clockwise = <strong>negative</strong>.
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="unit-circle.html">→ Unit Circle Walker</a>
+        <a class="related-link f-hand" href="trig-explorer.html">→ Trig Function Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Tab switching ────────────────────────────────────────────────────────
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab,.mode-panel').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.mode).classList.add('active');
+        if (t.dataset.mode === 'converter-panel') updateConverter();
+      });
+    });
+
+    // ── Coterminal Drill ─────────────────────────────────────────────────────
+    const COTERMINAL_PROBS = [
+      { given: 400,  unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:40,   k:-1, op:'subtract' },
+      { given: -50,  unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:310,  k:1,  op:'add' },
+      { given: 750,  unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:30,   k:-2, op:'subtract' },
+      { given: -270, unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:90,   k:1,  op:'add' },
+      { given: 500,  unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:140,  k:-1, op:'subtract' },
+      { given: -400, unit:'°', target:'[0°, 360°)',  min:0, max:360, answer:-40+360, k:2, op:'add' },
+    ];
+
+    let cotIdx = 0, cotScore = 0, cotAttempted = 0, cotAnswered = false;
+
+    function drawAngleCanvas(canvasId, angleDeg, color1, color2) {
+      const c = document.getElementById(canvasId);
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const cx = c.width / 2, cy = c.height / 2, r = cx - 10;
+      ctx.clearRect(0, 0, c.width, c.height);
+
+      // axes
+      ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(10, cy); ctx.lineTo(c.width - 10, cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, 10); ctx.lineTo(cx, c.height - 10); ctx.stroke();
+
+      // unit circle
+      ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+
+      function drawArm(deg, col, width) {
+        const rad = -deg * Math.PI / 180;
+        ctx.strokeStyle = col; ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + r * Math.cos(rad), cy + r * Math.sin(rad));
+        ctx.stroke();
+        // arrowhead
+        const ex = cx + r * Math.cos(rad), ey = cy + r * Math.sin(rad);
+        const ah = 10, aw = 4;
+        const angle = Math.atan2(ey - cy, ex - cx);
+        ctx.fillStyle = col;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(ex - ah * Math.cos(angle) + aw * Math.sin(angle),
+                   ey - ah * Math.sin(angle) - aw * Math.cos(angle));
+        ctx.lineTo(ex - ah * Math.cos(angle) - aw * Math.sin(angle),
+                   ey - ah * Math.sin(angle) + aw * Math.cos(angle));
+        ctx.closePath(); ctx.fill();
+      }
+
+      drawArm(angleDeg, color1, 2.5);
+      if (color2) drawArm(angleDeg, color2, 2);
+    }
+
+    function renderCoterminalQ() {
+      const prob = COTERMINAL_PROBS[cotIdx % COTERMINAL_PROBS.length];
+      cotAnswered = false;
+      drawAngleCanvas('coterminal-canvas', prob.given, '#2a6fb4');
+
+      const scoreHTML = cotAttempted > 0
+        ? `<span class="score-chip">✓ ${cotScore} / ${cotAttempted}</span>` : '';
+      document.getElementById('score-wrap').innerHTML = scoreHTML;
+
+      document.getElementById('coterminal-question').innerHTML = `
+        <div class="f-marker" style="font-size:11px; margin-bottom:8px;">FIND A COTERMINAL ANGLE</div>
+        <div class="f-hand" style="font-size:14px; color:var(--ink-2); margin-bottom:10px;">
+          Given angle: <strong style="font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--ink);">${prob.given}${prob.unit}</strong>
+          &nbsp;·&nbsp; Find a coterminal angle in <strong>${prob.target}</strong>
+        </div>
+        <div class="drill-row">
+          <input type="number" class="angle-input" id="coterm-input" placeholder="?" oninput="clearCotFeedback()">
+          <span class="unit-lbl">${prob.unit}</span>
+          <button class="check-btn" onclick="checkCoterm()">Check</button>
+        </div>
+        <div class="feedback-row" id="coterm-feedback"></div>
+        <div class="soln-card" id="coterm-soln"></div>
+      `;
+      document.getElementById('coterm-input').focus();
+    }
+
+    function clearCotFeedback() {
+      const inp = document.getElementById('coterm-input');
+      inp.classList.remove('correct', 'wrong');
+      document.getElementById('coterm-feedback').innerHTML = '';
+    }
+
+    function checkCoterm() {
+      if (cotAnswered) return;
+      const prob = COTERMINAL_PROBS[cotIdx % COTERMINAL_PROBS.length];
+      const val = parseFloat(document.getElementById('coterm-input').value);
+      if (isNaN(val)) return;
+
+      cotAttempted++;
+      const diff = val - prob.given;
+      const correct = Math.abs(diff % 360) < 0.5 && val >= prob.min && val < prob.max;
+
+      const inp = document.getElementById('coterm-input');
+      const fb  = document.getElementById('coterm-feedback');
+      const soln = document.getElementById('coterm-soln');
+
+      if (correct) {
+        cotScore++;
+        inp.classList.add('correct');
+        fb.innerHTML = `<span class="fb-ok">✓ Correct! ${prob.given}° and ${val}° share the same terminal side.</span>`;
+        drawAngleCanvas('coterminal-canvas', prob.given, '#2a6fb4', '#2a8a4a');
+        cotAnswered = true;
+        soln.className = 'soln-card show';
+        const k = Math.round(diff / 360);
+        const op = k > 0 ? `+ ${k} × 360°` : `− ${Math.abs(k)} × 360°`;
+        soln.innerHTML = `
+          <div class="soln-expr">${prob.given}° ${op} = <strong>${val}°</strong></div>
+          <div style="margin-top:6px; font-family:var(--f-body); font-size:12px; color:var(--ink-2);">
+            k = ${k} (${k > 0 ? 'added' : 'subtracted'} ${Math.abs(k)} full rotation${Math.abs(k)>1?'s':''})
+          </div>`;
+        document.getElementById('coterminal-question').insertAdjacentHTML('beforeend',
+          `<button class="next-btn" style="margin-top:10px;" onclick="nextCoterm()">Next →</button>`);
+      } else {
+        inp.classList.add('wrong');
+        const hint = val < prob.min || val >= prob.max
+          ? `${val}° isn't in the range ${prob.target} — ${prob.op} another 360°.`
+          : `${val}° and ${prob.given}° don't share a terminal side — check that the difference is a multiple of 360°.`;
+        fb.innerHTML = `<span class="fb-err">✗ ${hint}</span>`;
+        setTimeout(() => inp.classList.remove('wrong'), 500);
+      }
+      document.getElementById('score-wrap').innerHTML =
+        `<span class="score-chip">✓ ${cotScore} / ${cotAttempted}</span>`;
+    }
+
+    function nextCoterm() {
+      cotIdx++;
+      renderCoterminalQ();
+    }
+
+    // ── Radian Converter ─────────────────────────────────────────────────────
+    function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a,b]=[b,a%b]; } return a; }
+
+    function fmtRad(deg) {
+      // Return a nice fraction of π if possible
+      // deg/180 = n/d (simplified) → result is n·π/d
+      const mul = deg; // numerator if we write deg × π/180
+      const den = 180;
+      if (mul === 0) return '0';
+      const g = gcd(Math.abs(mul), den);
+      const n = mul / g, d = den / g;
+      if (d === 1) return n === 1 ? 'π' : n === -1 ? '−π' : `${n}π`;
+      const nStr = n === 1 ? '' : n === -1 ? '−' : String(n);
+      return `${nStr}π/${d}`;
+    }
+
+    function updateConverter() {
+      const deg = parseInt(document.getElementById('deg-slider').value);
+      document.getElementById('deg-display').textContent = deg + '°';
+      document.getElementById('conv-deg').textContent = deg + '°';
+
+      const radFrac = fmtRad(deg);
+      const radDec  = (deg * Math.PI / 180).toFixed(4);
+      const radDisplay = radFrac + (radFrac !== radDec ? ` ≈ ${radDec}` : '');
+      document.getElementById('conv-rad').textContent = radFrac;
+
+      // Show the dimensional-analysis setup
+      const absDeg = Math.abs(deg);
+      const g = gcd(absDeg, 180);
+      const n = deg / g, d = 180 / g;
+      const nStr = n === 1 ? '' : n === -1 ? '−' : String(n);
+      const fracStr = d === 1 ? `${nStr}π` : `${nStr}π/${d}`;
+
+      document.getElementById('conv-setup-box').innerHTML = `
+        <div style="color:var(--ink-2); font-size:12px; margin-bottom:4px; font-family:var(--f-body);">Dimensional analysis:</div>
+        <span class="cancel-line">${deg}°</span> × <span style="color:#2a6fb4;">π</span> / <span class="cancel-line">180°</span> = <strong style="color:var(--accent);">${radFrac}</strong>
+        <div style="font-size:11px; color:var(--ink-soft); margin-top:4px; font-family:var(--f-body);">
+          The ° units cancel — radians remain.
+        </div>`;
+
+      drawConverterCanvas(deg);
+    }
+
+    function drawConverterCanvas(deg) {
+      const c = document.getElementById('converter-canvas');
+      const ctx = c.getContext('2d');
+      const cx = c.width/2, cy = c.height/2, r = cx - 14;
+      ctx.clearRect(0,0,c.width,c.height);
+
+      // Axes
+      ctx.strokeStyle = '#ccc'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(14,cy); ctx.lineTo(c.width-14,cy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx,14); ctx.lineTo(cx,c.height-14); ctx.stroke();
+
+      // Circle
+      ctx.strokeStyle = '#bbb'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.stroke();
+
+      // Arc sweep
+      const start = 0;
+      const end = -deg * Math.PI / 180;
+      ctx.strokeStyle = 'rgba(42,111,180,0.3)'; ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(cx,cy,r*0.6, start, end, deg < 0);
+      ctx.stroke();
+
+      // Terminal arm
+      const rad = -deg * Math.PI / 180;
+      ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + r * Math.cos(rad), cy + r * Math.sin(rad));
+      ctx.stroke();
+
+      // Initial arm
+      ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+r,cy); ctx.stroke();
+
+      // Angle label
+      const labelRad = -deg/2 * Math.PI / 180;
+      const lx = cx + r*0.45*Math.cos(labelRad);
+      const ly = cy + r*0.45*Math.sin(labelRad);
+      ctx.fillStyle = '#2a6fb4';
+      ctx.font = 'bold 11px JetBrains Mono, monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${deg}°`, lx, ly);
+
+      // Direction arrow label
+      ctx.fillStyle = deg >= 0 ? '#2a8a4a' : '#d94f2a';
+      ctx.font = '11px Lexend, sans-serif';
+      ctx.fillText(deg >= 0 ? '↺ positive' : '↻ negative', cx, cy + r + 12);
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    renderCoterminalQ();
+    updateConverter();
+  </script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+</body>
+</html>

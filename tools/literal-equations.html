@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Literal Equation Isolator — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .tool-page { height: calc(100vh - 52px); }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+    .trainer-stage { flex: 1; overflow-y: auto; padding: 8px 0; display: flex; flex-direction: column; gap: 10px; }
+
+    /* problem picker */
+    .prob-picker { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 4px; }
+    .prob-btn {
+      padding: 5px 12px; border-radius: 16px; border: 1.5px solid var(--ink-2);
+      background: var(--paper); font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      cursor: pointer; transition: all .12s;
+    }
+    .prob-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .prob-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* original equation card */
+    .eq-card {
+      padding: 14px 18px; text-align: center;
+      background: var(--paper-2); border: 2px solid var(--ink-2); border-radius: 6px;
+    }
+    .eq-card-label { font-family: 'Permanent Marker', cursive; font-size: 11px; color: var(--ink-soft); margin-bottom: 6px; text-transform: uppercase; }
+    .eq-big { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: var(--ink); }
+    .eq-target-row { margin-top: 8px; font-family: var(--f-body); font-size: 13px; color: var(--ink-2); }
+    .target-badge {
+      display: inline-block; padding: 2px 10px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+      background: var(--accent); color: #fff; margin-left: 6px;
+    }
+
+    /* step cards */
+    .step-card {
+      border: 2px solid var(--ink-2); border-radius: 6px; padding: 10px 14px;
+      background: var(--paper); opacity: 0.2; pointer-events: none;
+      transition: opacity 0.3s, background 0.3s;
+    }
+    .step-card.revealed { opacity: 1; pointer-events: auto; }
+    .step-card.revealed.step-1 { background: #fdf0e0; border-color: #c07820; }
+    .step-card.revealed.step-2 { background: #e8f4ec; border-color: #2a8a4a; }
+    .step-card.revealed.step-3 { background: #dde9f6; border-color: #2a6fb4; }
+    .step-card.revealed.step-4 { background: #faeae4; border-color: #d94f2a; }
+    .step-card.revealed.step-final { background: var(--highlight); border-color: #c8a000; }
+
+    .step-num { font-family: 'Permanent Marker', cursive; font-size: 10px; color: var(--ink-soft); margin-bottom: 3px; text-transform: uppercase; }
+    .step-lbl { font-family: var(--f-body); font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+    .step-lbl strong { color: var(--ink); }
+    .step-expr { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--ink); line-height: 1.8; }
+    .step-note { font-family: var(--f-body); font-size: 12px; color: var(--ink-soft); margin-top: 5px; }
+
+    /* highlight the target variable in expressions */
+    .tv { color: var(--accent); font-weight: 700; }
+
+    /* factor-out visual */
+    .factor-box {
+      display: inline-block; padding: 2px 8px;
+      border: 2px solid var(--accent); border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--accent);
+      background: rgba(217,79,42,0.07);
+    }
+    .factor-rest {
+      display: inline-block; padding: 2px 8px;
+      border: 2px solid #2a6fb4; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #2a6fb4;
+      background: rgba(42,111,180,0.07);
+    }
+
+    /* answer chip */
+    .answer-chip {
+      display: inline-block; padding: 6px 16px;
+      background: var(--accent); color: #fff; border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* nav button */
+    .next-btn {
+      margin-top: 8px; padding: 6px 16px;
+      background: var(--ink); color: var(--paper); border: none;
+      border-radius: 4px; font-family: 'Permanent Marker', cursive; font-size: 13px;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .next-btn:hover { opacity: 0.8; }
+    .next-btn:disabled { opacity: 0.3; cursor: default; }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u3.html">← U3</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u3.html">← U3 · Rational &amp; Imaginary</a> &nbsp;·&nbsp; D9</div>
+      <div class="tool-title f-display">Literal Equation Isolator</div>
+      <div class="tool-tagline f-hand">Same moves as always — but the "answer" is an expression, not a number.</div>
+
+      <div class="sk-box" style="padding:10px; margin-top:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">PICK A PROBLEM</div>
+        <div class="prob-picker" id="prob-picker"></div>
+      </div>
+
+      <div class="trainer-stage" id="stage"></div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THE TWO CASES</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8;">
+          <strong>Target appears once:</strong><br>
+          Clear denominators → move everything else away → isolate.<br><br>
+          <strong>Target appears multiple times:</strong><br>
+          Collect all target terms on one side → factor the target out → divide by the group.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fdecea; border-color:var(--redline);">
+        <div class="f-marker" style="font-size:11px; color:var(--redline); margin-bottom:6px;">⚠ WATCH OUT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          After factoring out the target, you divide by the <em>entire group</em> — not just one term.<br><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">ax + bx = c<br>x(a + b) = c<br>x = c / (a + b)  ✓<br>x = c/a + b  ✗</span>
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 THINK ABOUT IT</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">In problem 3, after factoring, why do we divide by <em>(a + b)</em> and not just <em>a</em>?</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">Problem 5 has the target in a denominator. What's the very first move? Why?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="complete-square.html">→ Complete the Square</a>
+        <a class="related-link f-hand" href="quadratic-forms-explorer.html">→ Quadratic Forms Explorer</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── Problem definitions ────────────────────────────────────────────────
+    // Each problem has: label, equation, target, type, steps[]
+    // Each step: { lbl, expr, note, html (optional raw HTML for factor step) }
+    const PROBLEMS = [
+      {
+        id: 0,
+        label: 'v = d/t  → t',
+        eq: 'v = d / t',
+        target: 't',
+        type: 'one-occurrence',
+        intro: 'Target t appears once — it\'s in the denominator. Multiply both sides by t first.',
+        steps: [
+          { lbl: 'Multiply both sides by <strong>t</strong> to clear the denominator',
+            expr: 'v · t = d',
+            note: 'The t in the denominator cancels on the right.' },
+          { lbl: 'Divide both sides by <strong>v</strong>',
+            expr: 't = d / v',
+            note: 'v is just a coefficient — treat it like a number.' },
+        ],
+        answer: 't = d / v',
+      },
+      {
+        id: 1,
+        label: 'P = 2l + 2w  → l',
+        eq: 'P = 2l + 2w',
+        target: 'l',
+        type: 'one-occurrence',
+        intro: 'Target l appears once. Move everything else to the other side.',
+        steps: [
+          { lbl: 'Subtract <strong>2w</strong> from both sides',
+            expr: 'P − 2w = 2l',
+            note: '2w has nothing to do with l, so it moves right away.' },
+          { lbl: 'Divide both sides by <strong>2</strong>',
+            expr: 'l = (P − 2w) / 2',
+            note: 'Keep the parentheses — both P and 2w are divided by 2.' },
+        ],
+        answer: 'l = (P − 2w) / 2',
+      },
+      {
+        id: 2,
+        label: 'ax + bx = c  → x',
+        eq: 'ax + bx = c',
+        target: 'x',
+        type: 'factor-out',
+        intro: 'Target x appears in two terms. Collect them on one side — they\'re already there — then factor.',
+        steps: [
+          { lbl: '<strong>x</strong> appears in both ax and bx — factor it out',
+            html: `<span class="factor-box">x</span> · <span class="factor-rest">(a + b)</span> = c`,
+            note: 'Both terms share x as a factor — just like 3x + 5x = (3+5)x.' },
+          { lbl: 'Divide both sides by the group <strong>(a + b)</strong>',
+            expr: 'x = c / (a + b)',
+            note: 'Divide by the whole group in parentheses — not just a or just b.' },
+        ],
+        answer: 'x = c / (a + b)',
+      },
+      {
+        id: 3,
+        label: '2x + xy = 10  → x',
+        eq: '2x + xy = 10',
+        target: 'x',
+        type: 'factor-out',
+        intro: 'Target x appears in both terms. Factor it out.',
+        steps: [
+          { lbl: 'Factor <strong>x</strong> from both terms on the left',
+            html: `<span class="factor-box">x</span> · <span class="factor-rest">(2 + y)</span> = 10`,
+            note: 'x · 2 = 2x  and  x · y = xy — check by distributing back.' },
+          { lbl: 'Divide both sides by <strong>(2 + y)</strong>',
+            expr: 'x = 10 / (2 + y)',
+            note: 'The entire group (2 + y) is the divisor — parentheses matter.' },
+        ],
+        answer: 'x = 10 / (2 + y)',
+      },
+      {
+        id: 4,
+        label: '1/f = 1/p + 1/q  → p',
+        eq: '1/f = 1/p + 1/q',
+        target: 'p',
+        type: 'denominator',
+        intro: 'Target p is in a denominator. The LCD is f·p·q. Multiply every term by the LCD first.',
+        steps: [
+          { lbl: 'Multiply every term by <strong>fpq</strong> to clear all denominators',
+            expr: 'pq = fq + fp',
+            note: '(1/f)·fpq = pq,  (1/p)·fpq = fq,  (1/q)·fpq = fp' },
+          { lbl: '<strong>p</strong> now appears in two terms — move the fp term to the left',
+            expr: 'pq − fp = fq',
+            note: 'Subtract fp from both sides.' },
+          { lbl: 'Factor out <strong>p</strong> on the left',
+            html: `<span class="factor-box">p</span> · <span class="factor-rest">(q − f)</span> = fq`,
+            note: 'p · q − p · f = p(q − f)' },
+          { lbl: 'Divide both sides by <strong>(q − f)</strong>',
+            expr: 'p = fq / (q − f)',
+            note: 'This is the thin lens equation — used in optics!' },
+        ],
+        answer: 'p = fq / (q − f)',
+      },
+      {
+        id: 5,
+        label: 'A = P + Prt  → P',
+        eq: 'A = P + Prt',
+        target: 'P',
+        type: 'factor-out',
+        intro: 'Target P appears in two terms on the right. Factor it out.',
+        steps: [
+          { lbl: 'Factor <strong>P</strong> from both terms on the right',
+            html: `A = <span class="factor-box">P</span> · <span class="factor-rest">(1 + rt)</span>`,
+            note: 'P · 1 = P  and  P · rt = Prt — this is the compound interest formula.' },
+          { lbl: 'Divide both sides by <strong>(1 + rt)</strong>',
+            expr: 'P = A / (1 + rt)',
+            note: 'P is the principal — given total amount A, rate r, and time t.' },
+        ],
+        answer: 'P = A / (1 + rt)',
+      },
+    ];
+
+    // ─── State ──────────────────────────────────────────────────────────────
+    let currentProb = 0;
+    let revealedSteps = 0;
+
+    // ─── Render ─────────────────────────────────────────────────────────────
+    function renderPicker() {
+      const picker = document.getElementById('prob-picker');
+      picker.innerHTML = PROBLEMS.map((p, i) =>
+        `<button class="prob-btn${i === currentProb ? ' active' : ''}"
+          onclick="loadProblem(${i})">${p.label}</button>`
+      ).join('');
+    }
+
+    function stepClass(idx, total) {
+      if (idx === total - 1) return 'step-final';
+      return `step-${(idx % 4) + 1}`;
+    }
+
+    function renderStage() {
+      const prob = PROBLEMS[currentProb];
+      const stage = document.getElementById('stage');
+
+      // Build HTML
+      let html = `
+        <div class="eq-card sk-box">
+          <div class="eq-card-label">Equation</div>
+          <div class="eq-big">${prob.eq}</div>
+          <div class="eq-target-row">Solve for: <span class="target-badge">${prob.target}</span></div>
+        </div>`;
+
+      // Intro / type hint
+      const typeLabel = prob.type === 'factor-out'
+        ? '🔀 multiple occurrences — factor out'
+        : prob.type === 'denominator'
+        ? '📐 target in denominator — clear it first'
+        : '➡ one occurrence — isolate directly';
+
+      html += `
+        <div class="sk-box" style="padding:8px 12px; background:#fffbe6; border-color:#c8a000;">
+          <span class="f-hand" style="font-size:13px; color:var(--ink-2);">
+            <strong style="color:var(--ink);">${typeLabel}</strong><br>${prob.intro}
+          </span>
+        </div>`;
+
+      // Steps
+      const allSteps = [...prob.steps];
+      allSteps.forEach((step, i) => {
+        const revealed = i < revealedSteps;
+        const cls = `step-card${revealed ? ` revealed ${stepClass(i, allSteps.length)}` : ''}`;
+        const exprHTML = step.html
+          ? step.html
+          : `<span class="step-expr">${highlightTarget(step.expr, prob.target)}</span>`;
+
+        html += `
+          <div class="${cls}">
+            <div class="step-num">step ${i + 1}</div>
+            <div class="step-lbl">${step.lbl}</div>
+            <div>${exprHTML}</div>
+            ${step.note ? `<div class="step-note">${step.note}</div>` : ''}
+          </div>`;
+      });
+
+      // Answer card (shown after all steps revealed)
+      if (revealedSteps >= allSteps.length) {
+        html += `
+          <div class="step-card revealed step-final" style="text-align:center;">
+            <div class="step-num">answer</div>
+            <div class="step-lbl">Isolated — done ✓</div>
+            <div class="answer-chip">${prob.answer}</div>
+          </div>`;
+      }
+
+      // Next button
+      const done = revealedSteps >= allSteps.length;
+      html += `<button class="next-btn" onclick="nextStep()" ${done ? 'disabled' : ''}>
+        ${done ? '✓ complete' : 'Next step →'}
+      </button>`;
+
+      stage.innerHTML = html;
+    }
+
+    function highlightTarget(expr, tv) {
+      // Highlight all occurrences of target variable
+      const re = new RegExp(`\\b${tv}\\b`, 'g');
+      return expr.replace(re, `<span class="tv">${tv}</span>`);
+    }
+
+    function nextStep() {
+      const prob = PROBLEMS[currentProb];
+      if (revealedSteps < prob.steps.length) {
+        revealedSteps++;
+        renderStage();
+        // Scroll the new step into view
+        const cards = document.querySelectorAll('.step-card.revealed');
+        if (cards.length) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function loadProblem(idx) {
+      currentProb = idx;
+      revealedSteps = 1; // Show first step immediately
+      renderPicker();
+      renderStage();
+    }
+
+    // ─── Init ────────────────────────────────────────────────────────────────
+    loadProblem(0);
+  </script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+</body>
+</html>

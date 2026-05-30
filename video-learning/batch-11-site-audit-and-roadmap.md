@@ -266,10 +266,12 @@ The Adding Rationals tool (item 3d) was the only feature gap confirmed in code. 
 
 ## Remaining Action List
 
-| # | Item | Type | Effort | Unit |
-|---|---|---|---|---|
-| 10 | Literal Equation Isolator (new tool) | New tool | Medium | u3 |
-| 11 | Domain Restriction Sorter (new tool) | New tool | Medium | u4 |
-| 12 | Quadratic Three-Form Navigator (new tool) | New tool | Medium | u3 |
-| 13 | Coterminal Angle + Radian Conversion Drill (new tool) | New tool | Small–Medium | u7 |
-| 14 | Run batch-12 analysis on U1 (25-26) new transcripts | Analysis | Medium | — |
+| # | Item | Status |
+|---|---|---|
+| 10 | Literal Equation Isolator | ✅ built — `tools/literal-equations.html`, linked from u3 D9 |
+| 11 | Domain Restriction Sorter | ✅ built — `tools/domain-restriction.html`, linked from u4 D4 |
+| 12 | Quadratic Three-Form Navigator | ✅ already existed as `tools/quadratic-forms-explorer.html` (one parabola, three forms, all in sync) |
+| 13 | Coterminal Angle + Radian Conversion Drill | ✅ built — `tools/coterminal-radian.html`, linked from u7 D2 |
+| 14 | Run batch-12 analysis on U1 (25-26) new transcripts | ⏳ pending — 46 new transcripts being generated; run after completion |
+
+Total tool count after this pass: **55**
