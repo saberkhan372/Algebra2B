@@ -180,18 +180,23 @@
       <!-- Sidebar -->
       <aside class="sidebar">
 
-        <!-- How to use -->
+        <!-- How to use (collapsed by default) -->
         <div class="sidebar-section">
           <div class="how-to-use sk-box rot-l" style="position:relative;">
             <div class="pin" style="top:-6px; right:16px;"></div>
-            <div class="section-label">HOW TO USE THIS SITE</div>
-            <ol>
-              <li>Pick a unit or topic below.</li>
-              <li>Open a tool — they're <span class="highlight">tiny</span>.</li>
-              <li>Mess with it. Try to break it.</li>
-              <li>Show me what you found.</li>
-            </ol>
-            <div class="no-track">~ no logins · nothing saved ~</div>
+            <div id="htu-hdr" class="section-label sk-coll-hdr" style="margin-bottom:0;">
+              <span>HOW TO USE THIS SITE</span>
+              <span class="sk-coll-arrow">▾</span>
+            </div>
+            <div id="htu-body" class="sk-coll-body sk-closed" style="max-height:0;opacity:0;">
+              <ol style="margin-top:8px;">
+                <li>Pick a unit or topic below.</li>
+                <li>Open a tool — they're <span class="highlight">tiny</span>.</li>
+                <li>Mess with it. Try to break it.</li>
+                <li>Show me what you found.</li>
+              </ol>
+              <div class="no-track">~ no logins · nothing saved ~</div>
+            </div>
           </div>
         </div>
 
@@ -210,10 +215,13 @@
           </ul>
         </div>
 
-        <!-- Kind legend -->
+        <!-- Kind legend (collapsed by default) -->
         <div class="sidebar-section" style="margin-top: 16px;">
-          <div class="section-label f-marker" style="font-size:12px; margin-bottom: 6px;">LEGEND</div>
-          <div style="display:flex; flex-direction:column; gap:4px; font-size:13px;">
+          <div id="legend-hdr" class="section-label f-marker sk-coll-hdr" style="font-size:12px; margin-bottom:4px;">
+            <span>LEGEND</span>
+            <span class="sk-coll-arrow">▾</span>
+          </div>
+          <div id="legend-body" class="sk-coll-body sk-closed" style="max-height:0;opacity:0;display:flex;flex-direction:column;gap:4px;font-size:13px;padding-top:4px;">
             <span><span class="sk-tag kind-explorer" style="font-size:10px;">explorer</span> drag &amp; discover</span>
             <span><span class="sk-tag kind-visualizer" style="font-size:10px;">visualizer</span> see it move</span>
             <span><span class="sk-tag kind-practice" style="font-size:10px;">practice</span> step-by-step</span>
@@ -572,6 +580,24 @@
       bars.style.display = progressOpen ? '' : 'none';
       btn.textContent = progressOpen ? '▾' : '▸';
     }
+
+    // ── Sidebar collapse: HOW TO USE and LEGEND ─────────────────────
+    function initSidebarCollapses() {
+      function wire(hdrId, bodyId) {
+        const hdr  = document.getElementById(hdrId);
+        const body = document.getElementById(bodyId);
+        if (!hdr || !body) return;
+        hdr.addEventListener('click', function () {
+          const closed = body.classList.toggle('sk-closed');
+          hdr.classList.toggle('sk-closed', closed);
+          body.style.maxHeight = closed ? '0' : '2000px';
+          body.style.opacity   = closed ? '0' : '1';
+        });
+      }
+      wire('htu-hdr', 'htu-body');
+      wire('legend-hdr', 'legend-body');
+    }
+    initSidebarCollapses();
 
     // Build after progress.js sets up A2PG
     setTimeout(buildProgressBars, 300);

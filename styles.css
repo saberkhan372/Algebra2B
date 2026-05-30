@@ -1163,6 +1163,29 @@ input[type="range"] {
   background: var(--paper-2);
 }
 
+/* ── Collapsible section pattern ─────────────────────────────────────────── */
+.sk-coll-hdr {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  user-select: none;
+}
+.sk-coll-hdr:hover { opacity: 0.75; }
+.sk-coll-arrow {
+  font-size: 10px;
+  color: var(--ink-soft);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.sk-coll-hdr.sk-closed .sk-coll-arrow { transform: rotate(-90deg); }
+.sk-coll-body {
+  overflow: hidden;
+  transition: max-height 0.22s ease, opacity 0.18s ease;
+}
+.sk-coll-body.sk-closed { max-height: 0 !important; opacity: 0; }
+
 /* ── Print styles (item 12 — "print key ideas") ── */
 @media print {
   /* Hide everything interactive */

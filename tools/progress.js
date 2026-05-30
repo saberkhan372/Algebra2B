@@ -105,6 +105,92 @@
     sidebar.insertBefore(wrap, sidebar.firstChild);
   }
 
+  // ── Collapse helper: make a section header toggle its body ────────
+  // hdrEl: the clickable header element
+  // bodyEl: the element whose height will animate
+  // key:    localStorage key for open/closed state
+  // defaultOpen: whether to start expanded if no saved preference
+  function makeCollapsible(hdrEl, bodyEl, key, defaultOpen) {
+    var arrow = document.createElement('span');
+    arrow.className = 'sk-coll-arrow';
+    arrow.textContent = '▾';
+    hdrEl.classList.add('sk-coll-hdr');
+    hdrEl.appendChild(arrow);
+    bodyEl.classList.add('sk-coll-body');
+
+    var saved = localStorage.getItem(key);
+    var isOpen = saved !== null ? saved === '1' : defaultOpen;
+
+    function setOpen(open, animate) {
+      isOpen = open;
+      if (open) {
+        bodyEl.classList.remove('sk-closed');
+        hdrEl.classList.remove('sk-closed');
+        bodyEl.style.maxHeight = '2000px';  // large enough for any sidebar section
+        bodyEl.style.opacity = '1';
+      } else {
+        if (animate) {
+          requestAnimationFrame(function () {
+            bodyEl.classList.add('sk-closed');
+            hdrEl.classList.add('sk-closed');
+          });
+        } else {
+          bodyEl.classList.add('sk-closed');
+          hdrEl.classList.add('sk-closed');
+        }
+      }
+      try { localStorage.setItem(key, open ? '1' : '0'); } catch (e) {}
+    }
+
+    setOpen(isOpen, false);
+    hdrEl.addEventListener('click', function () { setOpen(!isOpen, true); });
+  }
+
+  // ── Auto-collapse HOW TO USE box on tool pages ────────────────────
+  // Covers the 25 tools that use .how-to-box; no per-tool HTML edits needed.
+  function collapseHowToUse() {
+    var box = document.querySelector('.how-to-box');
+    if (!box) return;
+
+    // Build a slim header row above the box
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'font-family:var(--f-body);font-size:10px;font-weight:700;' +
+      'color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;' +
+      'margin-bottom:4px;padding:0 2px;';
+    hdr.innerHTML = '<span>how to use &amp; try this</span>';
+
+    // Wrap box contents into a body div
+    var body = document.createElement('div');
+    while (box.firstChild) body.appendChild(box.firstChild);
+    box.appendChild(hdr);
+    box.appendChild(body);
+
+    makeCollapsible(hdr, body, 'a2pg-htu', false);  // default: closed
+  }
+
+  // ── Auto-collapse lesson stack on unit pages ──────────────────────
+  function collapseLessonStack() {
+    var stack = document.querySelector('.lesson-stack');
+    if (!stack) return;
+
+    var rowCount = stack.querySelectorAll('.lesson-row').length;
+    if (!rowCount) return;
+
+    var hdr = document.createElement('div');
+    hdr.style.cssText = 'font-family:var(--f-body);font-size:10px;font-weight:700;' +
+      'color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;' +
+      'padding:6px 0 4px;';
+    hdr.innerHTML = '<span>lesson schedule (' + rowCount + ' days)</span>';
+
+    // Wrap the lesson stack in a body div
+    var body = document.createElement('div');
+    stack.parentNode.insertBefore(hdr, stack);
+    stack.parentNode.insertBefore(body, stack);
+    body.appendChild(stack);
+
+    makeCollapsible(hdr, body, 'a2pg-ls', false);   // default: closed
+  }
+
   // ── Main entry ───────────────────────────────────────────────────
   function init() {
     var path = location.pathname;
@@ -124,10 +210,16 @@
       if (window.UrlState && window.UrlState.auto) {
         setTimeout(window.UrlState.auto, 0);
       }
+
+      // Collapse informational sidebar sections
+      collapseHowToUse();
     } else {
       // Homepage or unit page — tag cards now + after JS renders them
       applyBadges();
       setTimeout(applyBadges, 200);
+
+      // Collapse lesson stack on unit pages
+      collapseLessonStack();
     }
   }
 

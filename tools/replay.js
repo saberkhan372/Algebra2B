@@ -17,6 +17,7 @@
   var MAX_GAP  = 2000;   // cap pauses to 2 s when normalising
   var timeline = [], recording = false, recStart = 0;
   var lastVals = null, rafId = null, pollTimer = null;
+  var rpOpen   = false;   // replay panel open/closed state
 
   function $ (id) { return document.getElementById(id); }
 
@@ -75,10 +76,16 @@
     panel.id = 'replay-wrap';
     panel.style.cssText = 'padding:9px 13px;border-bottom:1.5px solid var(--ink-soft)';
     panel.innerHTML =
-      '<div style="font-family:var(--f-body);font-size:10px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">replay</div>' +
+      // Collapsible header — clicking toggles the panel body
+      '<div id="rp-hdr" class="sk-coll-hdr" style="font-family:var(--f-body);font-size:10px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;">' +
+        '<span>replay</span><span class="sk-coll-arrow">&#9662;</span>' +
+      '</div>' +
+
+      // Body — starts collapsed; contains all state panels
+      '<div id="rp-body" class="sk-coll-body sk-closed" style="max-height:0;opacity:0;">' +
 
       // idle
-      '<div id="rp-idle" style="display:flex;align-items:center;gap:8px;">' +
+      '<div id="rp-idle" style="display:flex;align-items:center;gap:8px;padding-top:6px;">' +
         '<button id="rp-rec" class="btn accent" style="font-size:12px;padding:4px 10px;">&#9210; rec</button>' +
         '<span style="font-family:var(--f-body);font-size:11px;color:var(--ink-soft);">record &amp; share a walkthrough</span>' +
       '</div>' +
@@ -108,9 +115,31 @@
         '<div style="font-family:var(--f-body);font-size:12px;color:var(--ink-2);">&#9654; playing replay&#8230;</div>' +
         '<div class="rp-bar-wrap"><div id="rp-abar" class="rp-bar-fill"></div></div>' +
         '<button id="rp-skip" class="btn" style="font-size:11px;padding:2px 8px;align-self:flex-start;">&#9632; skip</button>' +
-      '</div>';
+      '</div>' +
+
+      '</div>';  // close rp-body
 
     sidebar.appendChild(panel);
+
+    // Wire the collapse toggle
+    var rpHdr  = panel.querySelector('#rp-hdr');
+    var rpBody = panel.querySelector('#rp-body');
+    rpOpen = false;
+    rpHdr.addEventListener('click', function () {
+      rpOpen = !rpOpen;
+      if (rpOpen) {
+        rpBody.classList.remove('sk-closed');
+        rpHdr.classList.remove('sk-closed');
+        rpBody.style.maxHeight = '2000px';
+        rpBody.style.opacity   = '1';
+      } else {
+        requestAnimationFrame(function () {
+          rpBody.classList.add('sk-closed');
+          rpHdr.classList.add('sk-closed');
+        });
+      }
+    });
+
     return true;
   }
 
@@ -231,6 +260,11 @@
   // ── Auto-play from shared URL ──────────────────────────────────────────────
   var autoTL = replayFromHash();
   if (autoTL && autoTL.length >= 2) {
+    // Auto-expand the replay panel when arriving via a shared replay URL
+    rpOpen = true;
+    var _rpBody = $('rp-body'), _rpHdr = $('rp-hdr');
+    if (_rpBody) { _rpBody.classList.remove('sk-closed'); _rpBody.style.maxHeight = '800px'; }
+    if (_rpHdr)  { _rpHdr.classList.remove('sk-closed'); }
     setPanel('auto');
     applyFrame(autoTL[0]);
 
