@@ -10,26 +10,26 @@ metadata:
 **Algebra 2B Playgrounds** is a static site (GitHub Pages) at `Algebra2B/`. Serves as classroom supplement for 7-unit Algebra 2 course (Sept–May).
 
 **Site structure:**
-- `index.html` — homepage with 42-tool grid, search/filter, animated TOTW canvas, per-card canvas hover previews
+- `index.html` — homepage with 59-tool grid, search/filter, animated TOTW canvas, per-card canvas hover previews
 - `about.html` — teacher letter, FAQ, credits
 - `map.html` — full visual map of all tools organized by unit
 - `u1.html`–`u7.html` — unit pages (lesson stacks with tool links); `u9.html` for Statistics
-- `tools/` — 42 standalone interactive HTML tools
+- `tools/` — 59 standalone interactive HTML tools
 - `styles.css` — all shared CSS variables and classes
 - `algebra-2-tools/` — Claude Design wireframe exports (reference only)
 - `video-learning/` — transcripts, batch insight notes, contact sheets, PDF extracts
 
-**44 tools currently built (as of 2026-05-28):**
-U1 (7): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher, **Function X-Ray**, **Inequality Region Explorer**
-U2 (6): Abs Value Grapher, Transformations Explorer, Neg Exponent Flipper, Diff of Squares, Diff of Cubes, **Parent Function Atlas**
-U3 (7): Imaginary Number Sandbox, Quadratic Standard Form, Rational Expression Builder, Complete the Square Trainer, Quadratic Word Problems Trainer, Rationalizing Denominators, **Quadratic Forms Explorer**
-U4 (4): Rational Exponents Tower, Cubic & Radical Grapher, Composition Machine, Inverse Function Revealer
-U5 (6): Log↔Exp Converter, Exponential Function Explorer, Log Properties Sandbox, Exponential Equation Solver, Exponential Model Builder, **Log↔Exp Mirror**
-U6 (7): Rational Simplifier, Adding Rational Expressions, Rational Mult/Div Stepper, Solving Rational Equations, Polynomial Sketch Pad, Polynomial Division Stepper, **Rational Behavior**
-U7 (4): SOH CAH TOA Triangle Solver, Unit Circle Walker, Sine/Cosine Graph Builder, **Trig Explorer**
+**59 tools currently built (as of 2026-05-30):**
+U1 (12): Quadratic Slider Studio, Substitution Stepper, Elimination Race, Factoring Quadratics Lab, Piecewise Function Grapher, Function X-Ray, Inequality Region Explorer, Systems Explorer, **Inequality Solver**, **Abs Value Equation Stepper**, **Point-Slope Form Trainer**, **Function Notation Evaluator**
+U2 (6): Abs Value Grapher, Transformations Explorer, Neg Exponent Flipper, Diff of Squares, Diff of Cubes, Parent Function Atlas
+U3 (9): Imaginary Number Sandbox, Quadratic Standard Form, Rational Expression Builder, Complete the Square Trainer, Quadratic Word Problems Trainer, Rationalizing Denominators, Quadratic Forms Explorer, Complex Number Explorer, **Literal Equation Isolator**
+U4 (6): Rational Exponents Tower, Cubic & Radical Grapher, Composition Machine, Inverse Function Revealer, Composition & Inverse Lab, **Domain Restriction Sorter**
+U5 (8): Log↔Exp Converter, Exponential Function Explorer, Log Properties Sandbox, Exponential Equation Solver, Exponential Model Builder, Log↔Exp Mirror, Growth Race, **Exponential Equations Stepper**
+U6 (8): Rational Simplifier, Adding Rational Expressions (now Adding & Subtracting), Rational Mult/Div Stepper, Solving Rational Equations, Polynomial Sketch Pad, Polynomial Division Stepper, Rational Behavior, Polynomial Roots
+U7 (7): SOH CAH TOA Triangle Solver, Unit Circle Walker, Sine/Cosine Graph Builder, Trig Explorer, Unit Circle Wave Sync, Sine/Cosine Graph Builder (from circle), **Coterminal Angles & Radian Conversion**
 U9 (3): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab
 
-**No tools missing** — all 44 tools are live. No coming-soon rows on any unit page.
+**No missing tools** — all 59 tools live. No coming-soon rows on any unit page.
 
 **Explorer tools** (built 2026-05-28):
 - `tools/parent-function-atlas.html` — 5 families: x², |x|, √x, 2ˣ, 1/x with a/h/k sliders; live feature chips (domain, range, zeros, y-intercept, asymptotes); dashed asymptote lines, colored intercept dots
@@ -45,6 +45,8 @@ U9 (3): Box Plot Builder, Probability Rules Sandbox, Sampling Bias Lab
 - `tools/inequality-explorer.html` — Linear, Quadratic, Abs Value inequalities + 2-linear System; live shaded region, solid/dashed boundary, click-to-place test point with ✓/✗, intersection region highlighted in system mode
 
 **PLAN.md tracks all build phases** — see it for priority order, who builds what, and design constraints.
+
+**How to apply:** Always check PLAN.md for current tool count and batch-insight pass notes before building. Tool count is 59 as of 2026-05-30.
 
 **Why:** Classroom supplement giving students visual/interactive exposure to concepts. No logins, no tracking, no cost.
 

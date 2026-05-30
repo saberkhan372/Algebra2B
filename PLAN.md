@@ -1,17 +1,17 @@
 # Algebra 2B Playgrounds — Build Plan
 
-Last updated: 2026-05-29  
+Last updated: 2026-05-30  
 Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site audit, and video-learning transcripts/contact sheets.
 
 ---
 
 ## Current state
 
-**Site:** 8 unit pages (u1–u7 + u9), **50 tools** wired into the homepage grid.  
+**Site:** 8 unit pages (u1–u7 + u9), **59 tools** wired into the homepage grid.  
 **Curriculum:** All 8 units complete (Sept → May). Year is done.  
 **Unit pages:** U1–U7 + U9 fully wired. No coming-soon rows remain.  
-**Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip), correct "all 50" count.  
-**Video-learning:** Complete through batch 10 — 57 transcripts, extracted PDF text, 37 contact sheets, 10 synthesis notes.
+**Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip).  
+**Video-learning:** Complete through batch 12 — 75+ transcripts, extracted PDF text, 37 contact sheets, 12 synthesis notes. 46 additional transcripts from batch-11 transcription pass (29 complete, 17 pending at time of writing).
 
 **Student & classroom improvements (May 2026) — all complete:**
 - Board mode + teacher quick-nav (`⛶ board` / `⊞ tools`) — `tools/fullscreen.js`
@@ -30,7 +30,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - **Concept map** — `concept-map.html`; 50 nodes in 8 concept threads, 10 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
 - **Collapsible sections** — HOW TO USE & TRY THIS (25 tool pages), lesson schedule (8 unit pages), REPLAY panel, homepage sidebar sections, and **all 8 homepage unit grids** start collapsed; `.sk-coll-*` CSS pattern in `styles.css`; unit grids auto-expand when any filter/search is active; state saved in localStorage
 
-**50 tools built/integrated:**
+**59 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
@@ -81,7 +81,18 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - Composition & Inverse Lab (U4) — compose f and g, watch f∘g and g∘f diverge; flip to Inverse mode: drag point on f, see mirror on f⁻¹ over y=x
 - Growth Race (U5) — log, √x, x, x², 2^x on one canvas; drag cursor, watch live leaderboard flip; 2^x falls behind x² then explodes past it
 
-**No planned tools missing** — all 50 tools are live.
+**9 tools added in batch-11/12 video-insight pass (May–June 2026):**
+- Exponential Equations Stepper (U5) — 3 decision lanes: same base / log both sides / x on both sides; was already built, now linked from u5 D6
+- Sine / Cosine Graph Builder — "From the Circle" mode (U7) — traces the wave from unit circle coordinates; was already built, now linked from u7 D3–4
+- Literal Equation Isolator (U3, D9) — 6 presets covering target-appears-once and factor-out cases; color-coded step reveal
+- Domain Restriction Sorter (U4, D4) — 6 problems; student picks rule type first (√ alone / denom / √ in denom), then steps through algebra; number line SVG output
+- Coterminal Angles & Radian Conversion (U7, D2) — coterminal drill with score tracking; degree↔radian converter with dimensional-analysis unit-cancellation display
+- Inequality Solver (U1, D7) — 6 presets; ⚠ flip-alert card on every divide-by-negative step; number line + interval notation output
+- Absolute Value Equation Stepper (U1, D7) — 6 presets; isolate → two-branch visual → solve each → check both; no-solution detector
+- Point-Slope Form Trainer (U1, D6) — three modes: point+slope (live graph), two points (slope formula shown), parallel/perp (flip-and-negate with steps)
+- Function Notation Evaluator (U1, D8) — regular f(x) with PEMDAS breakdown + undefined detector; piecewise tab with "pick the piece first" game mechanic
+
+**No missing tools from the planned curriculum** — all originally planned 50 tools are live, plus 9 additional from video-insight passes.
 
 **Explorer roadmap (in priority order):**
 1. ✓ Parent Function Atlas — built
@@ -91,9 +102,11 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 5. ✓ Trig Function Explorer (U7) — built
 6. ✓ Inequality Region Explorer (cross-unit) — built (live at tools/inequality-explorer.html)
 
-**Archived/orphan prototype files not in student navigation:**
-- `tools/exponential-equations.html` - earlier exponential-equation solver prototype.
-- `tools/sincos-grapher.html` - alternate sine/cosine grapher prototype; canonical student link is `tools/sine-cosine-builder.html`.
+**Additional tools built but not originally planned (from video insights):**
+- `tools/exponential-equations.html` — fuller exponential equation solver (3 modes); now linked from u5.html D6.
+- `tools/sincos-grapher.html` — sine/cosine grapher with "From the Circle" mode; now linked from u7.html D3–4.
+- `tools/adding-rationals.html` — upgraded to "Adding & Subtracting" with explicit distribute-negative step 2 in subtract mode.
+- `tools/abs-value-grapher.html` — h-tooltip added: "plug in x=[h] to make inside=0" appears when h≠0.
 
 ---
 
@@ -130,6 +143,8 @@ Artifacts now include:
 - `video-learning/batch-8-functions-transformations-unit2-insights.md` - insights from U2-D1, U2-D2, U2-D5, and U2-D8: functions, domain/range/end behavior, calculator workflow, transformations, and cumulative Unit 2 review.
 - `video-learning/batch-9-25-26-revisit-insights.md` - insights from 25-26 versions of U1-D2/D3, U2-D3/D4/D6/D7, U3-D1, and U3-D3: confirms patterns from earlier batches; new insights include the definitive "why h is opposite" explanation, "plus/minus ruin the party" exponent rule, imaginary-solutions/no-x-intercepts bridge, GCF-always-first principle, and three-form quadratic map (vertex ↔ standard ↔ intercept).
 - `video-learning/batch-10-unit3-remaining-review-insights.md` - insights from U3-D2, U3-D4, U3-D7, U3-D8, U3-D9, U3-D10, and Unit 3 Test Review: intercept form, quadratic word problems, rationalizing denominators, powers of `i`, conjugates, literal equations, piecewise parabolas, and cumulative review patterns.
+- `video-learning/batch-11-site-audit-and-roadmap.md` - cross-site audit comparing all transcripts/PDFs against live tools. Found items 3b–3g already implemented. Linked 2 orphaned tools, improved Adding Rationals subtract flow, added h-tooltip to Abs Value Grapher. Built Literal Equations Isolator, Domain Restriction Sorter, Coterminal & Radians drill.
+- `video-learning/batch-12-unit1-25-26-insights.md` - full analysis of U1-D1, D4–D8 (25-26). Key insights: plug-boundary-value piecewise technique (D5), flip-rule for inequalities (D7), two-branch absolute value solving (D7), f(x)=y equivalence (D5/D8). Built 4 tools: Inequality Solver, Abs Value Equation Stepper, Point-Slope Form Trainer, Function Notation Evaluator.
 
 Transcribed lessons so far:
 
@@ -194,6 +209,21 @@ Transcribed lessons so far:
 - U8-D3 - adding/subtracting rational expressions, LCD building, numerator combining, sign distribution, and final simplification.
 - U8-D4 - solving rational equations, common denominators, excluded values, extraneous candidates, and no-solution cases.
 - Unit 8 Study Guide - rational-function identification (no square roots/fractional exponents), interval notation, three-case horizontal asymptote rule, slant asymptote identification, and graphing-from-asymptotes technique.
+
+Batch-11 transcription pass (46 additional videos — 29 complete as of 2026-05-30):
+- U1-D1 Video (25-26) - slope, standard→slope-intercept form, graphing, systems with checking, VUXHOY.
+- U1-D4 Video (25-26) - piecewise intro, domain concept, open/closed circles, bounded graphs.
+- U1-D5 Video (25-26) - piecewise deep dive, plug-boundary-value technique, multi-piece graphs, f(x)=y intro.
+- U1-D6 Video (25-26) - point-slope form, parallel/perpendicular slopes, negative reciprocal.
+- U1-D7 Video (25-26) - inequalities (flip rule), number-line graphing, absolute value as distance, two-branch solving, no-solution case.
+- U1-D8 Video (25-26) - function notation, evaluating f(x) with PEMDAS, undefined case, piecewise evaluation with f(x) notation.
+- U1 Review Video (unlabeled) - Unit 1 cumulative review.
+- U2-D3 Video (Part 2) 25-26 - absolute value transformations continued.
+- U2-D4 Video (unlabeled) - negative exponents and quiz review (older version).
+- U2-D5 Video (PART 1) and (PART 2) - parent functions and transformations.
+- U3 Review Video - Unit 3 cumulative review.
+- U3-D1 Video (24-25) - imaginary numbers (24-25 version).
+- Remaining 17 videos (U3-D2 through U4-D5, review/study-guide videos, calculator help, misc) - transcription in progress.
 
 U9 note: the newly transcribed U9-D1 through U9-D3 classroom videos are statistics/probability lessons. The local video inventory also contains a separate `Unit 9 Review Video (Conics)`, so future U9 planning should keep those strands distinct until the source materials are reconciled.
 
