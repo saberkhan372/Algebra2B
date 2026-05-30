@@ -6,7 +6,7 @@
  * Network failures return offline.html for navigation requests.
  */
 
-const CACHE_VERSION = 'a2p-v11';
+const CACHE_VERSION = 'a2p-v12';
 const OFFLINE_URL   = '/offline.html';
 
 // Everything to precache on install — covers all pages and shared assets
@@ -38,7 +38,7 @@ const PRECACHE_URLS = [
   '/tools/tour.js',
   '/tools/math-fmt.js',
   '/tools/math-input.js',
-  // All 50 tool pages (plus 2 orphaned prototypes kept for SW completeness)
+  // All 60 tool pages
   '/tools/abs-value-grapher.html',
   '/tools/adding-rationals.html',
   '/tools/box-plot-builder.html',
@@ -97,7 +97,8 @@ const PRECACHE_URLS = [
   '/tools/function-notation.html',
   '/tools/inequality-solver.html',
   '/tools/literal-equations.html',
-  '/tools/point-slope.html'
+  '/tools/point-slope.html',
+  '/tools/linear-equations.html'
 ];
 
 // ── Install: cache everything ──

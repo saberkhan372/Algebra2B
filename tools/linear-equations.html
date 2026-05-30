@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linear Equations Explorer — A2 Playgrounds</title>
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    html, body { height: 100%; }
+    .tool-page { height: calc(100vh - 52px); overflow-y: auto; }
+    @media (max-width: 900px) { .tool-page { height: auto; } }
+
+    /* tabs */
+    .mode-tabs { display:flex; gap:0; border-bottom:2px solid var(--ink); margin-bottom:14px; flex-wrap:wrap; }
+    .mode-tab {
+      padding:6px 18px; border:none; background:transparent;
+      font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; color:var(--ink-soft); border-bottom:3px solid transparent;
+      margin-bottom:-2px; transition:all .15s;
+    }
+    .mode-tab.active { color:var(--ink); border-bottom-color:var(--accent); }
+    .mode-tab:hover:not(.active) { background:var(--paper-2); }
+    .mode-panel { display:none; }
+    .mode-panel.active { display:block; }
+
+    /* input grids */
+    .input-row { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:10px 0; }
+    .coeff-input {
+      width:60px; font-family:'JetBrains Mono',monospace; font-size:17px;
+      padding:5px 8px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); text-align:center;
+    }
+    .coeff-input:focus { border-color:var(--accent); outline:none; }
+    .math-lbl { font-family:'JetBrains Mono',monospace; font-size:17px; color:var(--ink-2); }
+
+    /* form cards */
+    .form-cards { display:flex; flex-direction:column; gap:8px; margin:10px 0; }
+    .form-card {
+      padding:10px 14px; border:2px solid var(--ink-2); border-radius:6px; background:var(--paper);
+    }
+    .form-card.fc-si   { border-color:#2a6fb4; background:#dde9f6; }
+    .form-card.fc-std  { border-color:#2a8a4a; background:#e8f4ec; }
+    .form-card.fc-ps   { border-color:#d94f2a; background:#faeae4; }
+    .form-name { font-family:'Permanent Marker',cursive; font-size:11px; color:var(--ink-soft); margin-bottom:4px; text-transform:uppercase; }
+    .form-eq   { font-family:'JetBrains Mono',monospace; font-size:17px; color:var(--ink); }
+    .form-note { font-family:var(--f-body); font-size:12px; color:var(--ink-2); margin-top:4px; }
+
+    /* canvas */
+    .graph-wrap { position:relative; margin:10px 0; }
+    .graph-canvas { display:block; border:2px solid var(--ink-2); border-radius:4px; background:var(--paper-2); touch-action:none; }
+
+    /* VUXHOY display */
+    .vuxhoy-grid {
+      display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:10px 0;
+    }
+    .vux-card, .hoy-card {
+      padding:12px 14px; border:2px solid; border-radius:6px; text-align:center;
+    }
+    .vux-card { border-color:#2a6fb4; background:#dde9f6; }
+    .hoy-card { border-color:#2a8a4a; background:#e8f4ec; }
+    .vux-letter, .hoy-letter {
+      font-family:'Caveat',cursive; font-size:28px; font-weight:700; line-height:1;
+    }
+    .vux-letter { color:#2a6fb4; }
+    .hoy-letter { color:#2a8a4a; }
+    .vux-meaning, .hoy-meaning { font-family:var(--f-body); font-size:13px; margin-top:2px; color:var(--ink-2); }
+
+    .line-type-row { display:flex; gap:10px; flex-wrap:wrap; margin:10px 0; }
+    .line-type-btn {
+      flex:1; padding:8px 14px; border:2px solid var(--ink-2); border-radius:4px;
+      background:var(--paper); font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:all .12s; text-align:center;
+    }
+    .line-type-btn.active-h { border-color:#2a8a4a; background:#e8f4ec; color:#2a8a4a; }
+    .line-type-btn.active-v { border-color:#2a6fb4; background:#dde9f6; color:#2a6fb4; }
+
+    .c-val-row { display:flex; align-items:center; gap:8px; margin:8px 0; }
+    .c-val-row label { font-family:'Permanent Marker',cursive; font-size:12px; color:var(--ink-2); min-width:50px; }
+    .vux-eq { font-family:'JetBrains Mono',monospace; font-size:20px; color:var(--ink); padding:8px 14px; background:var(--paper-2); border-radius:4px; border:2px solid var(--ink-2); display:inline-block; margin-top:6px; }
+
+    /* verify tab */
+    .verify-result {
+      padding:10px 14px; border-radius:6px; margin-top:8px;
+      font-family:var(--f-body); font-size:13px; display:none;
+    }
+    .verify-result.show { display:block; }
+    .verify-result.yes { border:2px solid #2a8a4a; background:#e8f4ec; }
+    .verify-result.no  { border:2px solid var(--redline); background:#fdecea; }
+    .verify-expr { font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--ink); line-height:1.9; margin-top:6px; }
+    .verify-verdict { font-family:'Permanent Marker',cursive; font-size:16px; margin-top:6px; }
+    .v-yes { color:#2a8a4a; }
+    .v-no  { color:var(--redline); }
+
+    .check-btn {
+      padding:6px 18px; background:var(--ink); color:var(--paper); border:none;
+      border-radius:4px; font-family:'Permanent Marker',cursive; font-size:13px;
+      cursor:pointer; transition:opacity .15s; margin-top:6px;
+    }
+    .check-btn:hover { opacity:.8; }
+
+    /* slope chip */
+    .slope-chip {
+      display:inline-block; padding:4px 12px; border-radius:4px;
+      font-family:'JetBrains Mono',monospace; font-size:13px;
+      border:1.5px solid var(--ink-2); background:var(--paper-2); margin-top:4px;
+    }
+  </style>
+</head>
+<body class="paper-lined">
+  <nav class="site-nav" style="padding:6px 16px;">
+    <a href="../index.html" class="nav-logo" style="font-size:20px;">A2 <span class="accent">Playgrounds</span></a>
+    <div class="nav-links"><a href="../u1.html">← U1</a><a href="../index.html">all tools</a></div>
+  </nav>
+
+  <div class="tool-page">
+    <div class="tool-main">
+      <div class="tool-breadcrumb"><a href="../u1.html">← U1 · Systems &amp; Foundations</a> &nbsp;·&nbsp; D1 · D6</div>
+      <div class="tool-title f-display">Linear Equations Explorer</div>
+      <div class="tool-tagline f-hand">Rise over run. Three forms, one line. Always check your solution.</div>
+
+      <div class="mode-tabs">
+        <button class="mode-tab active" data-mode="forms-panel">Forms &amp; Graph</button>
+        <button class="mode-tab" data-mode="vuxhoy-panel">VUXHOY</button>
+        <button class="mode-tab" data-mode="verify-panel">Verify a Solution</button>
+      </div>
+
+      <!-- ── Tab 1: Forms & Graph ── -->
+      <div class="mode-panel active" id="forms-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:8px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:8px;">ENTER SLOPE-INTERCEPT FORM &nbsp;·&nbsp; <span style="color:var(--ink-2);">y = mx + b</span></div>
+          <div class="input-row">
+            <span class="math-lbl">y =</span>
+            <input class="coeff-input" id="si-m" type="number" step="0.5" value="2" oninput="updateFromSI()">
+            <span class="math-lbl">x +</span>
+            <input class="coeff-input" id="si-b" type="number" step="1" value="1" oninput="updateFromSI()">
+          </div>
+
+          <div class="f-marker" style="font-size:11px; margin-bottom:8px; margin-top:10px;">OR ENTER STANDARD FORM &nbsp;·&nbsp; <span style="color:var(--ink-2);">Ax + By = C</span></div>
+          <div class="input-row">
+            <input class="coeff-input" id="std-a" type="number" step="1" value="2" oninput="updateFromStd()">
+            <span class="math-lbl">x +</span>
+            <input class="coeff-input" id="std-b" type="number" step="1" value="-1" oninput="updateFromStd()">
+            <span class="math-lbl">y =</span>
+            <input class="coeff-input" id="std-c" type="number" step="1" value="3" oninput="updateFromStd()">
+          </div>
+        </div>
+
+        <div class="form-cards" id="form-cards"></div>
+        <div class="graph-wrap">
+          <canvas id="forms-canvas" class="graph-canvas" width="320" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- ── Tab 2: VUXHOY ── -->
+      <div class="mode-panel" id="vuxhoy-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:10px; background:#fffbe6; border-color:#c8a000;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:4px;">THE VUXHOY RULE</div>
+          <div class="f-hand" style="font-size:13px; color:var(--ink-2); line-height:1.7;">
+            Two special lines that don't fit y = mx + b:
+          </div>
+        </div>
+
+        <div class="vuxhoy-grid">
+          <div class="vux-card">
+            <div class="vux-letter">VUX</div>
+            <div class="vux-meaning"><strong>V</strong>ertical lines<br><strong>U</strong>ndefined slope<br>equation uses <strong>X</strong></div>
+          </div>
+          <div class="hoy-card">
+            <div class="hoy-letter">HOY</div>
+            <div class="hoy-meaning"><strong>H</strong>orizontal lines<br><strong>O</strong> (zero) slope<br>equation uses <strong>Y</strong></div>
+          </div>
+        </div>
+
+        <div class="line-type-row">
+          <button class="line-type-btn active-h" id="btn-horiz" onclick="setLineType('horiz')">Horizontal — y = c</button>
+          <button class="line-type-btn" id="btn-vert"  onclick="setLineType('vert')">Vertical — x = c</button>
+        </div>
+
+        <div class="c-val-row">
+          <label id="c-label">y =</label>
+          <input type="range" id="c-slider" min="-6" max="6" step="1" value="2" oninput="updateVuxhoy()" style="flex:1;">
+          <span id="c-display" style="font-family:'JetBrains Mono',monospace; font-size:16px; min-width:30px; color:var(--accent);">2</span>
+        </div>
+
+        <div id="vux-eq-wrap">
+          <span class="vux-eq" id="vux-eq">y = 2</span>
+        </div>
+
+        <div id="vux-explain" class="sk-box" style="padding:10px; margin-top:10px; background:var(--paper-2);">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="graph-wrap" style="margin-top:10px;">
+          <canvas id="vuxhoy-canvas" class="graph-canvas" width="320" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- ── Tab 3: Verify a Solution ── -->
+      <div class="mode-panel" id="verify-panel">
+        <div class="sk-box" style="padding:10px; margin-bottom:8px;">
+          <div class="f-marker" style="font-size:11px; margin-bottom:8px;">THE LINE (slope-intercept form)</div>
+          <div class="input-row">
+            <span class="math-lbl">y =</span>
+            <input class="coeff-input" id="vf-m" type="number" step="0.5" value="2" oninput="clearVerify()">
+            <span class="math-lbl">x +</span>
+            <input class="coeff-input" id="vf-b" type="number" step="1" value="1" oninput="clearVerify()">
+          </div>
+
+          <div class="f-marker" style="font-size:11px; margin-bottom:8px; margin-top:10px;">THE POINT</div>
+          <div class="input-row">
+            <span class="math-lbl">(</span>
+            <input class="coeff-input" id="vf-x" type="number" step="1" value="1" oninput="clearVerify()">
+            <span class="math-lbl">,</span>
+            <input class="coeff-input" id="vf-y" type="number" step="1" value="3" oninput="clearVerify()">
+            <span class="math-lbl">)</span>
+          </div>
+          <button class="check-btn" onclick="runVerify()">Check →</button>
+        </div>
+
+        <div class="f-hand" style="font-size:12px; color:var(--ink-2); margin-bottom:4px;">
+          Try these: &nbsp;
+          <button class="preset-btn" onclick="loadVerify(2,1,1,3,true)"  style="padding:3px 8px; border-radius:12px; border:1.5px solid var(--ink-2); background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer;">(1, 3) on y=2x+1?</button>
+          <button class="preset-btn" onclick="loadVerify(-1,4,2,3,false)" style="padding:3px 8px; border-radius:12px; border:1.5px solid var(--ink-2); background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer;">(2, 3) on y=−x+4?</button>
+          <button class="preset-btn" onclick="loadVerify(3,-2,-1,-5,true)" style="padding:3px 8px; border-radius:12px; border:1.5px solid var(--ink-2); background:var(--paper); font-family:'JetBrains Mono',monospace; font-size:11px; cursor:pointer;">(−1,−5) on y=3x−2?</button>
+        </div>
+
+        <div class="verify-result" id="verify-result"></div>
+
+        <div class="sk-box" style="padding:10px; margin-top:12px; background:var(--paper-2);">
+          <div class="f-marker" style="font-size:11px; margin-bottom:4px;">WHY VERIFY?</div>
+          <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+            A solution is any point on the line — there are infinitely many. After solving a system,
+            always plug the point into <em>both</em> original equations to confirm it satisfies both.
+            "You can always, always, always check."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-sidebar">
+      <div class="sk-box" style="padding:10px; background:var(--paper-2);">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">THREE FORMS</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.9; color:var(--ink-2);">
+          <span style="color:#2a6fb4; font-weight:700;">Slope-intercept</span><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">y = mx + b</span><br>
+          easiest to graph<br><br>
+          <span style="color:#2a8a4a; font-weight:700;">Standard form</span><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">Ax + By = C</span><br>
+          convert: isolate y<br><br>
+          <span style="color:#d94f2a; font-weight:700;">Point-slope form</span><br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:12px;">y − y₁ = m(x − x₁)</span><br>
+          use any point on the line
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:6px;">SLOPE = RISE / RUN</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.7; color:var(--ink-2);">
+          Steep stairs → big slope.<br>
+          Gentle stairs → small slope.<br>
+          Downhill (right) → negative.<br>
+          Flat → slope = 0.<br>
+          Vertical wall → undefined.
+        </div>
+      </div>
+
+      <div class="sk-box" style="padding:10px; background:#fffbe6; border-color:#c8a000;">
+        <div class="f-marker" style="font-size:11px; margin-bottom:4px;">STANDARD → SLOPE-INTERCEPT</div>
+        <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+          Goal: get y by itself.<br>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px;">
+            5x − 7y = 84<br>
+            −7y = −5x + 84<br>
+            y = (5/7)x − 12
+          </span>
+        </div>
+      </div>
+
+      <div class="try-this-box">
+        <div class="f-marker" style="font-size:12px; margin-bottom:8px;">👀 TRY THIS</div>
+        <div class="try-this-item sk-box" style="margin-bottom:8px; padding:8px 10px;">
+          <span class="q-num f-display" style="color:var(--accent);">Q1.</span>
+          <span class="f-hand" style="font-size:13px;">Enter standard form 6x + 2y = 8. What is the slope-intercept form? Verify with the graph.</span>
+        </div>
+        <div class="try-this-item sk-box" style="padding:8px 10px; transform:rotate(0.3deg);">
+          <span class="q-num f-display" style="color:var(--accent);">Q2.</span>
+          <span class="f-hand" style="font-size:13px;">In VUXHOY, switch to vertical. Why does the slope say "undefined"? Try dragging the line — what changes?</span>
+        </div>
+      </div>
+
+      <div class="related-box">
+        <div class="related-label f-type">related tools →</div>
+        <a class="related-link f-hand" href="point-slope.html">→ Point-Slope Form Trainer</a>
+        <a class="related-link f-hand" href="systems-explorer.html">→ Systems Explorer</a>
+        <a class="related-link f-hand" href="substitution-stepper.html">→ Substitution Stepper</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── Tab switching ────────────────────────────────────────────────────────
+    document.querySelectorAll('.mode-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        document.querySelectorAll('.mode-tab,.mode-panel').forEach(el => el.classList.remove('active'));
+        t.classList.add('active');
+        document.getElementById(t.dataset.mode).classList.add('active');
+        if (t.dataset.mode === 'forms-panel')  updateFromSI();
+        if (t.dataset.mode === 'vuxhoy-panel') updateVuxhoy();
+      });
+    });
+
+    // ── Helpers ──────────────────────────────────────────────────────────────
+    function fmtN(n) {
+      if (!isFinite(n)) return '?';
+      const r = Math.round(n * 1000) / 1000;
+      if (Number.isInteger(r)) return String(r);
+      for (let d = 2; d <= 20; d++) {
+        const num = Math.round(n * d);
+        if (Math.abs(num / d - n) < 0.0001) return `${num}/${d}`;
+      }
+      return r.toFixed(3).replace(/0+$/, '').replace(/\.$/, '');
+    }
+
+    function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+
+    function mStr(m) {
+      const n = fmtN(m);
+      if (n === '1') return '';
+      if (n === '-1') return '−';
+      if (n.startsWith('-')) return '−' + n.slice(1);
+      return n;
+    }
+    function bStr(b) {
+      if (b === 0) return '';
+      const n = fmtN(Math.abs(b));
+      return b > 0 ? ` + ${n}` : ` − ${n}`;
+    }
+
+    function siForm(m, b) {
+      const ms = mStr(m) + 'x';
+      return `y = ${ms}${bStr(b)}` || 'y = 0';
+    }
+    function stdForm(m, b) {
+      // y = mx + b  →  −mx + y = b  →  multiply through to clear fractions if needed
+      // Express as integers if possible: Ax + By = C
+      // Find a multiplier that clears fractions in m
+      let mult = 1;
+      for (let d = 1; d <= 20; d++) {
+        if (Math.abs(Math.round(m * d) - m * d) < 0.0001) { mult = d; break; }
+      }
+      const A = -Math.round(m * mult);
+      const B = mult;
+      const C = Math.round(b * mult);
+      const g = gcd(gcd(Math.abs(A), Math.abs(B)), Math.abs(C));
+      const An = A / g, Bn = B / g, Cn = C / g;
+      // Format: Ax + By = C
+      const aStr = An === 1 ? 'x' : An === -1 ? '−x' : An < 0 ? `−${Math.abs(An)}x` : `${An}x`;
+      const bPart = Bn === 1 ? ' + y' : Bn === -1 ? ' − y' : Bn > 0 ? ` + ${Bn}y` : ` − ${Math.abs(Bn)}y`;
+      return `${aStr}${bPart} = ${Cn}`;
+    }
+    function psForm(m, b) {
+      // Use y-intercept point (0, b)
+      const ms = fmtN(m);
+      const bs = fmtN(Math.abs(b));
+      const bSign = b >= 0 ? ` + ${fmtN(b)}` : ` − ${fmtN(-b)}`;
+      return `y − (${fmtN(b)}) = ${ms}(x − 0)`;
+    }
+
+    // ── Forms canvas ─────────────────────────────────────────────────────────
+    function drawFormsCanvas(m, b) {
+      const c = document.getElementById('forms-canvas');
+      const ctx = c.getContext('2d');
+      const W = c.width, H = c.height;
+      const ox = W / 2, oy = H / 2, sc = W / 20;
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = '#f6f1e4';
+      ctx.fillRect(0, 0, W, H);
+
+      // grid
+      ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+      for (let i = -10; i <= 10; i++) {
+        ctx.beginPath(); ctx.moveTo(ox + i*sc, 0); ctx.lineTo(ox + i*sc, H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, oy - i*sc); ctx.lineTo(W, oy - i*sc); ctx.stroke();
+      }
+
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+      // tick labels
+      ctx.fillStyle = 'rgba(29,26,20,0.35)';
+      ctx.font = "10px 'JetBrains Mono',monospace";
+      for (let i = -8; i <= 8; i += 2) {
+        if (i === 0) continue;
+        ctx.textAlign = 'center'; ctx.fillText(i, ox + i*sc, oy + 14);
+        ctx.textAlign = 'right';  ctx.fillText(-i, ox - 5, oy - i*sc + 4);
+      }
+
+      // line
+      ctx.strokeStyle = '#2a6fb4'; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      const x1 = -ox/sc, x2 = (W-ox)/sc;
+      ctx.moveTo(ox + x1*sc, oy - (m*x1+b)*sc);
+      ctx.lineTo(ox + x2*sc, oy - (m*x2+b)*sc);
+      ctx.stroke();
+
+      // y-intercept dot
+      const yint_px = oy - b*sc;
+      if (yint_px >= 0 && yint_px <= H) {
+        ctx.fillStyle = '#2a6fb4'; ctx.strokeStyle = '#f6f1e4'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(ox, yint_px, 5, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#2a6fb4';
+        ctx.font = "11px 'JetBrains Mono',monospace"; ctx.textAlign = 'left';
+        ctx.fillText(`(0, ${fmtN(b)})`, ox + 8, yint_px - 4);
+      }
+
+      // rise/run arrows from a nice point
+      if (isFinite(m) && m !== 0) {
+        // Find a clean starting x near center
+        const startX = Math.round(-b/m) !== 0 ? 0 : 1;
+        const startY = m * startX + b;
+        const runX = startX + 1;
+        const riseY = m * runX + b;
+
+        const px1 = ox + startX*sc, py1 = oy - startY*sc;
+        const px2 = ox + runX*sc,   py2 = oy - riseY*sc;
+
+        // run arrow (horizontal)
+        ctx.strokeStyle = '#c07820'; ctx.lineWidth = 1.5; ctx.setLineDash([3,3]);
+        ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py1); ctx.stroke();
+        // rise arrow (vertical)
+        ctx.strokeStyle = '#d94f2a';
+        ctx.beginPath(); ctx.moveTo(px2, py1); ctx.lineTo(px2, py2); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // labels
+        ctx.font = "11px 'Patrick Hand',cursive";
+        ctx.fillStyle = '#c07820'; ctx.textAlign = 'center';
+        ctx.fillText('run = 1', (px1+px2)/2, py1 + 12);
+        ctx.fillStyle = '#d94f2a'; ctx.textAlign = px2 > W*0.7 ? 'right' : 'left';
+        ctx.fillText(`rise = ${fmtN(m)}`, px2 + (px2 > W*0.7 ? -5 : 5), (py1+py2)/2 + 4);
+      }
+    }
+
+    // ── Forms tab logic ──────────────────────────────────────────────────────
+    let currentM = 2, currentB = 1;
+    let updatingFromStd = false, updatingFromSI = false;
+
+    function renderFormCards(m, b) {
+      const el = document.getElementById('form-cards');
+      const slopeChip = m === 0 ? 'slope = 0 (horizontal)' :
+                        !isFinite(m) ? 'slope = undefined (vertical)' :
+                        `slope m = ${fmtN(m)} &nbsp;·&nbsp; y-intercept b = ${fmtN(b)}`;
+
+      el.innerHTML = `
+        <div class="slope-chip">${slopeChip}</div>
+        <div class="form-card fc-si">
+          <div class="form-name">Slope-intercept form</div>
+          <div class="form-eq">${siForm(m, b)}</div>
+          <div class="form-note">Read m and b directly. Easiest for graphing.</div>
+        </div>
+        <div class="form-card fc-std">
+          <div class="form-name">Standard form &nbsp;<span style="font-size:10px; color:var(--ink-soft);">(Ax + By = C)</span></div>
+          <div class="form-eq">${stdForm(m, b)}</div>
+          <div class="form-note">To convert back: isolate y — move the x term, then divide everything.</div>
+        </div>
+        <div class="form-card fc-ps">
+          <div class="form-name">Point-slope form &nbsp;<span style="font-size:10px; color:var(--ink-soft);">(using y-intercept)</span></div>
+          <div class="form-eq">${psForm(m, b)}</div>
+          <div class="form-note">Any point on the line works — here we used the y-intercept (0, ${fmtN(b)}).</div>
+        </div>`;
+    }
+
+    function updateFromSI() {
+      if (updatingFromStd) return;
+      updatingFromSI = true;
+      const m = parseFloat(document.getElementById('si-m').value) || 0;
+      const b = parseFloat(document.getElementById('si-b').value) || 0;
+      currentM = m; currentB = b;
+      // Sync standard form fields: pick simple integers if possible
+      // −mx + y = b → A=−m, B=1, C=b
+      let mult = 1;
+      for (let d = 1; d <= 20; d++) {
+        if (Math.abs(Math.round(m*d) - m*d) < 0.0001) { mult = d; break; }
+      }
+      const g = gcd(gcd(Math.abs(Math.round(-m*mult)), mult), Math.abs(Math.round(b*mult))) || 1;
+      document.getElementById('std-a').value = Math.round(-m*mult/g);
+      document.getElementById('std-b').value = Math.round(mult/g);
+      document.getElementById('std-c').value = Math.round(b*mult/g);
+      updatingFromSI = false;
+      renderFormCards(m, b);
+      drawFormsCanvas(m, b);
+    }
+
+    function updateFromStd() {
+      if (updatingFromSI) return;
+      updatingFromStd = true;
+      const A = parseFloat(document.getElementById('std-a').value) || 0;
+      const B = parseFloat(document.getElementById('std-b').value) || 0;
+      const C = parseFloat(document.getElementById('std-c').value) || 0;
+      if (B === 0) {
+        // vertical-like — just show what we can
+        updatingFromStd = false;
+        renderFormCards(0, 0);
+        return;
+      }
+      const m = -A / B;
+      const b = C / B;
+      currentM = m; currentB = b;
+      document.getElementById('si-m').value = Math.round(m * 1000) / 1000;
+      document.getElementById('si-b').value = Math.round(b * 1000) / 1000;
+      updatingFromStd = false;
+      renderFormCards(m, b);
+      drawFormsCanvas(m, b);
+    }
+
+    // ── VUXHOY tab ───────────────────────────────────────────────────────────
+    let lineType = 'horiz';
+
+    function setLineType(type) {
+      lineType = type;
+      document.getElementById('btn-horiz').className = `line-type-btn${type === 'horiz' ? ' active-h' : ''}`;
+      document.getElementById('btn-vert').className  = `line-type-btn${type === 'vert'  ? ' active-v' : ''}`;
+      updateVuxhoy();
+    }
+
+    function updateVuxhoy() {
+      const c = parseInt(document.getElementById('c-slider').value);
+      document.getElementById('c-display').textContent = c;
+
+      const isHoriz = lineType === 'horiz';
+      document.getElementById('c-label').textContent = isHoriz ? 'y =' : 'x =';
+      document.getElementById('vux-eq').textContent = isHoriz ? `y = ${c}` : `x = ${c}`;
+      document.getElementById('vux-eq').style.borderColor = isHoriz ? '#2a8a4a' : '#2a6fb4';
+      document.getElementById('vux-eq').style.background  = isHoriz ? '#e8f4ec' : '#dde9f6';
+      document.getElementById('vux-eq').style.color        = isHoriz ? '#2a8a4a' : '#2a6fb4';
+
+      const explain = document.getElementById('vux-explain');
+      if (isHoriz) {
+        explain.innerHTML = `
+          <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+            <strong style="color:#2a8a4a;">Horizontal line — HOY</strong><br>
+            Slope = <strong>0</strong> (perfectly flat — no rise, just run).<br>
+            The equation only has y: <span style="font-family:'JetBrains Mono',monospace;">y = ${c}</span>.<br>
+            Every point on this line has y-coordinate = ${c}.<br>
+            Domain: (−∞, ∞) &nbsp;·&nbsp; Range: {${c}}
+          </div>`;
+      } else {
+        explain.innerHTML = `
+          <div class="f-hand" style="font-size:13px; line-height:1.8; color:var(--ink-2);">
+            <strong style="color:#2a6fb4;">Vertical line — VUX</strong><br>
+            Slope = <strong>undefined</strong> — you can't measure the steepness of a vertical wall.<br>
+            The equation only has x: <span style="font-family:'JetBrains Mono',monospace;">x = ${c}</span>.<br>
+            Every point on this line has x-coordinate = ${c}.<br>
+            Domain: {${c}} &nbsp;·&nbsp; Range: (−∞, ∞)
+          </div>`;
+      }
+
+      drawVuxhoy(c, isHoriz);
+    }
+
+    function drawVuxhoy(c, isHoriz) {
+      const canvas = document.getElementById('vuxhoy-canvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      const ox = W/2, oy = H/2, sc = W/20;
+
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle = '#f6f1e4'; ctx.fillRect(0,0,W,H);
+
+      // grid
+      ctx.strokeStyle = 'rgba(29,26,20,0.07)'; ctx.lineWidth = 1;
+      for (let i = -10; i <= 10; i++) {
+        ctx.beginPath(); ctx.moveTo(ox+i*sc,0); ctx.lineTo(ox+i*sc,H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0,oy-i*sc); ctx.lineTo(W,oy-i*sc); ctx.stroke();
+      }
+      // axes
+      ctx.strokeStyle = 'rgba(29,26,20,0.4)'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+      const col = isHoriz ? '#2a8a4a' : '#2a6fb4';
+      ctx.strokeStyle = col; ctx.lineWidth = 3;
+      ctx.beginPath();
+      if (isHoriz) {
+        ctx.moveTo(0, oy - c*sc); ctx.lineTo(W, oy - c*sc);
+      } else {
+        ctx.moveTo(ox + c*sc, 0); ctx.lineTo(ox + c*sc, H);
+      }
+      ctx.stroke();
+
+      // label
+      ctx.font = "13px 'Patrick Hand',cursive";
+      ctx.fillStyle = col; ctx.textAlign = 'left';
+      if (isHoriz) {
+        ctx.fillText(`y = ${c}  (slope = 0)`, ox + 5, oy - c*sc - 8);
+      } else {
+        ctx.fillText(`x = ${c}`, ox + c*sc + 5, 20);
+        ctx.fillText('slope = undefined', ox + c*sc + 5, 36);
+      }
+
+      // slope annotation
+      if (!isHoriz) {
+        // Draw a little "wall" hint
+        ctx.strokeStyle = 'rgba(42,111,180,0.3)'; ctx.lineWidth = 8;
+        ctx.beginPath(); ctx.moveTo(ox+c*sc, oy+2*sc); ctx.lineTo(ox+c*sc, oy-2*sc); ctx.stroke();
+      }
+    }
+
+    // ── Verify tab ───────────────────────────────────────────────────────────
+    function clearVerify() {
+      const el = document.getElementById('verify-result');
+      el.className = 'verify-result';
+      el.innerHTML = '';
+    }
+
+    function runVerify() {
+      const m  = parseFloat(document.getElementById('vf-m').value) || 0;
+      const b  = parseFloat(document.getElementById('vf-b').value) || 0;
+      const px = parseFloat(document.getElementById('vf-x').value) || 0;
+      const py = parseFloat(document.getElementById('vf-y').value) || 0;
+      const expected = m * px + b;
+      const isSolution = Math.abs(expected - py) < 0.001;
+
+      const el = document.getElementById('verify-result');
+      el.className = `verify-result show ${isSolution ? 'yes' : 'no'}`;
+
+      const mStr2 = fmtN(m);
+      const bPart = b >= 0 ? ` + ${fmtN(b)}` : ` − ${fmtN(-b)}`;
+      const step1 = `y = ${mStr2}(${fmtN(px)})${bPart}`;
+      const step2 = `y = ${fmtN(m*px)}${bPart}`;
+      const step3 = `y = ${fmtN(expected)}`;
+
+      el.innerHTML = `
+        <div class="form-name" style="color:${isSolution ? '#2a8a4a' : 'var(--redline)'};">
+          ${isSolution ? '✓ Solution check' : '✗ Not a solution'}
+        </div>
+        <div class="verify-expr">
+          Plug in x = ${fmtN(px)} into y = ${mStr2}x${bPart}:<br>
+          ${step1}<br>
+          ${step2}<br>
+          ${step3}
+        </div>
+        <div class="verify-expr" style="margin-top:6px;">
+          Does y = ${fmtN(expected)} match the point's y = ${fmtN(py)}?
+        </div>
+        <div class="verify-verdict ${isSolution ? 'v-yes' : 'v-no'}">
+          ${isSolution
+            ? `✓ Yes — (${fmtN(px)}, ${fmtN(py)}) IS on the line y = ${mStr2}x${bPart}`
+            : `✗ No — f(${fmtN(px)}) = ${fmtN(expected)}, not ${fmtN(py)}. This point is NOT on the line.`}
+        </div>`;
+    }
+
+    function loadVerify(m, b, px, py) {
+      document.getElementById('vf-m').value = m;
+      document.getElementById('vf-b').value = b;
+      document.getElementById('vf-x').value = px;
+      document.getElementById('vf-y').value = py;
+      runVerify();
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    updateFromSI();
+    updateVuxhoy();
+  </script>
+  <script src="progress.js"></script>
+  <script src="related.js"></script>
+</body>
+</html>
