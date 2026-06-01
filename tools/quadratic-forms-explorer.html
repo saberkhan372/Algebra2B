@@ -667,7 +667,7 @@
     // ─── init ──────────────────────────────────────────────────────────────
     window.addEventListener('DOMContentLoaded', () => {
       if (typeof UrlState !== 'undefined') {
-        const s = UrlState.load();
+        const s = UrlState.load() || {};
         if (s.a != null) P.a = +s.a;
         if (s.h != null) P.h = +s.h;
         if (s.k != null) P.k = +s.k;

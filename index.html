@@ -37,6 +37,9 @@
     .page-wrapper {
       padding-left: 44px;
     }
+    body > .pacing-banner {
+      padding-left: 44px;
+    }
 
     /* Red margin line */
     .content-area {
@@ -170,7 +173,7 @@
   </nav>
 
   <!-- First-visit welcome banner -->
-  <div id="welcome-banner" style="display:none; padding:10px 20px; background:var(--highlight); border-bottom:1.5px dashed var(--ink-2); display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+  <div id="welcome-banner" style="display:none; padding:10px 20px 10px 44px; background:var(--highlight); border-bottom:1.5px dashed var(--ink-2); display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
     <span style="font-family:'Caveat',cursive; font-size:18px; font-weight:700; color:var(--ink);">Welcome to A2 Playgrounds</span>
     <span style="font-family:var(--f-body); font-size:13px; color:var(--ink-2);">— 66 interactive math tools for Algebra 2. Start anywhere:</span>
     <a href="map.html" style="font-family:var(--f-body); font-size:13px; padding:3px 10px; border:1.5px solid var(--ink-2); border-radius:3px; text-decoration:none; color:var(--ink); background:var(--paper);">📋 course map</a>
@@ -389,6 +392,9 @@
       { id: 'lineq',   prev: 'linear',      name: 'Linear Equations Explorer',        unit: 'U1', topic: 'Linear',       kind: 'explorer',   diff: 1, code: 'Lx', desc: 'All three forms + live rise/run graph. VUXHOY for vertical/horizontal lines. Verify a point is on the line.', href: 'tools/linear-equations.html' },
       { id: 'drt',     prev: 'systems',     name: 'Distance · Rate · Time Trainer',    unit: 'U1', topic: 'Systems',       kind: 'practice',   diff: 2, code: 'Dt', desc: 'Draw a picture → define variables → fill in the D=R×T table → write equations → solve. Plane/wind, boat/current, meeting, catch-up, and ticket problems.', href: 'tools/drt-trainer.html' },
       { id: 'conics',  prev: 'conics',      name: 'Conic Sections Explorer',           unit: 'U8', topic: 'Conics',        kind: 'explorer',   diff: 2, code: 'Cn', desc: 'Explore parabolas, circles, ellipses, and hyperbolas — slide h, k, and axes; identify conics from their equations.', href: 'tools/conics.html' },
+      { id: 'ti84',    prev: 'systems',     name: 'TI-84 & PLYSMLT2 Guide',            unit: 'U1', topic: 'Systems',       kind: 'reference',  diff: 1, code: 'Ti', desc: 'Use the TI-84 PLYSMLT2 app to solve systems, enter coefficients carefully, and interpret calculator output.', href: 'tools/ti84-plysmlt.html' },
+      { id: 'exprules', prev: 'exponent',    name: 'Exponent Rules Trainer',            unit: 'U2', topic: 'Exponents',     kind: 'practice',   diff: 2, code: 'Er', desc: 'Practice product, quotient, power, zero, and negative exponent rules with visible mistake checks.', href: 'tools/exponent-rules.html' },
+      { id: 'cxarith', prev: 'complex',      name: 'Complex Arithmetic Stepper',        unit: 'U3', topic: 'Complex',       kind: 'practice',   diff: 2, code: 'Ca', desc: 'Add, subtract, multiply, and divide complex numbers step by step, including conjugate cleanup.', href: 'tools/complex-arithmetic.html' },
     ];
 
     const UNIT_INFO = {

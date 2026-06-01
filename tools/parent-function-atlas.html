@@ -840,7 +840,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       // optional url-state restore
       if (typeof UrlState !== 'undefined') {
-        const s = UrlState.load();
+        const s = UrlState.load() || {};
         if (s.fn && FNDEFS[s.fn]) fn = s.fn;
         if (s.a != null) P.a = +s.a;
         if (s.h != null) P.h = +s.h;

@@ -609,7 +609,7 @@
     // ─── init ──────────────────────────────────────────────────────────────
     window.addEventListener('DOMContentLoaded', () => {
       if (typeof UrlState !== 'undefined') {
-        const s = UrlState.load();
+        const s = UrlState.load() || {};
         if (s.b != null && parseFloat(s.b) > 0) {
           b = parseFloat(s.b);
           document.getElementById('sl-b').value = b;

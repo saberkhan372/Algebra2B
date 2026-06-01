@@ -13,7 +13,7 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 ## Current State
 
 - Branch: `main` — remote `origin` → `https://github.com/saberkhan372/Algebra2B.git`
-- **62 tools** built and integrated across 8 units (all complete).
+- **66 tools** built and integrated across 8 units (all complete).
 - **8 unit pages**: `u1.html`–`u7.html` + `u8.html`. All counts accurate.
 - `CODEBASE.md` is the orientation doc for agents — read it first.
 - `PLAN.md` is the working build plan.
@@ -29,15 +29,15 @@ Local preview: `python3 -m http.server 3333` → `http://127.0.0.1:3333/`
 | `styles.css` | Full shared design system (includes board-mode, print, wide-screen rules) |
 | `404.html` | Friendly 404 page (GitHub Pages serves automatically) |
 | `offline.html` | Offline fallback (served by service worker) |
-| `sw.js` | Service worker v14 — precaches all 62 tools + shared scripts + error pages |
+| `sw.js` | Service worker v14 — precaches all 66 tools + shared scripts + error pages |
 | `tools/url-state.js` | URL hash state encoding/decoding + auto-wiring for range inputs |
 | `tools/progress.js` | Visited badges, start-here banners, share/print buttons |
 | `tools/related.js` | "TRY NEXT" section injection |
 | `tools/fullscreen.js` | Board mode + teacher quick-nav panel |
-| `tools/` | 62 standalone tool pages |
+| `tools/` | 66 standalone tool pages |
 | `PLAN.md` | Build plan, completed work, agent lanes |
 | `CODEBASE.md` | Agent orientation — all patterns documented |
 
 ## Tool Count
 
-63 tools live as of 2026-05-30. The original 50-tool plan is complete. 13 additional tools from batch-11/12/13/14 video-insight passes. Batch-14 added: Distance · Rate · Time Trainer (U1). Also ships: shapes.html (The Graph Shapes — 10 interactive canvases with sliders). Future additions from teacher requests or continued video-learning analysis.
+66 tools live as of 2026-05-30. The original 50-tool plan is complete. 16 additional tools from batch-11/12/13/14 video-insight passes. Batch-14 added: Distance · Rate · Time Trainer (U1). Also ships: shapes.html (The Graph Shapes — 10 interactive canvases with sliders). Future additions from teacher requests or continued video-learning analysis.

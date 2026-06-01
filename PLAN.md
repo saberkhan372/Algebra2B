@@ -7,7 +7,7 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 
 ## Current state
 
-**Site:** 8 unit pages (u1–u7 + u9), **62 tools** wired into the homepage grid.  
+**Site:** 8 unit pages (u1–u7 + u8), **66 tools** wired into the homepage grid.  
 **Curriculum:** All 8 units complete (Sept → May). Year is done.  
 **Unit pages:** U1–U7 + U8 fully wired. No coming-soon rows remain.  
 **Homepage:** Reorganized May 2026 — unit-grouped sections collapse by default; filter/search auto-expands matching units; dual filter rows (kind + unit chip).  
@@ -27,10 +27,10 @@ Based on: pacing plan, final exam, lesson PDFs (Blocks 1–26), current site aud
 - `404.html` + `offline.html`; service worker v14 with offline fallback
 - `📷 save PNG` button on 31 canvas tools — `tools/save-png.js`
 - **Replay recording** — `tools/replay.js` on 19 slider tools; `⏺ rec` captures sessions, `🔗 share` encodes full timeline as `#r=base64url`; shared URLs auto-play for students
-- **Concept map** — `concept-map.html`; 63 nodes in 8 concept threads, 20 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
+- **Concept map** — `concept-map.html`; 66 nodes in 8 concept threads, 20 cross-thread bridges; hover shows tool desc + connections; click navigates; visited tools shown solid; linked from main nav
 - **Collapsible sections** — HOW TO USE & TRY THIS (25 tool pages), lesson schedule (8 unit pages), REPLAY panel, homepage sidebar sections, and **all 8 homepage unit grids** start collapsed; `.sk-coll-*` CSS pattern in `styles.css`; unit grids auto-expand when any filter/search is active; state saved in localStorage
 
-**59 tools built/integrated:**
+**66 tools built/integrated:**
 - Absolute Value Grapher (U2)
 - Quadratic Slider Studio (U1/U2, vertex form)
 - Negative Exponent Flipper (U2)
