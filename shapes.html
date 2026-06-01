@@ -734,7 +734,7 @@
         { key:'h', label:'h', min:-4, max:4, step:.1, default:0,  color:'#2a6fb4' },
         { key:'k', label:'k', min:-2, max:5, step:.1, default:0,  color:'#2a8a4a' },
       ],
-      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>|<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>|<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)}</b>|<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>|<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
       buildSpec: p => ({ fn: x => p.a*Math.abs(x-p.h) + p.k, domain: () => true }),
       dirty: true,
     });
@@ -750,7 +750,7 @@
         { key:'h', label:'h', min:-2, max:7,  step:.1, default:0, color:'#2a6fb4' },
         { key:'k', label:'k', min:-3, max:4,  step:.1, default:0, color:'#2a8a4a' },
       ],
-      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>√(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)}</b>√(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
       buildSpec: p => ({
         fn: x => p.a * Math.sqrt(x - p.h) + p.k,
         domain: x => x >= p.h,
@@ -790,7 +790,7 @@
         { key:'b', label:'b', min:1.1,max:4,  step:.05, default:2, color:'#8f6c00' },
         { key:'h', label:'h', min:-1, max:7,  step:.1,  default:0, color:'#2a6fb4' },
       ],
-      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>log<sub><b style="color:#8f6c00">${fmtN(p.b)}</b></sub>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)`,
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)}</b>log<sub><b style="color:#8f6c00">${fmtN(p.b)}</b></sub>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>)`,
       buildSpec: p => ({
         fn: x => p.a * Math.log(x - p.h) / Math.log(p.b),
         domain: x => x > p.h + 0.01,
@@ -832,7 +832,7 @@
         { key:'a', label:'a', min:-2, max:2, step:.1, default:1, color:'#d94f2a' },
         { key:'b', label:'b', min:0,  max:6, step:.1, default:3, color:'#7a2a8a' },
       ],
-      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)||'0'}</b>(x³ − <b style="color:#7a2a8a">${fmtN(p.b)}</b>x)`,
+      eqHtml: p => `y = <b style="color:#d94f2a">${fmtCoeff(p.a)}</b>(x³ − <b style="color:#7a2a8a">${fmtN(p.b)}</b>x)`,
       buildSpec: p => ({
         fn: x => p.a*(x**3 - p.b*x),
         domain: () => true,
@@ -852,7 +852,7 @@
         { key:'h', label:'h', min:-3, max:3,  step:.1,  default:0, color:'#2a6fb4' },
         { key:'k', label:'k', min:-2, max:2,  step:.1,  default:0, color:'#2a8a4a' },
       ],
-      eqHtml: p => `y = <b style="color:#d94f2a">${fmtN(p.a)}</b>·sin(<b style="color:#8f6c00">${fmtN(p.b)}</b>(<b style="color:#2a6fb4">${shiftStr(p.h,'x')}</b>))<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`,
+      eqHtml: p => { const ac=fmtCoeff(p.a), dot=ac&&ac!=='−'?'·':'', rb=Math.round(p.b*10)/10, inner=rb===1?shiftStr(p.h,'x'):`${fmtN(rb)}(${shiftStr(p.h,'x')})`; return `y = <b style="color:#d94f2a">${ac}</b>${dot}sin(<b style="color:#8f6c00">${inner}</b>)<b style="color:#2a8a4a">${offsetStr(p.k)}</b>`; },
       buildSpec: p => ({
         fn: x => p.a * Math.sin(p.b * (x - p.h)) + p.k,
         domain: () => true,
